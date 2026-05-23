@@ -1182,6 +1182,44 @@ class AcademicReviewAgent:
 
         return report_text
 
+    def submit_feedback(self, report: ReviewReport,
+                        accepted_indices: list = None,
+                        rejected_indices: list = None,
+                        comment: str = ""):
+        """
+        提交审稿反馈，驱动知识库进化。
+
+        Parameters
+        ----------
+        report : ReviewReport, 上次review()的结果
+        accepted_indices : list of int, 被接受的issue序号(从1开始)
+        rejected_indices : list of int, 被拒绝的issue序号(从1开始)
+        comment : str, 用户评论
+        """
+        accepted = []
+        rejected = []
+        for i, issue in enumerate(report.issues, 1):
+            entry = {"category": issue.category, "severity": issue.severity.value}
+            if accepted_indices and i in accepted_indices:
+                accepted.append(entry)
+            elif rejected_indices and i in rejected_indices:
+                rejected.append(entry)
+
+        # 写入knowledge_store
+        try:
+            import sys
+            sys.path.insert(0, str(__import__('pathlib').Path(__file__).parent))
+            from self_evolving_engine import FeedbackCollector, KnowledgeStore
+            store = KnowledgeStore()
+            fb = FeedbackCollector(store)
+            fb.log_review_feedback(
+                paper_text="", report_issues=[],
+                accepted=accepted, rejected=rejected, comment=comment
+            )
+            return True
+        except Exception:
+            return False
+
 
 # ============================================================================
 # 便捷入口
@@ -1205,3 +1243,95 @@ def review_paper(text_or_path, paper_type='sci', language='auto', output_path=No
     report = agent.review(text_or_path)
     report_text = agent.generate_report(report, output_path=output_path)
     return report, report_text
+
+
+# ============================================================================
+# 知识库桥接：从knowledge_store加载进化后的知识
+# ============================================================================
+def _load_evolved_knowledge():
+    """从knowledge_store加载进化后的知识，覆盖硬编码默认值。失败时静默跳过。"""
+    import json
+    from pathlib import Path
+
+    store_dir = Path(__file__).parent / "knowledge_store"
+    if not store_dir.exists():
+        return
+
+    # 1. 加载审稿规则
+    rules_path = store_dir / "review_rules.json"
+    if rules_path.exists():
+        try:
+            with open(rules_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            entries = data.get("entries", {})
+
+            evolved_forbidden_en = {}
+            evolved_forbidden_zh = {}
+            evolved_ai_en = []
+            evolved_ai_zh = []
+            evolved_hollow_en = []
+            evolved_hollow_zh = []
+            evolved_overclaim_en = []
+            evolved_overclaim_zh = []
+
+            for key, entry in entries.items():
+                val = entry.get("value", entry)
+                if key.startswith("forbidden_en_") and isinstance(val, dict):
+                    evolved_forbidden_en[val["word"]] = val["suggestion"]
+                elif key.startswith("forbidden_zh_") and isinstance(val, dict):
+                    evolved_forbidden_zh[val["word"]] = val["suggestion"]
+                elif key.startswith("ai_pattern_en_") and isinstance(val, str):
+                    evolved_ai_en.append(val)
+                elif key.startswith("ai_pattern_zh_") and isinstance(val, str):
+                    evolved_ai_zh.append(val)
+                elif key.startswith("hollow_en_") and isinstance(val, str):
+                    evolved_hollow_en.append(val)
+                elif key.startswith("hollow_zh_") and isinstance(val, str):
+                    evolved_hollow_zh.append(val)
+                elif key.startswith("overclaim_en_") and isinstance(val, str):
+                    evolved_overclaim_en.append(val)
+                elif key.startswith("overclaim_zh_") and isinstance(val, str):
+                    evolved_overclaim_zh.append(val)
+
+            if evolved_forbidden_en:
+                ReviewKB.EN_FORBIDDEN = evolved_forbidden_en
+            if evolved_forbidden_zh:
+                ReviewKB.ZH_FORBIDDEN = evolved_forbidden_zh
+            if evolved_ai_en:
+                ReviewKB.AI_PATTERNS_EN = evolved_ai_en
+            if evolved_ai_zh:
+                ReviewKB.AI_PATTERNS_ZH = evolved_ai_zh
+            if evolved_hollow_en:
+                ReviewKB.HOLLOW_PATTERNS_EN = evolved_hollow_en
+            if evolved_hollow_zh:
+                ReviewKB.HOLLOW_PATTERNS_ZH = evolved_hollow_zh
+            if evolved_overclaim_en:
+                ReviewKB.OVERCLAIM_EN = evolved_overclaim_en
+            if evolved_overclaim_zh:
+                ReviewKB.OVERCLAIM_ZH = evolved_overclaim_zh
+        except Exception:
+            pass
+
+    # 2. 加载评分权重
+    params_path = store_dir / "parameters.json"
+    if params_path.exists():
+        try:
+            with open(params_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            entries = data.get("entries", {})
+
+            for key, entry in entries.items():
+                if not key.startswith("score_weight_"):
+                    continue
+                dim = key.replace("score_weight_", "")
+                val = entry.get("value", entry)
+                if isinstance(val, dict) and dim in Scorer.DIMENSIONS:
+                    new_weight = val.get("weight", val.get("value"))
+                    if new_weight is not None and isinstance(new_weight, (int, float)):
+                        Scorer.DIMENSIONS[dim]["weight"] = float(new_weight)
+        except Exception:
+            pass
+
+
+# 模块加载时自动桥接进化知识
+_load_evolved_knowledge()

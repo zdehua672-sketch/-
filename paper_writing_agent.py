@@ -898,3 +898,41 @@ def write_paper(data_path=None, paper_type='thesis', language='zh', output_dir=N
 
 if __name__ == '__main__':
     writer = write_paper()
+
+
+# ============================================================================
+# 知识库桥接：从knowledge_store加载进化后的机制知识
+# ============================================================================
+def _load_evolved_mechanisms():
+    """从knowledge_store加载进化后的机制知识，失败时静默跳过。"""
+    import json
+    from pathlib import Path
+
+    store_dir = Path(__file__).parent / "knowledge_store"
+    if not store_dir.exists():
+        return
+
+    mech_path = store_dir / "mechanisms.json"
+    if not mech_path.exists():
+        return
+
+    try:
+        with open(mech_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        entries = data.get("entries", {})
+
+        for key, entry in entries.items():
+            val = entry.get("value", entry)
+            if not isinstance(val, dict):
+                continue
+            # 将机制知识映射为MechanismKB的类属性
+            attr_name = key.upper().replace("-", "_").replace(" ", "_")
+            # 只添加新机制，不覆盖已有的硬编码机制
+            if not hasattr(MechanismKB, attr_name) and val.get("mechanism"):
+                setattr(MechanismKB, attr_name, val)
+    except Exception:
+        pass
+
+
+# 模块加载时自动桥接
+_load_evolved_mechanisms()
