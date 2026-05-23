@@ -2,9 +2,9 @@
   "meta": {
     "category": "parameters",
     "description": "系统参数（阈值/权重）",
-    "version": 16,
-    "created": "2026-05-23T09:50:52.307788+00:00",
-    "updated": "2026-05-23T09:51:22.100068+00:00",
+    "version": 11,
+    "created": "2026-05-23T10:00:06.170206+00:00",
+    "updated": "2026-05-23T10:00:07.836774+00:00",
     "source": "initial"
   },
   "entries": {
@@ -15,8 +15,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.092290+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_中文格式": {
       "value": {
@@ -25,8 +25,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.093287+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_错别字": {
       "value": {
@@ -35,8 +35,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.093609+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_学术语法": {
       "value": {
@@ -45,8 +45,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.093609+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_引文规范": {
       "value": {
@@ -55,8 +55,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.094608+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_图表规范": {
       "value": {
@@ -65,8 +65,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.094608+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_数据逻辑": {
       "value": {
@@ -75,8 +75,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.095510+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_Discussion逻辑": {
       "value": {
@@ -85,8 +85,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.096054+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_AI痕迹": {
       "value": {
@@ -95,8 +95,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.096054+00:00",
-      "version": 3
+      "updated": "2026-05-23T10:00:07.836774+00:00",
+      "version": 1
     },
     "score_weight_学术重复": {
       "value": {
@@ -105,47 +105,7 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-05-23T09:51:22.097053+00:00",
-      "version": 3
-    },
-    "checker_weight_AI痕迹_MINOR": {
-      "value": {
-        "weight": 0.81,
-        "adjustment": "decreased"
-      },
-      "confidence": 0.7,
-      "source": "feedback_learning",
-      "updated": "2026-05-23T09:51:22.098050+00:00",
-      "version": 2
-    },
-    "checker_weight_Discussion逻辑_CRITICAL": {
-      "value": {
-        "weight": 1.05,
-        "adjustment": "increased"
-      },
-      "confidence": 0.7,
-      "source": "feedback_learning",
-      "updated": "2026-05-23T09:51:22.099072+00:00",
-      "version": 1
-    },
-    "checker_weight_引文规范_MAJOR": {
-      "value": {
-        "weight": 1.05,
-        "adjustment": "increased"
-      },
-      "confidence": 0.7,
-      "source": "feedback_learning",
-      "updated": "2026-05-23T09:51:22.099072+00:00",
-      "version": 1
-    },
-    "sensitivity_AI痕迹": {
-      "value": {
-        "value": 0.9,
-        "reason": "该类别的审稿规则被用户拒绝2次，可能过于严格"
-      },
-      "confidence": 0.7,
-      "source": "auto_tuning",
-      "updated": "2026-05-23T09:51:22.100068+00:00",
+      "updated": "2026-05-23T10:00:07.836774+00:00",
       "version": 1
     }
   },
@@ -156,7 +116,7 @@
       "old": null,
       "new": "{'weight': 0.15, 'description': '格式规范性'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.012437+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -164,7 +124,7 @@
       "old": null,
       "new": "{'weight': 0.1, 'description': '中文格式规范'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.013434+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -172,7 +132,7 @@
       "old": null,
       "new": "{'weight': 0.1, 'description': '拼写正确性'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.013434+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -180,7 +140,7 @@
       "old": null,
       "new": "{'weight': 0.1, 'description': '语言学术性'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.014430+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -188,7 +148,7 @@
       "old": null,
       "new": "{'weight': 0.1, 'description': '引用规范性'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.014430+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -196,7 +156,7 @@
       "old": null,
       "new": "{'weight': 0.1, 'description': '图表规范性'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.014430+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -204,7 +164,7 @@
       "old": null,
       "new": "{'weight': 0.15, 'description': '数据一致性'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.015428+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -212,7 +172,7 @@
       "old": null,
       "new": "{'weight': 0.1, 'description': '讨论深度'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.016426+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -220,7 +180,7 @@
       "old": null,
       "new": "{'weight': 0.05, 'description': '自然度'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.016426+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     },
     {
       "action": "create",
@@ -228,50 +188,7 @@
       "old": null,
       "new": "{'weight': 0.05, 'description': '原创性'}",
       "source": "Scorer",
-      "timestamp": "2026-05-23T09:50:54.017443+00:00"
-    },
-    {
-      "action": "create",
-      "key": "checker_weight_AI痕迹_MINOR",
-      "old": null,
-      "new": "{'weight': 0.9, 'adjustment': 'decreased'}",
-      "source": "feedback_learning",
-      "timestamp": "2026-05-23T09:51:22.098050+00:00"
-    },
-    {
-      "action": "update",
-      "key": "checker_weight_AI痕迹_MINOR",
-      "old": {
-        "weight": 0.9,
-        "adjustment": "decreased"
-      },
-      "new": "{'weight': 0.81, 'adjustment': 'decreased'}",
-      "source": "feedback_learning",
-      "timestamp": "2026-05-23T09:51:22.098050+00:00"
-    },
-    {
-      "action": "create",
-      "key": "checker_weight_Discussion逻辑_CRITICAL",
-      "old": null,
-      "new": "{'weight': 1.05, 'adjustment': 'increased'}",
-      "source": "feedback_learning",
-      "timestamp": "2026-05-23T09:51:22.099072+00:00"
-    },
-    {
-      "action": "create",
-      "key": "checker_weight_引文规范_MAJOR",
-      "old": null,
-      "new": "{'weight': 1.05, 'adjustment': 'increased'}",
-      "source": "feedback_learning",
-      "timestamp": "2026-05-23T09:51:22.099072+00:00"
-    },
-    {
-      "action": "create",
-      "key": "sensitivity_AI痕迹",
-      "old": null,
-      "new": "{'value': 0.9, 'reason': '该类别的审稿规则被用户拒绝2次，可能过于严格'}",
-      "source": "auto_tuning",
-      "timestamp": "2026-05-23T09:51:22.100068+00:00"
+      "timestamp": "2026-05-23T10:00:07.836774+00:00"
     }
   ]
 }

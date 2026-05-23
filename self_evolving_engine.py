@@ -434,7 +434,404 @@ class FeedbackCollector:
 
 
 # ============================================================
-# 3. EvolutionEngine - 进化引擎
+# 3. GitHubMonitor - GitHub项目自动监控
+# ============================================================
+
+class GitHubMonitor:
+    """
+    GitHub项目自动监控器
+
+    使用 gh CLI 搜索、分析、跟踪学术AI相关项目。
+    支持按关键词/主题搜索，自动评估项目质量，存入知识库。
+    """
+
+    # 搜索领域配置
+    SEARCH_DOMAINS = {
+        "academic_writing": {
+            "queries": [
+                "academic paper writing",
+                "paper generation",
+                "thesis writing",
+            ],
+            "min_stars": 30,
+        },
+        "data_analysis": {
+            "queries": [
+                "scientific data analysis",
+                "research visualization",
+                "statistical analysis",
+            ],
+            "min_stars": 50,
+        },
+        "agent_framework": {
+            "queries": [
+                "multi-agent",
+                "AI agent framework",
+                "agentic workflow",
+            ],
+            "min_stars": 100,
+        },
+        "rag_system": {
+            "queries": [
+                "RAG system",
+                "retrieval augmented",
+                "knowledge base",
+            ],
+            "min_stars": 50,
+        },
+        "visualization": {
+            "queries": [
+                "scientific plotting",
+                "publication figures",
+                "matplotlib style",
+                "matplotlib journal style",
+                "academic figure generation",
+            ],
+            "min_stars": 100,
+        },
+        "environmental_science": {
+            "queries": [
+                "water quality analysis",
+                "carbon emission",
+                "environmental monitoring",
+            ],
+            "min_stars": 20,
+        },
+    }
+
+    def __init__(self, store: KnowledgeStore):
+        self.store = store
+
+    def search(self, query: str, language: str = None,
+               sort: str = "stars", limit: int = 10,
+               min_stars: int = 0) -> list:
+        """
+        搜索GitHub仓库
+
+        Parameters
+        ----------
+        query : str, 搜索关键词
+        language : str, 编程语言过滤
+        sort : str, 排序方式 (stars/forks/updated)
+        limit : int, 最大结果数
+        min_stars : int, 最低star数
+
+        Returns
+        -------
+        list of dict, 每个包含 full_name, description, stars, url 等
+        """
+        cmd = [
+            "gh", "search", "repos", query,
+            "--limit", str(limit),
+            "--sort", sort,
+            "--json", "fullName,description,stargazersCount,forksCount,"
+                       "language,updatedAt,url,isArchived",
+        ]
+        if language:
+            cmd.extend(["--language", language])
+
+        try:
+            import subprocess
+            result = subprocess.run(
+                cmd, capture_output=True, timeout=30
+            )
+            if result.returncode != 0:
+                return []
+
+            stdout = result.stdout.decode('utf-8', errors='replace')
+            repos = json.loads(stdout)
+            filtered = []
+            for repo in repos:
+                if repo.get("isArchived"):
+                    continue
+                if repo.get("stargazersCount", 0) < min_stars:
+                    continue
+                filtered.append({
+                    "full_name": repo["fullName"],
+                    "description": repo.get("description", ""),
+                    "stars": repo.get("stargazersCount", 0),
+                    "forks": repo.get("forksCount", 0),
+                    "language": repo.get("language", ""),
+                    "updated_at": repo.get("updatedAt", ""),
+                    "url": repo.get("url", ""),
+                    "topics": [],
+                })
+            return filtered
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+            return []
+
+    def get_repo_details(self, full_name: str) -> dict:
+        """获取仓库详细信息"""
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["gh", "api", f"repos/{full_name}"],
+                capture_output=True, timeout=15
+            )
+            if result.returncode != 0:
+                return {}
+            data = json.loads(result.stdout.decode('utf-8', errors='replace'))
+            # 只保留需要的字段
+            keep = ["name","description","stargazers_count","forks_count",
+                    "open_issues_count","language","license","created_at",
+                    "updated_at","pushed_at","default_branch","topics"]
+            return {k: data.get(k) for k in keep if k in data}
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+            return {}
+
+    def get_recent_commits(self, full_name: str, days: int = 30) -> list:
+        """获取最近提交记录"""
+        from datetime import timedelta
+        since = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["gh", "api", f"repos/{full_name}/commits",
+                 "-f", f"since={since}", "-f", "per_page=20"],
+                capture_output=True, timeout=15
+            )
+            if result.returncode != 0:
+                return []
+            data = json.loads(result.stdout.decode('utf-8', errors='replace'))
+            if not isinstance(data, list):
+                return []
+            return [c.get("commit", {}).get("message", "").split("\n")[0]
+                    for c in data[:20] if c.get("commit")]
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+            return []
+
+    def get_readme_summary(self, full_name: str, max_chars: int = 2000) -> str:
+        """获取README摘要"""
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["gh", "api", f"repos/{full_name}/readme"],
+                capture_output=True, timeout=15
+            )
+            if result.returncode != 0:
+                return ""
+            import base64
+            data = json.loads(result.stdout.decode('utf-8', errors='replace'))
+            content = base64.b64decode(data.get("content", "")).decode('utf-8', errors='ignore')
+            return content[:max_chars]
+        except Exception:
+            return ""
+
+    def analyze_repo(self, full_name: str) -> dict:
+        """综合分析一个仓库"""
+        details = self.get_repo_details(full_name)
+        if not details:
+            return {}
+
+        stars = details.get("stargazers_count", 0)
+        forks = details.get("forks_count", 0)
+        issues = details.get("open_issues_count", 0)
+        topics = details.get("topics", [])
+
+        # 计算活跃度
+        pushed_at = details.get("pushed_at", "")
+        try:
+            last_push = datetime.fromisoformat(pushed_at.replace('Z', '+00:00'))
+            days_since_push = (datetime.now(timezone.utc) - last_push).days
+        except (ValueError, TypeError):
+            days_since_push = 999
+
+        # 活跃度评分 (0-1)
+        if days_since_push <= 30:
+            activity = 1.0
+        elif days_since_push <= 90:
+            activity = 0.7
+        elif days_since_push <= 180:
+            activity = 0.4
+        else:
+            activity = 0.1
+
+        # 质量评分
+        quality = min(1.0, (stars / 1000) * 0.4 +
+                         (forks / 200) * 0.2 +
+                         activity * 0.3 +
+                         (1.0 if details.get("license") else 0.0) * 0.1)
+
+        # 获取最近提交
+        commits = self.get_recent_commits(full_name, days=30)
+
+        return {
+            "full_name": full_name,
+            "description": details.get("description", ""),
+            "stars": stars,
+            "forks": forks,
+            "open_issues": issues,
+            "language": details.get("language", ""),
+            "license": details.get("license", {}).get("spdx_id", "") if details.get("license") else "",
+            "topics": topics,
+            "created_at": details.get("created_at", ""),
+            "pushed_at": pushed_at,
+            "days_since_push": days_since_push,
+            "activity_score": round(activity, 2),
+            "quality_score": round(quality, 2),
+            "recent_commits_count": len(commits),
+            "recent_commits": commits[:5],
+            "url": f"https://github.com/{full_name}",
+        }
+
+    def scan_domain(self, domain: str, max_per_query: int = 5) -> dict:
+        """
+        扫描一个领域，搜索+分析+存储
+
+        Parameters
+        ----------
+        domain : str, SEARCH_DOMAINS中的领域名
+        max_per_query : int, 每个查询最多结果数
+
+        Returns
+        -------
+        dict, {found: int, new: int, repos: list}
+        """
+        config = self.SEARCH_DOMAINS.get(domain)
+        if not config:
+            return {"error": f"未知领域: {domain}"}
+
+        min_stars = config.get("min_stars", 0)
+        all_repos = {}
+        existing = self.store.get("resources")
+
+        for query in config["queries"]:
+            repos = self.search(query, limit=max_per_query, min_stars=min_stars)
+            for repo in repos:
+                name = repo["full_name"]
+                if name not in all_repos:
+                    all_repos[name] = repo
+
+        # 分析新发现的仓库
+        new_count = 0
+        analyzed = []
+        for name, repo in all_repos.items():
+            key = f"github_{name.replace('/', '_')}"
+            if key in existing:
+                continue  # 已有记录
+
+            # 详细分析
+            details = self.analyze_repo(name)
+            if details:
+                self.store.set("resources", key, {
+                    "type": "github_project",
+                    "domain": domain,
+                    **details,
+                    "status": "discovered",
+                    "discovered_at": datetime.now(timezone.utc).isoformat(),
+                }, source="github_monitor", confidence=details.get("quality_score", 0.5))
+                new_count += 1
+                analyzed.append(details)
+
+        return {
+            "domain": domain,
+            "found": len(all_repos),
+            "new": new_count,
+            "repos": sorted(analyzed, key=lambda x: x.get("stars", 0), reverse=True),
+        }
+
+    def scan_all_domains(self) -> dict:
+        """扫描所有领域"""
+        results = {}
+        total_new = 0
+        for domain in self.SEARCH_DOMAINS:
+            result = self.scan_domain(domain)
+            results[domain] = result
+            total_new += result.get("new", 0)
+
+        return {
+            "domains_scanned": len(results),
+            "total_new_repos": total_new,
+            "details": results,
+        }
+
+    def get_tracked_repos(self) -> list:
+        """获取所有已跟踪的仓库"""
+        resources = self.store.get("resources")
+        tracked = []
+        for key, entry in resources.items():
+            val = entry.get("value", entry) if isinstance(entry, dict) else entry
+            if isinstance(val, dict) and val.get("type") == "github_project":
+                tracked.append({
+                    "key": key,
+                    "name": val.get("full_name", ""),
+                    "stars": val.get("stars", 0),
+                    "quality": val.get("quality_score", 0),
+                    "activity": val.get("activity_score", 0),
+                    "status": val.get("status", ""),
+                    "domain": val.get("domain", ""),
+                })
+        return sorted(tracked, key=lambda x: x.get("stars", 0), reverse=True)
+
+    def check_updates(self) -> list:
+        """检查已跟踪仓库的更新"""
+        resources = self.store.get("resources")
+        updates = []
+
+        for key, entry in resources.items():
+            val = entry.get("value", entry) if isinstance(entry, dict) else entry
+            if not isinstance(val, dict) or val.get("type") != "github_project":
+                continue
+
+            name = val.get("full_name", "")
+            if not name:
+                continue
+
+            # 检查当前状态
+            current = self.analyze_repo(name)
+            if not current:
+                continue
+
+            old_stars = val.get("stars", 0)
+            new_stars = current.get("stars", 0)
+
+            if new_stars != old_stars:
+                updates.append({
+                    "repo": name,
+                    "old_stars": old_stars,
+                    "new_stars": new_stars,
+                    "star_change": new_stars - old_stars,
+                    "old_commits": val.get("recent_commits_count", 0),
+                    "new_commits": current.get("recent_commits_count", 0),
+                })
+
+                # 更新知识库
+                updated_data = {**val, **current}
+                self.store.set("resources", key, updated_data,
+                              source="github_update_check",
+                              confidence=current.get("quality_score", 0.5))
+
+        return updates
+
+    def generate_scan_report(self, results: dict) -> str:
+        """生成扫描报告"""
+        lines = [
+            "=" * 50,
+            "GitHub 项目扫描报告",
+            "=" * 50,
+            f"扫描领域: {results.get('domains_scanned', 0)}个",
+            f"新发现项目: {results.get('total_new_repos', 0)}个",
+            "",
+        ]
+
+        for domain, detail in results.get("details", {}).items():
+            if detail.get("new", 0) == 0:
+                continue
+            lines.append(f"\n--- {domain} ({detail['found']}个发现, {detail['new']}个新增) ---")
+            for repo in detail.get("repos", [])[:5]:
+                stars = repo.get("stars", 0)
+                name = repo.get("full_name", "")
+                desc = (repo.get("description", "") or "")[:80]
+                lines.append(f"  [{stars}★] {name}")
+                if desc:
+                    lines.append(f"         {desc}")
+
+        return "\n".join(lines)
+
+
+# ============================================================
+# 4. EvolutionEngine - 进化引擎
 # ============================================================
 
 class EvolutionEngine:
@@ -452,6 +849,7 @@ class EvolutionEngine:
     def __init__(self, base_dir: str = None):
         self.store = KnowledgeStore(base_dir)
         self.feedback = FeedbackCollector(self.store)
+        self.github = GitHubMonitor(self.store)
         self.base_dir = self.store.base_dir
         self._evolution_log: List[dict] = []
 
@@ -869,5 +1267,37 @@ if __name__ == "__main__":
         print("导入结果:")
         for source, ok in results.items():
             print(f"  {source}: {'OK' if ok else 'SKIP'}")
+    elif cmd == "scan":
+        domain = args[1] if len(args) > 1 else None
+        engine = EvolutionEngine()
+        engine.initialize()
+        if domain and domain != "all":
+            result = engine.github.scan_domain(domain)
+            print(f"扫描 {domain}: 发现{result.get('found', 0)}个, 新增{result.get('new', 0)}个")
+            for repo in result.get("repos", [])[:10]:
+                print(f"  [{repo.get('stars', 0)}★] {repo.get('full_name', '')}")
+        else:
+            results = engine.github.scan_all_domains()
+            print(engine.github.generate_scan_report(results))
+    elif cmd == "tracked":
+        engine = EvolutionEngine()
+        engine.initialize()
+        repos = engine.github.get_tracked_repos()
+        print(f"已跟踪 {len(repos)} 个项目:")
+        for r in repos[:20]:
+            print(f"  [{r['stars']}★ Q={r['quality']}] {r['name']} ({r['domain']})")
+    elif cmd == "updates":
+        engine = EvolutionEngine()
+        engine.initialize()
+        updates = engine.github.check_updates()
+        if updates:
+            print(f"发现 {len(updates)} 个更新:")
+            for u in updates:
+                print(f"  {u['repo']}: ★{u['old_stars']}->{u['new_stars']}")
+        else:
+            print("暂无更新")
     else:
-        print("用法: python self_evolving_engine.py [init|evolve|status|import]")
+        print("用法: python self_evolving_engine.py [init|evolve|status|import|scan|tracked|updates]")
+        print("  scan [domain|all]  - 扫描GitHub项目")
+        print("  tracked            - 查看已跟踪项目")
+        print("  updates            - 检查项目更新")
