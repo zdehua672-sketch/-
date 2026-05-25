@@ -888,6 +888,34 @@ class ScientificAnalysisAgent:
             return float(obj)
         return obj
 
+    def submit_feedback(self, analysis_type: str, rating: int = 3, comment: str = ""):
+        """
+        提交分析反馈用于知识进化
+
+        Parameters
+        ----------
+        analysis_type : str, 分析类型如 'descriptive', 'correlation', 'pca', 'carbon_balance'
+        rating : int, 1-5质量评分
+        comment : str, 用户评论
+        """
+        try:
+            from self_evolving_engine import FeedbackCollector, KnowledgeStore
+            store = KnowledgeStore()
+            fb = FeedbackCollector(store)
+            fb.log_analysis_feedback(
+                chart_type=analysis_type,
+                data_profile={
+                    "n_samples": len(self.df) if self.df is not None else 0,
+                    "n_variables": len(self.df.columns) if self.df is not None else 0,
+                    "analyses_performed": list(self.results.keys()) if self.results else [],
+                },
+                rating=rating,
+                comment=comment,
+            )
+            return True
+        except Exception:
+            return False
+
 
 # ============================================================================
 # 5. 快捷入口

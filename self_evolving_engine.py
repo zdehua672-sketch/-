@@ -46,6 +46,8 @@ class KnowledgeStore:
         "parameters": "系统参数（阈值/权重）",
         "resources": "外部资源（论文/项目/工具）",
         "feedback_log": "反馈日志",
+        "rationale_matrix": "写作推理矩阵（发现→机制→证据→引用）",
+        "revision_history": "修订历史（版本间变化追踪）",
     }
 
     def __init__(self, base_dir: str = None):
@@ -861,7 +863,7 @@ class EvolutionEngine:
         self._log_evolution("initialize", "从现有代码导入知识", results)
         return results
 
-    def evolve_cycle(self) -> dict:
+    def evolve_cycle(self, include_github_scan=True) -> dict:
         """执行一次完整进化周期"""
         report = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -875,6 +877,14 @@ class EvolutionEngine:
         # Step 2: 参数调优
         param_updates = self._tune_parameters(feedback_analysis)
         report["steps"]["param_updates"] = param_updates
+
+        # Step 2.5: GitHub资源发现
+        if include_github_scan:
+            try:
+                github_scan = self.github.scan_all_domains()
+                report["steps"]["github_scan"] = github_scan
+            except Exception as e:
+                report["steps"]["github_scan"] = {"error": str(e)}
 
         # Step 3: 知识差距分析
         gaps = self._find_knowledge_gaps()

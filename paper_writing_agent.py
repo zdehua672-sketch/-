@@ -12,6 +12,8 @@ from datetime import datetime
 
 from scientific_analysis_agent import ScientificAnalysisAgent, TextGenerator, CaptionGenerator
 from academic_plot_style import get_label
+from writing_rationale import RationaleMatrix, RationaleRow
+from motivation_thread import MotivationThread, SevenSentenceTest, IntroductionDiscussionMapper
 
 
 # ============================================================================
@@ -30,6 +32,13 @@ class MechanismKB:
             '相反，当DO>2 mg/L时，好氧微生物通过有氧呼吸将有机碳氧化为CO2，'
             '产甲烷过程被完全抑制。'
         ),
+        'mechanism_en': (
+            'Dissolved oxygen (DO) is the primary factor controlling methanogenesis in sewage networks. '
+            'Under strictly anaerobic conditions (DO < 0.5 mg/L), methanogenic archaea exhibit maximum '
+            'activity, converting organic carbon to CH4 via acetoclastic fermentation and hydrogenotrophic '
+            'CO2 reduction. Conversely, when DO exceeds 2 mg/L, aerobic microorganisms oxidize organic '
+            'carbon to CO2 through aerobic respiration, completely suppressing methanogenesis.'
+        ),
         'references': [
             'Guisasola et al. (2008)报道城市污水管道中厌氧段的产甲烷活动可降解50%以上的有机碳',
             'Jiang et al. (2011)指出管道系统是城市温室气体排放的重要来源',
@@ -46,6 +55,13 @@ class MechanismKB:
             '促进CH4的生成。但在高TOC条件下，'
             '有机酸积累导致pH下降，可能抑制产甲烷活性。'
         ),
+        'mechanism_en': (
+            'Total organic carbon (TOC) represents the aggregate organic carbon pool in wastewater and serves '
+            'as the primary substrate for methanogenesis. Higher TOC concentrations provide more abundant '
+            'organic substrates for hydrolytic and acidogenic bacteria, which in turn supply more acetate and '
+            'H2/CO2 to methanogenic archaea, enhancing CH4 production. However, under high TOC conditions, '
+            'volatile fatty acid accumulation may lower pH and inhibit methanogenic activity.'
+        ),
         'references': []
     }
 
@@ -57,6 +73,13 @@ class MechanismKB:
             '好氧条件下，异养菌通过三羧酸循环将有机物完全氧化为CO2和H2O。'
             '厌氧条件下，产甲烷过程中CO2也作为电子受体被还原为CH4。'
             '因此，DO对CO2的影响取决于好氧呼吸产CO2和厌氧产甲烷消耗CO2的平衡。'
+        ),
+        'mechanism_en': (
+            'CO2 in sewage networks originates from both aerobic respiration and anaerobic fermentation. '
+            'Under aerobic conditions, heterotrophic bacteria oxidize organic matter to CO2 and H2O via '
+            'the tricarboxylic acid cycle. Under anaerobic conditions, CO2 also serves as an electron '
+            'acceptor and is reduced to CH4 during methanogenesis. Therefore, the net effect of DO on CO2 '
+            'depends on the balance between aerobic CO2 production and anaerobic CO2 consumption in CH4 formation.'
         ),
         'references': []
     }
@@ -70,6 +93,14 @@ class MechanismKB:
             '同时，反硝化过程需要有机碳作为电子供体，'
             'C/N比直接影响脱氮效率(C/N>5时脱氮效率高)。'
             '碳氮的协同转化反映了管道中微生物群落的整体代谢活性。'
+        ),
+        'mechanism_en': (
+            'Carbon-nitrogen coupling is a core biogeochemical process in sewage networks. '
+            'Organic carbon degradation releases nitrogen from nitrogenous organic compounds '
+            '(ammonification), elevating NH4+ concentrations. Meanwhile, denitrification requires '
+            'organic carbon as an electron donor, and the C/N ratio directly affects nitrogen removal '
+            'efficiency (optimal when C/N > 5). The synergistic transformation of carbon and nitrogen '
+            'reflects the overall metabolic activity of the microbial community in the pipeline.'
         ),
         'references': []
     }
@@ -85,6 +116,15 @@ class MechanismKB:
             '冲刷管壁生物膜和底部沉积物中的有机碳，导致液相TOC升高。'
             '两种效应的相对大小决定了净变化方向。'
         ),
+        'mechanism_en': (
+            'Temperature is the dominant factor influencing microbial metabolic activity. '
+            'As temperature rises in spring, enzymatic activities of hydrolytic-acidogenic and '
+            'methanogenic microorganisms increase, accelerating organic carbon transformation and '
+            'potentially elevating gaseous carbon (CH4+CO2) concentrations. Concurrently, increased '
+            'rainfall in spring enhances pipeline flow, creating both dilution and scouring effects '
+            'that may wash biofilms and sediment-bound organic carbon into the liquid phase, increasing '
+            'TOC. The net outcome depends on the relative magnitude of these competing effects.'
+        ),
         'references': []
     }
 
@@ -98,6 +138,15 @@ class MechanismKB:
             '厌氧程度增加，CH4生成比例上升。'
             '同时，不同功能区(教学区/生活区/餐饮区)的有机负荷和组成不同，'
             '导致碳污染物的初始输入存在空间差异。'
+        ),
+        'mechanism_en': (
+            'Spatial differentiation of carbon pollutants in pipelines is jointly controlled by '
+            'functional zone discharge characteristics and in-pipe biogeochemical processes. '
+            'At the inlet, oxygen is relatively abundant, favoring aerobic respiration with CO2 as '
+            'the dominant carbon gas. Progressing toward the mid-section and outlet, O2 is progressively '
+            'consumed by microorganisms, increasing anaerobiosis and shifting the balance toward CH4 '
+            'production. Meanwhile, different functional zones (teaching, residential, dining) exhibit '
+            'distinct organic loading and composition, creating spatial variation in initial carbon input.'
         ),
         'references': []
     }
@@ -274,10 +323,11 @@ class DiscussionGenerator:
     不是Results的重复，不是空洞的套话
     """
 
-    def __init__(self, analysis_results, captions):
+    def __init__(self, analysis_results, captions, rationale_matrix=None):
         self.results = analysis_results
         self.captions = captions
         self.mechanisms = MechanismKB()
+        self.rationale = rationale_matrix or RationaleMatrix()
 
     def generate(self, language='zh'):
         """生成Discussion全文"""
@@ -392,6 +442,17 @@ class DiscussionGenerator:
                 for ref in mech.get('references', []):
                     lines.append(f'这与{ref}的研究结论一致。')
 
+                # 记录推理链
+                self.rationale.add(
+                    finding=f"{label}在{higher}显著高于另一季节({sig_level})",
+                    mechanism=mech['mechanism'],
+                    mechanism_en=mech.get('mechanism_en', ''),
+                    evidence=f"组间比较: {label} {g1}均值{m1:.3f}, {g2}均值{m2:.3f}",
+                    citation='; '.join(mech.get('references', [])),
+                    confidence=0.85,
+                    section='discussion',
+                )
+
         return '\n\n'.join(lines)
 
     def _discuss_correlation_zh(self, method):
@@ -436,6 +497,17 @@ class DiscussionGenerator:
                             f'存在的某种生物化学耦合机制，具体机理有待进一步研究。'
                         )
                     lines.append('')
+
+                    # 记录推理链
+                    self.rationale.add(
+                        finding=f"{label_i}与{label_j}呈显著{direction}相关(r={r:.3f}, p={p:.4f})",
+                        mechanism=mech['mechanism'] if mech else '待研究',
+                        mechanism_en=mech.get('mechanism_en', '') if mech else '',
+                        evidence=f"{method}相关: r={r:.3f}, p={p:.4f}",
+                        citation='; '.join(mech.get('references', [])) if mech else '',
+                        confidence=min(0.9, abs(r)),
+                        section='discussion',
+                    )
                     discussed += 1
 
                     if discussed >= 4:
@@ -556,9 +628,269 @@ class DiscussionGenerator:
             '（5）建立管道碳转化的动力学模型，为管网碳管理提供定量工具。'
         )
 
+    # ---- English Discussion methods ----
+
+    def _overview_en(self):
+        """Core findings overview (English)"""
+        findings = []
+
+        if '描述统计' in self.results:
+            findings.append('the occurrence characteristics of multiphase carbon pollutants')
+
+        if '组间比较' in self.results:
+            comp = self.results['组间比较']
+            sig = comp[comp['显著性'] != 'n.s.']
+            if len(sig) > 0:
+                findings.append(f'significant seasonal differences in {len(sig)} indicators')
+
+        if 'pearson相关' in self.results or 'spearman相关' in self.results:
+            findings.append('significant correlations among multiple variables')
+
+        if 'PCA' in self.results:
+            findings.append('variable clustering patterns revealed by PCA')
+
+        findings_str = ', '.join(findings) if findings else 'the data characteristics'
+        return (
+            '## 4 Discussion\n\n'
+            f'This study systematically investigated the occurrence, distribution, and driving '
+            f'mechanisms of multiphase carbon pollutants in a campus sewage network through '
+            f'integrated sampling and multivariate statistical analysis. The key findings include: '
+            f'{findings_str}. Each finding is discussed in detail below.'
+        )
+
+    def _discuss_findings_en(self):
+        """Discuss findings one by one (English)"""
+        paragraphs = []
+
+        if '组间比较' in self.results:
+            p = self._discuss_seasonal_en()
+            if p:
+                paragraphs.append(p)
+
+        for method in ['pearson', 'spearman']:
+            key = f'{method}相关'
+            if key in self.results:
+                p = self._discuss_correlation_en(method)
+                if p:
+                    paragraphs.append(p)
+                break
+
+        if 'PCA' in self.results:
+            p = self._discuss_pca_en()
+            if p:
+                paragraphs.append(p)
+
+        return paragraphs
+
+    def _discuss_seasonal_en(self):
+        """Seasonal differences discussion (English)"""
+        comp = self.results['组间比较']
+        sig = comp[comp['显著性'] != 'n.s.']
+
+        if len(sig) == 0:
+            return ''
+
+        lines = ['### 4.1 Seasonal Differences\n']
+
+        for _, row in sig.iterrows():
+            var = row['变量']
+            label = get_label(var)
+            sig_level = row['显著性']
+
+            mean_cols = [c for c in row.index if '_均值' in c]
+            if len(mean_cols) == 2:
+                g1, g2 = mean_cols[0].replace('_均值', ''), mean_cols[1].replace('_均值', '')
+                m1, m2 = row[mean_cols[0]], row[mean_cols[1]]
+                higher = g1 if m1 > m2 else g2
+
+                mech = MechanismKB.SEASONAL
+                lines.append(
+                    f'{label} was significantly higher in {higher} than in the other season ({sig_level}). '
+                    f'{mech.get("mechanism_en", mech["mechanism"])}'
+                )
+
+                for ref in mech.get('references', []):
+                    lines.append(f'This finding is consistent with the observations reported by previous studies.')
+
+        return '\n\n'.join(lines)
+
+    def _discuss_correlation_en(self, method):
+        """Correlation discussion with mechanism explanations (English)"""
+        key = f'{method}相关'
+        corr = self.results[key]['相关系数']
+        pvals = self.results[key]['p值']
+
+        lines = [f'### 4.2 Correlation Analysis\n']
+        lines.append(
+            f'{method.capitalize()} correlation analysis revealed significant associations among '
+            f'multiple variables. The formation mechanisms of key correlations are discussed below.\n'
+        )
+
+        discussed = 0
+        for i in range(len(corr)):
+            for j in range(i + 1, len(corr)):
+                r = corr.iloc[i, j]
+                p = pvals.iloc[i, j]
+                if abs(r) > 0.5 and p < 0.05:
+                    var_i = corr.index[i]
+                    var_j = corr.columns[j]
+                    label_i = get_label(var_i)
+                    label_j = get_label(var_j)
+                    direction = 'positive' if r > 0 else 'negative'
+
+                    mech = self.mechanisms.find_mechanism_for_correlation(var_i, var_j)
+
+                    lines.append(
+                        f'{label_i} showed a significant {direction} correlation with {label_j} '
+                        f'(r = {r:.3f}, p = {p:.4f}).'
+                    )
+
+                    if mech:
+                        lines.append(mech.get('mechanism_en', mech['mechanism']))
+                        for ref in mech.get('references', []):
+                            lines.append('Similar correlations have been reported in previous studies.')
+                    else:
+                        lines.append(
+                            f'This correlation may reflect an underlying biogeochemical coupling mechanism '
+                            f'between {label_i} and {label_j}, which warrants further investigation.'
+                        )
+                    lines.append('')
+                    discussed += 1
+
+                    if discussed >= 4:
+                        break
+            if discussed >= 4:
+                break
+
+        return '\n'.join(lines)
+
+    def _discuss_pca_en(self):
+        """PCA discussion (English)"""
+        pca = self.results['PCA']
+        var_ratio = pca.get('explained_variance_ratio', [])
+        loadings = pca.get('loadings')
+
+        if len(var_ratio) < 2:
+            return ''
+
+        lines = ['### 4.3 Principal Component Analysis\n']
+        lines.append(
+            f'The PCA results indicated that the first two principal components cumulatively explained '
+            f'{sum(var_ratio[:2])*100:.1f}% of the total variance, suggesting that these components '
+            f'effectively captured the major information of the original variables.'
+        )
+
+        if loadings is not None:
+            pc1 = loadings.iloc[:, 0].sort_values(key=abs, ascending=False)
+            high_pos = pc1[pc1 > 0.5].index.tolist()
+            high_neg = pc1[pc1 < -0.5].index.tolist()
+
+            if high_pos:
+                labels = [get_label(v) for v in high_pos[:3]]
+                lines.append(
+                    f'Variables with high positive loadings on PC1 included {", ".join(labels)}, '
+                    f'which may represent the integrated signal of organic matter input and microbial activity.'
+                )
+            if high_neg:
+                labels = [get_label(v) for v in high_neg[:3]]
+                lines.append(
+                    f'Variables with high negative loadings on PC1 included {", ".join(labels)}, '
+                    f'possibly reflecting the influence of redox conditions and environmental factors.'
+                )
+
+        return '\n'.join(lines)
+
+    def _discuss_carbon_balance_en(self):
+        """Carbon balance discussion (English)"""
+        if '描述统计' not in self.results:
+            return ''
+
+        desc = self.results['描述统计']['总体']
+        phase_data = {}
+        for col in ['气相碳', '液相碳', '固相碳']:
+            if col in desc.columns:
+                phase_data[col] = desc.loc['mean', col]
+
+        if len(phase_data) < 2:
+            return ''
+
+        total = sum(phase_data.values())
+        lines = ['### 4.4 Carbon Balance Analysis\n']
+        lines.append(
+            'The carbon balance analysis revealed the distribution pattern of carbon '
+            'across the solid, liquid, and gas phases.'
+        )
+
+        for phase, val in phase_data.items():
+            pct = val / total * 100
+            lines.append(f'{phase} accounted for {pct:.1f}% of the total carbon.')
+
+        max_phase = max(phase_data, key=phase_data.get)
+        if '液' in max_phase:
+            lines.append(
+                'Liquid-phase carbon dominated the total carbon pool, consistent with the primary '
+                'function of sewage networks as liquid conveyance systems. Liquid organic carbon '
+                'serves as the direct substrate for microbial metabolism in the pipeline and directly '
+                'influences the carbon source supply to downstream wastewater treatment plants.'
+            )
+        elif '固' in max_phase:
+            lines.append(
+                'Solid-phase carbon accounted for a significant proportion, indicating that pipeline '
+                'sediments and biofilms serve as important carbon sinks. The accumulation of solid-phase '
+                'carbon may cause pipeline blockage and corrosion, while the released organic carbon '
+                'provides a sustained substrate supply for anaerobic methanogenesis.'
+            )
+        elif '气' in max_phase:
+            lines.append(
+                'Gas-phase carbon constituted a notable proportion, suggesting high carbon emission '
+                'intensity from this campus sewage network. The elevated anaerobic conditions in the '
+                'pipeline promoted CH4 generation, which has important implications for greenhouse gas '
+                'mitigation strategies.'
+            )
+
+        return '\n'.join(lines)
+
+    def _limitations_en(self):
+        """Study limitations (English)"""
+        return (
+            '### 4.5 Limitations\n\n'
+            'Several limitations of this study should be acknowledged:\n\n'
+            '(1) Sampling was limited to winter and spring seasons, excluding summer and autumn, '
+            'which may not fully capture the seasonal variation patterns of carbon pollutants.\n\n'
+            '(2) Sampling frequency was limited to instantaneous grab samples, which may not '
+            'adequately represent the diurnal variation of carbon pollutants.\n\n'
+            '(3) Microbial community analysis was not performed, leaving a gap in direct evidence '
+            'for the key functional microorganisms involved in carbon transformation processes.\n\n'
+            '(4) The carbon balance calculation was based on a simplified mass-balance model that '
+            'did not account for contributions from pipeline wall adsorption or chemical precipitation.'
+        )
+
+    def _future_en(self):
+        """Future work (English)"""
+        return (
+            '### 4.6 Future Work\n\n'
+            'Future research could be advanced in the following directions:\n\n'
+            '(1) Extending the sampling period to cover all four seasons and establish a comprehensive '
+            'seasonal variation model for carbon pollutants.\n\n'
+            '(2) Increasing sampling frequency through continuous monitoring to reveal diurnal '
+            'variation patterns of carbon pollutants.\n\n'
+            '(3) Incorporating high-throughput sequencing to analyze pipeline microbial community '
+            'structure and identify key functional microorganisms and their metabolic pathways.\n\n'
+            '(4) Conducting carbon isotope tracer experiments to quantitatively distinguish the '
+            'contributions of different sources and transformation pathways to the carbon balance.\n\n'
+            '(5) Developing kinetic models of pipeline carbon transformation to provide quantitative '
+            'tools for pipeline carbon management.'
+        )
+
     def _generate_en(self):
         """SCI英文Discussion"""
-        return self._generate_zh()  # 占位，实际需要英文版
+        sections = []
+        sections.append(self._overview_en())
+        sections.extend(self._discuss_findings_en())
+        sections.append(self._discuss_carbon_balance_en())
+        sections.append(self._limitations_en())
+        sections.append(self._future_en())
+        return '\n\n'.join(s for s in sections if s)
 
 
 # ============================================================================
@@ -622,6 +954,9 @@ class AbstractGenerator:
 class MethodsGenerator:
     """Methods章节生成 - 引用国标/行标"""
 
+    def __init__(self, params=None):
+        self.params = params or {}
+
     def generate(self, language='zh'):
         if language == 'zh':
             return self._generate_zh()
@@ -631,13 +966,13 @@ class MethodsGenerator:
         return (
             '# 3 材料与方法\n\n'
             '## 3.1 研究区域概况\n\n'
-            '本研究选取某校园污水管网作为研究对象。该校园占地面积约X公顷，'
-            '常住人口约X万人，日均污水排放量约X m³/d。校园功能区主要包括教学区、'
+            f'本研究选取某校园污水管网作为研究对象。该校园占地面积约{self.params.get("area", "X")}公顷，'
+            f'常住人口约{self.params.get("population", "X")}万人，日均污水排放量约{self.params.get("sewage_flow", "X")} m³/d。校园功能区主要包括教学区、'
             '生活区、餐饮区和运动区，各功能区的污水通过支管汇入主管道后排出校园。\n\n'
             '## 3.2 采样方案\n\n'
-            '根据管网布局和功能区分布，在主管道上设置了X个采样点，'
+            f'根据管网布局和功能区分布，在主管道上设置了{self.params.get("sampling_points", "X")}个采样点，'
             '分别位于教学区(A1-A3)、生活区(B1-B3)、餐饮区(C1-C3)和管口出口(D)。'
-            '采样时间涵盖冬季(2024年X月)和春季(2025年X月)两个季节，'
+            f'采样时间涵盖冬季(2024年{self.params.get("winter_month", "X")}月)和春季(2025年{self.params.get("spring_month", "X")}月)两个季节，'
             '每次采样在各点同步采集固相、液相和气相样品。\n\n'
             '## 3.3 分析方法\n\n'
             '**气相分析：** 采用便携式气体检测仪测定管道内CH4、CO2、O2和VOCs浓度。'
@@ -667,9 +1002,15 @@ class MethodsGenerator:
         return (
             '# 3 Materials and Methods\n\n'
             '## 3.1 Study Area\n\n'
-            'A campus sewage network was selected as the study site...\n\n'
+            f'A campus sewage network was selected as the study site, covering approximately '
+            f'{self.params.get("area", "X")} hectares with a resident population of about '
+            f'{self.params.get("population", "X")}0,000 and a daily wastewater discharge of '
+            f'{self.params.get("sewage_flow", "X")} m³/d.\n\n'
             '## 3.2 Sampling Strategy\n\n'
-            'Solid, liquid, and gas phase samples were collected from X sampling points...\n\n'
+            f'Solid, liquid, and gas phase samples were collected from {self.params.get("sampling_points", "X")} '
+            'sampling points located at the teaching zone (A1-A3), residential zone (B1-B3), '
+            'dining zone (C1-C3), and outlet (D). Sampling was conducted in winter '
+            f'(2024/{self.params.get("winter_month", "X")}) and spring (2025/{self.params.get("spring_month", "X")}).\n\n'
             '## 3.3 Analytical Methods\n\n'
             'Gas phase: Portable gas detectors for CH4, CO2, O2, VOCs.\n'
             'Liquid phase: TOC analyzer (HJ 501-2009), COD by dichromate method (GB 11914-89).\n'
@@ -701,7 +1042,7 @@ class PaperWriter:
         self.language = 'zh'
         self.paper_type = 'thesis'  # thesis / sci / chinese
 
-    def write(self, data_path=None, paper_type='thesis', language='zh'):
+    def write(self, data_path=None, paper_type='thesis', language='zh', params=None):
         """
         一键生成论文
 
@@ -709,9 +1050,11 @@ class PaperWriter:
             data_path: 数据文件路径
             paper_type: 论文类型 thesis/sci/chinese
             language: zh/en
+            params: Methods参数字典(面积、人口等)
         """
         self.language = language
         self.paper_type = paper_type
+        self.params = params or {}
 
         print("\n" + "=" * 70)
         print("  论文自动写作Agent - 开始生成论文")
@@ -734,7 +1077,7 @@ class PaperWriter:
 
         # Methods
         print("  → 生成Materials & Methods...")
-        methods_gen = MethodsGenerator()
+        methods_gen = MethodsGenerator(params=self.params)
         self.sections['methods'] = methods_gen.generate(language)
 
         # Results (from analysis agent)
@@ -743,9 +1086,11 @@ class PaperWriter:
 
         # Discussion
         print("  → 生成Discussion（含机制解释）...")
+        self.rationale = RationaleMatrix()
         disc_gen = DiscussionGenerator(
             self.analysis_agent.results,
-            self.analysis_agent.captions
+            self.analysis_agent.captions,
+            rationale_matrix=self.rationale,
         )
         self.sections['discussion'] = disc_gen.generate(language)
 
@@ -778,6 +1123,30 @@ class PaperWriter:
             section_path = os.path.join(self.output_dir, f'section_{name}.md')
             with open(section_path, 'w', encoding='utf-8') as f:
                 f.write(content)
+
+        # 保存推理矩阵
+        print("  → 保存写作推理矩阵...")
+        self.rationale.save()
+        rationale_path = os.path.join(self.output_dir, 'rationale_matrix.md')
+        with open(rationale_path, 'w', encoding='utf-8') as f:
+            f.write(self.rationale.to_markdown())
+
+        # 七句话血统测试
+        print("  → 执行七句话血统测试...")
+        test = SevenSentenceTest()
+        test.extract_from_paper(self.sections)
+        thread_result = test.validate()
+        thread_path = os.path.join(self.output_dir, 'seven_sentence_test.md')
+        with open(thread_path, 'w', encoding='utf-8') as f:
+            f.write(test.to_markdown())
+            f.write('\n\n## 验证结果\n\n')
+            for check_name, passed in thread_result['checks']:
+                icon = '✓' if passed else '✗'
+                f.write(f"- {icon} {check_name}\n")
+            if thread_result['issues']:
+                f.write('\n## 问题\n\n')
+                for issue in thread_result['issues']:
+                    f.write(f"- {issue}\n")
 
         print(f"\n论文已保存: {paper_path}")
         print(f"各章节单独文件: {self.output_dir}/section_*.md")
@@ -866,12 +1235,7 @@ class PaperWriter:
 
     def _assemble_paper(self):
         """组装完整论文"""
-        if self.paper_type == 'thesis':
-            order = ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
-        elif self.paper_type == 'sci':
-            order = ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
-        else:  # chinese
-            order = ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+        order = ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
 
         parts = []
         for section in order:
@@ -889,10 +1253,10 @@ class PaperWriter:
 # ============================================================================
 # 7. 快捷入口
 # ============================================================================
-def write_paper(data_path=None, paper_type='thesis', language='zh', output_dir=None):
+def write_paper(data_path=None, paper_type='thesis', language='zh', output_dir=None, params=None):
     """一键生成论文"""
     writer = PaperWriter(output_dir)
-    paper = writer.write(data_path, paper_type, language)
+    paper = writer.write(data_path, paper_type, language, params=params)
     return writer
 
 
@@ -930,8 +1294,9 @@ def _load_evolved_mechanisms():
             # 只添加新机制，不覆盖已有的硬编码机制
             if not hasattr(MechanismKB, attr_name) and val.get("mechanism"):
                 setattr(MechanismKB, attr_name, val)
-    except Exception:
-        pass
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).debug(f"Failed to load evolved mechanisms: {e}")
 
 
 # 模块加载时自动桥接

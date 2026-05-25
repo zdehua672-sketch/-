@@ -7,10 +7,19 @@ Academic Review & Proofreading Agent - 论文自动检查系统
 
 import re
 import os
+import logging
 from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
+
+logger = logging.getLogger(__name__)
+
+try:
+    from self_evolving_engine import FeedbackCollector, KnowledgeStore
+except ImportError:
+    FeedbackCollector = None
+    KnowledgeStore = None
 
 # ============================================================================
 # 数据结构
@@ -37,6 +46,11 @@ class Issue:
     original: str           # 原文片段
     suggestion: str         # 修改建议
     fix: str = ''           # 自动修复文本
+    # 教学导向字段（借鉴PaperSpine）
+    root_cause: str = ''    # 根本原因
+    fix_action: str = ''    # 修复动作
+    downstream_impact: str = ''  # 下游影响
+    teaching_note: str = '' # 教学提示
 
 @dataclass
 class SectionContent:
@@ -958,6 +972,130 @@ class RepetitionChecker:
         return issues
 
 
+class RationaleChecker:
+    """推理链完整性检查 - 验证每个主张是否有支撑"""
+
+    @staticmethod
+    def check(sections, language='en'):
+        issues = []
+
+        for sec_name in ['discussion', 'introduction', 'results']:
+            if sec_name not in sections:
+                continue
+            sec = sections[sec_name]
+            for i, para in enumerate(sec.paragraphs):
+                if len(para) < 30:
+                    continue
+
+                # 检查是否有主张但无支撑
+                has_claim = any(kw in para.lower() for kw in
+                    ['表明', '显示', '揭示', '发现', 'suggest', 'indicate', 'reveal', 'demonstrate', 'show that'])
+                has_evidence = any(kw in para.lower() for kw in
+                    ['r=', 'p<', 'p=', '显著', 'significant', 'significant', 'correlation', '相关'])
+                has_citation = bool(re.search(r'\([A-Z][a-z]+\s+et\s+al\.|[\d{4}]\)|\[\d+\]', para))
+                has_mechanism = any(kw in para.lower() for kw in
+                    ['因为', '由于', '机制', '原因', 'because', 'mechanism', 'due to', 'attribute', '导致', '导致'])
+
+                if has_claim and not has_evidence and not has_citation:
+                    issues.append(Issue(
+                        category='推理链', severity=Severity.MAJOR,
+                        section=sec_name, location=f'第{i+1}段',
+                        problem='有主张但缺少数据证据或文献引用',
+                        original=para[:80] + '...',
+                        suggestion='为每个主张添加数据支撑（统计结果）或文献引用',
+                        root_cause='段落只提出了结论，没有提供支撑依据',
+                        fix_action='在主张句后添加: (1)统计证据如r=X, p<Y; (2)文献引用如(作者, 年份)',
+                        downstream_impact='读者无法判断结论的可信度',
+                        teaching_note='学术写作的核心原则: 每个主张都需要有据可查。'
+                                      '好的模式是: 主张 + 数据证据 + 机制解释 + 文献对比。',
+                    ))
+
+                if has_claim and has_evidence and not has_mechanism and sec_name == 'discussion':
+                    issues.append(Issue(
+                        category='推理链', severity=Severity.MINOR,
+                        section=sec_name, location=f'第{i+1}段',
+                        problem='有数据证据但缺少机制解释',
+                        original=para[:80] + '...',
+                        suggestion='在数据支撑后添加机制解释（为什么会出现这种结果）',
+                        root_cause='Discussion段落只罗列了发现，没有解释原因',
+                        fix_action='添加机制解释句，如"这一现象的可能机制是..."',
+                        downstream_impact='Discussion沦为Results的重复，缺乏深度',
+                        teaching_note='Discussion ≠ Results的重复。Discussion要回答"为什么"和"意味着什么"。',
+                    ))
+
+        return issues
+
+
+class LogicalLeapChecker:
+    """逻辑跳跃密度检查 - 借鉴PaperSpine的integrity_audit"""
+
+    @staticmethod
+    def check(sections, language='en'):
+        issues = []
+
+        if language == 'zh':
+            connectors = ['因此', '所以', '由此可见', '综上', '这说明', '这表明']
+        else:
+            connectors = ['therefore', 'thus', 'hence', 'consequently', 'it follows that',
+                         'this suggests', 'this indicates', 'accordingly']
+
+        for sec_name in ['discussion', 'introduction']:
+            if sec_name not in sections:
+                continue
+            sec = sections[sec_name]
+            for i, para in enumerate(sec.paragraphs):
+                if len(para) < 50:
+                    continue
+
+                connector_count = sum(
+                    para.lower().count(c.lower()) for c in connectors
+                )
+                sentences = re.split(r'[。！？.!?]', para)
+                sentence_count = max(1, len([s for s in sentences if len(s.strip()) > 5]))
+                density = connector_count / sentence_count
+
+                if density > 1.5:
+                    found = [c for c in connectors if c.lower() in para.lower()]
+                    issues.append(Issue(
+                        category='逻辑跳跃', severity=Severity.WARNING,
+                        section=sec_name, location=f'第{i+1}段',
+                        problem=f'逻辑连接词密度过高({density:.1f}/句): {", ".join(found[:3])}',
+                        original=para[:80] + '...',
+                        suggestion='减少逻辑连接词的使用，用数据和证据代替强行推理',
+                        root_cause='过多使用"因此/所以"暗示推理链条不扎实',
+                        fix_action='删除部分连接词，改用证据自然过渡',
+                        downstream_impact='读者感觉作者在"强行推论"',
+                        teaching_note='逻辑跳跃密度高意味着推理不扎实。'
+                                      '好的论证用数据说话，不需要频繁声明"因此"。',
+                    ))
+
+        # 检查弱断言词
+        weak_assertions_zh = ['显然', '毫无疑问', '众所周知', '不言而喻']
+        weak_assertions_en = ['clearly', 'obviously', 'undoubtedly', 'of course', 'without doubt']
+        weak_assertions = weak_assertions_zh if language == 'zh' else weak_assertions_en
+
+        for sec_name, sec in sections.items():
+            if sec_name in ('references', 'acknowledgments', 'preamble'):
+                continue
+            for i, para in enumerate(sec.paragraphs):
+                for weak in weak_assertions:
+                    if weak.lower() in para.lower():
+                        issues.append(Issue(
+                            category='逻辑跳跃', severity=Severity.MINOR,
+                            section=sec_name, location=f'第{i+1}段',
+                            problem=f'使用了弱断言词"{weak}"',
+                            original=para[:80] + '...',
+                            suggestion=f'删除"{weak}"，用数据支撑代替空洞断言',
+                            root_cause=f'"{weak}"是主观判断，学术写作应基于客观证据',
+                            fix_action=f'删除"{weak}"，在该位置添加具体数据或文献引用',
+                            downstream_impact='削弱论文的客观性和可信度',
+                            teaching_note='学术写作应避免主观判断词。'
+                                          '"显然"对作者来说显然，对读者未必。',
+                        ))
+
+        return issues
+
+
 # ============================================================================
 # 综合评分系统
 # ============================================================================
@@ -965,16 +1103,18 @@ class Scorer:
     """论文质量评分"""
 
     DIMENSIONS = {
-        'SCI格式': {'weight': 0.15, 'description': '格式规范性'},
-        '中文格式': {'weight': 0.10, 'description': '中文格式规范'},
-        '错别字': {'weight': 0.10, 'description': '拼写正确性'},
-        '学术语法': {'weight': 0.10, 'description': '语言学术性'},
-        '引文规范': {'weight': 0.10, 'description': '引用规范性'},
-        '图表规范': {'weight': 0.10, 'description': '图表规范性'},
-        '数据逻辑': {'weight': 0.15, 'description': '数据一致性'},
+        'SCI格式': {'weight': 0.12, 'description': '格式规范性'},
+        '中文格式': {'weight': 0.08, 'description': '中文格式规范'},
+        '错别字': {'weight': 0.08, 'description': '拼写正确性'},
+        '学术语法': {'weight': 0.08, 'description': '语言学术性'},
+        '引文规范': {'weight': 0.08, 'description': '引用规范性'},
+        '图表规范': {'weight': 0.08, 'description': '图表规范性'},
+        '数据逻辑': {'weight': 0.12, 'description': '数据一致性'},
         'Discussion逻辑': {'weight': 0.10, 'description': '讨论深度'},
-        'AI痕迹': {'weight': 0.05, 'description': '自然度'},
-        '学术重复': {'weight': 0.05, 'description': '原创性'},
+        'AI痕迹': {'weight': 0.04, 'description': '自然度'},
+        '学术重复': {'weight': 0.04, 'description': '原创性'},
+        '推理链完整性': {'weight': 0.10, 'description': '推理链完整性'},
+        '逻辑跳跃': {'weight': 0.06, 'description': '逻辑严谨性'},
     }
 
     @classmethod
@@ -1025,6 +1165,8 @@ class AcademicReviewAgent:
         ('Discussion逻辑', DiscussionChecker),
         ('AI痕迹', AIDetector),
         ('学术重复', RepetitionChecker),
+        ('推理链完整性', RationaleChecker),
+        ('逻辑跳跃', LogicalLeapChecker),
     ]
 
     def __init__(self, paper_type='sci', language='auto'):
@@ -1206,10 +1348,9 @@ class AcademicReviewAgent:
                 rejected.append(entry)
 
         # 写入knowledge_store
+        if FeedbackCollector is None:
+            return False
         try:
-            import sys
-            sys.path.insert(0, str(__import__('pathlib').Path(__file__).parent))
-            from self_evolving_engine import FeedbackCollector, KnowledgeStore
             store = KnowledgeStore()
             fb = FeedbackCollector(store)
             fb.log_review_feedback(
@@ -1217,7 +1358,8 @@ class AcademicReviewAgent:
                 accepted=accepted, rejected=rejected, comment=comment
             )
             return True
-        except Exception:
+        except Exception as e:
+            logger.debug(f"Failed to submit feedback: {e}")
             return False
 
 
@@ -1309,8 +1451,8 @@ def _load_evolved_knowledge():
                 ReviewKB.OVERCLAIM_EN = evolved_overclaim_en
             if evolved_overclaim_zh:
                 ReviewKB.OVERCLAIM_ZH = evolved_overclaim_zh
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Failed to load evolved review rules: {e}")
 
     # 2. 加载评分权重
     params_path = store_dir / "parameters.json"
@@ -1329,8 +1471,8 @@ def _load_evolved_knowledge():
                     new_weight = val.get("weight", val.get("value"))
                     if new_weight is not None and isinstance(new_weight, (int, float)):
                         Scorer.DIMENSIONS[dim]["weight"] = float(new_weight)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Failed to load evolved parameters: {e}")
 
 
 # 模块加载时自动桥接进化知识

@@ -1376,6 +1376,32 @@ class VisualizationAgent:
         """委托调用原ThesisPlotter的全部12种图"""
         self._legacy_plotter.generate_all_figures()
 
+    def submit_feedback(self, chart_type: str, chart_data: dict = None,
+                        rating: int = 3, comment: str = ""):
+        """
+        提交可视化反馈用于知识进化
+
+        Parameters
+        ----------
+        chart_type : str, 图表类型如 'boxplot', 'heatmap', 'pca'
+        chart_data : dict, 图表数据概况(变量、样本数等)
+        rating : int, 1-5质量评分
+        comment : str, 用户评论
+        """
+        try:
+            from self_evolving_engine import FeedbackCollector, KnowledgeStore
+            store = KnowledgeStore()
+            fb = FeedbackCollector(store)
+            fb.log_analysis_feedback(
+                chart_type=chart_type,
+                data_profile=chart_data or {},
+                rating=rating,
+                comment=comment,
+            )
+            return True
+        except Exception:
+            return False
+
 
 # ============================================================================
 # EnhancedCaptionGenerator - 数据驱动图注
