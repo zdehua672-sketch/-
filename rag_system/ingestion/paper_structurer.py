@@ -19,18 +19,22 @@ IMRAD_PATTERNS = {
     'methods': [
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?(?:materials?\s*(?:and|&)\s*)?methods?',
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?(?:材料|方法|实验方法|实验设计)',
+        r'(?i)^(?:\d\.?\s*)?(?:materials?\s*(?:and|&)\s*)?methods?\s*$',
     ],
     'results': [
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?results?(?:\s*(?:and|&)\s*discussion)?',
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?(?:结果|实验结果)',
+        r'(?i)^(?:\d\.?\s*)?results?\s*$',
     ],
     'discussion': [
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?discussion',
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?(?:讨论|分析讨论)',
+        r'(?i)^(?:\d\.?\s*)?discussion\s*$',
     ],
     'conclusion': [
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?conclusions?',
         r'(?i)^#{1,3}\s*(?:\d\.?\s*)?(?:结论|总结)',
+        r'(?i)^(?:\d\.?\s*)?conclusions?\s*$',
     ],
 }
 
