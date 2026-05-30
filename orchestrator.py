@@ -34,7 +34,7 @@ import sys
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Optional, List, Dict, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -224,9 +224,9 @@ class AcademicPipeline:
         print("[Pipeline] Step 4: 生成论文")
 
         try:
-            from paper_writing_agent import PaperWritingAgent
-            agent = PaperWritingAgent(data_dir=os.path.dirname(data_file) if data_file else self.base_dir)
-            result = agent.write_full_paper()
+            from paper_writing_agent import PaperWriter
+            agent = PaperWriter(output_dir=os.path.join(self.base_dir, 'paper_output'))
+            result = agent.write(data_path=data_file, language=language)
 
             self._log("step4_write", "论文生成完成", {
                 "data_file": data_file,

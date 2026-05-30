@@ -348,7 +348,11 @@ class ThesisPlotter:
         corr_df = df[corr_cols].copy()
         corr_df = corr_df.apply(pd.to_numeric, errors='coerce')
         corr = corr_df.corr(method='pearson')
-        labels = [get_label(c) for c in corr.columns]
+        short = {'CH4平均值':'CH4','N2O平均值':'N2O','CO2':'CO2','VOCs(ppb)':'VOCs',
+                 'TOC（mg/L)':'TOC','IC(mg/L)':'IC','TC(mg/L)':'TC','DO(mg/L)':'DO',
+                 'COD（mg/L)':'COD','总氮（mg/L)':'TN','铵态氮（mg/L)':'NH4','硝态氮（mg/L)':'NO3',
+                 'pH':'pH','液温':'T','电导率(uS/cm)':'EC'}
+        labels = [short.get(c, c) for c in corr.columns]
         fig, ax = plt.subplots(figsize=(12, 10), facecolor='white')
         mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
         cmap = sns.diverging_palette(240, 10, as_cmap=True)
@@ -358,9 +362,9 @@ class ThesisPlotter:
                     xticklabels=labels, yticklabels=labels,
                     annot_kws={'fontsize': 9},
                     cbar_kws={'shrink': 0.8, 'label': 'Pearson r'}, ax=ax)
-        ax.set_title('多参数相关性热图', fontsize=18, fontweight='bold', pad=20, fontproperties=CN_FONT_PROP)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10, fontproperties=CN_FONT_PROP)
-        ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=10)
+        ax.set_title('图6  多指标Pearson相关性矩阵', fontsize=16, fontweight='bold', pad=20, fontproperties=CN_FONT_PROP)
+        ax.set_xticklabels(labels, rotation=45, ha='right', fontsize=10, fontproperties=CN_FONT_PROP)
+        ax.set_yticklabels(labels, rotation=0, fontsize=10, fontproperties=CN_FONT_PROP)
         plt.tight_layout()
         fig_name = '图6_相关性热图'
         save_figure(fig, '图6_相关性热图', self.output_dir)
@@ -527,9 +531,13 @@ class ThesisPlotter:
         props = dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='#BBBBBB', alpha=0.9)
         ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=11,
                verticalalignment='top', bbox=props, family='monospace')
-        ax.set_xlabel(get_label(x_col), fontsize=13)
-        ax.set_ylabel(get_label(y_col), fontsize=13)
-        ax.set_title(title, fontsize=14, fontweight='bold', pad=15)
+        short = {'CH4平均值':'CH4','N2O平均值':'N2O','CO2':'CO2','VOCs(ppb)':'VOCs',
+                 'TOC（mg/L)':'TOC','IC(mg/L)':'IC','TC(mg/L)':'TC','DO(mg/L)':'DO',
+                 'COD（mg/L)':'COD','总氮（mg/L)':'TN','铵态氮（mg/L)':'NH4','硝态氮（mg/L)':'NO3',
+                 'pH':'pH','液温':'T','电导率(uS/cm)':'EC'}
+        ax.set_xlabel(short.get(x_col, get_label(x_col)), fontsize=13, fontproperties=CN_FONT_PROP)
+        ax.set_ylabel(short.get(y_col, get_label(y_col)), fontsize=13, fontproperties=CN_FONT_PROP)
+        ax.set_title(title, fontsize=14, fontweight='bold', pad=15, fontproperties=CN_FONT_PROP)
         ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB', prop=CN_FONT_PROP)
         ax.grid(alpha=0.3, linestyle='--')
         ax.set_axisbelow(True)
@@ -542,12 +550,12 @@ class ThesisPlotter:
         """图9-14: 所有回归分析图"""
         print("\n[生成图9-14] 回归分析图...")
         regressions = [
-            ('TOC（mg/L)', 'CH4平均值', 'TOC 与 CH$_4$ 的关系', '图9_TOC_CH4回归'),
-            ('TOC（mg/L)', 'CO2', 'TOC 与 CO$_2$ 的关系', '图10_TOC_CO2回归'),
-            ('DO(mg/L)', 'CH4平均值', 'DO 与 CH$_4$ 的关系', '图11_DO_CH4回归'),
-            ('COD（mg/L)', 'CH4平均值', 'COD 与 CH$_4$ 的关系', '图12_COD_CH4回归'),
+            ('TOC（mg/L)', 'CH4平均值', 'TOC 与 CH4 的关系', '图9_TOC_CH4回归'),
+            ('TOC（mg/L)', 'CO2', 'TOC 与 CO2 的关系', '图10_TOC_CO2回归'),
+            ('DO(mg/L)', 'CH4平均值', 'DO 与 CH4 的关系', '图11_DO_CH4回归'),
+            ('COD（mg/L)', 'CH4平均值', 'COD 与 CH4 的关系', '图12_COD_CH4回归'),
             ('总氮（mg/L)', 'TOC（mg/L)', 'TN 与 TOC 的关系', '图13_TN_TOC回归'),
-            ('铵态氮（mg/L)', 'CH4平均值', r'NH$_4^+$ 与 CH$_4$ 的关系', '图14_NH4_CH4回归'),
+            ('铵态氮（mg/L)', 'CH4平均值', 'NH4 与 CH4 的关系', '图14_NH4_CH4回归'),
         ]
         for x_col, y_col, title, filename in regressions:
             if x_col in self.df.columns and y_col in self.df.columns:

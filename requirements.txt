@@ -17,6 +17,9 @@ python-docx>=1.0
 # Network (for citation verification, paper reading)
 requests>=2.28
 
+# Testing
+pytest>=7.0
+
 # RAG system (optional)
 # chromadb>=0.4
 

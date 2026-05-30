@@ -11,7 +11,6 @@ import logging
 from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -1334,9 +1333,9 @@ class Scorer:
 
     DIMENSIONS = {
         'SCI格式': {'weight': 0.10, 'description': '格式规范性'},
-        '中文格式': {'weight': 0.07, 'description': '中文格式规范'},
-        '错别字': {'weight': 0.07, 'description': '拼写正确性'},
-        '学术语法': {'weight': 0.07, 'description': '语言学术性'},
+        '中文格式': {'weight': 0.08, 'description': '中文格式规范'},
+        '错别字': {'weight': 0.06, 'description': '拼写正确性'},
+        '学术语法': {'weight': 0.06, 'description': '语言学术性'},
         '引文规范': {'weight': 0.07, 'description': '引用规范性'},
         '图表规范': {'weight': 0.07, 'description': '图表规范性'},
         '数据逻辑': {'weight': 0.10, 'description': '数据一致性'},
@@ -1707,6 +1706,12 @@ def _load_evolved_knowledge():
                     new_weight = val.get("weight", val.get("value"))
                     if new_weight is not None and isinstance(new_weight, (int, float)):
                         Scorer.DIMENSIONS[dim]["weight"] = float(new_weight)
+
+            # 归一化权重确保总和为1.0
+            total_weight = sum(c['weight'] for c in Scorer.DIMENSIONS.values())
+            if total_weight > 0 and abs(total_weight - 1.0) > 1e-6:
+                for config in Scorer.DIMENSIONS.values():
+                    config['weight'] = round(config['weight'] / total_weight, 4)
         except Exception as e:
             logger.debug(f"Failed to load evolved parameters: {e}")
 

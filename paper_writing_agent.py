@@ -8,12 +8,11 @@
 
 import os
 import json
-from datetime import datetime
 
-from scientific_analysis_agent import ScientificAnalysisAgent, TextGenerator, CaptionGenerator
+from scientific_analysis_agent import ScientificAnalysisAgent
 from academic_plot_style import get_label
-from writing_rationale import RationaleMatrix, RationaleRow
-from motivation_thread import MotivationThread, SevenSentenceTest, IntroductionDiscussionMapper
+from writing_rationale import RationaleMatrix
+from motivation_thread import SevenSentenceTest
 
 try:
     from rag_system import RAGEngine

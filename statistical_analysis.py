@@ -9,7 +9,7 @@ Pearson/Spearman相关、PCA、HCA、多元回归
 import pandas as pd
 import numpy as np
 from scipy import stats
-from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
+from scipy.cluster.hierarchy import linkage, fcluster
 import warnings
 warnings.filterwarnings('ignore')
 

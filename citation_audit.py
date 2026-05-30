@@ -54,7 +54,7 @@ def extract_year(text: str) -> int:
     if match:
         return int(match.group(1))
     # 匹配独立的20XX年份
-    matches = re.findall(r'(20[0-2]\d)', text)
+    matches = re.findall(r'(20\d{2})', text)
     if matches:
         return int(matches[-1])  # 取最后一个（通常是出版年）
     return 0
