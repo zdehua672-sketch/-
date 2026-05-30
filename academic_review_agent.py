@@ -167,6 +167,71 @@ class ReviewKB:
         r"有待(?:进[一壹]步|深入)(?:研究|探讨|分析)",
     ]
 
+    # ===== 中文核心期刊专项（借鉴 xiuneng0-collab） =====
+
+    # 中文核心必删空话（来自中文核心期刊通用指令）
+    CN_CORE_FORBIDDEN_PHRASES = {
+        '需要进一步研究': '删除，或写具体后续方向',
+        '具有重要意义': '写具体什么意义',
+        '提供参考借鉴': '写具体参考什么',
+        '状态良好': '给出具体指标',
+        '有待完善': '写具体待完善什么',
+        '一定程度上': '删除或写具体程度',
+        '重要组成部分': '写具体贡献了什么',
+        '起到了关键作用': '写具体什么作用',
+        '取得了显著成效': '列出具体数据',
+        '具有一定的创新性': '写具体创新点',
+        '值得深入探讨': '删除，或直接探讨',
+        '提供了新思路': '写具体思路',
+        '效果明显': '给出具体数据',
+        '综上所述': '删除，直接陈述结论',
+        '填补了研究空白': '写具体填补了什么',
+    }
+
+    # 中文核心推荐用语
+    CN_CORE_RECOMMENDED_PHRASES = {
+        '数据表明': '代替"说明"或"表明"',
+        '实测数据显示': '代替"可以发现"',
+        '归档统计显示': '代替"据统计"',
+        '可追溯至': '代替"来源于"',
+        '据文献报道': '代替"有人研究过"',
+    }
+
+    # 中文核心AI痕迹增强检测
+    CN_CORE_AI_PATTERNS = [
+        r"(?:值得注意|值得关注|需要指出)(?:的?是)",
+        r"(?:不仅|不仅仅).+(?:而且|更)(?:是|为|具有)",
+        r"(?:总而言之|综上所述|总的来说|简而言之).{0,10}(?:本文|本研究|我们)",
+        r"(?:在).+(?:背景下|基础上|条件下).{0,5}(?:开展|进行|实施)",
+        r"(?:本文|本研究).{0,5}(?:旨在|目的在于|致力于)",
+        r"(?:具有|拥有).{0,5}(?:重要的?|深远的?)(?:理论|实践|现实)(?:意义|价值)",
+        r"(?:为).{0,10}(?:奠定了|提供了|创造了).{0,5}(?:基础|条件|可能)",
+        r"(?:从).{0,5}(?:角度|层面|维度).{0,5}(?:出发|来看|分析)",
+        r"(?:深度|广度|高度)(?:融?合|结合|交织)",
+        r"(?:赋能|加持|助力|驱动|引领)",
+        # humanizer-zh 补充模式
+        r"(?:标志着?|见证了?).{0,10}(?:关键|重要)(?:时刻|转折|里程碑)",
+        r"(?:作为|充当).{0,5}(?:一个?)(?:充满活力|丰富|重要)(?:的)",
+        r"(?:象征着?|体现了?).{0,10}(?:深厚|深刻)(?:的?联系|的理解)",
+        r"(?:为).{0,10}(?:奠定(?:了?)基础|做出(?:了?)重要贡献)",
+        r"(?:尽管|虽然).{0,20}(?:面临|挑战).{0,10}(?:尽管|但是|然而).{0,10}(?:继续|仍然)",
+        r"(?:此外|与此同时).{0,10}(?:关键(?:的|性)|至关重要|不可或缺)",
+        r"(?:不断演变|不断变化)(?:的?格局|的?趋势|的?态势)",
+        r"(?:深刻|深入)(?:的?认识|的?理解|的?洞察|探讨)",
+        r"(?:不可磨灭)(?:的?印记|的?贡献|的影响)",
+        r"(?:深深植根于|根植于)",
+        r"(?:令人叹为观止|叹为观止|令人瞩目)(?:的|地)",
+        r"(?:生态|闭环|链路|抓手|打法)",
+    ]
+
+    # 中文核心工程论文标题规范
+    CN_CORE_TITLE_RULES = {
+        'max_length': 25,  # 最长25个汉字
+        'forbidden_prefixes': ['一种', '基于', '关于'],
+        'recommended_format': 'XXX与XXX系统/平台/方法',
+        'forbidden_vague': ['重要', '关键', '新型', '高效', '先进'],
+    }
+
     HOLLOW_PATTERNS_EN = [
         r"(?:provides|offers|serves as) (?:a |an )?(?:valuable|useful|important) (?:reference|insight|foundation)",
         r"(?:further|additional|more) (?:research|study|investigation) (?:is |was )?(?:needed|required|warranted|necessary)",
@@ -497,6 +562,84 @@ class ChineseChecker:
                         suggestion='中文文段应使用全角逗号"，"'
                     ))
                     break
+
+        return issues
+
+    @staticmethod
+    def check_cn_core_rules(sections, language='zh'):
+        """
+        中文核心期刊专项检查（借鉴 xiuneng0-collab）
+
+        检查项:
+          1. 禁用空话
+          2. AI痕迹短语
+          3. 标题规范
+          4. 推荐用语替换
+        """
+        if language != 'zh':
+            return []
+        issues = []
+
+        # 1. 禁用空话检测
+        for sec_name, sec in sections.items():
+            for phrase, suggestion in ReviewKB.CN_CORE_FORBIDDEN_PHRASES.items():
+                if phrase in sec.body:
+                    # 找到出现位置的上下文
+                    idx = sec.body.find(phrase)
+                    context = sec.body[max(0,idx-20):idx+len(phrase)+20]
+                    issues.append(Issue(
+                        category='中文核心-禁用空话', severity=Severity.MAJOR,
+                        section=sec_name, location=f'发现"{phrase}"',
+                        problem=f'中文核心期刊禁用空话: "{phrase}"',
+                        original=context,
+                        suggestion=f'替换为: {suggestion}',
+                        teaching_note='中文核心要求表述具体，禁用套话和空洞表达'
+                    ))
+
+        # 2. AI痕迹短语检测
+        for sec_name, sec in sections.items():
+            for pattern in ReviewKB.CN_CORE_AI_PATTERNS:
+                matches = re.findall(pattern, sec.body)
+                if matches:
+                    issues.append(Issue(
+                        category='中文核心-AI痕迹', severity=Severity.MAJOR,
+                        section=sec_name, location='正文',
+                        problem=f'疑似AI生成短语: "{matches[0][:20]}"',
+                        original=matches[0][:60],
+                        suggestion='改写为更自然的学术表达，避免AI典型句式',
+                        teaching_note='中文核心编辑对AI痕迹非常敏感，需彻底去除'
+                    ))
+
+        # 3. 标题检查
+        if 'title' in sections:
+            title = sections['title'].body.strip()
+            rules = ReviewKB.CN_CORE_TITLE_RULES
+            if len(title) > rules['max_length']:
+                issues.append(Issue(
+                    category='中文核心-标题规范', severity=Severity.MINOR,
+                    section='标题', location='标题',
+                    problem=f'标题过长({len(title)}字)，建议≤{rules["max_length"]}字',
+                    original=title,
+                    suggestion='精简标题，删除冗余修饰词'
+                ))
+            for prefix in rules['forbidden_prefixes']:
+                if title.startswith(prefix):
+                    issues.append(Issue(
+                        category='中文核心-标题规范', severity=Severity.MINOR,
+                        section='标题', location='标题开头',
+                        problem=f'标题以"{prefix}"开头，中文核心建议避免',
+                        original=title,
+                        suggestion=f'去掉"{prefix}"前缀，直接用核心名词开头'
+                    ))
+            for word in rules['forbidden_vague']:
+                if word in title:
+                    issues.append(Issue(
+                        category='中文核心-标题规范', severity=Severity.MINOR,
+                        section='标题', location='标题',
+                        problem=f'标题含模糊修饰词"{word}"',
+                        original=title,
+                        suggestion=f'去掉"{word}"或替换为具体描述'
+                    ))
 
         return issues
 
@@ -1003,7 +1146,7 @@ class RationaleChecker:
 
                 if has_claim and not has_evidence and not has_citation:
                     issues.append(Issue(
-                        category='推理链', severity=Severity.MAJOR,
+                        category='推理链完整性', severity=Severity.MAJOR,
                         section=sec_name, location=f'第{i+1}段',
                         problem='有主张但缺少数据证据或文献引用',
                         original=para[:80] + '...',
@@ -1017,7 +1160,7 @@ class RationaleChecker:
 
                 if has_claim and has_evidence and not has_mechanism and sec_name == 'discussion':
                     issues.append(Issue(
-                        category='推理链', severity=Severity.MINOR,
+                        category='推理链完整性', severity=Severity.MINOR,
                         section=sec_name, location=f'第{i+1}段',
                         problem='有数据证据但缺少机制解释',
                         original=para[:80] + '...',
@@ -1245,6 +1388,7 @@ class AcademicReviewAgent:
     CHECKERS = [
         ('SCI格式', SCIChecker),
         ('中文格式', ChineseChecker),
+        ('中文核心专项', ChineseChecker),  # check_cn_core_rules
         ('错别字', TypoChecker),
         ('学术语法', GrammarChecker),
         ('引文规范', CitationChecker),
@@ -1299,7 +1443,10 @@ class AcademicReviewAgent:
         all_issues = []
         for name, checker in self.CHECKERS:
             try:
-                issues = checker.check(sections, self.language)
+                if name == '中文核心专项':
+                    issues = checker.check_cn_core_rules(sections, self.language)
+                else:
+                    issues = checker.check(sections, self.language)
                 all_issues.extend(issues)
                 if issues:
                     print(f"  [{name}] 发现{len(issues)}个问题")

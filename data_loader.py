@@ -49,23 +49,78 @@ class DataLoader:
     """
     
     def __init__(self, file_path=None):
-        self.base_dir = r'C:\Users\Administrator\Desktop\硕士毕业论文'
+        if file_path:
+            self.base_dir = os.path.dirname(os.path.abspath(file_path))
+            self.single_file = file_path
+        else:
+            desktop_file = os.path.join(os.path.expanduser('~'), 'Desktop', '冬春数据.xlsx')
+            if os.path.exists(desktop_file):
+                self.base_dir = os.path.dirname(desktop_file)
+                self.single_file = desktop_file
+            else:
+                self.base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+                self.single_file = None
         self.sampling_file = os.path.join(self.base_dir, '采样数据表.xlsx')
         self.winter_summary_file = os.path.join(self.base_dir, '冬季数据汇总.xlsx')
-        
+
         self.winter = None
         self.spring = None
         self.winter_summary = None
         self.df = None
         self.data_dict = {}
         self.quality_report = {}
-        
+
     def load_data(self):
-        """加载并合并所有数据源"""
+        """加载并合并所有数据源（自动选单文件或双文件）"""
+        if self.single_file and os.path.exists(self.single_file):
+            return self._load_single_file(self.single_file)
+        return self._load_dual_files()
+
+    def _load_single_file(self, file_path):
+        """单文件模式：冬春数据.xlsx含冬季/春季sheet"""
         print("=" * 60)
-        print("数据加载中...")
+        print("数据加载中（单文件模式）...")
         print("=" * 60)
-        
+        xls = pd.ExcelFile(file_path)
+        sheets = xls.sheet_names
+        print(f"  文件: {os.path.basename(file_path)}, Sheets: {sheets}")
+        winter_s, spring_s = None, None
+        for s in sheets:
+            if any(k in s for k in ['冬', 'winter']): winter_s = s
+            elif any(k in s for k in ['春', 'spring']): spring_s = s
+        if not winter_s: winter_s = sheets[0]
+        if not spring_s and len(sheets) > 1: spring_s = sheets[1]
+        self.winter = pd.read_excel(file_path, sheet_name=winter_s)
+        self.spring = pd.read_excel(file_path, sheet_name=spring_s)
+        print(f"  冬季: {self.winter.shape}, 春季: {self.spring.shape}")
+        self._unify_columns()
+        self.winter['季节'] = '冬季'
+        self.spring['季节'] = '春季'
+        for dfp in [self.winter, self.spring]:
+            if '采样点' not in dfp.columns:
+                fc = dfp.columns[0]
+                if dfp[fc].dtype == object:
+                    dfp.rename(columns={fc: '采样点'}, inplace=True)
+                else:
+                    dfp['采样点'] = [f'R{i}' for i in range(1, len(dfp) + 1)]
+        df = pd.concat([self.winter, self.spring], ignore_index=True)
+        unnamed = [c for c in df.columns if 'Unnamed' in str(c)]
+        if unnamed:
+            df = df.drop(columns=unnamed)
+        skip = ['采样点', '季节', '泥水状况', '采样时间', '采样时段',
+                '进水/出水', '管口/管中', '管口/管尾']
+        for col in df.columns:
+            if col not in skip:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+        self.df = df
+        self._detect_and_report()
+        return self.df
+
+    def _load_dual_files(self):
+        """双文件模式：采样数据表+冬季数据汇总"""
+        print("=" * 60)
+        print("数据加载中（双文件模式）...")
+        print("=" * 60)
         # ========== 1. 加载采样数据表（气相数据） ==========
         print("\n[数据源1] 采样数据表.xlsx (气相数据)")
         self.winter = pd.read_excel(self.sampling_file, sheet_name='冬季')
@@ -169,6 +224,29 @@ class DataLoader:
         
         return self.df
     
+    def _detect_and_report(self):
+        """自动检测变量类型并生成报告"""
+        df = self.df
+        gas = [c for c in df.columns if c in GAS_VARS]
+        liquid = [c for c in df.columns if c in LIQUID_VARS]
+        solid = [c for c in df.columns if c in SOLID_VARS]
+        # 也按关键词匹配
+        for c in df.columns:
+            if c in gas + liquid + solid + ['采样点', '季节']:
+                continue
+            cl = c.lower()
+            if any(k in cl for k in ['ch4', '甲烷', 'co2', 'n2o', '氧化亚氮', 'vocs', 'h2s', 'o2']):
+                if c not in gas: gas.append(c)
+            elif any(k in cl for k in ['do', 'toc', 'tc', 'ic', 'cod', 'ph', '氮', '磷', '氯', '导']):
+                if c not in liquid: liquid.append(c)
+            elif any(k in cl for k in ['固', '有机碳', '无机碳', '全碳', 'doc', 'g/kg']):
+                if c not in solid: solid.append(c)
+        print(f"\n  气相变量({len(gas)}): {gas}")
+        print(f"  液相变量({len(liquid)}): {liquid}")
+        print(f"  固相变量({len(solid)}): {solid}")
+        print(f"  样本数: {len(df)}, 季节: {df['季节'].value_counts().to_dict()}")
+        self.data_dict = {'gas': gas, 'liquid': liquid, 'solid': solid}
+
     def _unify_columns(self):
         """统一冬季和春季的列名"""
         # 冬季列名统一

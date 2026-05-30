@@ -400,7 +400,7 @@ class DiscussionGenerator:
 
         findings_str = '、'.join(findings) if findings else '数据特征'
         return (
-            '## 4 讨论\n\n'
+            '# 4 讨论\n\n'
             f'本研究通过系统的采样分析和多元统计方法，揭示了校园污水管网中'
             f'固-液-气多相态碳污染物的赋存特征。主要发现包括：'
             f'{findings_str}。以下对各发现进行深入讨论。'
@@ -993,7 +993,7 @@ class MethodsGenerator:
 
     def _generate_zh(self):
         return (
-            '# 3 材料与方法\n\n'
+            '# 2 材料与方法\n\n'
             '## 3.1 研究区域概况\n\n'
             f'本研究选取某校园污水管网作为研究对象。该校园占地面积约{self.params.get("area", "X")}公顷，'
             f'常住人口约{self.params.get("population", "X")}万人，日均污水排放量约{self.params.get("sewage_flow", "X")} m³/d。校园功能区主要包括教学区、'

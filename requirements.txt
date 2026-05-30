@@ -1,0 +1,29 @@
+# Core dependencies for Academic AI Toolkit
+# Install: pip install -r requirements.txt
+
+# Data processing
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10
+openpyxl>=3.1
+
+# Visualization
+matplotlib>=3.7
+seaborn>=0.12
+
+# Document generation
+python-docx>=1.0
+
+# Network (for citation verification, paper reading)
+requests>=2.28
+
+# RAG system (optional)
+# chromadb>=0.4
+
+# Scientific plotting (optional)
+# scienceplots>=2.0
+# adjustText>=0.8
+
+# Interactive plots (optional)
+# plotly>=5.0
+# kaleido>=0.2

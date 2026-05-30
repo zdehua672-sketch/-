@@ -17,10 +17,18 @@ from scipy.cluster.hierarchy import dendrogram
 # 使用手动实现的StandardScaler和PCA（避免sklearn依赖问题）
 from statistical_analysis import StandardScaler, PCA, LinearRegression, r2_score
 
+try:
+    from chart_qa import check_chart_quality, print_qa_report
+except ImportError:
+    check_chart_quality = None
+
 from academic_plot_style import (
     CHINESE_FONT, ENGLISH_FONT, TABLEAU_10, PHASE_COLORS,
     SEASON_COLORS, CARBON_COLORS, get_label, format_chemical,
-    significance_stars, add_significance_bars, save_figure
+    significance_stars, add_significance_bars, save_figure,
+    CN_FONT_PROP, CN_FONT_PROP_BOLD,
+    get_figure_size, get_save_dpi, add_panel_label,
+    save_figure_publication, DEFAULT_JOURNAL
 )
 
 
@@ -69,22 +77,29 @@ class ThesisPlotter:
             autopct='%1.1f%%', pctdistance=0.78,
             startangle=90, explode=explode,
             wedgeprops={'edgecolor': 'white', 'linewidth': 2},
-            textprops={'fontsize': 13})
+            textprops={'fontsize': 13, 'fontproperties': CN_FONT_PROP})
         for t in autotexts:
             t.set_fontsize(13)
             t.set_fontweight('bold')
             t.set_color('white')
+            t.set_fontproperties(CN_FONT_PROP)
         centre_circle = plt.Circle((0, 0), 0.40, fc='white', linewidth=0)
         ax.add_artist(centre_circle)
-        ax.set_title('固液气三相碳组成', fontsize=18, pad=20, fontweight='bold')
+        ax.set_title('图1  固液气三相碳污染物组成比例', fontsize=16, pad=20, fontweight='bold', fontproperties=CN_FONT_PROP)
         ax.axis('equal')
         legend_labels = [f'{l} ({s:.1f})' for l, s in zip(labels, sizes)]
         legend = ax.legend(wedges, legend_labels, title='相态 (均值)',
                           loc='center left', bbox_to_anchor=(1.05, 0.5),
-                          frameon=True, edgecolor='#BBBBBB', facecolor='white', fontsize=12)
+                          frameon=True, edgecolor='#BBBBBB', facecolor='white',
+                          fontsize=12, prop=CN_FONT_PROP)
+        legend.get_title().set_fontproperties(CN_FONT_PROP)
         legend.get_title().set_fontsize(13)
         plt.tight_layout()
+        fig_name = '图1_三相碳组成'
         save_figure(fig, '图1_三相碳组成', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图1已保存")
 
@@ -127,13 +142,17 @@ class ThesisPlotter:
                     fontsize=10, color='white', fontweight='bold')
         ax.set_xticks(x)
         ax.set_xticklabels(seasons, fontsize=13)
-        ax.set_ylabel('浓度 (mg/L)', fontsize=13)
-        ax.set_title('液相碳组成 (TOC vs IC)', fontsize=16, fontweight='bold', pad=15)
-        ax.legend(fontsize=12, frameon=True, edgecolor='#BBBBBB')
+        ax.set_ylabel('浓度 (mg/L, fontproperties=CN_FONT_PROP)', fontsize=13)
+        ax.set_title('液相碳组成 (TOC vs IC, fontproperties=CN_FONT_PROP)', fontsize=16, fontweight='bold', pad=15, fontproperties=CN_FONT_PROP)
+        ax.legend(fontsize=12, frameon=True, edgecolor='#BBBBBB', prop=CN_FONT_PROP)
         ax.grid(axis='y', alpha=0.3, linestyle='--')
         ax.set_axisbelow(True)
         plt.tight_layout()
+        fig_name = '图2_液相碳组成'
         save_figure(fig, '图2_液相碳组成', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图2已保存")
 
@@ -184,13 +203,17 @@ class ThesisPlotter:
                     ha='center', va='bottom', fontsize=11, fontweight='bold')
         ax.set_xticks(x)
         ax.set_xticklabels(seasons, fontsize=13)
-        ax.set_ylabel('含量 (g/kg)', fontsize=13)
-        ax.set_title('固相碳组成', fontsize=16, fontweight='bold', pad=15)
-        ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB')
+        ax.set_ylabel('含量 (g/kg, fontproperties=CN_FONT_PROP)', fontsize=13)
+        ax.set_title('固相碳组成', fontsize=16, fontweight='bold', pad=15, fontproperties=CN_FONT_PROP)
+        ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB', prop=CN_FONT_PROP)
         ax.grid(axis='y', alpha=0.3, linestyle='--')
         ax.set_axisbelow(True)
         plt.tight_layout()
+        fig_name = '图3_固相碳组成'
         save_figure(fig, '图3_固相碳组成', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图3已保存")
 
@@ -224,9 +247,9 @@ class ThesisPlotter:
                     patch.set_alpha(0.7)
                 for j, data in enumerate([winter_data, spring_data]):
                     jitter = np.random.normal(j + 1, 0.04, size=len(data))
-                    ax.scatter(jitter, data, alpha=0.6, s=40,
-                              color=colors[j], edgecolors='white', linewidth=0.5, zorder=5)
-                ax.set_xticklabels(['冬季', '春季'], fontsize=12)
+                    ax.scatter(jitter, data, alpha=0.6, s=20, marker='o',
+                              color=colors[j], edgecolors='none', zorder=5)
+                ax.set_xticklabels(['冬季', '春季'], fontsize=12, fontproperties=CN_FONT_PROP)
                 if len(winter_data) > 1 and len(spring_data) > 1:
                     from scipy import stats
                     _, p_val = stats.mannwhitneyu(winter_data, spring_data, alternative='two-sided')
@@ -241,9 +264,13 @@ class ThesisPlotter:
             ax.set_title(get_label(var), fontsize=14, fontweight='bold')
             ax.grid(axis='y', alpha=0.3, linestyle='--')
             ax.set_axisbelow(True)
-        fig.suptitle('冬春季气体浓度对比', fontsize=16, fontweight='bold', y=1.02)
+        fig.suptitle('冬春季气体浓度对比', fontsize=16, fontweight='bold', y=1.02, fontproperties=CN_FONT_PROP)
         plt.tight_layout()
+        fig_name = '图4_气体浓度箱线图'
         save_figure(fig, '图4_气体浓度箱线图', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图4已保存")
 
@@ -282,9 +309,9 @@ class ThesisPlotter:
                         patch.set_alpha(0.7)
                     for j, data in enumerate(data_list):
                         jitter = np.random.normal(j + 1, 0.04, size=len(data))
-                        ax.scatter(jitter, data, alpha=0.5, s=30,
-                                  color=colors[j], edgecolors='white', linewidth=0.5, zorder=5)
-                    ax.set_xticklabels(labels, fontsize=11)
+                        ax.scatter(jitter, data, alpha=0.5, s=15, marker='o',
+                                  color=colors[j], edgecolors='none', zorder=5)
+                    ax.set_xticklabels(labels, fontsize=11, fontproperties=CN_FONT_PROP)
             else:
                 ax.boxplot(df[var].dropna(), patch_artist=True,
                           boxprops={'facecolor': TABLEAU_10[i % 10], 'alpha': 0.7})
@@ -294,9 +321,13 @@ class ThesisPlotter:
             ax.set_axisbelow(True)
         for i in range(n_vars, len(axes)):
             axes[i].set_visible(False)
-        fig.suptitle('冬春季液相指标对比', fontsize=16, fontweight='bold', y=1.02)
+        fig.suptitle('冬春季液相对比', fontsize=16, fontweight='bold', y=1.02, fontproperties=CN_FONT_PROP)
         plt.tight_layout()
+        fig_name = '图5_液相指标箱线图'
         save_figure(fig, '图5_液相指标箱线图', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图5已保存")
 
@@ -327,11 +358,15 @@ class ThesisPlotter:
                     xticklabels=labels, yticklabels=labels,
                     annot_kws={'fontsize': 9},
                     cbar_kws={'shrink': 0.8, 'label': 'Pearson r'}, ax=ax)
-        ax.set_title('多参数相关性热图', fontsize=18, fontweight='bold', pad=20)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10)
+        ax.set_title('多参数相关性热图', fontsize=18, fontweight='bold', pad=20, fontproperties=CN_FONT_PROP)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10, fontproperties=CN_FONT_PROP)
         ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=10)
         plt.tight_layout()
+        fig_name = '图6_相关性热图'
         save_figure(fig, '图6_相关性热图', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图6已保存")
 
@@ -372,24 +407,33 @@ class ThesisPlotter:
         else:
             ax.scatter(principal[:, 0], principal[:, 1], c=TABLEAU_10[0],
                       s=100, alpha=0.7, edgecolors='#333333', linewidth=0.5)
+        short = {'CH4平均值':'CH4','N2O平均值':'N2O','CO2':'CO2','VOCs(ppb)':'VOCs',
+                 'TOC（mg/L)':'TOC','IC(mg/L)':'IC','TC(mg/L)':'TC','DO(mg/L)':'DO',
+                 'COD（mg/L)':'COD','总氮（mg/L)':'TN','铵态氮（mg/L)':'NH4','硝态氮（mg/L)':'NO3',
+                 'pH':'pH','液温':'T','电导率(uS/cm)':'EC'}
         for i, col in enumerate(pca_cols):
             ax.arrow(0, 0, loadings[i, 0] * 3, loadings[i, 1] * 3,
                     head_width=0.08, head_length=0.08, fc='#D55E00', ec='#D55E00', alpha=0.7)
-            label = get_label(col)
+            label = short.get(col, col)
             ax.text(loadings[i, 0] * 3.3, loadings[i, 1] * 3.3, label,
-                   fontsize=9, ha='center', va='center', color='#D55E00', fontweight='bold')
+                   fontsize=9, ha='center', va='center', color='#D55E00', fontweight='bold',
+                   fontproperties=CN_FONT_PROP)
         circle = plt.Circle((0, 0), 3, fill=False, color='#999999', linestyle='--', linewidth=0.8, alpha=0.5)
         ax.add_patch(circle)
         ax.axhline(y=0, color='#999999', linestyle='-', linewidth=0.5, alpha=0.3)
         ax.axvline(x=0, color='#999999', linestyle='-', linewidth=0.5, alpha=0.3)
         ax.set_xlabel(f'PC1 ({explained[0]*100:.1f}%)', fontsize=13)
         ax.set_ylabel(f'PC2 ({explained[1]*100:.1f}%)', fontsize=13)
-        ax.set_title('PCA双标图', fontsize=16, fontweight='bold', pad=15)
-        ax.legend(fontsize=12, frameon=True, edgecolor='#BBBBBB')
+        ax.set_title('图7  主成分分析(PCA)双标图', fontsize=15, fontweight='bold', pad=15, fontproperties=CN_FONT_PROP)
+        ax.legend(fontsize=12, frameon=True, edgecolor='#BBBBBB', prop=CN_FONT_PROP)
         ax.grid(alpha=0.3, linestyle='--')
         ax.set_axisbelow(True)
         plt.tight_layout()
+        fig_name = '图7_PCA双标图'
         save_figure(fig, '图7_PCA双标图', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图7已保存")
 
@@ -422,13 +466,17 @@ class ThesisPlotter:
                    labels=[f'R{i+1}' for i in range(len(hca_df))],
                    color_threshold=0.7 * max(linked[:, 2]),
                    above_threshold_color='#999999')
-        ax.set_title('层次聚类分析 (Ward法)', fontsize=16, fontweight='bold', pad=15)
-        ax.set_xlabel('样本', fontsize=13)
-        ax.set_ylabel('欧氏距离', fontsize=13)
+        ax.set_title('图8  层次聚类分析(Ward法, fontproperties=CN_FONT_PROP)树状图', fontsize=15, fontweight='bold', pad=15, fontproperties=CN_FONT_PROP)
+        ax.set_xlabel('样本', fontsize=13, fontproperties=CN_FONT_PROP)
+        ax.set_ylabel('欧氏距离', fontsize=13, fontproperties=CN_FONT_PROP)
         ax.grid(axis='y', alpha=0.3, linestyle='--')
         ax.set_axisbelow(True)
         plt.tight_layout()
+        fig_name = '图8_HCA聚类图'
         save_figure(fig, '图8_HCA聚类图', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图8已保存")
 
@@ -482,7 +530,7 @@ class ThesisPlotter:
         ax.set_xlabel(get_label(x_col), fontsize=13)
         ax.set_ylabel(get_label(y_col), fontsize=13)
         ax.set_title(title, fontsize=14, fontweight='bold', pad=15)
-        ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB')
+        ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB', prop=CN_FONT_PROP)
         ax.grid(alpha=0.3, linestyle='--')
         ax.set_axisbelow(True)
         plt.tight_layout()
@@ -531,13 +579,17 @@ class ThesisPlotter:
                            markeredgecolor='white', markeredgewidth=1)
             ax.set_ylabel(get_label(var), fontsize=12)
             ax.set_title(f'{get_label(var)} 沿程变化', fontsize=13, fontweight='bold')
-            ax.set_xlabel('采样点', fontsize=12)
-            ax.legend(fontsize=11)
+            ax.set_xlabel('采样点', fontsize=12, fontproperties=CN_FONT_PROP)
+            ax.legend(fontsize=11, prop=CN_FONT_PROP)
             ax.grid(alpha=0.3, linestyle='--')
             ax.set_axisbelow(True)
-        fig.suptitle('冬春季气体浓度沿程空间分布', fontsize=16, fontweight='bold', y=1.02)
+        fig.suptitle('冬春季气体浓度沿程空间分布', fontsize=16, fontweight='bold', y=1.02, fontproperties=CN_FONT_PROP)
         plt.tight_layout()
+        fig_name = '图15_空间分布图'
         save_figure(fig, '图15_空间分布图', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图15已保存")
 
@@ -561,9 +613,9 @@ class ThesisPlotter:
             ax1.axvline(valid_data.mean(), color='#333333', linestyle='--', linewidth=1.5,
                        label=f'均值: {valid_data.mean():.3f}')
             ax1.legend(fontsize=11)
-        ax1.set_xlabel('气液碳比', fontsize=13)
-        ax1.set_ylabel('密度', fontsize=13)
-        ax1.set_title('气液碳比分布', fontsize=14, fontweight='bold')
+        ax1.set_xlabel('气液碳比', fontsize=13, fontproperties=CN_FONT_PROP)
+        ax1.set_ylabel('密度', fontsize=13, fontproperties=CN_FONT_PROP)
+        ax1.set_title('气液碳比分布', fontsize=14, fontweight='bold', fontproperties=CN_FONT_PROP)
         ax1.grid(alpha=0.3, linestyle='--')
         ax2 = axes[1]
         if '季节' in df.columns:
@@ -584,14 +636,18 @@ class ThesisPlotter:
                 for j, data in enumerate(data_list):
                     jitter = np.random.normal(j + 1, 0.04, size=len(data))
                     ax2.scatter(jitter, data, alpha=0.5, s=30,
-                              color=colors[j], edgecolors='white', linewidth=0.5, zorder=5)
-                ax2.set_xticklabels(labels, fontsize=11)
-        ax2.set_ylabel('气液碳比', fontsize=13)
-        ax2.set_title('冬春气液碳比对比', fontsize=14, fontweight='bold')
+                              color=colors[j], edgecolors='none', linewidth=0.5, zorder=5)
+                ax2.set_xticklabels(labels, fontsize=11, fontproperties=CN_FONT_PROP)
+        ax2.set_ylabel('气液碳比', fontsize=13, fontproperties=CN_FONT_PROP)
+        ax2.set_title('冬春气液碳比对比', fontsize=14, fontweight='bold', fontproperties=CN_FONT_PROP)
         ax2.grid(alpha=0.3, linestyle='--')
         ax2.set_axisbelow(True)
         plt.tight_layout()
+        fig_name = '图16_气液碳比分布'
         save_figure(fig, '图16_气液碳比分布', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图16已保存")
 
@@ -627,7 +683,7 @@ class ThesisPlotter:
                    arrowprops=dict(arrowstyle='->', color='#333333', lw=2))
         ax.annotate('', xy=(4.5, 4.5), xytext=(3, 5.5),
                    arrowprops=dict(arrowstyle='->', color='#333333', lw=2))
-        ax.set_title('校园污水管网碳平衡示意图', fontsize=20, fontweight='bold', pad=20)
+        ax.set_title('校园污水管网碳平衡示意图', fontsize=20, fontweight='bold', pad=20, fontproperties=CN_FONT_PROP)
         legend_text = (f'总碳量: {total_c:.1f}\n'
                       f'气相占比: {gas_c/total_c*100:.1f}%\n'
                       f'液相占比: {liquid_c/total_c*100:.1f}%\n'
@@ -636,7 +692,11 @@ class ThesisPlotter:
         ax.text(8.5, 1, legend_text, fontsize=12, verticalalignment='bottom',
                bbox=props, family='monospace')
         plt.tight_layout()
+        fig_name = '图17_碳平衡示意图'
         save_figure(fig, '图17_碳平衡示意图', self.output_dir)
+        if check_chart_quality:
+            r = check_chart_quality(fig, auto_fix=True)
+            print_qa_report(r, fig_name)
         plt.close()
         print("  ✓ 图17已保存")
 

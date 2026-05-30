@@ -3,6 +3,9 @@ Self-Evolving Academic AI Engine
 ================================
 可持续进化的科研AI系统核心引擎
 
+import logging
+logger = logging.getLogger(__name__)
+
 组件:
   KnowledgeStore   - JSON结构化知识库（替代硬编码字典）
   FeedbackCollector - 反馈收集与学习
@@ -53,6 +56,9 @@ class KnowledgeStore:
         "feedback_log": "反馈日志",
         "rationale_matrix": "写作推理矩阵（发现→机制→证据→引用）",
         "revision_history": "修订历史（版本间变化追踪）",
+        "literature_matrix": "文献矩阵（来源×主题交叉+证据收敛+知识缺口）",
+        "paper_assessments": "论文质量评估（证据分级+来源可信度）",
+        "literature_links": "论文关联网络（主题关联+矛盾+作者关联）",
     }
 
     def __init__(self, base_dir: str = None):
@@ -209,10 +215,10 @@ class KnowledgeStore:
                          source="ReviewKB", confidence=0.95)
 
             # 夸大词汇
-            for word in getattr(kb, 'OVERCLAIM_WORDS_EN', []):
+            for word in getattr(kb, 'OVERCLAIM_EN', []):
                 self.set("review_rules", f"overclaim_en_{word}", word,
                          source="ReviewKB", confidence=0.9)
-            for word in getattr(kb, 'OVERCLAIM_WORDS_ZH', []):
+            for word in getattr(kb, 'OVERCLAIM_ZH', []):
                 self.set("review_rules", f"overclaim_zh_{word}", word,
                          source="ReviewKB", confidence=0.9)
 

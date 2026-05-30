@@ -5,6 +5,7 @@
 =============================================================================
 """
 
+import os
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import rcParams
@@ -57,28 +58,26 @@ CARBON_COLORS = {
 # ============================================================================
 def setup_fonts():
     import matplotlib.font_manager as fm
-    chinese_fonts = [
-        'Microsoft YaHei', 'SimHei', 'STHeiti',
-        'Noto Sans CJK SC', 'WenQuanYi Micro Hei',
-        'PingFang SC', 'Arial Unicode MS',
-    ]
-    english_font = 'Times New Roman'
-    available_fonts = [f.name for f in fm.fontManager.ttflist]
-    selected_chinese = 'SimHei'
-    for font in chinese_fonts:
-        if font in available_fonts:
-            selected_chinese = font
-            break
-    rcParams['font.family'] = 'sans-serif'
-    rcParams['font.sans-serif'] = [selected_chinese, 'DejaVu Sans']
-    rcParams['font.serif'] = [english_font, 'DejaVu Serif']
+    # 只用文件路径，不设rcParams（rcParams会覆盖fontproperties kwarg）
+    font_path = os.path.join(os.environ.get('WINDIR', 'C:/Windows'), 'Fonts', 'simhei.ttf')
+    if not os.path.exists(font_path):
+        for f in fm.fontManager.ttflist:
+            if f.name == 'SimHei':
+                font_path = f.fname
+                break
+    if font_path and os.path.exists(font_path):
+        CN_FONT_PROP = fm.FontProperties(fname=font_path)
+        CN_FONT_PROP_BOLD = fm.FontProperties(fname=font_path, weight='bold')
+    else:
+        CN_FONT_PROP = fm.FontProperties(family='SimHei')
+        CN_FONT_PROP_BOLD = fm.FontProperties(family='SimHei', weight='bold')
     rcParams['axes.unicode_minus'] = False
     rcParams['mathtext.fontset'] = 'stix'
     rcParams['mathtext.default'] = 'regular'
-    print(f"[字体配置] 中文: {selected_chinese}, 英文: {english_font}")
-    return selected_chinese, english_font
+    print(f"[字体配置] SimHei: {font_path}")
+    return 'SimHei', 'Times New Roman', CN_FONT_PROP, CN_FONT_PROP_BOLD
 
-CHINESE_FONT, ENGLISH_FONT = setup_fonts()
+CHINESE_FONT, ENGLISH_FONT, CN_FONT_PROP, CN_FONT_PROP_BOLD = setup_fonts()
 
 # ============================================================================
 # 3. 全局绘图参数
@@ -234,6 +233,159 @@ def save_figure(fig, filename, output_dir, formats=None):
                     format=fmt, pad_inches=0.1)
         saved_files.append(filepath)
     return saved_files
+
+
+# ============================================================================
+# 8. 期刊规范（整合自 scientific-visualization skill）
+# ============================================================================
+
+JOURNAL_CONFIGS = {
+    'nature': {
+        'name': 'Nature',
+        'single_column_mm': 89,
+        'double_column_mm': 183,
+        'max_height_mm': 247,
+        'dpi_line_art': 1000,
+        'dpi_photo': 300,
+        'dpi_combo': 600,
+        'font': 'Arial',
+        'font_min_pt': 5,
+        'font_label_pt': 7,
+        'font_tick_pt': 6,
+        'font_panel_pt': 10,
+        'panel_label_style': 'lowercase_bold',  # a, b, c (Nature)
+        'color_space': 'RGB',
+        'format_vector': ['pdf', 'eps'],
+        'format_raster': ['tiff', 'png'],
+    },
+    'science': {
+        'name': 'Science',
+        'single_column_mm': 55,
+        'double_column_mm': 175,
+        'max_height_mm': 233,
+        'dpi_line_art': 1000,
+        'dpi_photo': 300,
+        'font': 'Helvetica',
+        'font_min_pt': 6,
+        'panel_label_style': 'uppercase_paren',  # (A), (B), (C)
+    },
+    'cell': {
+        'name': 'Cell Press',
+        'single_column_mm': 85,
+        'double_column_mm': 178,
+        'max_height_mm': 230,
+        'dpi_line_art': 1000,
+        'dpi_photo': 300,
+        'font': 'Arial',
+        'font_label_pt': 8,
+        'font_tick_pt': 6,
+        'panel_label_style': 'uppercase_bold',  # A, B, C
+    },
+    'elsevier': {
+        'name': 'Elsevier',
+        'single_column_mm': 90,
+        'double_column_mm': 190,
+        'dpi_line_art': 1000,
+        'dpi_photo': 300,
+        'font': 'Arial',
+        'panel_label_style': 'uppercase_paren',
+    },
+}
+
+# 默认期刊
+DEFAULT_JOURNAL = 'nature'
+
+def get_journal_config(journal=None):
+    """获取期刊配置"""
+    return JOURNAL_CONFIGS.get(journal or DEFAULT_JOURNAL, JOURNAL_CONFIGS['nature'])
+
+def mm_to_inches(mm):
+    """毫米转英寸"""
+    return mm / 25.4
+
+def get_figure_size(journal=None, columns=1):
+    """根据期刊获取推荐figsize (inch)"""
+    cfg = get_journal_config(journal)
+    if columns == 2:
+        w = cfg['double_column_mm']
+    elif columns == 1.5:
+        w = (cfg['single_column_mm'] + cfg['double_column_mm']) / 2
+    else:
+        w = cfg['single_column_mm']
+    h = cfg.get('max_height_mm', 247) * 0.4  # 默认半高
+    return (mm_to_inches(w), mm_to_inches(h))
+
+def get_save_dpi(journal=None, fig_type='line_art'):
+    """根据期刊获取保存DPI"""
+    cfg = get_journal_config(journal)
+    if fig_type == 'photo':
+        return cfg.get('dpi_photo', 300)
+    elif fig_type == 'combo':
+        return cfg.get('dpi_combo', 600)
+    return cfg.get('dpi_line_art', 1000)
+
+def add_panel_label(ax, index, journal=None, x=-0.12, y=1.08):
+    """
+    添加子图标注 (a), (b), (c) 等
+
+    Parameters
+    ----------
+    ax : matplotlib Axes
+    index : int, 0=a, 1=b, 2=c...
+    journal : str, 期刊名
+    x, float, 标注位置 (相对axes坐标)
+    """
+    import string
+    cfg = get_journal_config(journal)
+    style = cfg.get('panel_label_style', 'lowercase_bold')
+    fontsize = cfg.get('font_panel_pt', 10)
+
+    if style == 'lowercase_bold':
+        label = string.ascii_lowercase[index]
+    elif style == 'uppercase_bold':
+        label = string.ascii_uppercase[index]
+    elif style == 'uppercase_paren':
+        label = f'({string.ascii_uppercase[index]})'
+    elif style == 'lowercase_paren':
+        label = f'({string.ascii_lowercase[index]})'
+    else:
+        label = string.ascii_lowercase[index]
+
+    ax.text(x, y, label, transform=ax.transAxes,
+            fontsize=fontsize, fontweight='bold', va='top',
+            fontproperties=CN_FONT_PROP)
+
+def save_figure_publication(fig, filename, output_dir, journal=None,
+                            formats=None, fig_type='line_art'):
+    """
+    按期刊规范保存图表
+
+    Parameters
+    ----------
+    fig : matplotlib Figure
+    filename : str, 文件名（不含扩展名）
+    output_dir : str, 输出目录
+    journal : str, 期刊名 (nature/science/cell/elsevier)
+    formats : list, 输出格式 ['pdf','png','svg']
+    fig_type : str, line_art/photo/combo
+    """
+    import os
+    cfg = get_journal_config(journal)
+    dpi = get_save_dpi(journal, fig_type)
+    if formats is None:
+        formats = ['png', 'pdf', 'svg']
+
+    os.makedirs(output_dir, exist_ok=True)
+    saved = []
+    for fmt in formats:
+        path = os.path.join(output_dir, f'{filename}.{fmt}')
+        fig.savefig(path, dpi=dpi, bbox_inches='tight',
+                    format=fmt, pad_inches=0.1, facecolor='white')
+        saved.append(path)
+
+    journal_name = cfg.get('name', journal or 'default')
+    print(f"  Saved {len(saved)} formats @ {dpi} DPI ({journal_name} spec)")
+    return saved
 
 # ============================================================================
 # 7. 初始化

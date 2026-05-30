@@ -15,6 +15,7 @@ import re
 import json
 import os
 import sys
+import sqlite3
 import logging
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
@@ -39,6 +40,9 @@ class PaperMetadata:
     reference_count: int = 0
     fields_of_study: list = field(default_factory=list)
     source: str = ""                # arxiv / local_pdf / local_text
+    evidence_level: int = 6         # 证据等级 1-7 (P2)
+    evidence_weight: float = 0.5    # 证据权重 0-1 (P2)
+    credibility_score: float = 0.0  # 来源可信度 0-1 (P3)
 
 
 @dataclass
@@ -59,6 +63,314 @@ class PaperContent:
     references: list = field(default_factory=list)  # 引用列表
     read_time: str = ""
     word_count: int = 0
+
+
+# ============================================================
+# 0. SQLite论文数据库 — 持久化存储全部论文数据
+# ============================================================
+
+class PaperDatabase:
+    """
+    SQLite论文数据库
+
+    存储: 元数据 + 全部章节文本 + 关键发现 + 引用列表 + 证据分级 + 可信度
+    重启后可恢复全部数据，无需重新读取。
+
+    Schema:
+      papers      — 论文主表（元数据+质量评分）
+      sections    — 章节（类型+标题+文本+关键发现）
+      references  — 参考文献
+    """
+
+    def __init__(self, db_path: str = None):
+        self.db_path = db_path or os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "knowledge_store", "papers.db"
+        )
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        self._conn = sqlite3.connect(self.db_path)
+        self._conn.row_factory = sqlite3.Row
+        self._init_tables()
+
+    def _init_tables(self):
+        """创建表结构"""
+        self._conn.executescript("""
+            CREATE TABLE IF NOT EXISTS papers (
+                paper_id        TEXT PRIMARY KEY,
+                title           TEXT NOT NULL DEFAULT '',
+                authors         TEXT NOT NULL DEFAULT '[]',
+                year            INTEGER DEFAULT 0,
+                abstract        TEXT DEFAULT '',
+                arxiv_url       TEXT DEFAULT '',
+                doi             TEXT DEFAULT '',
+                venue           TEXT DEFAULT '',
+                citation_count  INTEGER DEFAULT 0,
+                reference_count INTEGER DEFAULT 0,
+                fields_of_study TEXT DEFAULT '[]',
+                source          TEXT DEFAULT '',
+                evidence_level  INTEGER DEFAULT 6,
+                evidence_weight REAL DEFAULT 0.5,
+                credibility_score REAL DEFAULT 0.0,
+                read_time       TEXT DEFAULT '',
+                word_count      INTEGER DEFAULT 0,
+                created_at      TEXT DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS sections (
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                paper_id        TEXT NOT NULL,
+                section_type    TEXT DEFAULT 'other',
+                title           TEXT DEFAULT '',
+                level           INTEGER DEFAULT 2,
+                text            TEXT DEFAULT '',
+                key_findings    TEXT DEFAULT '[]',
+                FOREIGN KEY (paper_id) REFERENCES papers(paper_id) ON DELETE CASCADE
+            );
+
+            CREATE TABLE IF NOT EXISTS paper_refs (
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                paper_id        TEXT NOT NULL,
+                title           TEXT DEFAULT '',
+                authors         TEXT DEFAULT '',
+                year            TEXT DEFAULT '',
+                citation_count  INTEGER DEFAULT 0,
+                FOREIGN KEY (paper_id) REFERENCES papers(paper_id) ON DELETE CASCADE
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_sections_paper ON sections(paper_id);
+            CREATE INDEX IF NOT EXISTS idx_sections_type ON sections(section_type);
+            CREATE INDEX IF NOT EXISTS idx_refs_paper ON paper_refs(paper_id);
+            CREATE INDEX IF NOT EXISTS idx_papers_year ON papers(year);
+            CREATE INDEX IF NOT EXISTS idx_papers_evidence ON papers(evidence_level);
+        """)
+        self._conn.commit()
+
+    def save_paper(self, content: 'PaperContent') -> bool:
+        """
+        保存一篇完整论文到数据库
+
+        存储: 元数据 + 全部章节 + 全部引用
+        支持幂等写入（同paper_id覆盖更新）
+        """
+        m = content.metadata
+        try:
+            # 主表
+            self._conn.execute("""
+                INSERT OR REPLACE INTO papers
+                (paper_id, title, authors, year, abstract, arxiv_url, doi, venue,
+                 citation_count, reference_count, fields_of_study, source,
+                 evidence_level, evidence_weight, credibility_score,
+                 read_time, word_count, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                m.paper_id, m.title, json.dumps(m.authors, ensure_ascii=False),
+                m.year, m.abstract, m.arxiv_url, m.doi, m.venue,
+                m.citation_count, m.reference_count,
+                json.dumps(m.fields_of_study, ensure_ascii=False), m.source,
+                m.evidence_level, m.evidence_weight, m.credibility_score,
+                content.read_time, content.word_count,
+                datetime.now(timezone.utc).isoformat(),
+            ))
+
+            # 删除旧章节和引用（幂等更新）
+            self._conn.execute("DELETE FROM sections WHERE paper_id = ?", (m.paper_id,))
+            self._conn.execute("DELETE FROM paper_refs WHERE paper_id = ?", (m.paper_id,))
+
+            # 章节
+            for sec in content.sections:
+                self._conn.execute("""
+                    INSERT INTO sections (paper_id, section_type, title, level, text, key_findings)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (
+                    m.paper_id, sec.section_type, sec.title, sec.level,
+                    sec.text, json.dumps(sec.key_findings, ensure_ascii=False),
+                ))
+
+            # 引用
+            for ref in content.references:
+                self._conn.execute("""
+                    INSERT INTO paper_refs (paper_id, title, authors, year, citation_count)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (
+                    m.paper_id, ref.get("title", ""), ref.get("authors", ""),
+                    str(ref.get("year", "")), ref.get("citation_count", 0),
+                ))
+
+            self._conn.commit()
+            return True
+        except Exception as e:
+            logger.error(f"Database save error for {m.paper_id}: {e}")
+            self._conn.rollback()
+            return False
+
+    def load_paper(self, paper_id: str) -> Optional['PaperContent']:
+        """从数据库加载一篇完整论文"""
+        row = self._conn.execute(
+            "SELECT * FROM papers WHERE paper_id = ?", (paper_id,)
+        ).fetchone()
+        if not row:
+            return None
+
+        meta = PaperMetadata(
+            paper_id=row["paper_id"],
+            title=row["title"],
+            authors=json.loads(row["authors"]),
+            year=row["year"],
+            abstract=row["abstract"],
+            arxiv_url=row["arxiv_url"],
+            doi=row["doi"],
+            venue=row["venue"],
+            citation_count=row["citation_count"],
+            reference_count=row["reference_count"],
+            fields_of_study=json.loads(row["fields_of_study"]),
+            source=row["source"],
+            evidence_level=row["evidence_level"],
+            evidence_weight=row["evidence_weight"],
+            credibility_score=row["credibility_score"],
+        )
+
+        sections = []
+        for srow in self._conn.execute(
+            "SELECT * FROM sections WHERE paper_id = ? ORDER BY id", (paper_id,)
+        ).fetchall():
+            sections.append(PaperSection(
+                section_type=srow["section_type"],
+                title=srow["title"],
+                level=srow["level"],
+                text=srow["text"],
+                key_findings=json.loads(srow["key_findings"]),
+            ))
+
+        references = []
+        for rrow in self._conn.execute(
+            "SELECT * FROM paper_refs WHERE paper_id = ?", (paper_id,)
+        ).fetchall():
+            references.append({
+                "title": rrow["title"],
+                "authors": rrow["authors"],
+                "year": rrow["year"],
+                "citation_count": rrow["citation_count"],
+            })
+
+        return PaperContent(
+            metadata=meta, sections=sections, references=references,
+            read_time=row["read_time"], word_count=row["word_count"],
+        )
+
+    def load_all(self) -> dict:
+        """加载全部论文，返回 {paper_id: PaperContent}"""
+        papers = {}
+        for row in self._conn.execute("SELECT paper_id FROM papers").fetchall():
+            paper = self.load_paper(row["paper_id"])
+            if paper:
+                papers[paper.metadata.paper_id] = paper
+        return papers
+
+    def list_papers(self) -> list:
+        """列出全部论文摘要（轻量查询，不加载全文）"""
+        rows = self._conn.execute("""
+            SELECT paper_id, title, authors, year, source,
+                   evidence_level, credibility_score, word_count,
+                   (SELECT COUNT(*) FROM sections WHERE sections.paper_id = papers.paper_id) as section_count,
+                   (SELECT COUNT(*) FROM paper_refs WHERE paper_refs.paper_id = papers.paper_id) as ref_count
+            FROM papers ORDER BY created_at DESC
+        """).fetchall()
+        result = []
+        for r in rows:
+            authors = json.loads(r["authors"])
+            result.append({
+                "paper_id": r["paper_id"],
+                "title": r["title"],
+                "authors": ", ".join(authors[:3]),
+                "year": r["year"],
+                "source": r["source"],
+                "evidence_level": r["evidence_level"],
+                "credibility_score": r["credibility_score"],
+                "sections": r["section_count"],
+                "word_count": r["word_count"],
+            })
+        return result
+
+    def search(self, query: str, top_k: int = 10) -> list:
+        """全文搜索论文（标题+摘要+章节文本）"""
+        query_like = f"%{query}%"
+        rows = self._conn.execute("""
+            SELECT DISTINCT p.paper_id, p.title, p.year,
+                   p.evidence_level, p.credibility_score,
+                   CASE
+                       WHEN p.title LIKE ? THEN 10
+                       WHEN p.abstract LIKE ? THEN 5
+                       ELSE 1
+                   END as relevance
+            FROM papers p
+            LEFT JOIN sections s ON s.paper_id = p.paper_id
+            WHERE p.title LIKE ? OR p.abstract LIKE ? OR s.text LIKE ?
+            ORDER BY relevance DESC, p.year DESC
+            LIMIT ?
+        """, (query_like, query_like, query_like, query_like, query_like, top_k)).fetchall()
+
+        return [{
+            "paper_id": r["paper_id"],
+            "title": r["title"],
+            "year": r["year"],
+            "evidence_level": r["evidence_level"],
+            "credibility_score": r["credibility_score"],
+            "relevance": r["relevance"],
+        } for r in rows]
+
+    def count(self) -> int:
+        """论文总数"""
+        return self._conn.execute("SELECT COUNT(*) FROM papers").fetchone()[0]
+
+    def get_stats(self) -> dict:
+        """数据库统计"""
+        total = self.count()
+        if total == 0:
+            return {"total": 0}
+
+        row = self._conn.execute("""
+            SELECT
+                AVG(word_count) as avg_words,
+                AVG(credibility_score) as avg_credibility,
+                MIN(year) as earliest_year,
+                MAX(year) as latest_year
+            FROM papers WHERE year > 0
+        """).fetchone()
+
+        levels = {}
+        for r in self._conn.execute(
+            "SELECT evidence_level, COUNT(*) as cnt FROM papers GROUP BY evidence_level"
+        ).fetchall():
+            levels[f"Level {r[0]}"] = r[1]
+
+        sources = {}
+        for r in self._conn.execute(
+            "SELECT source, COUNT(*) as cnt FROM papers GROUP BY source"
+        ).fetchall():
+            sources[r[0]] = r[1]
+
+        return {
+            "total": total,
+            "avg_words": int(row["avg_words"] or 0),
+            "avg_credibility": round(row["avg_credibility"] or 0, 2),
+            "year_range": f"{row['earliest_year'] or '?'}-{row['latest_year'] or '?'}",
+            "evidence_levels": levels,
+            "sources": sources,
+        }
+
+    def delete_paper(self, paper_id: str) -> bool:
+        """删除一篇论文（级联删除章节和引用）"""
+        try:
+            self._conn.execute("DELETE FROM papers WHERE paper_id = ?", (paper_id,))
+            self._conn.commit()
+            return True
+        except Exception:
+            return False
+
+    def close(self):
+        """关闭数据库连接"""
+        if self._conn:
+            self._conn.close()
 
 
 # ============================================================
@@ -396,7 +708,7 @@ class PaperReader:
     """
     论文阅读器 — 统一入口
 
-    读取论文 → 解析结构 → 提取发现 → 存入记忆 → 加入索引
+    读取论文 → 解析结构 → 提取发现 → 评估质量 → 存入记忆 → 加入索引
 
     用法:
         reader = PaperReader()
@@ -406,12 +718,24 @@ class PaperReader:
 
         # 搜索已读论文
         results = reader.search("dissolved oxygen methane")
+
+        # 构建文献矩阵
+        matrix = reader.build_literature_matrix()
+
+        # 验证引用
+        verified = reader.verify_references(refs)
     """
 
     def __init__(self, output_dir: str = None):
         self.output_dir = output_dir or os.path.join(os.getcwd(), 'paper_output')
         os.makedirs(self.output_dir, exist_ok=True)
         self._papers: dict[str, PaperContent] = {}  # 内存缓存
+        self._lit_memory = None  # 延迟初始化
+        self.db = PaperDatabase()  # SQLite持久化
+        # 从数据库恢复已有论文
+        self._papers = self.db.load_all()
+        if self._papers:
+            logger.info(f"从数据库恢复了 {len(self._papers)} 篇论文")
 
     def read(self, source: str, fetch_metadata: bool = True) -> PaperContent:
         """
@@ -468,48 +792,73 @@ class PaperReader:
         # 存入KnowledgeStore
         self._store_memory(content)
 
+        # 评估论文质量（P2证据分级 + P3来源可信度）
+        self._assess_paper_quality(content)
+
+        # 持久化到SQLite数据库
+        self.db.save_paper(content)
+
         print(f"[PaperReader] 完成: {content.metadata.title[:50]}... "
               f"({len(content.sections)} sections, {content.word_count} chars)")
         return content
 
     def search(self, query: str, top_k: int = 5) -> list:
-        """搜索已读论文"""
+        """搜索已读论文（RAG > SQLite > 内存）"""
         try:
             from rag_system import RAGEngine
             engine = RAGEngine()
             results = engine.retrieve(query, max_results=top_k)
-            return results
+            if results:
+                return results
         except Exception:
-            # 退化为内存搜索
-            results = []
-            query_lower = query.lower()
-            for pid, paper in self._papers.items():
-                score = 0
-                if query_lower in paper.metadata.title.lower():
-                    score += 3
-                if query_lower in paper.metadata.abstract.lower():
-                    score += 2
-                for sec in paper.sections:
-                    if query_lower in sec.text.lower():
-                        score += 1
-                if score > 0:
-                    results.append({'paper_id': pid, 'title': paper.metadata.title, 'score': score})
-            results.sort(key=lambda x: x['score'], reverse=True)
-            return results[:top_k]
+            pass
+
+        # SQLite全文搜索
+        try:
+            db_results = self.db.search(query, top_k=top_k)
+            if db_results:
+                return db_results
+        except Exception:
+            pass
+
+        # 退化为内存搜索
+        results = []
+        query_lower = query.lower()
+        for pid, paper in self._papers.items():
+            score = 0
+            if query_lower in paper.metadata.title.lower():
+                score += 3
+            if query_lower in paper.metadata.abstract.lower():
+                score += 2
+            for sec in paper.sections:
+                if query_lower in sec.text.lower():
+                    score += 1
+            if score > 0:
+                results.append({'paper_id': pid, 'title': paper.metadata.title, 'score': score})
+        results.sort(key=lambda x: x['score'], reverse=True)
+        return results[:top_k]
 
     def list_papers(self) -> list:
-        """列出所有已读论文"""
-        return [
-            {
-                'paper_id': pid,
-                'title': p.metadata.title,
-                'authors': ', '.join(p.metadata.authors[:3]),
-                'year': p.metadata.year,
-                'sections': len(p.sections),
-                'source': p.metadata.source,
-            }
-            for pid, p in self._papers.items()
-        ]
+        """列出所有已读论文（优先从数据库查询）"""
+        try:
+            return self.db.list_papers()
+        except Exception:
+            # 退化为内存列表
+            return [
+                {
+                    'paper_id': pid,
+                    'title': p.metadata.title,
+                    'authors': ', '.join(p.metadata.authors[:3]),
+                    'year': p.metadata.year,
+                    'sections': len(p.sections),
+                    'source': p.metadata.source,
+                }
+                for pid, p in self._papers.items()
+            ]
+
+    def get_db_stats(self) -> dict:
+        """获取数据库统计"""
+        return self.db.get_stats()
 
     # --- 内部方法 ---
 
@@ -637,7 +986,7 @@ class PaperReader:
             from self_evolving_engine import KnowledgeStore
             store = KnowledgeStore()
             entry_key = f"paper_{content.metadata.paper_id}"
-            store.add("resources", entry_key, {
+            store.set("resources", entry_key, {
                 "title": content.metadata.title,
                 "authors": content.metadata.authors[:5],
                 "year": content.metadata.year,
@@ -650,6 +999,118 @@ class PaperReader:
             })
         except Exception as e:
             logger.debug(f"KnowledgeStore save skipped: {e}")
+
+    def _get_lit_memory(self):
+        """延迟初始化文献记忆系统"""
+        if self._lit_memory is None:
+            try:
+                from literature_memory import LiteratureMemory
+                self._lit_memory = LiteratureMemory()
+            except ImportError:
+                logger.debug("literature_memory module not available")
+                self._lit_memory = None
+        return self._lit_memory
+
+    def _assess_paper_quality(self, content: PaperContent):
+        """
+        P2+P3: 评估论文质量（证据分级 + 来源可信度）
+
+        将结果写入 content.metadata 并存入文献记忆系统
+        """
+        mem = self._get_lit_memory()
+        if mem is None:
+            return
+
+        try:
+            assessment = mem.assess_paper(content)
+            # 回写到 metadata
+            content.metadata.evidence_level = assessment.get("evidence_level", 6)
+            content.metadata.evidence_weight = assessment.get("evidence_weight", 0.5)
+            content.metadata.credibility_score = assessment.get("credibility_score", 0.0)
+        except Exception as e:
+            logger.debug(f"Paper quality assessment skipped: {e}")
+
+    def build_literature_matrix(self) -> str:
+        """
+        P1: 构建文献矩阵（来源×主题交叉表）
+
+        Returns: Markdown 格式的矩阵报告
+        """
+        mem = self._get_lit_memory()
+        if mem is None:
+            return "文献记忆模块不可用"
+
+        if not mem.matrix.papers:
+            return "暂无论文数据，请先读取论文"
+
+        matrix = mem.build_matrix(auto_detect_themes=True)
+
+        # P4: 自动构建关联网络
+        mem.network.build_from_matrix(matrix)
+
+        # 持久化
+        try:
+            mem.save_all()
+        except Exception as e:
+            logger.warning(f"Failed to save literature matrix: {e}")
+
+        return matrix.to_markdown()
+
+    def verify_references(self, references: list, timeout: int = 10) -> str:
+        """
+        P0: 三级引用验证（S2 API + DOI + Levenshtein）
+
+        Parameters
+        ----------
+        references : list of dict, 每个包含 {title, doi?, year?}
+
+        Returns: Markdown 格式的验证报告
+        """
+        mem = self._get_lit_memory()
+        if mem is None:
+            return "文献记忆模块不可用"
+
+        results = mem.verify_citations_batch(references, timeout=timeout)
+
+        lines = [
+            "# 三级引用验证报告", "",
+            f"- 总引用数: {len(results)}",
+            "",
+            "| # | 标题(前50字) | 状态 | 置信度 | 验证方式 | 标记 |",
+            "|---|------------|------|--------|----------|------|",
+        ]
+
+        verified_count = 0
+        for i, r in enumerate(results):
+            title = r["reference"][:50]
+            status = r["final_status"]
+            conf = f"{r['confidence']:.2f}"
+            method = ""
+            if r.get("tier0_s2"):
+                method = r["tier0_s2"].get("verification_method", "")
+            elif r.get("tier1_doi"):
+                method = "doi_crossref"
+            flags = ", ".join(r.get("flags", []))
+            if "VERIFIED" in status:
+                verified_count += 1
+            lines.append(f"| {i+1} | {title} | {status} | {conf} | {method} | {flags} |")
+
+        lines.extend([
+            "",
+            f"**验证通过**: {verified_count}/{len(results)} "
+            f"({verified_count*100//max(1,len(results))}%)",
+        ])
+
+        return "\n".join(lines)
+
+    def get_network_report(self) -> str:
+        """P4: 获取论文关联网络报告"""
+        mem = self._get_lit_memory()
+        if mem is None:
+            return "文献记忆模块不可用"
+
+        titles = {pid: p.metadata.title for pid, p in self._papers.items()}
+        return mem.network.to_markdown(titles)
 
 
 # ============================================================
@@ -712,3 +1173,5 @@ methane production in campus sewage networks.
         print("  python paper_reader.py --test")
         print("  python paper_reader.py https://arxiv.org/abs/2301.12345")
         print("  python paper_reader.py paper.pdf")
+        print("  python paper_reader.py --matrix   # 构建文献矩阵")
+        print("  python paper_reader.py --network  # 查看论文关联网络")

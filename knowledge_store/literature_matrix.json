@@ -1,0 +1,127 @@
+{
+  "themes": [
+    "significant",
+    "dissolved",
+    "oxygen",
+    "indicate",
+    "negative",
+    "correlation"
+  ],
+  "papers": {
+    "pipeline_test": {
+      "title": "pipeline_test",
+      "authors": "",
+      "year": 0,
+      "evidence_level": 6,
+      "evidence_weight": 0.5,
+      "credibility_score": 0.32,
+      "themes": {
+        "significant": "✓ 支持",
+        "dissolved": "✓ 支持",
+        "oxygen": "✓ 支持",
+        "indicate": "✓ 支持",
+        "negative": "✓ 支持",
+        "correlation": "✓ 支持"
+      },
+      "key_findings": [
+        "This study investigates the relationship between dissolved oxygen (DO)\nand methane (CH4) production in campus sewage networks.",
+        "Our results\nindicate a significant negative correlation between DO and CH4 concentrations.",
+        "Urban sewer systems are significant sources of greenhouse gas emissions."
+      ]
+    }
+  },
+  "convergence": [
+    {
+      "theme": "significant",
+      "supports": 1,
+      "contradicts": 0,
+      "net": 1,
+      "strength": "弱 (Weak)",
+      "confidence": "低 (Low)"
+    },
+    {
+      "theme": "dissolved",
+      "supports": 1,
+      "contradicts": 0,
+      "net": 1,
+      "strength": "弱 (Weak)",
+      "confidence": "低 (Low)"
+    },
+    {
+      "theme": "oxygen",
+      "supports": 1,
+      "contradicts": 0,
+      "net": 1,
+      "strength": "弱 (Weak)",
+      "confidence": "低 (Low)"
+    },
+    {
+      "theme": "indicate",
+      "supports": 1,
+      "contradicts": 0,
+      "net": 1,
+      "strength": "弱 (Weak)",
+      "confidence": "低 (Low)"
+    },
+    {
+      "theme": "negative",
+      "supports": 1,
+      "contradicts": 0,
+      "net": 1,
+      "strength": "弱 (Weak)",
+      "confidence": "低 (Low)"
+    },
+    {
+      "theme": "correlation",
+      "supports": 1,
+      "contradicts": 0,
+      "net": 1,
+      "strength": "弱 (Weak)",
+      "confidence": "低 (Low)"
+    }
+  ],
+  "gaps": [
+    {
+      "theme": "significant",
+      "type": "证据不足",
+      "description": "'significant' 仅1篇文献支持",
+      "priority": "中"
+    },
+    {
+      "theme": "dissolved",
+      "type": "证据不足",
+      "description": "'dissolved' 仅1篇文献支持",
+      "priority": "中"
+    },
+    {
+      "theme": "oxygen",
+      "type": "证据不足",
+      "description": "'oxygen' 仅1篇文献支持",
+      "priority": "中"
+    },
+    {
+      "theme": "indicate",
+      "type": "证据不足",
+      "description": "'indicate' 仅1篇文献支持",
+      "priority": "中"
+    },
+    {
+      "theme": "negative",
+      "type": "证据不足",
+      "description": "'negative' 仅1篇文献支持",
+      "priority": "中"
+    },
+    {
+      "theme": "correlation",
+      "type": "证据不足",
+      "description": "'correlation' 仅1篇文献支持",
+      "priority": "中"
+    },
+    {
+      "theme": "方法论",
+      "type": "高证据等级缺失",
+      "description": "无系统综述或RCT，全为中低等级证据",
+      "priority": "高"
+    }
+  ]
+}
