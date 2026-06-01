@@ -879,6 +879,150 @@ class EvolutionEngine:
         self._log_evolution("initialize", "从现有代码导入知识", results)
         return results
 
+    def auto_learn(self, topic: str, max_papers: int = 10,
+                   read_top_n: int = 5) -> dict:
+        """
+        自动学习：搜论文 → 读取 → 提取句式/机制 → 存入知识库。
+
+        Parameters
+        ----------
+        topic : str, 研究主题（如 "sewage methane emission"）
+        max_papers : int, 搜索最大论文数
+        read_top_n : int, 实际读取的论文数
+
+        Returns
+        -------
+        dict: 学习报告
+        """
+        from auto_paper_finder import AutoPaperFinder
+        from pattern_learner import (
+            SentencePatternLearner, DiscussionLearner,
+            MechanismLearner, learn_patterns_from_paper
+        )
+
+        report = {
+            'topic': topic,
+            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'papers_found': 0,
+            'papers_read': 0,
+            'patterns_learned': 0,
+            'mechanisms_learned': 0,
+            'structures_learned': 0,
+            'details': [],
+        }
+
+        # Step 1: 搜索论文
+        print(f"[AutoLearn] 搜索论文: {topic}")
+        finder = AutoPaperFinder(store=self.store)
+        try:
+            papers = finder.find_papers(topic, max_results=max_papers)
+            report['papers_found'] = len(papers)
+        except Exception as e:
+            report['error'] = f"搜索失败: {e}"
+            logger.warning(f"Auto learn search failed: {e}")
+            return report
+
+        if not papers:
+            report['error'] = "未找到相关论文"
+            return report
+
+        # Step 2: 读取 top-N 论文并学习
+        spl = SentencePatternLearner()
+        dl = DiscussionLearner()
+        ml = MechanismLearner()
+
+        # 按引用数排序，优先读高引用论文
+        papers_sorted = sorted(papers,
+                               key=lambda x: x.get('citation_count', 0),
+                               reverse=True)
+
+        for i, paper in enumerate(papers_sorted[:read_top_n]):
+            title = paper.get('title', '')
+            abstract = paper.get('abstract', '')
+            arxiv_id = paper.get('arxiv_id', '')
+
+            print(f"  [{i+1}/{read_top_n}] {title[:60]}...")
+
+            paper_detail = {
+                'title': title,
+                'source': paper.get('source', ''),
+                'citation_count': paper.get('citation_count', 0),
+                'patterns': 0,
+                'mechanisms': 0,
+            }
+
+            # 从摘要学习
+            if abstract:
+                # 句式学习
+                patterns = spl.learn_from_text(abstract, 'abstract')
+                paper_detail['patterns'] += len(patterns)
+
+                # 机制学习
+                mechs = ml.learn_from_text(abstract, source=f'abstract:{title[:30]}')
+                paper_detail['mechanisms'] += len(mechs)
+
+            # 尝试读取全文（如果有 arxiv ID）
+            if arxiv_id:
+                try:
+                    from paper_reader import PaperReader
+                    reader = PaperReader()
+                    content = reader.read(f"https://arxiv.org/abs/{arxiv_id}",
+                                          fetch_metadata=False)
+
+                    # 从全文学习
+                    result = learn_patterns_from_paper(content, store=self.store)
+                    paper_detail['patterns'] += len(result.get('patterns', []))
+                    paper_detail['mechanisms'] += len(result.get('mechanisms', []))
+
+                    if result.get('structure'):
+                        report['structures_learned'] += 1
+
+                    report['papers_read'] += 1
+                except Exception as e:
+                    logger.info(f"Could not read full paper {arxiv_id}: {e}")
+
+            report['details'].append(paper_detail)
+
+        # Step 3: 聚合学习结果并存入知识库
+        # 句式模式
+        all_patterns = spl.get_patterns(top_n=30)
+        for p in all_patterns:
+            key = f"learned_{p['function']}_{hash(p['pattern']) % 10000:04d}"
+            self.store.set("writing_templates", key, {
+                'pattern': p['pattern'],
+                'function': p.get('function', ''),
+                'section_type': p.get('section_type', ''),
+                'count': p.get('count', 1),
+                'source': f'auto_learn:{topic[:30]}',
+            }, source='auto_learn', confidence=0.7)
+        report['patterns_learned'] = len(all_patterns)
+
+        # 机制知识
+        mech_entries = ml.to_knowledge_store_format()
+        for key, entry in mech_entries.items():
+            self.store.set("mechanisms", key, entry,
+                           source='auto_learn', confidence=0.6)
+        report['mechanisms_learned'] = len(mech_entries)
+
+        # 讨论结构
+        if dl.structures:
+            for i, struct in enumerate(dl.structures):
+                self.store.set("writing_templates", f"learned_discussion_structure_{i}",
+                               struct, source='auto_learn', confidence=0.6)
+
+        self._log_evolution("auto_learn",
+                            f"学习主题: {topic}, {report['papers_found']}篇论文, "
+                            f"{report['patterns_learned']}个句式, "
+                            f"{report['mechanisms_learned']}个机制",
+                            report)
+
+        print(f"[AutoLearn] 完成: {report['papers_found']}篇论文, "
+              f"{report['patterns_learned']}个句式, "
+              f"{report['mechanisms_learned']}个机制, "
+              f"{report['structures_learned']}个讨论结构")
+
+        return report
+
     def evolve_cycle(self, include_github_scan=True) -> dict:
         """执行一次完整进化周期"""
         report = {

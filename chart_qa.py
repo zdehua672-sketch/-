@@ -10,8 +10,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 import io, sys, os
+import logging
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+logger = logging.getLogger(__name__)
 
 
 def check_chart_quality(fig, auto_fix=True, verbose=False):
@@ -37,7 +39,8 @@ def check_chart_quality(fig, auto_fix=True, verbose=False):
     try:
         fig.canvas.draw()
         renderer = fig.canvas.get_renderer()
-    except Exception:
+    except Exception as e:
+        logger.debug(f"chart_qa renderer: {e}")
         return {'status': 'SKIP', 'high': 0, 'medium': 0, 'issues': [], 'fixed': []}
 
     issues = []
@@ -61,8 +64,8 @@ def check_chart_quality(fig, auto_fix=True, verbose=False):
                         for l in xlabels:
                             l.set_fontsize(max(6, l.get_fontsize() - 1))
                         fixed.append(('XTICK_COLLISION', 'reduced fontsize'))
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"chart_qa check skipped: {e}")
 
         # --- 检测2: 文字重叠（标注之间）---
         texts = [c for c in ax.get_children()
@@ -95,8 +98,8 @@ def check_chart_quality(fig, auto_fix=True, verbose=False):
                                     t1.set_fontsize(max(6, t1.get_fontsize() - 1))
                                     t2.set_fontsize(max(6, t2.get_fontsize() - 1))
                                     fixed.append(('TEXT_OVERLAP', 'reduced fontsize'))
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"chart_qa check skipped: {e}")
 
         # --- 检测3: 图例遮挡数据 ---
         legend = ax.get_legend()
@@ -117,8 +120,8 @@ def check_chart_quality(fig, auto_fix=True, verbose=False):
                                 break
                     except Exception:
                         pass
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"chart_qa check skipped: {e}")
 
         # --- 检测4: 标注与图形元素重叠（柱子/散点）---
         for text_obj in texts:
@@ -138,8 +141,8 @@ def check_chart_quality(fig, auto_fix=True, verbose=False):
                                     break
                     except Exception:
                         pass
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"chart_qa check skipped: {e}")
 
         # --- 检测5: 轴标签被裁剪 ---
         for label in [ax.xaxis.label, ax.yaxis.label]:
@@ -160,8 +163,8 @@ def check_chart_quality(fig, auto_fix=True, verbose=False):
             try:
                 bb = ax.get_window_extent(renderer)
                 heights.append(bb.height)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"chart_qa check skipped: {e}")
         if heights:
             min_h = min(heights)
             max_h = max(heights)

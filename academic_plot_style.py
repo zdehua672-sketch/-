@@ -54,28 +54,73 @@ CARBON_COLORS = {
 }
 
 # ============================================================================
-# 2. 字体配置
+# 2. 字体配置（彻底解决中文显示问题）
 # ============================================================================
 def setup_fonts():
     import matplotlib.font_manager as fm
-    # 只用文件路径，不设rcParams（rcParams会覆盖fontproperties kwarg）
-    font_path = os.path.join(os.environ.get('WINDIR', 'C:/Windows'), 'Fonts', 'simhei.ttf')
-    if not os.path.exists(font_path):
+
+    # 清除字体缓存，确保新安装的字体能被发现
+    try:
+        fm._load_fontmanager(try_read_cache=False)
+    except Exception:
+        pass
+
+    # 按优先级查找可用的中文字体
+    CN_FONT_CANDIDATES = [
+        ('Microsoft YaHei', 'msyh.ttc'),      # 微软雅黑 - 最现代
+        ('SimHei', 'simhei.ttf'),              # 黑体 - 经典
+        ('DengXian', 'Deng.ttf'),              # 等线 - Win10+
+        ('SimSun', 'simsun.ttc'),              # 宋体
+        ('KaiTi', 'simkai.ttf'),               # 楷体
+        ('FangSong', 'simfang.ttf'),           # 仿宋
+        ('STSong', 'STSONG.TTF'),              # 华文宋体
+        ('STXihei', 'STXIHEI.TTF'),           # 华文细黑
+    ]
+
+    cn_font_name = None
+    cn_font_path = None
+    cn_font_family = None  # 用于 rcParams 的字体族名
+
+    for font_name, font_file in CN_FONT_CANDIDATES:
+        # 方法1：直接找文件
+        font_path = os.path.join(os.environ.get('WINDIR', 'C:/Windows'), 'Fonts', font_file)
+        if os.path.exists(font_path):
+            cn_font_name = font_name
+            cn_font_path = font_path
+            cn_font_family = font_name
+            break
+        # 方法2：从 fontManager 查
         for f in fm.fontManager.ttflist:
-            if f.name == 'SimHei':
-                font_path = f.fname
+            if f.name == font_name:
+                cn_font_name = font_name
+                cn_font_path = f.fname
+                cn_font_family = font_name
                 break
-    if font_path and os.path.exists(font_path):
-        CN_FONT_PROP = fm.FontProperties(fname=font_path)
-        CN_FONT_PROP_BOLD = fm.FontProperties(fname=font_path, weight='bold')
+        if cn_font_name:
+            break
+
+    if cn_font_name:
+        # === 关键：设置 rcParams 让所有文本默认使用中文字体 ===
+        rcParams['font.sans-serif'] = [cn_font_name, 'DejaVu Sans', 'Arial']
+        rcParams['font.family'] = 'sans-serif'
+        # 同时保留 FontProperties 供显式使用
+        CN_FONT_PROP = fm.FontProperties(fname=cn_font_path)
+        CN_FONT_PROP_BOLD = fm.FontProperties(fname=cn_font_path, weight='bold')
     else:
-        CN_FONT_PROP = fm.FontProperties(family='SimHei')
-        CN_FONT_PROP_BOLD = fm.FontProperties(family='SimHei', weight='bold')
+        # 降级：用 SimHei 名称（可能不生效）
+        CN_FONT_PROP = fm.FontProperties(family='sans-serif')
+        CN_FONT_PROP_BOLD = fm.FontProperties(family='sans-serif', weight='bold')
+        cn_font_name = 'DejaVu Sans (fallback)'
+        print("[字体警告] 未找到中文字体，中文可能显示为方块！")
+
+    # 解决负号显示问题
     rcParams['axes.unicode_minus'] = False
+    # 数学文本用 STIX（与中文字体兼容）
     rcParams['mathtext.fontset'] = 'stix'
     rcParams['mathtext.default'] = 'regular'
-    print(f"[字体配置] SimHei: {font_path}")
-    return 'SimHei', 'Times New Roman', CN_FONT_PROP, CN_FONT_PROP_BOLD
+
+    print(f"[字体配置] 中文字体: {cn_font_name} ({cn_font_path})")
+    return cn_font_name, 'Times New Roman', CN_FONT_PROP, CN_FONT_PROP_BOLD
 
 CHINESE_FONT, ENGLISH_FONT, CN_FONT_PROP, CN_FONT_PROP_BOLD = setup_fonts()
 
@@ -127,7 +172,13 @@ def set_plot_style():
         'savefig.bbox': 'tight',
         'savefig.pad_inches': 0.1,
         'savefig.transparent': False,
+        # 确保中文字体在 sns.set_style 之后仍然生效
+        'axes.unicode_minus': False,
     })
+    # sns.set_style 会重置 font.sans-serif，需要重新设置
+    if CHINESE_FONT:
+        rcParams['font.sans-serif'] = [CHINESE_FONT, 'DejaVu Sans', 'Arial']
+        rcParams['font.family'] = 'sans-serif'
     print("[绘图风格] 学术绘图模板已加载")
 
 # ============================================================================

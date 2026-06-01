@@ -6,14 +6,12 @@
 """
 
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-from matplotlib import lines as mlines
 from matplotlib.patches import FancyBboxPatch
 import seaborn as sns
 import numpy as np
 import pandas as pd
 import os
-from scipy.cluster.hierarchy import dendrogram
+from scipy.cluster.hierarchy import linkage, dendrogram
 # 使用手动实现的StandardScaler和PCA（避免sklearn依赖问题）
 from statistical_analysis import StandardScaler, PCA, LinearRegression, r2_score
 
@@ -30,6 +28,11 @@ from academic_plot_style import (
     get_figure_size, get_save_dpi, add_panel_label,
     save_figure_publication, DEFAULT_JOURNAL
 )
+from variable_registry import (
+    GAS_VARS, LIQUID_VARS, SOLID_VARS, DERIVED_VARS,
+    SHORT_NAMES, get_phase_cols, get_analysis_cols,
+    get_regression_pairs, infer_derived_variables,
+)
 
 
 class ThesisPlotter:
@@ -42,16 +45,7 @@ class ThesisPlotter:
         self._prepare_derived_variables()
 
     def _prepare_derived_variables(self):
-        df = self.df
-        if 'CH4平均值' in df.columns and 'CO2' in df.columns:
-            df['气相碳'] = pd.to_numeric(df['CH4平均值'], errors='coerce') + \
-                          pd.to_numeric(df['CO2'], errors='coerce')
-        if 'TC(mg/L)' in df.columns:
-            df['液相碳'] = pd.to_numeric(df['TC(mg/L)'], errors='coerce')
-        if '固总碳（g/kg)' in df.columns:
-            df['固相碳'] = pd.to_numeric(df['固总碳（g/kg)'], errors='coerce')
-        if '气相碳' in df.columns and '液相碳' in df.columns:
-            df['气液碳比'] = df['气相碳'] / df['液相碳'].replace(0, np.nan)
+        infer_derived_variables(self.df)
 
     def plot_phase_composition(self):
         """图1: 三相碳组成饼图"""
@@ -348,10 +342,7 @@ class ThesisPlotter:
         corr_df = df[corr_cols].copy()
         corr_df = corr_df.apply(pd.to_numeric, errors='coerce')
         corr = corr_df.corr(method='pearson')
-        short = {'CH4平均值':'CH4','N2O平均值':'N2O','CO2':'CO2','VOCs(ppb)':'VOCs',
-                 'TOC（mg/L)':'TOC','IC(mg/L)':'IC','TC(mg/L)':'TC','DO(mg/L)':'DO',
-                 'COD（mg/L)':'COD','总氮（mg/L)':'TN','铵态氮（mg/L)':'NH4','硝态氮（mg/L)':'NO3',
-                 'pH':'pH','液温':'T','电导率(uS/cm)':'EC'}
+        short = SHORT_NAMES
         labels = [short.get(c, c) for c in corr.columns]
         fig, ax = plt.subplots(figsize=(12, 10), facecolor='white')
         mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
@@ -411,10 +402,7 @@ class ThesisPlotter:
         else:
             ax.scatter(principal[:, 0], principal[:, 1], c=TABLEAU_10[0],
                       s=100, alpha=0.7, edgecolors='#333333', linewidth=0.5)
-        short = {'CH4平均值':'CH4','N2O平均值':'N2O','CO2':'CO2','VOCs(ppb)':'VOCs',
-                 'TOC（mg/L)':'TOC','IC(mg/L)':'IC','TC(mg/L)':'TC','DO(mg/L)':'DO',
-                 'COD（mg/L)':'COD','总氮（mg/L)':'TN','铵态氮（mg/L)':'NH4','硝态氮（mg/L)':'NO3',
-                 'pH':'pH','液温':'T','电导率(uS/cm)':'EC'}
+        short = SHORT_NAMES
         for i, col in enumerate(pca_cols):
             ax.arrow(0, 0, loadings[i, 0] * 3, loadings[i, 1] * 3,
                     head_width=0.08, head_length=0.08, fc='#D55E00', ec='#D55E00', alpha=0.7)
@@ -523,7 +511,7 @@ class ThesisPlotter:
             std_err = np.std(residuals)
             ax.fill_between(x_smooth, y_smooth - 1.96 * std_err, y_smooth + 1.96 * std_err,
                            alpha=0.15, color='#D55E00')
-        except:
+        except Exception:
             pass
         textstr = f'y = {model.coef_[0]:.3f}x + {model.intercept_:.2f}\n'
         textstr += f'R² = {r2:.3f}\nr = {r:.3f}\np = {p_value:.2e}\n'
@@ -531,12 +519,8 @@ class ThesisPlotter:
         props = dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='#BBBBBB', alpha=0.9)
         ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=11,
                verticalalignment='top', bbox=props, family='monospace')
-        short = {'CH4平均值':'CH4','N2O平均值':'N2O','CO2':'CO2','VOCs(ppb)':'VOCs',
-                 'TOC（mg/L)':'TOC','IC(mg/L)':'IC','TC(mg/L)':'TC','DO(mg/L)':'DO',
-                 'COD（mg/L)':'COD','总氮（mg/L)':'TN','铵态氮（mg/L)':'NH4','硝态氮（mg/L)':'NO3',
-                 'pH':'pH','液温':'T','电导率(uS/cm)':'EC'}
-        ax.set_xlabel(short.get(x_col, get_label(x_col)), fontsize=13, fontproperties=CN_FONT_PROP)
-        ax.set_ylabel(short.get(y_col, get_label(y_col)), fontsize=13, fontproperties=CN_FONT_PROP)
+        ax.set_xlabel(SHORT_NAMES.get(x_col, get_label(x_col)), fontsize=13, fontproperties=CN_FONT_PROP)
+        ax.set_ylabel(SHORT_NAMES.get(y_col, get_label(y_col)), fontsize=13, fontproperties=CN_FONT_PROP)
         ax.set_title(title, fontsize=14, fontweight='bold', pad=15, fontproperties=CN_FONT_PROP)
         ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB', prop=CN_FONT_PROP)
         ax.grid(alpha=0.3, linestyle='--')

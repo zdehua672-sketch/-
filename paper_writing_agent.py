@@ -333,6 +333,12 @@ class DiscussionGenerator:
         self.mechanisms = MechanismKB()
         self.rationale = rationale_matrix or RationaleMatrix()
         self.rag = rag_engine
+        # 加载知识记忆
+        try:
+            from knowledge_memory import KnowledgeMemory
+            self.memory = KnowledgeMemory()
+        except Exception:
+            self.memory = None
 
     def _search_literature(self, query, max_results=2):
         """通过RAG检索相关文献，返回引用列表"""
@@ -353,9 +359,34 @@ class DiscussionGenerator:
 
     def generate(self, language='zh'):
         """生成Discussion全文"""
+        # 从知识记忆中获取相关写作上下文
+        self._learned_context = self._get_learned_context()
         if language == 'zh':
             return self._generate_zh()
         return self._generate_en()
+
+    def _get_learned_context(self):
+        """从知识记忆中获取相关句式、机制、引用"""
+        context = {'patterns': [], 'mechanisms': [], 'references': []}
+        if not self.memory:
+            return context
+        try:
+            # 提取关键变量作为查询
+            key_vars = []
+            for key in self.results:
+                if '相关' in str(key):
+                    key_vars.append(str(key)[:30])
+            if '描述统计' in self.results:
+                key_vars.append('碳污染物排放特征')
+
+            query = ' '.join(key_vars[:3]) if key_vars else '碳污染物'
+            ctx = self.memory.get_writing_context(query, 'discussion')
+            context['patterns'] = ctx.get('patterns', [])[:5]
+            context['mechanisms'] = ctx.get('mechanisms', [])[:3]
+            context['references'] = ctx.get('references', [])[:3]
+        except Exception:
+            pass
+        return context
 
     def _generate_zh(self):
         """中文Discussion"""
@@ -398,12 +429,21 @@ class DiscussionGenerator:
             findings.append('PCA揭示的变量聚类模式')
 
         findings_str = '、'.join(findings) if findings else '数据特征'
-        return (
+        text = (
             '# 4 讨论\n\n'
             f'本研究通过系统的采样分析和多元统计方法，揭示了校园污水管网中'
             f'固-液-气多相态碳污染物的赋存特征。主要发现包括：'
             f'{findings_str}。以下对各发现进行深入讨论。'
         )
+
+        # 如果有学习到的文献引用，补充引用支持
+        refs = self._learned_context.get('references', [])
+        if refs:
+            ref_str = refs[0].get('title', '')[:60]
+            if ref_str:
+                text += f' 前人研究（{ref_str}等）也为该领域提供了重要参考。'
+
+        return text
 
     def _discuss_findings_zh(self):
         """逐个讨论发现"""
@@ -1329,7 +1369,7 @@ if __name__ == '__main__':
 # 知识库桥接：从knowledge_store加载进化后的机制知识
 # ============================================================================
 def _load_evolved_mechanisms():
-    """从knowledge_store加载进化后的机制知识，失败时静默跳过。"""
+    """从knowledge_store加载进化后的机制知识（含自动学习的），失败时静默跳过。"""
     import json
     from pathlib import Path
 
@@ -1353,8 +1393,23 @@ def _load_evolved_mechanisms():
             # 将机制知识映射为MechanismKB的类属性
             attr_name = key.upper().replace("-", "_").replace(" ", "_")
             # 只添加新机制，不覆盖已有的硬编码机制
-            if not hasattr(MechanismKB, attr_name) and val.get("mechanism"):
-                setattr(MechanismKB, attr_name, val)
+            if not hasattr(MechanismKB, attr_name):
+                if val.get("mechanism"):
+                    setattr(MechanismKB, attr_name, val)
+                # 处理自动学习的机制（有 var1, var2, relation_type 格式）
+                elif val.get("var1") and val.get("var2") and val.get("relation_type"):
+                    # 转换为 MechanismKB 兼容格式
+                    mech_dict = {
+                        'pattern': val.get('pattern', f"{val['var1']} {val['relation_type']} {val['var2']}"),
+                        'mechanism': val.get('mechanism', val.get('evidence', '')),
+                        'mechanism_en': val.get('mechanism', ''),
+                        'references': [val.get('source', '')] if val.get('source') else [],
+                        'var1': val['var1'],
+                        'var2': val['var2'],
+                        'relation_type': val['relation_type'],
+                        'learned': True,
+                    }
+                    setattr(MechanismKB, attr_name, mech_dict)
     except Exception as e:
         import logging
         logging.getLogger(__name__).debug(f"Failed to load evolved mechanisms: {e}")

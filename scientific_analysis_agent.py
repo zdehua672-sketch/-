@@ -17,6 +17,10 @@ from data_loader import DataLoader
 from statistical_analysis import StatisticalAnalyzer
 from plotting_functions import ThesisPlotter
 from academic_plot_style import get_label, format_chemical
+from variable_registry import (
+    DERIVED_VARS, classify_phase, get_phase_cols,
+    get_analysis_cols, get_regression_pairs,
+)
 
 
 # ============================================================================
@@ -35,42 +39,27 @@ class AnalysisOrchestrator:
         self.recommendations = {}
 
     def _classify_variables(self):
-        """自动识别变量类型和可用性"""
+        """自动识别变量类型和可用性（使用统一注册中心）"""
         info = {
-            'gas': [],      # 气相变量
-            'liquid': [],   # 液相变量
-            'solid': [],    # 固相变量
-            'env': [],      # 环境变量
+            'gas': [],
+            'liquid': [],
+            'solid': [],
+            'env': [],
             'all_numeric': []
         }
-
-        gas_keywords = ['CH4', 'CO2', 'N2O', 'VOCs', 'H2S', 'O2', '甲烷', '氧化亚氮']
-        solid_keywords = ['固总碳', '有机碳', '无机碳', 'DOC(mg/kg)', '全磷', '铵态氮（mg/kg', '硝态氮（mg/kg']
-        env_keywords = ['气温', '泥水', '采样', '井深', '管径', '本底']
 
         for col in self.df.columns:
             if not pd.api.types.is_numeric_dtype(self.df[col]):
                 continue
-            if col in ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例', '气液碳比', 'CH4_TOCT比']:
+            if col in DERIVED_VARS:
                 continue
-
-            non_null = self.df[col].dropna()
-            if len(non_null) < 3:
+            if self.df[col].dropna().shape[0] < 3:
                 continue
 
             info['all_numeric'].append(col)
-            col_lower = str(col).lower()
-
-            is_gas = any(k.lower() in col_lower for k in gas_keywords)
-            is_solid = any(k in col for k in solid_keywords)
-            is_env = any(k in col for k in env_keywords)
-
-            if is_gas:
-                info['gas'].append(col)
-            elif is_solid:
-                info['solid'].append(col)
-            elif is_env:
-                info['env'].append(col)
+            phase = classify_phase(col)
+            if phase in info:
+                info[phase].append(col)
             else:
                 info['liquid'].append(col)
 
@@ -154,21 +143,8 @@ class AnalysisOrchestrator:
         return decisions
 
     def _find_regression_pairs(self):
-        """找到有科研意义的回归变量对"""
-        pairs = []
-        key_pairs = [
-            ('TOC（mg/L)', 'CH4平均值', '有机碳-甲烷关系'),
-            ('TOC（mg/L)', 'CO2', '有机碳-二氧化碳关系'),
-            ('DO(mg/L)', 'CH4平均值', '溶解氧-甲烷关系'),
-            ('COD（mg/L)', 'CH4平均值', '化学需氧量-甲烷关系'),
-            ('TOC（mg/L)', '总氮（mg/L)', '碳氮耦合关系'),
-            ('铵态氮（mg/L)', 'CH4平均值', '氮转化-甲烷关系'),
-        ]
-        cols = set(self.variable_info['all_numeric'])
-        for x, y, desc in key_pairs:
-            if x in cols and y in cols:
-                pairs.append({'x': x, 'y': y, 'description': desc})
-        return pairs
+        """找到有科研意义的回归变量对（使用统一注册中心）"""
+        return get_regression_pairs(self.df)
 
     def decide_figures(self):
         """智能决策：应该画哪些图"""

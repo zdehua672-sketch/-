@@ -10,34 +10,8 @@ import numpy as np
 import os
 from datetime import datetime
 
-# ============================================================================
-# 1. 变量分类定义
-# ============================================================================
-GAS_VARS = [
-    '甲烷(ppm)', 'CH4平均值', '甲烷PPM', '甲烷（PPM）',
-    '氧化亚氮(ppm)', '氧化亚氮（ppm）', '氧化亚氮PPM', '氧化亚氮（PPM）',
-    'N2O平均值', 'CO2(ppm)', 'CO2(PPM)', 'CO2', 'CO2(mg/L)',
-    'VOCs(ppb)', 'O2(%vol)', 'H2S',
-]
-
-LIQUID_VARS = [
-    'DO(mg/L)', 'pH', '液温', '液温(℃）', '电导率(uS/cm)', '电导率(us/cm)',
-    'TOC（mg/L)', 'TC(mg/L)', 'IC(mg/L)', 'COD（mg/L)', 'COD（锰）（mg/L)',
-    '总氮（mg/L)', '总磷（mg/L)', '铵态氮（mg/L)', '硝态氮（mg/L)',
-    'NaCl(mg/L)', 'NaCl(g/L)',
-]
-
-SOLID_VARS = [
-    '固总碳（g/kg)', '有机碳（g/kg)', '无机碳（g/kg)',
-    'DOC(mg/kg)', '全磷（g/kg)',
-    '（固）铵态氮（mg/kg）', '（固）硝态氮（mg/kg）',
-]
-
-ENV_VARS = [
-    '气温/℃', '气温℃', '气温（℃）', '泥水状况', '采样时间', '采样时段',
-    '井深(m)', '管径（mm)', 'O2(%vol)', 'O2本底值',
-    'CO2本底值', 'VOCs本底值',
-]
+# 变量分类定义（统一从注册中心读取）
+from variable_registry import GAS_VARS, LIQUID_VARS, SOLID_VARS, ENV_VARS
 
 
 # ============================================================================

@@ -13,6 +13,8 @@ from scipy.cluster.hierarchy import linkage, fcluster
 import warnings
 warnings.filterwarnings('ignore')
 
+from variable_registry import DERIVED_VARS, get_analysis_cols, get_regression_pairs
+
 
 class StandardScaler:
     """手动实现StandardScaler，避免sklearn依赖"""
@@ -112,8 +114,7 @@ class StatisticalAnalyzer:
         print("=" * 60)
         
         numeric_cols = self.df.select_dtypes(include=[np.number]).columns
-        exclude_cols = ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例', '气液碳比', 'CH4_TOCT比']
-        numeric_cols = [c for c in numeric_cols if c not in exclude_cols]
+        numeric_cols = [c for c in numeric_cols if c not in DERIVED_VARS]
         
         desc_all = self.df[numeric_cols].describe()
         
@@ -236,14 +237,7 @@ class StatisticalAnalyzer:
         print("=" * 60)
         
         if cols is None:
-            key_cols = [
-                'CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)',
-                'TOC（mg/L)', 'IC(mg/L)', 'TC(mg/L)', 'DO(mg/L)',
-                'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)', '硝态氮（mg/L)',
-                '固总碳（g/kg)', '有机碳（g/kg)', '无机碳（g/kg)', 'DOC(mg/kg)',
-                'pH', '液温', '电导率(uS/cm)',
-            ]
-            cols = [c for c in key_cols if c in self.df.columns]
+            cols = get_analysis_cols(self.df)
         
         corr_df = self.df[cols].copy()
         corr_matrix = corr_df.corr(method=method)
@@ -281,14 +275,8 @@ class StatisticalAnalyzer:
         print("=" * 60)
         
         if cols is None:
-            key_cols = [
-                'CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)',
-                'TOC（mg/L)', 'IC(mg/L)', 'TC(mg/L)', 'DO(mg/L)',
-                'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)', '硝态氮（mg/L)',
-                'pH', '液温', '电导率(uS/cm)',
-            ]
-            cols = [c for c in key_cols if c in self.df.columns]
-        
+            cols = get_analysis_cols(self.df)
+
         pca_df = self.df[cols].copy()
         pca_df = pca_df.dropna()
         
@@ -346,13 +334,8 @@ class StatisticalAnalyzer:
         print("=" * 60)
         
         if cols is None:
-            key_cols = [
-                'CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)',
-                'TOC（mg/L)', 'IC(mg/L)', 'TC(mg/L)', 'DO(mg/L)',
-                'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)', '硝态氮（mg/L)',
-            ]
-            cols = [c for c in key_cols if c in self.df.columns]
-        
+            cols = get_analysis_cols(self.df)
+
         hca_df = self.df[cols].copy()
         hca_df = hca_df.dropna()
         
@@ -459,15 +442,9 @@ class StatisticalAnalyzer:
         except Exception as e:
             print(f"HCA分析出错: {e}")
         
-        regression_pairs = [
-            ('TOC（mg/L)', 'CH4平均值'),
-            ('TOC（mg/L)', 'CO2'),
-            ('DO(mg/L)', 'CH4平均值'),
-            ('COD（mg/L)', 'CH4平均值'),
-            ('总氮（mg/L)', 'TOC（mg/L)'),
-            ('铵态氮（mg/L)', 'CH4平均值'),
-        ]
-        for x_col, y_col in regression_pairs:
+        pairs = get_regression_pairs(self.df)
+        for pair in pairs:
+            x_col, y_col = pair['x'], pair['y']
             if x_col in self.df.columns and y_col in self.df.columns:
                 try:
                     self.regression_analysis(x_col, y_col)
