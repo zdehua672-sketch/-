@@ -1,11 +1,7 @@
 {
   "meta": {
-    "category": "writing_templates",
-    "description": "写作模板（句式/结构/讨论）",
-    "version": 1,
-    "created": "2026-05-26T08:12:45.165373+00:00",
-    "updated": "2026-05-26T08:12:45.165373+00:00",
-    "source": "initial"
+    "count": 17,
+    "updated": "2026-06-02T09:20:59.002167+00:00"
   },
   "entries": {
     "intro_opening_zh": {
@@ -98,6 +94,42 @@
       "source": "hardcoded",
       "updated": "2026-05-26T08:12:45.165373+00:00",
       "version": 1
+    },
+    "correlation_discussion_zh": {
+      "category": "writing_templates",
+      "value": {
+        "template": "{变量A}与{变量B}呈显著{正/负}相关(r={r}, p={p})。{机制}。{文献}也报道了类似关系。",
+        "usage": "Discussion讨论相关性"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "gap_statement_zh": {
+      "category": "writing_templates",
+      "value": {
+        "template": "然而，{现有不足}。特别是{具体空白}尚未{开展/解决}。",
+        "usage": "Introduction指空白"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "mechanism_explanation_zh": {
+      "category": "writing_templates",
+      "value": {
+        "template": "{发现}。机制如下：{步骤1}，进而{步骤2}，最终{结果}。",
+        "usage": "Discussion解释机制"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "carbon_balance_zh": {
+      "category": "writing_templates",
+      "value": {
+        "template": "碳平衡分析表明，{相态}碳占总碳的{百分比}%，是{主导/次要}碳形式。{意义}。",
+        "usage": "Results/Discussion碳平衡"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
     }
   }
 }

@@ -1,11 +1,7 @@
 {
   "meta": {
-    "category": "domain_terms",
-    "description": "领域术语",
-    "version": 1,
-    "created": "2026-05-26T08:12:45.165373+00:00",
-    "updated": "2026-05-26T08:12:45.165373+00:00",
-    "source": "initial"
+    "count": 21,
+    "updated": "2026-06-02T09:20:59.002167+00:00"
   },
   "entries": {
     "DO": {
@@ -175,6 +171,76 @@
       "source": "hardcoded",
       "updated": "2026-05-26T08:12:45.165373+00:00",
       "version": 1
+    },
+    "sewage_network": {
+      "category": "domain_terms",
+      "value": {
+        "zh": "污水管网",
+        "en": "Sewage network",
+        "definition": "城市污水收集输送管道系统"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "multiphase_carbon": {
+      "category": "domain_terms",
+      "value": {
+        "zh": "多相态碳",
+        "en": "Multiphase carbon",
+        "definition": "固/液/气三态碳污染物"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "methanogenesis": {
+      "category": "domain_terms",
+      "value": {
+        "zh": "产甲烷",
+        "en": "Methanogenesis",
+        "definition": "厌氧古菌产CH4过程"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "dissolved_oxygen": {
+      "category": "domain_terms",
+      "value": {
+        "zh": "溶解氧",
+        "en": "DO",
+        "definition": "控制管道氧化还原条件"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "total_organic_carbon": {
+      "category": "domain_terms",
+      "value": {
+        "zh": "总有机碳",
+        "en": "TOC",
+        "definition": "产甲烷底物"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "carbon_balance": {
+      "category": "domain_terms",
+      "value": {
+        "zh": "碳平衡",
+        "en": "Carbon balance",
+        "definition": "碳输入输出质量守恒"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "pipe_biofilm": {
+      "category": "domain_terms",
+      "value": {
+        "zh": "管壁生物膜",
+        "en": "Pipe biofilm",
+        "definition": "管道内壁微生物群落"
+      },
+      "version": 1,
+      "created": "2026-06-02T09:20:59.002167+00:00"
     }
   }
 }

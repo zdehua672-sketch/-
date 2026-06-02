@@ -55,6 +55,7 @@ class AcademicPipeline:
         self._writing_agent = None
         self._review_agent = None
         self._engine = None
+        self._motivation_mgr = None
         self._pipeline_log = []
 
     # ============================================================
@@ -92,6 +93,13 @@ class AcademicPipeline:
                 logger.debug(f"EvolutionEngine not available: {e}")
                 self._engine = None
         return self._engine
+
+    def _get_motivation_mgr(self):
+        if self._motivation_mgr is None:
+            from motivation_planner import MotivationManager
+            output_dir = os.path.join(self.base_dir, 'paper_output')
+            self._motivation_mgr = MotivationManager(output_dir=output_dir)
+        return self._motivation_mgr
 
     def _log(self, step: str, detail: str, data: dict = None):
         self._pipeline_log.append({
@@ -205,8 +213,265 @@ class AcademicPipeline:
         return report
 
     # ============================================================
-    # Step 4: 写论文（委托 paper_writing_agent）
+    # Step 3.5: 动机生成（借鉴 PaperSpine motivation-first）
     # ============================================================
+
+    def step3_5_motivation(self, analysis_results: dict = None,
+                           language: str = 'zh') -> list:
+        """
+        生成动机选项 — 在写论文前必须先确认动机
+
+        从分析结果中推导3-5个动机选项，供用户选择。
+
+        Parameters
+        ----------
+        analysis_results : dict, 科学分析结果（来自 ScientificAnalysisAgent）
+        language : str, 'zh'/'en'
+
+        Returns
+        -------
+        list of MotivationOption: 动机选项列表
+        """
+        print("[Pipeline] Step 3.5: 生成动机选项")
+        mgr = self._get_motivation_mgr()
+
+        # 获取文献矩阵（如果可用）
+        lit_matrix = ""
+        try:
+            mem = self._get_lit_memory()
+            if mem.matrix.papers:
+                lit_matrix = f"{len(mem.matrix.papers)}篇论文, {len(mem.matrix.themes)}个主题"
+        except Exception:
+            pass
+
+        options = mgr.generate_options(
+            analysis_results=analysis_results,
+            literature_matrix=lit_matrix,
+            language=language,
+        )
+
+        self._log("step3_5_motivation", f"生成{len(options)}个动机选项", {
+            "count": len(options),
+            "language": language,
+        })
+
+        print(f"  生成 {len(options)} 个动机选项:")
+        for opt in options:
+            print(f"    [{opt.option_id}] {opt.one_sentence[:60]}")
+        print(f"\n  请调用 step3_6_confirm_motivation('{options[0].option_id}') 确认动机")
+
+        return options
+
+    def step3_6_confirm_motivation(self, option_id: str = None,
+                                    custom_motivation: str = None,
+                                    language: str = 'zh') -> dict:
+        """
+        确认动机并生成写作蓝图
+
+        三种确认方式：
+        1. option_id='A' — 选择一个选项
+        2. custom_motivation='...' — 用户自写动机
+        3. option_id='A', 编辑某个字段
+
+        Parameters
+        ----------
+        option_id : str, 选项ID（A/B/C/D/E）
+        custom_motivation : str, 用户自写的动机
+        language : str, 'zh'/'en'
+
+        Returns
+        -------
+        dict: {confirmed_motivation, blueprint, execution_table}
+        """
+        print("[Pipeline] Step 3.6: 确认动机")
+        mgr = self._get_motivation_mgr()
+
+        # 确认动机
+        confirmed = mgr.confirm(
+            option_id=option_id,
+            custom_motivation=custom_motivation,
+        )
+
+        print(f"  动机已确认: {confirmed.motivation_statement[:60]}")
+        print(f"  来源: {confirmed.source}")
+
+        # 生成写作蓝图
+        blueprint = mgr.generate_blueprint(language=language)
+
+        print(f"  写作蓝图已生成: {len(blueprint.section_blueprints)} 个章节")
+
+        self._log("step3_6_confirm", "动机确认+写作蓝图生成", {
+            "source": confirmed.source,
+            "motivation": confirmed.motivation_statement[:50],
+            "sections": len(blueprint.section_blueprints),
+        })
+
+        return {
+            "confirmed_motivation": confirmed,
+            "blueprint": blueprint,
+            "execution_table": blueprint.to_execution_table(),
+        }
+
+    # ============================================================
+    # Step 3.7: 深度模仿分析（借鉴 PaperSpine deep-imitation-protocol）
+    # ============================================================
+
+    def step3_7_deep_imitation(self, section_name: str, exemplar_text: str,
+                                draft_text: str, paper_title: str = "") -> dict:
+        """
+        深度模仿分析 — 三层表格法+闭卷改写
+
+        Parameters
+        ----------
+        section_name : str, 章节名
+        exemplar_text : str, 范文文本
+        draft_text : str, 草稿文本
+        paper_title : str, 范文标题
+
+        Returns
+        -------
+        dict: {exemplar_moves, draft_moves, target_moves, report}
+        """
+        print(f"[Pipeline] Step 3.7: 深度模仿分析 - {section_name}")
+        from deep_imitation import DeepImitationManager
+
+        output_dir = os.path.join(self.base_dir, 'paper_output')
+        mgr = DeepImitationManager(output_dir=output_dir)
+
+        exemplar_moves = mgr.analyze_exemplar(section_name, exemplar_text, paper_title)
+        draft_moves = mgr.analyze_draft(section_name, draft_text)
+        target_moves = mgr.generate_blueprint(section_name)
+
+        self._log("step3_7_imitation", f"深度模仿: {section_name}", {
+            "exemplar_moves": len(exemplar_moves),
+            "draft_moves": len(draft_moves),
+            "target_moves": len(target_moves),
+        })
+
+        print(f"  范文动作: {len(exemplar_moves)}, 草稿动作: {len(draft_moves)}, 目标: {len(target_moves)}")
+
+        report = mgr.generate_report(section_name)
+        return {
+            "exemplar_moves": exemplar_moves,
+            "draft_moves": draft_moves,
+            "target_moves": target_moves,
+            "report": report,
+        }
+
+    # ============================================================
+    # Step 3.8: 完整性审计（教学模式）
+    # ============================================================
+
+    def step3_8_integrity_audit(self) -> str:
+        """
+        完整性审计 — 四维度教学式审计
+
+        Returns: Markdown 审计报告
+        """
+        print("[Pipeline] Step 3.8: 完整性审计")
+        from integrity_audit import IntegrityAuditManager
+
+        output_dir = os.path.join(self.base_dir, 'paper_output')
+        mgr = IntegrityAuditManager(output_dir=output_dir)
+        report = mgr.run_audit()
+        md = mgr.format_report(report)
+
+        # 保存
+        os.makedirs(output_dir, exist_ok=True)
+        path = os.path.join(output_dir, 'integrity_audit.md')
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(md)
+
+        blocked = report.blocked
+        self._log("step3_8_audit", f"完整性审计: {report.total_findings}发现, {'阻止' if blocked else '通过'}", {
+            "total_findings": report.total_findings,
+            "blocked": blocked,
+        })
+
+        print(f"  发现: {report.total_findings}, 状态: {'BLOCKED' if blocked else 'READY'}")
+        return md
+
+    # ============================================================
+    # Step 3.9: 引用支持库（claim级绑定）
+    # ============================================================
+
+    def step3_9_citation_bank(self, paper_text: str = None,
+                               section: str = "Introduction") -> str:
+        """
+        构建引用支持库 — 每个引用绑定到句子级claim
+
+        Parameters
+        ----------
+        paper_text : str, 论文文本（用于提取claims）
+        section : str, 章节名
+
+        Returns
+        -------
+        str: 引用支持库报告
+        """
+        print("[Pipeline] Step 3.9: 构建引用支持库")
+        from citation_support_bank import CitationSupportBank
+
+        output_dir = os.path.join(self.base_dir, 'paper_output')
+        bank = CitationSupportBank(output_dir=output_dir)
+
+        # 从知识库加载已有引用
+        try:
+            from citation_audit import extract_citations_from_file
+            # 尝试从已有论文中提取引用
+        except Exception:
+            pass
+
+        # 从论文文本中提取claims
+        if paper_text:
+            claims = bank.extract_claims_from_text(paper_text, section)
+            print(f"  提取了 {len(claims)} 个claims")
+
+        # 绑定引用
+        bindings = bank.bind_citations()
+
+        # 保存
+        bank.save()
+        report = bank.generate_report()
+
+        self._log("step3_9_citation_bank", f"引用支持库: {len(bank.candidates)}候选", {
+            "candidates": len(bank.candidates),
+            "claims": len(bank.claims),
+        })
+
+        print(f"  候选: {len(bank.candidates)}, Claims: {len(bank.claims)}")
+        return report
+
+    # ============================================================
+    # Step 3.95: 产品完整性检查
+    # ============================================================
+
+    def step3_95_artifact_check(self) -> str:
+        """
+        产品完整性检查 — 自动检查所有必要产物
+
+        Returns: Markdown 检查报告
+        """
+        print("[Pipeline] Step 3.95: 产品完整性检查")
+        from artifact_check import ArtifactChecker
+
+        output_dir = os.path.join(self.base_dir, 'paper_output')
+        checker = ArtifactChecker(output_dir=output_dir)
+        report = checker.check_all()
+        md = checker.format_report(report)
+
+        # 保存
+        checker.check_and_save()
+
+        self._log("step3_95_check", f"产物检查: {report.ok}/{report.total}通过", {
+            "total": report.total,
+            "ok": report.ok,
+            "missing": report.missing,
+            "thin": report.thin,
+        })
+
+        print(f"  {report.ok}/{report.total} 通过, {report.missing} 缺失, {report.thin} 薄弱")
+        return md
 
     def step4_write(self, data_file: str = None, output_dir: str = None,
                     language: str = 'zh') -> str:
@@ -543,7 +808,7 @@ class AcademicPipeline:
         steps = {
             'start': {
                 'label': '开始',
-                'next': ['step1_read', 'step4_write', 'step9_assemble_document'],
+                'next': ['step1_read', 'step3_5_motivation', 'step4_write', 'step9_assemble_document'],
             },
             'step1_read': {
                 'label': '读取论文',
@@ -552,13 +817,43 @@ class AcademicPipeline:
             },
             'step2_matrix': {
                 'label': '文献矩阵',
-                'next': ['step3_verify_citations', 'step4_write'],
+                'next': ['step3_verify_citations', 'step3_5_motivation', 'step4_write'],
                 'done_msg': '文献矩阵已构建',
             },
             'step3_verify_citations': {
                 'label': '引用验证',
-                'next': ['step4_write', 'step5_review'],
+                'next': ['step3_5_motivation', 'step4_write', 'step5_review'],
                 'done_msg': '引用验证完成',
+            },
+            'step3_5_motivation': {
+                'label': '动机生成',
+                'next': ['step3_6_confirm_motivation'],
+                'done_msg': '动机选项已生成，请确认',
+            },
+            'step3_6_confirm_motivation': {
+                'label': '动机确认+蓝图',
+                'next': ['step3_7_deep_imitation', 'step3_8_integrity_audit', 'step4_write'],
+                'done_msg': '动机已确认，写作蓝图已生成',
+            },
+            'step3_7_deep_imitation': {
+                'label': '深度模仿',
+                'next': ['step3_8_integrity_audit', 'step4_write'],
+                'done_msg': '深度模仿分析完成',
+            },
+            'step3_8_integrity_audit': {
+                'label': '完整性审计',
+                'next': ['step3_9_citation_bank', 'step4_write'],
+                'done_msg': '完整性审计完成',
+            },
+            'step3_9_citation_bank': {
+                'label': '引用支持库',
+                'next': ['step3_95_artifact_check', 'step4_write'],
+                'done_msg': '引用支持库已构建',
+            },
+            'step3_95_artifact_check': {
+                'label': '产物完整性检查',
+                'next': ['step4_write', 'step5_review'],
+                'done_msg': '产物完整性检查完成',
             },
             'step4_write': {
                 'label': '论文写作',
@@ -602,7 +897,13 @@ class AcademicPipeline:
             'step1_read': '读取论文 (arxiv URL / 本地PDF / TXT)，提取结构+元数据',
             'step2_matrix': '构建文献矩阵 (来源×主题交叉表 + 证据收敛 + 知识缺口)',
             'step3_verify_citations': '引用验证 (S2 API + DOI + Levenshtein 三级验证)',
-            'step4_write': '论文写作 (数据分析 → 图表 → 正文自动生成)',
+            'step3_5_motivation': '动机生成 (从分析结果推导3-5个动机选项，借鉴PaperSpine motivation-first)',
+            'step3_6_confirm_motivation': '动机确认+写作蓝图 (用户确认动机，生成执行计划)',
+            'step3_7_deep_imitation': '深度模仿 (三层表格法学习范文+闭卷改写，借鉴PaperSpine deep-imitation-protocol)',
+            'step3_8_integrity_audit': '完整性审计 (四维度教学式审计：根因+修复+影响+教学)',
+            'step3_9_citation_bank': '引用支持库 (句子级claim-引用绑定，借鉴PaperSpine citation_support_bank)',
+            'step3_95_artifact_check': '产物完整性检查 (自动检查所有必要产物的存在性和内容质量)',
+            'step4_write': '论文写作 (基于确认动机+写作蓝图，数据分析 → 图表 → 正文)',
             'step5_review': '审稿检查 (10类检查 + AI痕迹检测 + 修改建议)',
             'step6_submission_check': '投稿前检查 (中文核心期刊37项规范清单)',
             'step7_revision_audit': '修订审计 (版本间变化检测，区分实质修改vs浅编辑)',
@@ -641,6 +942,12 @@ class AcademicPipeline:
             ('step1_read', '读取论文'),
             ('step2_matrix', '文献矩阵'),
             ('step3_verify_citations', '引用验证'),
+            ('step3_5_motivation', '动机生成'),
+            ('step3_6_confirm_motivation', '动机确认+写作蓝图'),
+            ('step3_7_deep_imitation', '深度模仿'),
+            ('step3_8_integrity_audit', '完整性审计'),
+            ('step3_9_citation_bank', '引用支持库'),
+            ('step3_95_artifact_check', '产物完整性检查'),
             ('step4_write', '论文写作'),
             ('step5_review', '审稿检查'),
             ('step6_submission_check', '投稿前检查'),
@@ -845,6 +1152,20 @@ if __name__ == "__main__":
         print(result["report_md"])
         print(pipe.suggest_next_steps('step5_review'))
 
+    elif args[0] == "motivation":
+        # 如果有分析结果文件
+        results = {}
+        if len(args) > 1 and os.path.exists(args[1]):
+            import pickle
+            with open(args[1], 'rb') as f:
+                results = pickle.load(f)
+        options = pipe.step3_5_motivation(analysis_results=results)
+        print(pipe.suggest_next_steps('step3_5_motivation'))
+
+    elif args[0] == "confirm" and len(args) > 1:
+        result = pipe.step3_6_confirm_motivation(option_id=args[1])
+        print(pipe.suggest_next_steps('step3_6_confirm_motivation'))
+
     elif args[0] == "check" and len(args) > 1:
         with open(args[1], "r", encoding="utf-8") as f:
             text = f.read()
@@ -874,6 +1195,8 @@ if __name__ == "__main__":
         print("  python orchestrator.py status              # 系统状态")
         print("  python orchestrator.py read <source>       # 读论文")
         print("  python orchestrator.py matrix              # 文献矩阵")
+        print("  python orchestrator.py motivation [data]   # 生成动机选项")
+        print("  python orchestrator.py confirm <A|B|C>     # 确认动机+生成蓝图")
         print("  python orchestrator.py review <file>       # 审稿")
         print("  python orchestrator.py check <file>        # 投稿前检查")
         print("  python orchestrator.py evolve              # 进化周期")
