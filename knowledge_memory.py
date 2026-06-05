@@ -74,6 +74,12 @@ class KnowledgeMemory:
                 if not isinstance(val, dict):
                     val = {'raw': val}
 
+                # 跳过空内容条目
+                if cat == 'mechanisms':
+                    mech_text = val.get('mechanism', '')
+                    if not mech_text or len(mech_text) < 10:
+                        continue
+
                 # 计算相关性
                 relevance = self._calc_relevance(query_tokens, key, val)
                 if relevance > 0.1:

@@ -289,40 +289,81 @@ class DocumentAssembler:
             self._render_text({'text': text, 'bold': False, 'indent': True, 'align': None})
 
     def _render_text(self, data):
-        """渲染正文段落"""
+        """渲染正文段落 — 智能合并短句为段落"""
         text = data.get('text', '')
         if not text:
             return
 
         # 将文本按段落分割
-        paragraphs = text.strip().split('\n')
-        for para_text in paragraphs:
-            para_text = para_text.strip()
-            if not para_text:
+        lines = text.strip().split('\n')
+        # 智能合并：连续的普通文本行合并为一个段落
+        merged_paragraphs = []
+        current_para = []
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                # 空行 = 段落分隔
+                if current_para:
+                    merged_paragraphs.append(' '.join(current_para))
+                    current_para = []
                 continue
 
-            # 检测是否是小标题（以 ### 或 ** 开头）
-            if para_text.startswith('###'):
-                heading_text = para_text.lstrip('#').strip()
-                self.doc.add_heading(heading_text, level=3)
-            elif para_text.startswith('**') and para_text.endswith('**'):
-                _add_styled_paragraph(
-                    self.doc, para_text.strip('*'),
-                    font_name=self.config['heading_font'],
-                    size=Pt(12), bold=True, indent=False
-                )
-            elif para_text.startswith('- '):
-                # 列表项
-                _add_styled_paragraph(
-                    self.doc, para_text[2:],
-                    font_name=self.config['body_font'],
-                    size=self.config['body_size'],
-                    indent=False,
-                    space_before=0, space_after=Pt(2)
-                )
+            # 标题行不合并
+            if line.startswith('#'):
+                if current_para:
+                    merged_paragraphs.append(' '.join(current_para))
+                    current_para = []
+                merged_paragraphs.append(('heading', line))
+                continue
+
+            # 粗体标题行不合并
+            if line.startswith('**') and line.endswith('**'):
+                if current_para:
+                    merged_paragraphs.append(' '.join(current_para))
+                    current_para = []
+                merged_paragraphs.append(('bold', line))
+                continue
+
+            # 列表项不合并
+            if line.startswith('- '):
+                if current_para:
+                    merged_paragraphs.append(' '.join(current_para))
+                    current_para = []
+                merged_paragraphs.append(('list', line))
+                continue
+
+            # 普通文本 → 合并
+            current_para.append(line)
+
+        if current_para:
+            merged_paragraphs.append(' '.join(current_para))
+
+        # 渲染合并后的段落
+        for item in merged_paragraphs:
+            if isinstance(item, tuple):
+                tag, para_text = item
+                if tag == 'heading':
+                    heading_text = para_text.lstrip('#').strip()
+                    self.doc.add_heading(heading_text, level=3)
+                elif tag == 'bold':
+                    _add_styled_paragraph(
+                        self.doc, para_text.strip('*'),
+                        font_name=self.config['heading_font'],
+                        size=Pt(12), bold=True, indent=False
+                    )
+                elif tag == 'list':
+                    _add_styled_paragraph(
+                        self.doc, para_text[2:],
+                        font_name=self.config['body_font'],
+                        size=self.config['body_size'],
+                        indent=False,
+                        space_before=0, space_after=Pt(2)
+                    )
             else:
+                # 普通段落
                 _add_styled_paragraph(
-                    self.doc, para_text,
+                    self.doc, item,
                     font_name=self.config['body_font'],
                     size=self.config['body_size'],
                     bold=data.get('bold', False),
