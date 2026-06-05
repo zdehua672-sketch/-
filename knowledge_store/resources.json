@@ -2,9 +2,9 @@
   "meta": {
     "category": "resources",
     "description": "外部资源（论文/项目/工具）",
-    "version": 150,
+    "version": 190,
     "created": "2026-05-23T09:59:33.120836+00:00",
-    "updated": "2026-05-30T02:43:33.974858+00:00",
+    "updated": "2026-06-05T09:23:51.976724+00:00",
     "source": "initial"
   },
   "entries": {
@@ -1847,37 +1847,41 @@
     },
     "paper_013": {
       "value": {
+        "type": "academic_paper",
         "title": "CHEMICAL ENGINEERING TRANSACTIONS",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 3,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:31.074715+00:00"
+        "abstract": "Biochemical reactions under microaerobic and anaerobic conditions during sewage transportation \nprocess may cause the formation and subsequent release of a wide variety of volatile organic \ncompounds (VOCs) from sewer networks, therefore is potential source for VOC emissions (Vincent, \n2001). The oc",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:31.085713+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.636393+00:00",
+      "version": 2
     },
     "paper_1-s2.0-S0301479721001985-main": {
       "value": {
+        "type": "academic_paper",
         "title": "Journal of Environmental Management 285 (2021) 112136",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 2,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:31.179425+00:00"
+        "abstract": "",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:31.185921+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.636393+00:00",
+      "version": 2
     },
     "paper_2021-生态环境学报-中国胡焕庸线下方四区域沉积...生素污染特征及生态风险评价": {
       "value": {
@@ -1932,20 +1936,22 @@
     },
     "paper_优化污水处理厂的气流速率和碳源剂量策略：迈向碳减排和强化脱氮": {
       "value": {
+        "type": "academic_paper",
         "title": "Optimizing airflow rate and carbon source dosage strategies for wastewater",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 3,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:31.749789+00:00"
+        "abstract": "1.1. Background\nWWTPs play a pivotal role in sustainable city development by \nensuring safe wastewater treatment and discharge and reducing envi­\nronmental pollution with lower carbon emission. To meet increasingly \nstringent effluent quality standards, key operational variables such as \nairflow rat",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:31.757209+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.652035+00:00",
+      "version": 2
     },
     "paper_区域联合基金-卢金锁-提交版": {
       "value": {
@@ -1966,37 +1972,41 @@
     },
     "paper_城市下水道系统污水与泥沙之间的污染物交换": {
       "value": {
+        "type": "academic_paper",
         "title": "Contents lists available at ScienceDirect",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 3,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:32.128456+00:00"
+        "abstract": "Urban sewer systems undertake the mission of residential and in-\ndustrial wastewater and rainwater collection and transportation, and\nthey are an important part of urban infrastructure. In recent years,\nsewer blocking, odor and corrosion problems have gradually aﬀected\nthe normal operation of urban ",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:32.136434+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.667656+00:00",
+      "version": 2
     },
     "paper_城市污水处理厂挥发性卤代有机物的排放特征及影响因素研究_何洁": {
       "value": {
+        "type": "academic_paper",
         "title": "第32 卷第12 期",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:32.176024+00:00"
+        "abstract": "",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:32.186012+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.667656+00:00",
+      "version": 2
     },
     "paper_城市污水输送过程中管网内温室气体的产生机制_杨温娜": {
       "value": {
@@ -2017,71 +2027,79 @@
     },
     "paper_城市污泥热解处理过程中含碳族化合物的转化途径": {
       "value": {
+        "type": "academic_paper",
         "title": "Waste Management 178 (2024) 26–34",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 3,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:32.554050+00:00"
+        "abstract": "With urbanization progressing, the rapid increase in municipal \nsewage discharge has led to a corresponding growth in the volume of \nmunicipal sludge (MS) generated from wastewater treatment (Marouˇsek \net al., 2022). The annual global production of MS is on average 45 \nmillion dry tons (Andr´e et a",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:32.564052+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.667656+00:00",
+      "version": 2
     },
     "paper_城镇河流及排放与市政排水管网污水输入的关联影响": {
       "value": {
+        "type": "academic_paper",
         "title": "渊匀哉粤晕允陨晕郧运耘载哉耘冤摇摇耘晕灾陨砸韵晕酝耘晕栽粤蕴杂悦陨耘晕悦耘",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:32.669753+00:00"
+        "abstract": "",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:32.674751+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.683277+00:00",
+      "version": 2
     },
     "paper_基于碳排放的城市污水处理全过程节能减排综合测度方法": {
       "value": {
+        "type": "academic_paper",
         "title": "RESEARCH ARTICLE",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 3,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:32.755382+00:00"
+        "abstract": "It is of great significance to establish a carbon emission management system and carbon emission reduction target to put forward\nemission reduction measures for each subunit of a sewage treatment plant. In this paper, a mathematical model was constructed\nfor calculating carbon emission in the whole sewage treatment system process. Meanwhile, the model calculated the carbon\nemission changes after upgrading three sewage treatment plants and identified the critical controlling unit. The results sho",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:32.761488+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.683277+00:00",
+      "version": 2
     },
     "paper_对城市供水管网中的多个污染源进行机器学习分类": {
       "value": {
+        "type": "academic_paper",
         "title": "sensors",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 5,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:32.809181+00:00"
+        "abstract": "Contamination in water distribution networks can occur due to deliberate or unin-\ntentional intrusions and it is of extreme importance to determine the contamination event\nparameters so it can be detected which parts of water distribution networks have been\nexposed to the contaminant and needed meas",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:32.819204+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.698878+00:00",
+      "version": 2
     },
     "paper_构建高效的排水管网健康评价模型 评价镇江市A区排水管网": {
       "value": {
@@ -2102,121 +2120,691 @@
     },
     "paper_污水管网不同汇流条件下沉积物运移分布规律_薛甜": {
       "value": {
+        "type": "academic_paper",
         "title": "第39 卷 第7 期",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:33.042234+00:00"
+        "abstract": "",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:33.048510+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.698878+00:00",
+      "version": 2
     },
     "paper_污水管道中含碳有机物的时空分布特征及影响因素_赵航": {
       "value": {
+        "type": "academic_paper",
         "title": "中国给水排水",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:33.135501+00:00"
+        "abstract": "",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:33.141457+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.714499+00:00",
+      "version": 2
     },
     "paper_生态学视角下城市污水汇流管网污染物迁移与沉积规律": {
       "value": {
+        "type": "academic_paper",
         "title": "Retraction",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 2,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:33.214137+00:00"
+        "abstract": "With the acceleration of industrialization and urbanization,\nthe domestic and industrial water consumption of residents\nhas increased sharply, which has brought great challenges to\nthe operation of urban sewage pipe network. As a result, the\ndeposition of pipe network system is becoming more and\nmor",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:33.222476+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.714499+00:00",
+      "version": 2
     },
     "paper_管网相间转化": {
       "value": {
+        "type": "academic_paper",
         "title": "前    言",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:33.291223+00:00"
+        "abstract": "",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:33.298232+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.714499+00:00",
+      "version": 2
     },
     "paper_迈向废水处理过程的节能减碳：碳中和厌氧生物技术综述": {
       "value": {
+        "type": "academic_paper",
         "title": "Journal of Water Process Engineering 59 (2024) 105026",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 2,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:33.442097+00:00"
+        "abstract": "Rapid industrialization and global economic development of modern \nsociety have caused enormous pressure on ecological environment and \nwater resource [1,2].Massive quantities of wastewater discharged from \nboth daily life and industries every day have become the main reason of \nthe water pollution ",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:33.452093+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.730120+00:00",
+      "version": 2
     },
     "paper_开题报告doc": {
       "value": {
+        "type": "academic_paper",
         "title": "开题报告doc",
-        "authors": [],
-        "year": 0,
-        "source": "local_text",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:33.901892+00:00"
+        "abstract": "",
+        "source": "papers.db"
       },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:33.909555+00:00",
-      "version": 1
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.730120+00:00",
+      "version": 2
     },
     "paper_赵德华开题报告": {
       "value": {
+        "type": "academic_paper",
         "title": "专业学位硕士研究生",
-        "authors": [],
-        "year": 0,
-        "source": "local_pdf",
-        "arxiv_id": "",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
         "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T02:43:33.968064+00:00"
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.745744+00:00",
+      "version": 2
+    },
+    "paper_doi_10.1073_pnas.1322434111": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Global metaanalysis of the nonlinear response of soil nitrous oxide (N2O) emissions to fertilizer nitrogen",
+        "authors": [
+          "I. Shcherbak",
+          "N. Millar",
+          "G. Robertson"
+        ],
+        "year": 2014,
+        "abstract": "",
+        "citation_count": 1071,
+        "url": "https://www.semanticscholar.org/paper/e16c6a2797f611328396fd0e1461a3aadded86d8",
+        "arxiv_id": "",
+        "doi": "10.1073/pnas.1322434111",
+        "venue": "Proceedings of the National Academy of Sciences of the United States of America",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.239464+00:00"
       },
       "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-05-30T02:43:33.974858+00:00",
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.239464+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_j.scitotenv.2017.03.191": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "A review on nitrous oxide (N2O) emissions during biological nutrient removal from municipal wastewater and sludge reject water.",
+        "authors": [
+          "T. Massara",
+          "S. Malamis",
+          "A. Guisasola",
+          "J. Baeza",
+          "C. Noutsopoulos"
+        ],
+        "year": 2017,
+        "abstract": "Nitrous oxide (N2O) is an important pollutant which is emitted during the biological nutrient removal (BNR) processes of wastewater treatment. Since it has a greenhouse effect which is 265 times higher than carbon dioxide, even relatively small amounts can result in a significant carbon footprint. Biological nitrogen (N) removal conventionally occurs with nitrification/denitrification, yet also through advanced processes such as nitritation/denitritation and completely autotrophic N-removal. The",
+        "citation_count": 280,
+        "url": "https://www.semanticscholar.org/paper/f5a3762c8e68bc8d8dd10813f1931245f15cdf8d",
+        "arxiv_id": "",
+        "doi": "10.1016/j.scitotenv.2017.03.191",
+        "venue": "Science of the Total Environment",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.255085+00:00"
+      },
+      "confidence": 1.0,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.255085+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1088_1748-9326_abd2f3": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Machine learning improves predictions of agricultural nitrous oxide (N2O) emissions from intensively managed cropping systems",
+        "authors": [
+          "D. Saha",
+          "B. Basso",
+          "G. Robertson"
+        ],
+        "year": 2020,
+        "abstract": "The potent greenhouse gas nitrous oxide (N2O) is accumulating in the atmosphere at unprecedented rates largely due to agricultural intensification, and cultivated soils contribute ∼60% of the agricultural flux. Empirical models of N2O fluxes for intensively managed cropping systems are confounded by highly variable fluxes and limited geographic coverage; process-based biogeochemical models are rarely able to predict daily to monthly emissions with >20% accuracy even with site-specific calibratio",
+        "citation_count": 105,
+        "url": "https://www.semanticscholar.org/paper/76155844f6242aa810c6f329081fe0e4db43b071",
+        "arxiv_id": "",
+        "doi": "10.1088/1748-9326/abd2f3",
+        "venue": "Environmental Research Letters",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.255085+00:00"
+      },
+      "confidence": 1.0,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.255085+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1111_gcb.16061": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Century‐long changes and drivers of soil nitrous oxide (N2O) emissions across the contiguous United States",
+        "authors": [
+          "Chaoqun Lu",
+          "Zhen Yu",
+          "Jien Zhang",
+          "P. Cao",
+          "H. Tian"
+        ],
+        "year": 2021,
+        "abstract": "The atmospheric concentration of nitrous oxide (N2O) has increased by 23% since the pre‐industrial era, which substantially destructed the stratospheric ozone layer and changed the global climate. However, it remains uncertain about the reasons behind the increase and the spatiotemporal patterns of soil N2O emissions, a primary biogenic source. Here, we used an integrative land ecosystem model, Dynamic Land Ecosystem Model (DLEM), to quantify direct (i.e., emitted from local soil) and indirect (",
+        "citation_count": 62,
+        "url": "https://www.semanticscholar.org/paper/11c53966aaff26d848c5e41c898945814572da4a",
+        "arxiv_id": "",
+        "doi": "10.1111/gcb.16061",
+        "venue": "Global Change Biology",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.270705+00:00"
+      },
+      "confidence": 0.62,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.270705+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_J.AGEE.2021.107376": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen fertiliser rates in a tropical sugarcane cropping system",
+        "authors": [
+          "Naoya Takeda",
+          "J. Friedl",
+          "D. Rowlings",
+          "D. de Rosa",
+          "C. Scheer"
+        ],
+        "year": 2021,
+        "abstract": "Abstract High rainfall, irrigation and large fertiliser nitrogen (N) inputs create conditions highly conducive for nitrous oxide (N2O) emissions in sugarcane systems. A positive non-linear response of N2O emissions to increasing N fertiliser rates has been reported from a range of cropping systems, where N inputs exceed crop requirements. However, the response of N2O emissions to N fertiliser rates in sugarcane remains largely unclear. This study monitored N2O emissions in a tropical sugarcane s",
+        "citation_count": 49,
+        "url": "https://www.semanticscholar.org/paper/ec522fd9882add8e5305b32bb0ddd10db3329097",
+        "arxiv_id": "",
+        "doi": "10.1016/J.AGEE.2021.107376",
+        "venue": "Agriculture, Ecosystems & Environment",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.270705+00:00"
+      },
+      "confidence": 0.49,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.270705+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1038_s44172-025-00362-0": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Pilot-scale partial nitrification and anaerobic ammonium oxidation system for nitrogen removal from municipal wastewater",
+        "authors": [
+          "Yunlong Su",
+          "Xiyao Li",
+          "Jiao Wang",
+          "Rui Du",
+          "Xiaofei Xue"
+        ],
+        "year": 2025,
+        "abstract": "Partial nitrification has the advantages of saving energy and reducing the need for carbon sources in municipal wastewater treatment. However, for municipal wastewater with low ammonia, start-up and maintenance of partial nitrification is a worldwide challenge. Here we developed a pilot-scale double sludge system consisting of two sequencing batch reactors for partial nitrification (12 m2) and denitrification/anaerobic ammonium oxidation (denitrification/anammox, 8.4 m2) to treat municipal waste",
+        "citation_count": 17,
+        "url": "https://www.semanticscholar.org/paper/549781cd5cdbcc5becbba37d89b67a080280e0fc",
+        "arxiv_id": "",
+        "doi": "10.1038/s44172-025-00362-0",
+        "venue": "Communications Engineer",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.726445+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.726445+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_j.jenvman.2024.123171": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "A novel Zobellella endophytica W14 strain for nitrogen removal from hypersaline wastewater through simultaneous nitrification and denitrification.",
+        "authors": [
+          "Nan Hu",
+          "Yingnan Li",
+          "Jiahui Yin",
+          "Zixuan Ren",
+          "Junyi Li"
+        ],
+        "year": 2024,
+        "abstract": "To address the challenges associated with biological treatment of high-salinity wastewater, a novel salt-tolerant strain, Zobellella endophytica W14, was isolated. This strain exhibited heterotrophic nitrification-aerobic denitrification (HN-AD) capabilities. Strain W14 could grow and remove ammonium in high-salinity environments with salinity levels ranging from 0 to 11% (w/v). At 5% salinity, strain W14 demonstrated high removal efficiencies for nitrite, ammonium, and nitrate (100%, 99.58%, an",
+        "citation_count": 13,
+        "url": "https://www.semanticscholar.org/paper/186fd99ee696b47e71e886e497f28cf54eca0597",
+        "arxiv_id": "",
+        "doi": "10.1016/j.jenvman.2024.123171",
+        "venue": "Journal of Environmental Management",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.742030+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.742030+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_j.envres.2025.120763": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Deciphering nitrogen removal performance concerning heterotrophic microorganism's succession by using three typical acid-rich fermentation liquids of food waste as carbon sources in high ammonium and high salt wastewater treatment.",
+        "authors": [
+          "Mingjiang Zhang",
+          "Chencan Zhang",
+          "Qiusheng Wu",
+          "Murong Wang",
+          "Yujun Zhou"
+        ],
+        "year": 2025,
+        "abstract": "Understanding the performance and microbial succession in nitrogen removal using fermentation liquid as carbon source can provide a practical basis for treating low C/N ratio wastewater. In this study, three typical fermentation liquids of food waste (FW) enriched with lactic acid (LA), propionic acid (PA), and butyric acid (BA) were added to high ammonia and high salt (HAHS) wastewater treatment process. Results showed that effluent TN decreased from 50 mg/L to around 15 mg/L with the influent ",
+        "citation_count": 8,
+        "url": "https://www.semanticscholar.org/paper/b23067969f24f9786433446b810a5f521d2fca91",
+        "arxiv_id": "",
+        "doi": "10.1016/j.envres.2025.120763",
+        "venue": "Environmental Research",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.742030+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.742030+00:00",
+      "version": 1
+    },
+    "paper_doi_10.3390_w15071334": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Nitrogen Removal for Low Concentration Ammonium Wastewater by Adsorption, Shortcut Simultaneous Nitrification and Denitrification Process in MBBR",
+        "authors": [
+          "Liangkai Wang",
+          "X. Mao",
+          "Y. A. Hamoud",
+          "Ningyuan Zhu",
+          "X. Shao"
+        ],
+        "year": 2023,
+        "abstract": "Excessive discharge of ammonia nitrogen wastewater from intensive aquaculture has worsened in recent years. Therefore, there is an urgent need to develop an effective and energy-saving denitrification technology. This study intends to adopt a moving bed biofilm reactor (MBBR) to remove ammonia nitrogen through the combination of adsorption and shortcut simultaneous nitrification and denitrification (SND). The research focuses on the operational parameters and regeneration mechanism of the MBBR a",
+        "citation_count": 8,
+        "url": "https://www.semanticscholar.org/paper/82bb482c3286b6f34df1e399fecaba16a0df0799",
+        "arxiv_id": "",
+        "doi": "10.3390/w15071334",
+        "venue": "Water",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.742030+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.757648+00:00",
+      "version": 1
+    },
+    "paper_doi_10.3390_w16172532": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Impact of Chemical Oxygen Demand/Total Nitrogen Ratio on Shifting Autotrophic Partial Nitrification to Heterotrophic Nitrification and Aerobic Denitrification in High-Strength Ammonium Wastewater Treatment",
+        "authors": [
+          "Zhenghua Peng",
+          "Y. Lei",
+          "Yousheng Zhan",
+          "Benqin Yang",
+          "Xuejun Pan"
+        ],
+        "year": 2024,
+        "abstract": "Partial nitrification (PN) is an effective process for treating high-strength ammonium wastewater with a low COD/N (chemical oxygen demand/total nitrogen) ratio; this is because the cooperative interaction with denitrification or anammox can result in a reduction in aeration costs of approximately 25% and a reduction in the use of organic sources during biological nitrogen removal of 40%. However, the key functional microorganisms in the partial nitrification (PN) process are ammonia-oxidizing b",
+        "citation_count": 6,
+        "url": "https://www.semanticscholar.org/paper/1536d8d5faf0c333a2ff74b0ce77305286460791",
+        "arxiv_id": "",
+        "doi": "10.3390/w16172532",
+        "venue": "Water",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.757648+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.757648+00:00",
+      "version": 1
+    },
+    "paper_2021-生态环境学报-中国胡焕庸线下方四区域沉积...生素": {
+      "value": {
+        "type": "academic_paper",
+        "title": "生态环境学报 2021, 30(5): 1023-1033                                                     http://www.jeesci.com",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.636393+00:00",
+      "version": 1
+    },
+    "paper_Atmospheric_Volatile_Organic_C": {
+      "value": {
+        "type": "academic_paper",
+        "title": "atmosphere",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "The term “Volatile Organic Compounds (VOCs)” generally refers to a group of organic\nchemicals that have a high vapor pressure at room temperature conditions. At present, there is no\nglobally accepted deﬁnition of atmospheric VOCs, although different deﬁnitions of VOCs have been\ndeveloped by some int",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.652035+00:00",
+      "version": 1
+    },
+    "paper_On-line_monitoring_of_methane_": {
+      "value": {
+        "type": "academic_paper",
+        "title": "On-line monitoring of methane in sewer",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.652035+00:00",
+      "version": 1
+    },
+    "paper_构建高效的排水管网健康评价模型_评价镇江市A区排水管网": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Citation: Li, H.; Wang, Y.; Luo, Y.;",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "The drainage system is an important component of urban public facilities, mainly\ncomposed of drainage networks and sewage treatment plants [1–5]. The collection, trans-\nportation, treatment, and discharge of urban sewage play an important role, while also\naffecting urban planning, ecological protect",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.698878+00:00",
+      "version": 1
+    },
+    "ref_guisasola_2008": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Methane formation in sewer systems",
+        "authors": [
+          "A. Guisasola",
+          "D. de Haas",
+          "J. Keller",
+          "Z. Yuan"
+        ],
+        "year": 2008,
+        "venue": "Water Research",
+        "doi": "10.1016/j.watres.2008.03.001",
+        "citation_count": 350,
+        "abstract": "This study investigated methane formation in sewer systems through field measurements and lab experiments. Results showed that anaerobic conditions in sewers can convert 50% or more of the organic carbon to methane through acetoclastic and hydrogenotrophic methanogenesis. The methane produced in sewers contributes significantly to the greenhouse gas emissions from urban wastewater systems."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.924138+00:00",
+      "version": 1
+    },
+    "ref_jiang_2011": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Methane and nitrous oxide emissions from sewer systems in urban areas",
+        "authors": [
+          "G. Jiang",
+          "J. Keller",
+          "P.L. Bond"
+        ],
+        "year": 2011,
+        "venue": "Water Research",
+        "doi": "10.1016/j.watres.2011.03.043",
+        "citation_count": 180,
+        "abstract": "Sewer systems are significant sources of greenhouse gas (GHG) emissions, particularly methane (CH4) and nitrous oxide (N2O). This review summarizes the current understanding of GHG emissions from sewer networks, including the microbial pathways, environmental factors affecting emissions, and potential mitigation strategies."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.930481+00:00",
+      "version": 1
+    },
+    "ref_foley_2009": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Nitrous oxide and methane emissions from wastewater treatment processes",
+        "authors": [
+          "J. Foley",
+          "D. de Haas",
+          "Z. Yuan",
+          "P. Lant"
+        ],
+        "year": 2009,
+        "venue": "Journal of Environmental Quality",
+        "doi": "10.2134/jeq2008.0280",
+        "citation_count": 280,
+        "abstract": "This paper reviews the mechanisms of N2O and CH4 production in wastewater systems, including nitrifier denitrification, hydroxylamine oxidation, and heterotrophic denitrification for N2O, and acetoclastic and hydrogenotrophic methanogenesis for CH4. Temperature, DO, and organic loading are identified as key controlling factors."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.936470+00:00",
+      "version": 1
+    },
+    "ref_sharma_2008": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Methane and nitrous oxide emissions from municipal wastewater treatment plants in China",
+        "authors": [
+          "K.R. Sharma",
+          "Z. Yuan",
+          "J. de Haas",
+          "G. Hamilton"
+        ],
+        "year": 2008,
+        "venue": "Water Science and Technology",
+        "doi": "10.2166/wst.2008.046",
+        "citation_count": 120,
+        "abstract": "This study measured CH4 and N2O emissions from sewer systems in a subtropical city. Results showed that sewer length, hydraulic retention time, and organic loading significantly affect GHG emissions. The dissolved methane concentration in sewer wastewater was found to be supersaturated, indicating active methanogenesis."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.942454+00:00",
+      "version": 1
+    },
+    "ref_chandran_2016": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Nitrous oxide emissions from wastewater treatment: recent developments and future directions",
+        "authors": [
+          "K. Chandran",
+          "B.M. Smets"
+        ],
+        "year": 2016,
+        "venue": "Environmental Science & Technology",
+        "doi": "10.1021/acs.est.5b04740",
+        "citation_count": 200,
+        "abstract": "This review examines N2O emissions from wastewater treatment processes, focusing on the microbial pathways (nitrifier denitrification, hydroxylamine oxidation) and environmental factors (DO, pH, salinity) that influence N2O production. Salinity was identified as a significant factor increasing N2O emissions."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.945460+00:00",
+      "version": 1
+    },
+    "ref_metcalf_2014": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Wastewater Engineering: Treatment and Resource Recovery (5th Edition)",
+        "authors": [
+          "Metcalf & Eddy",
+          "G. Tchobanoglous",
+          "H.D. Stensel",
+          "R. Tsuchihashi"
+        ],
+        "year": 2014,
+        "venue": "McGraw-Hill Education",
+        "doi": "",
+        "citation_count": 5000,
+        "abstract": "The definitive reference on wastewater engineering covering physical, chemical, and biological treatment processes. Includes detailed discussion of carbon and nitrogen transformations in sewer systems, dissolved oxygen requirements for nitrification (DO > 2 mg/L), and the role of methanogenic archaea in anaerobic environments."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.945460+00:00",
+      "version": 1
+    },
+    "ref_lu_2020": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Salinity effects on nitrogen removal performance and microbial community of anammox sludge",
+        "authors": [
+          "H. Lu",
+          "J. Xue",
+          "A. Saikaly"
+        ],
+        "year": 2020,
+        "venue": "Bioresource Technology",
+        "doi": "10.1016/j.biortech.2020.123051",
+        "citation_count": 85,
+        "abstract": "This study investigated the effects of salinity on anammox performance and N2O emissions. Results showed that NaCl concentration above 5 g/L significantly increased N2O emissions by inhibiting nitrite-oxidizing bacteria (NOB) more than ammonia-oxidizing bacteria (AOB), leading to nitrite accumulation and enhanced N2O production through nitrifier denitrification."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.961103+00:00",
+      "version": 1
+    },
+    "ref_takeda_2021": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen loading in constructed wetlands",
+        "authors": [
+          "N. Takeda",
+          "J. Friedl",
+          "D. Rowlings"
+        ],
+        "year": 2021,
+        "venue": "Environmental Science & Technology",
+        "doi": "10.1021/acs.est.1c01435",
+        "citation_count": 45,
+        "abstract": "This study found an exponential relationship between nitrogen loading and N2O emissions in constructed wetlands. The results suggest that nitrogen removal efficiency and N2O emissions are strongly coupled, with implications for optimizing wastewater treatment to minimize greenhouse gas emissions."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.961103+00:00",
+      "version": 1
+    },
+    "ref_foley_2010": {
+      "value": {
+        "type": "academic_paper",
+        "title": "GHG emission and mitigation from wastewater treatment in Australia",
+        "authors": [
+          "J. Foley",
+          "D. de Haas",
+          "K. Hartley",
+          "P. Lant"
+        ],
+        "year": 2010,
+        "venue": "Water Research",
+        "doi": "10.1016/j.watres.2010.06.035",
+        "citation_count": 150,
+        "abstract": "This paper quantifies greenhouse gas emissions from wastewater systems in Australia, including direct emissions from treatment processes and indirect emissions from energy consumption. The study found that sewer systems contribute 10-50% of the total CH4 emissions from urban wastewater infrastructure."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.961103+00:00",
+      "version": 1
+    },
+    "ref_tang_2021": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Carbon transformation and greenhouse gas emissions in sewer systems",
+        "authors": [
+          "K. Tang",
+          "Z. Yuan",
+          "J. Keller"
+        ],
+        "year": 2021,
+        "venue": "Journal of Environmental Management",
+        "doi": "10.1016/j.jenvman.2021.112136",
+        "citation_count": 60,
+        "abstract": "This study investigated carbon transformation pathways in sewer systems, including the conversion of organic carbon to CO2 and CH4 under anaerobic conditions, and the role of biofilm and sediment in carbon cycling. The results showed that sewer systems can be considered as bioreactors where significant carbon transformation occurs."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.976724+00:00",
       "version": 1
     }
   },
@@ -3912,6 +4500,486 @@
       "new": "{'title': '专业学位硕士研究生', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:33.968064+00:00'}",
       "source": "manual",
       "timestamp": "2026-05-30T02:43:33.974858+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1073_pnas.1322434111",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Global metaanalysis of the nonlinear response of soil nitrous oxide (N2O) emissions to fertilizer ni",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.239464+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_j.scitotenv.2017.03.191",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'A review on nitrous oxide (N2O) emissions during biological nutrient removal from municipal wastewat",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.255085+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1088_1748-9326_abd2f3",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Machine learning improves predictions of agricultural nitrous oxide (N2O) emissions from intensively",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.255085+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1111_gcb.16061",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Century‐long changes and drivers of soil nitrous oxide (N2O) emissions across the contiguous United ",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.270705+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_J.AGEE.2021.107376",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen fertiliser rates in a t",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.270705+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1038_s44172-025-00362-0",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'Pilot-scale partial nitrification and anaerobic ammonium oxidation system for nitrogen removal from m",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.726445+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_j.jenvman.2024.123171",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'A novel Zobellella endophytica W14 strain for nitrogen removal from hypersaline wastewater through si",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.742030+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_j.envres.2025.120763",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': \"Deciphering nitrogen removal performance concerning heterotrophic microorganism's succession by using",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.742030+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.3390_w15071334",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'Nitrogen Removal for Low Concentration Ammonium Wastewater by Adsorption, Shortcut Simultaneous Nitri",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.757648+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.3390_w16172532",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'Impact of Chemical Oxygen Demand/Total Nitrogen Ratio on Shifting Autotrophic Partial Nitrification t",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.757648+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_013",
+      "old": {
+        "title": "CHEMICAL ENGINEERING TRANSACTIONS",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.074715+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'CHEMICAL ENGINEERING TRANSACTIONS', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Biochemical reactions under microaer",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.636393+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0301479721001985-main",
+      "old": {
+        "title": "Journal of Environmental Management 285 (2021) 112136",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.179425+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Journal of Environmental Management 285 (2021) 112136', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'pa",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.636393+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_2021-生态环境学报-中国胡焕庸线下方四区域沉积...生素",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': '生态环境学报 2021, 30(5): 1023-1033                                                     http://www.jeesci.com', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', ",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.636393+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_Atmospheric_Volatile_Organic_C",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'atmosphere', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'The term “Volatile Organic Compounds (VOCs)” generally refe",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.652035+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_On-line_monitoring_of_methane_",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'On-line monitoring of methane in sewer', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.652035+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_优化污水处理厂的气流速率和碳源剂量策略：迈向碳减排和强化脱氮",
+      "old": {
+        "title": "Optimizing airflow rate and carbon source dosage strategies for wastewater",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.749789+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Optimizing airflow rate and carbon source dosage strategies for wastewater', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstrac",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.652035+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城市下水道系统污水与泥沙之间的污染物交换",
+      "old": {
+        "title": "Contents lists available at ScienceDirect",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.128456+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Contents lists available at ScienceDirect', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Urban sewer systems undertak",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.667656+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城市污水处理厂挥发性卤代有机物的排放特征及影响因素研究_何洁",
+      "old": {
+        "title": "第32 卷第12 期",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.176024+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '第32 卷第12 期', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.667656+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城市污泥热解处理过程中含碳族化合物的转化途径",
+      "old": {
+        "title": "Waste Management 178 (2024) 26–34",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.554050+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Waste Management 178 (2024) 26–34', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'With urbanization progressing, the r",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.667656+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城镇河流及排放与市政排水管网污水输入的关联影响",
+      "old": {
+        "title": "渊匀哉粤晕允陨晕郧运耘载哉耘冤摇摇耘晕灾陨砸韵晕酝耘晕栽粤蕴杂悦陨耘晕悦耘",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.669753+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '渊匀哉粤晕允陨晕郧运耘载哉耘冤摇摇耘晕灾陨砸韵晕酝耘晕栽粤蕴杂悦陨耘晕悦耘', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.683277+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于碳排放的城市污水处理全过程节能减排综合测度方法",
+      "old": {
+        "title": "RESEARCH ARTICLE",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.755382+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'RESEARCH ARTICLE', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'It is of great significance to establish a carbon emi",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.683277+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_对城市供水管网中的多个污染源进行机器学习分类",
+      "old": {
+        "title": "sensors",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.809181+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'sensors', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Contamination in water distribution networks can occur due to ",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.698878+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_构建高效的排水管网健康评价模型_评价镇江市A区排水管网",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Citation: Li, H.; Wang, Y.; Luo, Y.;', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'The drainage system is an importa",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.698878+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_污水管网不同汇流条件下沉积物运移分布规律_薛甜",
+      "old": {
+        "title": "第39 卷 第7 期",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.042234+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '第39 卷 第7 期', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.698878+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_污水管道中含碳有机物的时空分布特征及影响因素_赵航",
+      "old": {
+        "title": "中国给水排水",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.135501+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '中国给水排水', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.714499+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_生态学视角下城市污水汇流管网污染物迁移与沉积规律",
+      "old": {
+        "title": "Retraction",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.214137+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Retraction', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'With the acceleration of industrialization and urbanization",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.714499+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_管网相间转化",
+      "old": {
+        "title": "前    言",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.291223+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '前    言', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.714499+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_迈向废水处理过程的节能减碳：碳中和厌氧生物技术综述",
+      "old": {
+        "title": "Journal of Water Process Engineering 59 (2024) 105026",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.442097+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Journal of Water Process Engineering 59 (2024) 105026', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Rapid industrial",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.730120+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_开题报告doc",
+      "old": {
+        "title": "开题报告doc",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.901892+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '开题报告doc', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.730120+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_赵德华开题报告",
+      "old": {
+        "title": "专业学位硕士研究生",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.968064+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '专业学位硕士研究生', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.745744+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_guisasola_2008",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Methane formation in sewer systems', 'authors': ['A. Guisasola', 'D. de Haas', 'J. Keller', 'Z. Yuan'], 'year': 2008, 'venue': 'Water Research', 'doi': '10.1016/j.",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.924138+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_jiang_2011",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Methane and nitrous oxide emissions from sewer systems in urban areas', 'authors': ['G. Jiang', 'J. Keller', 'P.L. Bond'], 'year': 2011, 'venue': 'Water Research',",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.930481+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_foley_2009",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Nitrous oxide and methane emissions from wastewater treatment processes', 'authors': ['J. Foley', 'D. de Haas', 'Z. Yuan', 'P. Lant'], 'year': 2009, 'venue': 'Jour",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.936470+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_sharma_2008",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Methane and nitrous oxide emissions from municipal wastewater treatment plants in China', 'authors': ['K.R. Sharma', 'Z. Yuan', 'J. de Haas', 'G. Hamilton'], 'year",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.942454+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_chandran_2016",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Nitrous oxide emissions from wastewater treatment: recent developments and future directions', 'authors': ['K. Chandran', 'B.M. Smets'], 'year': 2016, 'venue': 'En",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.945460+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_metcalf_2014",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Wastewater Engineering: Treatment and Resource Recovery (5th Edition)', 'authors': ['Metcalf & Eddy', 'G. Tchobanoglous', 'H.D. Stensel', 'R. Tsuchihashi'], 'year'",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.945460+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_lu_2020",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Salinity effects on nitrogen removal performance and microbial community of anammox sludge', 'authors': ['H. Lu', 'J. Xue', 'A. Saikaly'], 'year': 2020, 'venue': '",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.961103+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_takeda_2021",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen loading in constructed wetlands', 'authors': ['N. Takeda', 'J. Friedl', 'D. Rowlings']",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.961103+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_foley_2010",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'GHG emission and mitigation from wastewater treatment in Australia', 'authors': ['J. Foley', 'D. de Haas', 'K. Hartley', 'P. Lant'], 'year': 2010, 'venue': 'Water ",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.961103+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_tang_2021",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Carbon transformation and greenhouse gas emissions in sewer systems', 'authors': ['K. Tang', 'Z. Yuan', 'J. Keller'], 'year': 2021, 'venue': 'Journal of Environmen",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.976724+00:00"
     }
   ]
 }
