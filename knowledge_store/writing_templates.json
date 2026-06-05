@@ -1,7 +1,8 @@
 {
   "meta": {
     "count": 17,
-    "updated": "2026-06-02T09:20:59.002167+00:00"
+    "updated": "2026-06-04T09:23:51.804512+00:00",
+    "version": 18
   },
   "entries": {
     "intro_opening_zh": {
@@ -130,6 +131,386 @@
       },
       "version": 1,
       "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "learned_abstract_5424": {
+      "value": {
+        "pattern": "Partial nitrif[VAR]ation has the advantages of saving energy and reducing the need for carbon sources in mun[VAR]ipal wastewater treatment.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_background_3936": {
+      "value": {
+        "pattern": "However, for mun[VAR]ipal wastewater with low ammonia, start-up and maintenance of partial nitrif[VAR]ation is a worldwide challenge.",
+        "function": "background",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_5604": {
+      "value": {
+        "pattern": "Here we developed a pilot-scale [VAR]uble sludge system consisting of two sequencing ba[VAR]h reactors for partial nitrif[VAR]ation ([NUM] m[NUM]) and denitrif[VAR]ation/anaerob[VAR]ammonium oxidation (denitrif[VAR]ation/anammox, [NUM] m[NUM]) to treat mun[VAR]ipal wastewater.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_8261": {
+      "value": {
+        "pattern": "Partial nitrif[VAR]ation was maintained at no ammonium remaining with a nitrite accumulation rate of [VALUE_UNIT].",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_result_4900": {
+      "value": {
+        "pattern": "This study found that partial nitrif[VAR]ation system effluent chem[VAR]al oxygen demand increased from [NUM] mg L−[NUM] to [NUM] mg L−[NUM] accompanied by transformation from complete nitrif[VAR]ation to partial nitrif[VAR]ation.",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_9421": {
+      "value": {
+        "pattern": "In the denitrif[VAR]ation/anammox system, the reduction of nitrite to nitrogen required about [VALUE_UNIT] less carbon consumption than nitrate.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_8389": {
+      "value": {
+        "pattern": "High nitrogen removal was achieved with effluent total inorgan[VAR]nitrogen of [NUM] mg L−[NUM] without carbon addition.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_4669": {
+      "value": {
+        "pattern": "This work provided a pilot-scale demonstration of low-carbon high-nitrogen removal.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_6216": {
+      "value": {
+        "pattern": "Yongzhen Peng and colleagues achieved high nitrogen removal in mun[VAR]ipal wastewater treatment by sequentially combining partial nitrif[VAR]ation and denitrif[VAR]ation reactors.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_7413": {
+      "value": {
+        "pattern": "This pilot-scale study provides a low-energy and low-carbon technology toward a sustainable wastewater treatment solution.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_7365": {
+      "value": {
+        "pattern": "To address the challenges associated with biolog[VAR]al treatment of high-salinity wastewater, a novel salt-tolerant strain, Zobellella en[VAR][VAR]yt[VAR]a W[NUM], was isolated.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_5002": {
+      "value": {
+        "pattern": "This strain exhibited heterotro[VAR][VAR]nitrif[VAR]ation-aerob[VAR]denitrif[VAR]ation (HN-AD) capabilities.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_6795": {
+      "value": {
+        "pattern": "Strain W[NUM] could grow and remove ammonium in high-salinity environments with salinity levels ranging from [NUM] to [VALUE_UNIT] (w/v).",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_7299": {
+      "value": {
+        "pattern": "At [VALUE_UNIT] salinity, strain W[NUM] demonstrated high removal eff[VAR]iencies for nitrite, ammonium, and nitrate ([VALUE_UNIT], [VALUE_UNIT], and [VALUE_UNIT], respectively), when these compounds were provided as the single source of nitrogen.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_8010": {
+      "value": {
+        "pattern": "In cases of mixed nitrogen sources, total nitrogen removal eff[VAR]iency of strain reached [VALUE_UNIT].",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.788891+00:00",
+      "version": 1
+    },
+    "learned_abstract_6330": {
+      "value": {
+        "pattern": "The nitrogen balance analysis confirmed the utilization of nitrogen sources by strain W[NUM] through both assimilation and dissimilation.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.804512+00:00",
+      "version": 1
+    },
+    "learned_abstract_8512": {
+      "value": {
+        "pattern": "Through the amplif[VAR]ation of functional genes involved in nitrogen metabolism (i.e. , hao, napA, nirS, and nosZ), the nitrogen metabolism pathway of strain W[NUM] was pred[VAR]ted to be: [CHEM[VAR]AL]⁺ → NH₂OH → NO₂⁻ → [CHEM[VAR]AL]⁻ → NO₂⁻ → NO → [CHEM[VAR]AL] → N₂.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.804512+00:00",
+      "version": 1
+    },
+    "learned_abstract_8936": {
+      "value": {
+        "pattern": "The study reveals that the novel W[NUM] strain can eff[VAR]iently remove total nitrogen from high-salinity wastewater and has signif[VAR]ant potential for biolog[VAR]al treatment of such wastewater.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:wastewater nitrogen ammonium n"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-04T09:23:51.804512+00:00",
+      "version": 1
     }
-  }
+  },
+  "changelog": [
+    {
+      "action": "create",
+      "key": "learned_abstract_5424",
+      "old": null,
+      "new": "{'pattern': 'Partial nitrif[VAR]ation has the advantages of saving energy and reducing the need for carbon sources in mun[VAR]ipal wastewater treatment.', 'function': 'abstract', 'section_type': 'abst",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_background_3936",
+      "old": null,
+      "new": "{'pattern': 'However, for mun[VAR]ipal wastewater with low ammonia, start-up and maintenance of partial nitrif[VAR]ation is a worldwide challenge.', 'function': 'background', 'section_type': 'abstract",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_5604",
+      "old": null,
+      "new": "{'pattern': 'Here we developed a pilot-scale [VAR]uble sludge system consisting of two sequencing ba[VAR]h reactors for partial nitrif[VAR]ation ([NUM] m[NUM]) and denitrif[VAR]ation/anaerob[VAR]ammon",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8261",
+      "old": null,
+      "new": "{'pattern': 'Partial nitrif[VAR]ation was maintained at no ammonium remaining with a nitrite accumulation rate of [VALUE_UNIT].', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'sourc",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_4900",
+      "old": null,
+      "new": "{'pattern': 'This study found that partial nitrif[VAR]ation system effluent chem[VAR]al oxygen demand increased from [NUM] mg L−[NUM] to [NUM] mg L−[NUM] accompanied by transformation from complete ni",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_9421",
+      "old": null,
+      "new": "{'pattern': 'In the denitrif[VAR]ation/anammox system, the reduction of nitrite to nitrogen required about [VALUE_UNIT] less carbon consumption than nitrate.', 'function': 'abstract', 'section_type': ",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8389",
+      "old": null,
+      "new": "{'pattern': 'High nitrogen removal was achieved with effluent total inorgan[VAR]nitrogen of [NUM] mg L−[NUM] without carbon addition.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, ",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_4669",
+      "old": null,
+      "new": "{'pattern': 'This work provided a pilot-scale demonstration of low-carbon high-nitrogen removal.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'auto_learn:wastewater nitr",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_6216",
+      "old": null,
+      "new": "{'pattern': 'Yongzhen Peng and colleagues achieved high nitrogen removal in mun[VAR]ipal wastewater treatment by sequentially combining partial nitrif[VAR]ation and denitrif[VAR]ation reactors.', 'fun",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_7413",
+      "old": null,
+      "new": "{'pattern': 'This pilot-scale study provides a low-energy and low-carbon technology toward a sustainable wastewater treatment solution.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_7365",
+      "old": null,
+      "new": "{'pattern': 'To address the challenges associated with biolog[VAR]al treatment of high-salinity wastewater, a novel salt-tolerant strain, Zobellella en[VAR][VAR]yt[VAR]a W[NUM], was isolated.', 'funct",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_5002",
+      "old": null,
+      "new": "{'pattern': 'This strain exhibited heterotro[VAR][VAR]nitrif[VAR]ation-aerob[VAR]denitrif[VAR]ation (HN-AD) capabilities.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'a",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_6795",
+      "old": null,
+      "new": "{'pattern': 'Strain W[NUM] could grow and remove ammonium in high-salinity environments with salinity levels ranging from [NUM] to [VALUE_UNIT] (w/v).', 'function': 'abstract', 'section_type': 'abstra",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_7299",
+      "old": null,
+      "new": "{'pattern': 'At [VALUE_UNIT] salinity, strain W[NUM] demonstrated high removal eff[VAR]iencies for nitrite, ammonium, and nitrate ([VALUE_UNIT], [VALUE_UNIT], and [VALUE_UNIT], respectively), when the",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8010",
+      "old": null,
+      "new": "{'pattern': 'In cases of mixed nitrogen sources, total nitrogen removal eff[VAR]iency of strain reached [VALUE_UNIT].', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'auto_",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.788891+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_6330",
+      "old": null,
+      "new": "{'pattern': 'The nitrogen balance analysis confirmed the utilization of nitrogen sources by strain W[NUM] through both assimilation and dissimilation.', 'function': 'abstract', 'section_type': 'abstra",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.804512+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8512",
+      "old": null,
+      "new": "{'pattern': 'Through the amplif[VAR]ation of functional genes involved in nitrogen metabolism (i.e. , hao, napA, nirS, and nosZ), the nitrogen metabolism pathway of strain W[NUM] was pred[VAR]ted to b",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.804512+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8936",
+      "old": null,
+      "new": "{'pattern': 'The study reveals that the novel W[NUM] strain can eff[VAR]iently remove total nitrogen from high-salinity wastewater and has signif[VAR]ant potential for biolog[VAR]al treatment of such ",
+      "source": "auto_learn",
+      "timestamp": "2026-06-04T09:23:51.804512+00:00"
+    }
+  ]
 }

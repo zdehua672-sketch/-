@@ -126,6 +126,8 @@ class KnowledgeStore:
         """设置知识条目（带版本和置信度）"""
         store = self._stores.setdefault(category, self._default_store(category))
         entries = store.setdefault("entries", {})
+        store.setdefault("changelog", [])
+        store.setdefault("meta", {"version": 1})
 
         old_value = entries.get(key, {}).get("value")
         entries[key] = {

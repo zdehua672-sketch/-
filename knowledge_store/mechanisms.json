@@ -1,43 +1,44 @@
 {
   "meta": {
     "count": 36,
-    "updated": "2026-06-02T09:20:59.000173+00:00"
+    "updated": "2026-06-04T09:29:05.435195+00:00",
+    "version": 28
   },
   "entries": {
     "c_n_coupling_pattern": {
       "value": "TOC与TN/铵态氮相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.965959+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 23
     },
     "c_n_coupling_mechanism": {
       "value": "碳氮耦合是污水管道生物转化的核心过程。有机碳降解释放含氮有机物中的氮（氨化作用），使NH4+浓度升高。同时，反硝化过程需要有机碳作为电子供体，C/N比直接影响脱氮效率(C/N>5时脱氮效率高)。碳氮的协同转化反映了管道中微生物群落的整体代谢活性。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.966960+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 23
     },
     "c_n_coupling_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.968953+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 23
     },
     "do_ch4_pattern": {
       "value": "DO与CH4负相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.970284+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.643963+00:00",
+      "version": 23
     },
     "do_ch4_mechanism": {
       "value": "溶解氧(DO)浓度是控制管道中产甲烷过程的关键因素。当DO<0.5 mg/L时，管道进入严格厌氧状态，产甲烷古菌活性达到最高，通过乙酸发酵和CO2/H2还原两条途径将有机碳转化为CH4。相反，当DO>2 mg/L时，好氧微生物通过有氧呼吸将有机碳氧化为CO2，产甲烷过程被完全抑制。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.971280+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.645954+00:00",
+      "version": 23
     },
     "do_ch4_references": {
       "value": [
@@ -46,92 +47,92 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.973274+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.648954+00:00",
+      "version": 23
     },
     "do_co2_pattern": {
       "value": "DO与CO2可能正相关或呈复杂关系",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.973567+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.649943+00:00",
+      "version": 23
     },
     "do_co2_mechanism": {
       "value": "CO2的来源包括好氧呼吸和厌氧发酵两部分。好氧条件下，异养菌通过三羧酸循环将有机物完全氧化为CO2和H2O。厌氧条件下，产甲烷过程中CO2也作为电子受体被还原为CH4。因此，DO对CO2的影响取决于好氧呼吸产CO2和厌氧产甲烷消耗CO2的平衡。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.974568+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.651938+00:00",
+      "version": 23
     },
     "do_co2_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.976561+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.653932+00:00",
+      "version": 23
     },
     "seasonal_pattern": {
       "value": "冬春差异",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.978572+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.667417+00:00",
+      "version": 23
     },
     "seasonal_mechanism": {
       "value": "温度是影响微生物代谢活性的主要因素。春季温度升高，水解酸化菌和产甲烷菌的酶活性增强，有机碳转化速率加快，气相碳(CH4+CO2)浓度可能升高。同时，春季降雨增加了管道流量，可能产生稀释效应和冲刷效应——冲刷管壁生物膜和底部沉积物中的有机碳，导致液相TOC升高。两种效应的相对大小决定了净变化方向。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.979562+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.669411+00:00",
+      "version": 23
     },
     "seasonal_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.980551+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.671406+00:00",
+      "version": 23
     },
     "spatial_pattern": {
       "value": "沿程空间变化",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.981548+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.673400+00:00",
+      "version": 23
     },
     "spatial_mechanism": {
       "value": "管道中碳污染物的空间分异受功能区排放特征和管道内生化过程共同控制。管口区域氧气充足(O2较高)，好氧呼吸为主，CO2为主要碳气。随着向管道中段和末端推进，O2被微生物消耗逐渐降低，厌氧程度增加，CH4生成比例上升。同时，不同功能区(教学区/生活区/餐饮区)的有机负荷和组成不同，导致碳污染物的初始输入存在空间差异。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.982545+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.674397+00:00",
+      "version": 23
     },
     "spatial_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.984540+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 23
     },
     "toc_ch4_pattern": {
       "value": "TOC与CH4正相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.985426+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 23
     },
     "toc_ch4_mechanism": {
       "value": "TOC代表污水中有机碳的总量，是产甲烷过程的底物来源。TOC浓度越高，可供水解酸化菌利用的有机底物越充足，进而为产甲烷古菌提供更多的乙酸和H2/CO2底物，促进CH4的生成。但在高TOC条件下，有机酸积累导致pH下降，可能抑制产甲烷活性。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.986427+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 23
     },
     "toc_ch4_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.988328+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 23
     },
     "section_一_气相碳污染物生成机制": {
       "value": {
@@ -141,8 +142,8 @@
       },
       "confidence": 0.95,
       "source": "mechanism-kb.md",
-      "updated": "2026-06-02T09:06:07.991359+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 23
     },
     "section_二_液相碳污染物赋存机制": {
       "value": {
@@ -152,8 +153,8 @@
       },
       "confidence": 0.95,
       "source": "mechanism-kb.md",
-      "updated": "2026-06-02T09:06:07.992329+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "section_三_固相碳污染物赋存机制": {
       "value": {
@@ -163,8 +164,8 @@
       },
       "confidence": 0.95,
       "source": "mechanism-kb.md",
-      "updated": "2026-06-02T09:06:07.994323+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "section_四_碳氮耦合机制": {
       "value": {
@@ -174,8 +175,8 @@
       },
       "confidence": 0.95,
       "source": "mechanism-kb.md",
-      "updated": "2026-06-02T09:06:07.995348+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "section_五_空间分异机制": {
       "value": {
@@ -185,8 +186,8 @@
       },
       "confidence": 0.95,
       "source": "mechanism-kb.md",
-      "updated": "2026-06-02T09:06:07.996318+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "section_六_季节差异机制": {
       "value": {
@@ -196,8 +197,8 @@
       },
       "confidence": 0.95,
       "source": "mechanism-kb.md",
-      "updated": "2026-06-02T09:06:07.997344+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "section_七_discussion可用的机制解释模板": {
       "value": {
@@ -207,50 +208,50 @@
       },
       "confidence": 0.95,
       "source": "mechanism-kb.md",
-      "updated": "2026-06-02T09:06:07.998343+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "c_n_coupling_mechanism_en": {
       "value": "Carbon-nitrogen coupling is a core biogeochemical process in sewage networks. Organic carbon degradation releases nitrogen from nitrogenous organic compounds (ammonification), elevating NH4+ concentrations. Meanwhile, denitrification requires organic carbon as an electron donor, and the C/N ratio directly affects nitrogen removal efficiency (optimal when C/N > 5). The synergistic transformation of carbon and nitrogen reflects the overall metabolic activity of the microbial community in the pipeline.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.967956+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 20
     },
     "do_ch4_mechanism_en": {
       "value": "Dissolved oxygen (DO) is the primary factor controlling methanogenesis in sewage networks. Under strictly anaerobic conditions (DO < 0.5 mg/L), methanogenic archaea exhibit maximum activity, converting organic carbon to CH4 via acetoclastic fermentation and hydrogenotrophic CO2 reduction. Conversely, when DO exceeds 2 mg/L, aerobic microorganisms oxidize organic carbon to CO2 through aerobic respiration, completely suppressing methanogenesis.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.972277+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.646951+00:00",
+      "version": 20
     },
     "do_co2_mechanism_en": {
       "value": "CO2 in sewage networks originates from both aerobic respiration and anaerobic fermentation. Under aerobic conditions, heterotrophic bacteria oxidize organic matter to CO2 and H2O via the tricarboxylic acid cycle. Under anaerobic conditions, CO2 also serves as an electron acceptor and is reduced to CH4 during methanogenesis. Therefore, the net effect of DO on CO2 depends on the balance between aerobic CO2 production and anaerobic CO2 consumption in CH4 formation.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.975564+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.652936+00:00",
+      "version": 20
     },
     "seasonal_mechanism_en": {
       "value": "Temperature is the dominant factor influencing microbial metabolic activity. As temperature rises in spring, enzymatic activities of hydrolytic-acidogenic and methanogenic microorganisms increase, accelerating organic carbon transformation and potentially elevating gaseous carbon (CH4+CO2) concentrations. Concurrently, increased rainfall in spring enhances pipeline flow, creating both dilution and scouring effects that may wash biofilms and sediment-bound organic carbon into the liquid phase, increasing TOC. The net outcome depends on the relative magnitude of these competing effects.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.979562+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.670416+00:00",
+      "version": 20
     },
     "spatial_mechanism_en": {
       "value": "Spatial differentiation of carbon pollutants in pipelines is jointly controlled by functional zone discharge characteristics and in-pipe biogeochemical processes. At the inlet, oxygen is relatively abundant, favoring aerobic respiration with CO2 as the dominant carbon gas. Progressing toward the mid-section and outlet, O2 is progressively consumed by microorganisms, increasing anaerobiosis and shifting the balance toward CH4 production. Meanwhile, different functional zones (teaching, residential, dining) exhibit distinct organic loading and composition, creating spatial variation in initial carbon input.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.983542+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.676392+00:00",
+      "version": 20
     },
     "toc_ch4_mechanism_en": {
       "value": "Total organic carbon (TOC) represents the aggregate organic carbon pool in wastewater and serves as the primary substrate for methanogenesis. Higher TOC concentrations provide more abundant organic substrates for hydrolytic and acidogenic bacteria, which in turn supply more acetate and H2/CO2 to methanogenic archaea, enhancing CH4 production. However, under high TOC conditions, volatile fatty acid accumulation may lower pH and inhibit methanogenic activity.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-02T09:06:07.987325+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 20
     },
     "methane_production_sewer": {
       "category": "mechanisms",
@@ -318,6 +319,262 @@
       },
       "version": 1,
       "created": "2026-06-02T09:20:59.000173+00:00"
+    },
+    "carbon_phase_distribution_pattern": {
+      "value": "碳在固液气三相的分配",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.626342+00:00",
+      "version": 2
+    },
+    "carbon_phase_distribution_mechanism": {
+      "value": "污水管网中碳污染物以三相存在：液相(TOC/DOC/POC)占总碳60-80%，是微生物代谢直接底物；固相(沉积物有机碳/生物膜EPS)占15-30%，是碳汇也是内源碳释放源；气相(CH4/CO2/VOCs)占5-15%，是碳损失和温室效应直接贡献者。三相碳通过溶解-沉淀、吸附-解吸、生物转化等过程动态平衡。",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.628371+00:00",
+      "version": 2
+    },
+    "carbon_phase_distribution_references": {
+      "value": [
+        "Sharma et al. (2008)",
+        "Ni et al. (2015)"
+      ],
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 2
+    },
+    "carbon_phase_distribution_source": {
+      "value": "domain_knowledge",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 2
+    },
+    "dissolved_oxygen_control_pattern": {
+      "value": "DO控制碳转化路径",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 2
+    },
+    "dissolved_oxygen_control_mechanism": {
+      "value": "溶解氧(DO)是控制管道碳转化路径的核心开关：DO>2mg/L时好氧呼吸为主，有机碳转化为CO2，CH4被抑制；DO 0.5-2mg/L时微好氧区，好氧厌氧共存；DO<0.5mg/L时严格厌氧，产甲烷活跃；DO<0.2mg/L时硫酸盐还原菌与产甲烷古菌竞争。管口到管末端的DO梯度决定碳转化空间分异。",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 2
+    },
+    "dissolved_oxygen_control_references": {
+      "value": [
+        "Guisasola et al. (2008)",
+        "Jiang et al. (2011)"
+      ],
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.628838+00:00",
+      "version": 2
+    },
+    "dissolved_oxygen_control_source": {
+      "value": "domain_knowledge",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.642934+00:00",
+      "version": 2
+    },
+    "functional_zone_carbon_input_pattern": {
+      "value": "功能区碳输入差异",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.655927+00:00",
+      "version": 2
+    },
+    "functional_zone_carbon_input_mechanism": {
+      "value": "不同功能区排放的污水碳组成差异显著：教学区低有机碳低油脂；生活区中等有机碳含洗涤剂；餐饮区高有机碳(TOC 200-500mg/L)高油脂高NH4+；运动区间歇排放含有机碎屑。功能区差异导致管网有机碳负荷的空间异质性，影响不同位置的碳转化路径和气相碳排放。",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.656897+00:00",
+      "version": 2
+    },
+    "functional_zone_carbon_input_references": {
+      "value": [],
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.658922+00:00",
+      "version": 2
+    },
+    "functional_zone_carbon_input_source": {
+      "value": "domain_knowledge",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.659921+00:00",
+      "version": 2
+    },
+    "methane_production_sewer_pattern": {
+      "value": "管道厌氧环境产甲烷",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.661945+00:00",
+      "version": 2
+    },
+    "methane_production_sewer_mechanism": {
+      "value": "污水管道底部沉积物和管壁生物膜在厌氧条件下形成产甲烷热点。产甲烷古菌通过乙酸发酵(CH3COOH->CH4+CO2)和氢营养型还原(CO2+4H2->CH4+2H2O)两条途径产生CH4。管道中CH4产生量可占城市污水处理系统总CH4排放的10-50%。水力停留时间(HRT)越长、有机负荷越高，CH4排放越严重。",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.662944+00:00",
+      "version": 2
+    },
+    "methane_production_sewer_references": {
+      "value": [
+        "Guisasola et al. (2008) Water Research",
+        "Jiang et al. (2011) ES&T",
+        "Cheng et al. (2022) Water Research"
+      ],
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.664937+00:00",
+      "version": 2
+    },
+    "methane_production_sewer_source": {
+      "value": "domain_knowledge",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.666420+00:00",
+      "version": 2
+    },
+    "temperature_seasonal_effect_pattern": {
+      "value": "温度驱动季节差异",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 2
+    },
+    "temperature_seasonal_effect_mechanism": {
+      "value": "温度通过微生物酶活性控制碳转化速率：Q10效应(每升10C速率增2-3倍)。冬季(5-15C)微生物活性低，有机碳降解慢；春季(15-25C)水解酸化菌和产甲烷菌活性增强，CH4排放增加；夏季(>25C)产甲烷速率达峰值。降雨事件冲刷管壁生物膜和沉积物，导致脉冲式碳释放。",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 2
+    },
+    "temperature_seasonal_effect_references": {
+      "value": [
+        "Sun et al. (2022)"
+      ],
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 2
+    },
+    "temperature_seasonal_effect_source": {
+      "value": "domain_knowledge",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-04T09:17:26.677400+00:00",
+      "version": 2
+    },
+    "n2o_nacl_mechanism": {
+      "value": {
+        "pattern": "N2O与NaCl正相关",
+        "mechanism": "N2O排放与NaCl浓度的正相关关系可能反映了盐度对硝化过程的影响。高盐度环境下，亚硝酸盐氧化菌(NOB)比氨氧化菌(AOB)更易受抑制，导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O。此外，NaCl浓度升高会增加污水渗透压，影响微生物群落结构，促进N2O的产生。",
+        "references": [
+          "Chandran et al. (2016)报道盐度升高会显著增加污水处理中N2O排放",
+          "Lu et al. (2020)发现NaCl浓度>5g/L时N2O排放因子增加2-3倍"
+        ]
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.419574+00:00",
+      "version": 1
+    },
+    "tn_nh4_mechanism": {
+      "value": {
+        "pattern": "TN与NH4+正相关",
+        "mechanism": "总氮(TN)与铵态氮(NH4+)的强正相关(r=0.985)表明，污水管网中氮的主要存在形式为铵态氮，占TN的大部分。这是因为管道内厌氧条件下，有机氮通过氨化作用转化为NH4+，而硝化作用因DO不足而受限，导致NH4+积累。TN-NH4+的差值主要为有机氮和少量硝态氮。",
+        "references": [
+          "Guisasola et al. (2008)指出管道厌氧段有机氮氨化是NH4+的主要来源",
+          "Jiang et al. (2011)报道管道污水中NH4+-N占TN的60-80%"
+        ]
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.419574+00:00",
+      "version": 1
+    },
+    "co2_no2_mechanism": {
+      "value": {
+        "pattern": "CO2与NO2正相关",
+        "mechanism": "CO2与NO2的正相关可能反映了共同的环境驱动因素。温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)。此外，管道内微生物活性增强时，有氧呼吸产CO2和硝化产NO2同步增加。NO2作为硝化中间产物，其积累也与DO水平和有机物浓度有关。",
+        "references": [
+          "Foley et al. (2009)报道管道温室气体排放与微生物活性正相关"
+        ]
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.419574+00:00",
+      "version": 1
+    },
+    "cod_seasonal_mechanism": {
+      "value": {
+        "pattern": "COD冬高春低",
+        "mechanism": "COD冬季显著高于春季的原因可能有：(1)冬季低温抑制微生物分解，有机物在管道内积累；(2)春季温度回升后，微生物活性增强，有机物被快速降解，导致管道出水COD降低；(3)冬季用水量减少，污水在管道内停留时间延长，沉积物再悬浮和有机物释放增加。",
+        "references": [
+          "Guisasola et al. (2008)报道管道内有机物降解受温度显著影响",
+          "Sharma et al. (2008)发现冬季管道COD浓度比夏季高30-50%"
+        ]
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.419574+00:00",
+      "version": 1
+    },
+    "ch4_seasonal_mechanism": {
+      "value": {
+        "pattern": "CH4春高冬低",
+        "mechanism": "CH4春季显著高于冬季的原因：(1)温度是控制产甲烷菌活性的关键因素，最适温度35-40°C，冬季低温(6.6°C)严重抑制产甲烷活性，春季温度回升(16°C)后活性恢复；(2)春季管道内厌氧区扩大，DO降低，有利于产甲烷过程；(3)冬季积累的有机底物在春季被产甲烷菌利用，导致CH4集中释放。",
+        "references": [
+          "Guisasola et al. (2008)报道温度每升高10°C，产甲烷速率增加2-3倍",
+          "Jiang et al. (2011)指出管道CH4排放具有显著季节性"
+        ]
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.419574+00:00",
+      "version": 1
+    },
+    "do_no3_mechanism": {
+      "value": {
+        "pattern": "DO与NO3-正相关",
+        "mechanism": "DO与硝态氮(NO3-)的正相关反映了硝化作用对溶解氧的依赖。硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全。DO<0.5 mg/L时硝化作用几乎停止，NO3-浓度极低。因此DO高的采样点NO3-浓度也高。",
+        "references": [
+          "Metcalf & Eddy (2014)指出DO是硝化作用的限速因子"
+        ]
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.419574+00:00",
+      "version": 1
+    },
+    "toc_tc_mechanism": {
+      "value": {
+        "pattern": "TOC与TC正相关",
+        "mechanism": "TOC与TC的强正相关(r=0.789)表明有机碳是总碳的主要组成部分。TC=TOC+IC，当TOC占TC比例稳定时，两者自然呈正相关。TOC/TC比值反映了有机碳在总碳中的份额，比值越高说明有机污染越重。",
+        "references": []
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.419574+00:00",
+      "version": 1
+    },
+    "vocs_seasonal_mechanism": {
+      "value": {
+        "pattern": "VOCs冬高春低",
+        "mechanism": "VOCs冬季高于春季可能原因：(1)冬季大气扩散条件差，管道内VOCs不易逸散；(2)冬季低温下VOCs挥发性降低，在液相中浓度升高；(3)春季微生物活性增强，部分VOCs被生物降解。",
+        "references": []
+      },
+      "confidence": 0.85,
+      "source": "domain_knowledge",
+      "updated": "2026-06-04T09:29:05.435195+00:00",
+      "version": 1
     }
   },
   "changelog": [
@@ -568,6 +825,230 @@
       "new": "Total organic carbon (TOC) represents the aggregate organic carbon pool in wastewater and serves as the primary substrate for methanogenesis. Higher TOC concentrations provide more abundant organic substrates for hydrolytic and acidogenic bacteria, which in turn supply more acetate and H2/CO2 to methanogenic archaea, enhancing CH4 production. However, under high TOC conditions, volatile fatty acid accumulation may lower pH and inhibit methanogenic activity.",
       "source": "MechanismKB",
       "timestamp": "2026-05-25T08:44:42.651608+00:00"
+    },
+    {
+      "action": "create",
+      "key": "carbon_phase_distribution_pattern",
+      "old": null,
+      "new": "碳在固液气三相的分配",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.435433+00:00"
+    },
+    {
+      "action": "create",
+      "key": "carbon_phase_distribution_mechanism",
+      "old": null,
+      "new": "污水管网中碳污染物以三相存在：液相(TOC/DOC/POC)占总碳60-80%，是微生物代谢直接底物；固相(沉积物有机碳/生物膜EPS)占15-30%，是碳汇也是内源碳释放源；气相(CH4/CO2/VOCs)占5-15%，是碳损失和温室效应直接贡献者。三相碳通过溶解-沉淀、吸附-解吸、生物转化等过程动态平衡。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.435433+00:00"
+    },
+    {
+      "action": "create",
+      "key": "carbon_phase_distribution_references",
+      "old": null,
+      "new": "['Sharma et al. (2008)', 'Ni et al. (2015)']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.435433+00:00"
+    },
+    {
+      "action": "create",
+      "key": "carbon_phase_distribution_source",
+      "old": null,
+      "new": "domain_knowledge",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.435433+00:00"
+    },
+    {
+      "action": "create",
+      "key": "dissolved_oxygen_control_pattern",
+      "old": null,
+      "new": "DO控制碳转化路径",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.452856+00:00"
+    },
+    {
+      "action": "create",
+      "key": "dissolved_oxygen_control_mechanism",
+      "old": null,
+      "new": "溶解氧(DO)是控制管道碳转化路径的核心开关：DO>2mg/L时好氧呼吸为主，有机碳转化为CO2，CH4被抑制；DO 0.5-2mg/L时微好氧区，好氧厌氧共存；DO<0.5mg/L时严格厌氧，产甲烷活跃；DO<0.2mg/L时硫酸盐还原菌与产甲烷古菌竞争。管口到管末端的DO梯度决定碳转化空间分异。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.454850+00:00"
+    },
+    {
+      "action": "create",
+      "key": "dissolved_oxygen_control_references",
+      "old": null,
+      "new": "['Guisasola et al. (2008)', 'Jiang et al. (2011)']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.455847+00:00"
+    },
+    {
+      "action": "create",
+      "key": "dissolved_oxygen_control_source",
+      "old": null,
+      "new": "domain_knowledge",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.456845+00:00"
+    },
+    {
+      "action": "create",
+      "key": "functional_zone_carbon_input_pattern",
+      "old": null,
+      "new": "功能区碳输入差异",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.469991+00:00"
+    },
+    {
+      "action": "create",
+      "key": "functional_zone_carbon_input_mechanism",
+      "old": null,
+      "new": "不同功能区排放的污水碳组成差异显著：教学区低有机碳低油脂；生活区中等有机碳含洗涤剂；餐饮区高有机碳(TOC 200-500mg/L)高油脂高NH4+；运动区间歇排放含有机碎屑。功能区差异导致管网有机碳负荷的空间异质性，影响不同位置的碳转化路径和气相碳排放。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.471884+00:00"
+    },
+    {
+      "action": "create",
+      "key": "functional_zone_carbon_input_references",
+      "old": null,
+      "new": "[]",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.472879+00:00"
+    },
+    {
+      "action": "create",
+      "key": "functional_zone_carbon_input_source",
+      "old": null,
+      "new": "domain_knowledge",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.473881+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_pattern",
+      "old": null,
+      "new": "管道厌氧环境产甲烷",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.474874+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_mechanism",
+      "old": null,
+      "new": "污水管道底部沉积物和管壁生物膜在厌氧条件下形成产甲烷热点。产甲烷古菌通过乙酸发酵(CH3COOH->CH4+CO2)和氢营养型还原(CO2+4H2->CH4+2H2O)两条途径产生CH4。管道中CH4产生量可占城市污水处理系统总CH4排放的10-50%。水力停留时间(HRT)越长、有机负荷越高，CH4排放越严重。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.476871+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_references",
+      "old": null,
+      "new": "['Guisasola et al. (2008) Water Research', 'Jiang et al. (2011) ES&T', 'Cheng et al. (2022) Water Research']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.477866+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_source",
+      "old": null,
+      "new": "domain_knowledge",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.478863+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_pattern",
+      "old": null,
+      "new": "温度驱动季节差异",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.484689+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_mechanism",
+      "old": null,
+      "new": "温度通过微生物酶活性控制碳转化速率：Q10效应(每升10C速率增2-3倍)。冬季(5-15C)微生物活性低，有机碳降解慢；春季(15-25C)水解酸化菌和产甲烷菌活性增强，CH4排放增加；夏季(>25C)产甲烷速率达峰值。降雨事件冲刷管壁生物膜和沉积物，导致脉冲式碳释放。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.484689+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_references",
+      "old": null,
+      "new": "['Sun et al. (2022)']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.484689+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_source",
+      "old": null,
+      "new": "domain_knowledge",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-04T09:13:13.484689+00:00"
+    },
+    {
+      "action": "create",
+      "key": "n2o_nacl_mechanism",
+      "old": null,
+      "new": "{'pattern': 'N2O与NaCl正相关', 'mechanism': 'N2O排放与NaCl浓度的正相关关系可能反映了盐度对硝化过程的影响。高盐度环境下，亚硝酸盐氧化菌(NOB)比氨氧化菌(AOB)更易受抑制，导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O。此外，NaCl浓度升高会增加污水渗透压，影响微生物群落结构，促进N2O的产生。', 'references': ['Chan",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.419574+00:00"
+    },
+    {
+      "action": "create",
+      "key": "tn_nh4_mechanism",
+      "old": null,
+      "new": "{'pattern': 'TN与NH4+正相关', 'mechanism': '总氮(TN)与铵态氮(NH4+)的强正相关(r=0.985)表明，污水管网中氮的主要存在形式为铵态氮，占TN的大部分。这是因为管道内厌氧条件下，有机氮通过氨化作用转化为NH4+，而硝化作用因DO不足而受限，导致NH4+积累。TN-NH4+的差值主要为有机氮和少量硝态氮。', 'references': ['Guisas",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.419574+00:00"
+    },
+    {
+      "action": "create",
+      "key": "co2_no2_mechanism",
+      "old": null,
+      "new": "{'pattern': 'CO2与NO2正相关', 'mechanism': 'CO2与NO2的正相关可能反映了共同的环境驱动因素。温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)。此外，管道内微生物活性增强时，有氧呼吸产CO2和硝化产NO2同步增加。NO2作为硝化中间产物，其积累也与DO水平和有机物浓度有关。', 'references': ['Foley et al.",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.419574+00:00"
+    },
+    {
+      "action": "create",
+      "key": "cod_seasonal_mechanism",
+      "old": null,
+      "new": "{'pattern': 'COD冬高春低', 'mechanism': 'COD冬季显著高于春季的原因可能有：(1)冬季低温抑制微生物分解，有机物在管道内积累；(2)春季温度回升后，微生物活性增强，有机物被快速降解，导致管道出水COD降低；(3)冬季用水量减少，污水在管道内停留时间延长，沉积物再悬浮和有机物释放增加。', 'references': ['Guisasola et al. (2008",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.419574+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ch4_seasonal_mechanism",
+      "old": null,
+      "new": "{'pattern': 'CH4春高冬低', 'mechanism': 'CH4春季显著高于冬季的原因：(1)温度是控制产甲烷菌活性的关键因素，最适温度35-40°C，冬季低温(6.6°C)严重抑制产甲烷活性，春季温度回升(16°C)后活性恢复；(2)春季管道内厌氧区扩大，DO降低，有利于产甲烷过程；(3)冬季积累的有机底物在春季被产甲烷菌利用，导致CH4集中释放。', 'references':",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.419574+00:00"
+    },
+    {
+      "action": "create",
+      "key": "do_no3_mechanism",
+      "old": null,
+      "new": "{'pattern': 'DO与NO3-正相关', 'mechanism': 'DO与硝态氮(NO3-)的正相关反映了硝化作用对溶解氧的依赖。硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全。DO<0.5 mg/L时硝化作用几乎停止，NO3-浓度极低。因此DO高的采样点NO3-浓度也高。', 'refe",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.419574+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_tc_mechanism",
+      "old": null,
+      "new": "{'pattern': 'TOC与TC正相关', 'mechanism': 'TOC与TC的强正相关(r=0.789)表明有机碳是总碳的主要组成部分。TC=TOC+IC，当TOC占TC比例稳定时，两者自然呈正相关。TOC/TC比值反映了有机碳在总碳中的份额，比值越高说明有机污染越重。', 'references': []}",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.419574+00:00"
+    },
+    {
+      "action": "create",
+      "key": "vocs_seasonal_mechanism",
+      "old": null,
+      "new": "{'pattern': 'VOCs冬高春低', 'mechanism': 'VOCs冬季高于春季可能原因：(1)冬季大气扩散条件差，管道内VOCs不易逸散；(2)冬季低温下VOCs挥发性降低，在液相中浓度升高；(3)春季微生物活性增强，部分VOCs被生物降解。', 'references': []}",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-04T09:29:05.435195+00:00"
     }
   ]
 }

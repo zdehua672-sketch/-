@@ -225,7 +225,7 @@ class KnowledgeMemory:
         }
 
     def _calc_relevance(self, query_tokens: set, key: str, value: dict) -> float:
-        """计算查询与条目的相关性"""
+        """计算查询与条目的相关性（Jaccard + 子串匹配 + 中文字符重叠）"""
         # 从 key 和 value 中提取文本
         text_parts = [key.lower()]
         for v in value.values():
@@ -237,14 +237,72 @@ class KnowledgeMemory:
         full_text = ' '.join(text_parts)
         text_tokens = set(re.findall(r'[\w一-鿿]+', full_text))
 
-        # Jaccard 相似度
+        # 1. Jaccard 相似度
         if not query_tokens or not text_tokens:
-            return 0.0
+            jaccard = 0.0
+        else:
+            intersection = query_tokens & text_tokens
+            union = query_tokens | text_tokens
+            jaccard = len(intersection) / len(union) if union else 0.0
 
-        intersection = query_tokens & text_tokens
-        union = query_tokens | text_tokens
+        # 2. 子串匹配：查询token是否出现在文本中（部分匹配）
+        #    例如 "总氮（mg/L)" 的子串 "总氮" 能匹配 "总氮"
+        query_chars = set(re.findall(r'[一-鿿]+', ' '.join(query_tokens)))
+        text_chars = set(re.findall(r'[一-鿿]+', full_text))
+        if query_chars and text_chars:
+            char_overlap = sum(1 for c in query_chars if c in text_chars)
+            char_score = char_overlap / len(query_chars)
+        else:
+            char_score = 0.0
 
-        return len(intersection) / len(union) if union else 0.0
+        # 3. 变量名精确匹配：提取变量名核心部分
+        #    "总氮（mg/L)" → "总氮", "TOC（mg/L)" → "TOC"
+        # 同时处理中英文变量名映射
+        VAR_ALIASES = {
+            '总氮': 'TN', '铵态氮': 'NH4', '硝态氮': 'NO3', '总磷': 'TP',
+            '甲烷': 'CH4', '氧化亚氮': 'N2O', '二氧化碳': 'CO2',
+            '溶解氧': 'DO', '化学需氧量': 'COD', '有机碳': 'TOC',
+            '无机碳': 'IC', '总碳': 'TC', '电导率': 'EC',
+            '挥发性有机物': 'VOCs', '硫化氢': 'H2S',
+        }
+        # 反向映射
+        ALIAS_TO_CN = {v: k for k, v in VAR_ALIASES.items()}
+
+        query_vars = set()
+        for t in query_tokens:
+            cn = re.findall(r'[一-鿿]+', t)
+            query_vars.update(cn)
+            en = re.findall(r'[A-Z]{2,}', t.upper())
+            query_vars.update(en)
+            # 添加别名
+            for c in cn:
+                if c in VAR_ALIASES:
+                    query_vars.add(VAR_ALIASES[c])
+            for e in en:
+                if e in ALIAS_TO_CN:
+                    query_vars.add(ALIAS_TO_CN[e])
+
+        text_vars = set()
+        for t in text_tokens:
+            cn = re.findall(r'[一-鿿]+', t)
+            text_vars.update(cn)
+            en = re.findall(r'[A-Z]{2,}', t.upper())
+            text_vars.update(en)
+            for c in cn:
+                if c in VAR_ALIASES:
+                    text_vars.add(VAR_ALIASES[c])
+            for e in en:
+                if e in ALIAS_TO_CN:
+                    text_vars.add(ALIAS_TO_CN[e])
+
+        if query_vars and text_vars:
+            var_overlap = len(query_vars & text_vars)
+            var_score = var_overlap / len(query_vars)
+        else:
+            var_score = 0.0
+
+        # 综合得分：取最高
+        return max(jaccard, char_score, var_score)
 
 
 # ============================================================================

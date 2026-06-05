@@ -135,8 +135,8 @@ def set_plot_style():
         'grid.color': '#E0E0E0',
         'grid.linestyle': '--',
         'grid.alpha': 0.5,
-        'axes.spines.top': False,
-        'axes.spines.right': False,
+        'axes.spines.top': True,
+        'axes.spines.right': True,
         'axes.spines.left': True,
         'axes.spines.bottom': True,
     })

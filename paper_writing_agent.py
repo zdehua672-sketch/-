@@ -587,7 +587,9 @@ class DiscussionGenerator:
 
     def _discuss_pca_zh(self):
         """讨论PCA结果"""
-        pca = self.results['PCA']
+        pca = self.results.get('PCA')
+        if pca is None:
+            return ''
         var_ratio = pca.get('explained_variance_ratio', [])
         loadings = pca.get('loadings')
 
@@ -834,7 +836,9 @@ class DiscussionGenerator:
 
     def _discuss_pca_en(self):
         """PCA discussion (English)"""
-        pca = self.results['PCA']
+        pca = self.results.get('PCA')
+        if pca is None:
+            return ''
         var_ratio = pca.get('explained_variance_ratio', [])
         loadings = pca.get('loadings')
 

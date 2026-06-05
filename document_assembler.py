@@ -501,7 +501,7 @@ def assemble_from_analysis(agent, output_dir=None, paper_type='chinese'):
     if os.path.exists(fig_dir):
         fig_files = sorted([
             f for f in os.listdir(fig_dir)
-            if f.endswith(('.png', '.jpg', '.pdf'))
+            if f.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff'))
         ])
 
     if hasattr(agent, 'texts') and agent.texts:

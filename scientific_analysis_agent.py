@@ -230,7 +230,7 @@ class AnalysisOrchestrator:
                             })
 
         # 检查PCA结果
-        if 'PCA' in analysis_results:
+        if 'PCA' in analysis_results and analysis_results['PCA'] is not None:
             var_ratio = analysis_results['PCA'].get('方差贡献率', [])
             if len(var_ratio) >= 2 and sum(var_ratio[:2]) > 0.7:
                 points.append({
@@ -427,7 +427,7 @@ class TextGenerator:
 
     def _gen_pca(self):
         """生成PCA分析文字"""
-        if 'PCA' not in self.results:
+        if 'PCA' not in self.results or self.results['PCA'] is None:
             return ''
 
         pca = self.results['PCA']
@@ -855,13 +855,17 @@ class ScientificAnalysisAgent:
     def _make_serializable(self, obj):
         """将numpy/pandas对象转为可JSON序列化的格式"""
         if isinstance(obj, dict):
-            return {k: self._make_serializable(v) for k, v in obj.items()}
+            return {str(k) if not isinstance(k, (str, int, float, bool, type(None))) else k:
+                    self._make_serializable(v) for k, v in obj.items()}
         elif isinstance(obj, (pd.DataFrame, pd.Series)):
-            return obj.to_dict()
+            d = obj.to_dict()
+            return self._make_serializable(d)
         elif isinstance(obj, np.ndarray):
             return obj.tolist()
         elif isinstance(obj, (np.integer, np.floating)):
             return float(obj)
+        elif isinstance(obj, tuple):
+            return str(obj)
         return obj
 
     def submit_feedback(self, analysis_type: str, rating: int = 3, comment: str = ""):

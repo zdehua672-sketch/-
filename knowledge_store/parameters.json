@@ -4,7 +4,7 @@
     "description": "系统参数（阈值/权重）",
     "version": 44,
     "created": "2026-05-23T10:00:06.170206+00:00",
-    "updated": "2026-06-02T09:06:08.011139+00:00",
+    "updated": "2026-06-04T09:17:26.708663+00:00",
     "source": "initial"
   },
   "entries": {
@@ -15,8 +15,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:07.999337+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "score_weight_中文格式": {
       "value": {
@@ -25,8 +25,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.000335+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "score_weight_错别字": {
       "value": {
@@ -35,8 +35,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.000686+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "score_weight_学术语法": {
       "value": {
@@ -45,8 +45,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.001685+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "score_weight_引文规范": {
       "value": {
@@ -55,8 +55,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.002683+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "score_weight_图表规范": {
       "value": {
@@ -65,8 +65,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.003680+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "score_weight_数据逻辑": {
       "value": {
@@ -75,8 +75,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.004541+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.693042+00:00",
+      "version": 23
     },
     "score_weight_Discussion逻辑": {
       "value": {
@@ -85,8 +85,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.005587+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.708663+00:00",
+      "version": 23
     },
     "score_weight_AI痕迹": {
       "value": {
@@ -95,8 +95,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.006693+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.708663+00:00",
+      "version": 23
     },
     "score_weight_学术重复": {
       "value": {
@@ -105,8 +105,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.007691+00:00",
-      "version": 21
+      "updated": "2026-06-04T09:17:26.708663+00:00",
+      "version": 23
     },
     "checker_weight_AI痕迹_MINOR": {
       "value": {
@@ -155,8 +155,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.009687+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.708663+00:00",
+      "version": 20
     },
     "score_weight_逻辑跳跃": {
       "value": {
@@ -165,8 +165,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.010908+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.708663+00:00",
+      "version": 20
     },
     "score_weight_引用质量": {
       "value": {
@@ -175,8 +175,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-02T09:06:08.011139+00:00",
-      "version": 18
+      "updated": "2026-06-04T09:17:26.708663+00:00",
+      "version": 20
     }
   },
   "changelog": [
