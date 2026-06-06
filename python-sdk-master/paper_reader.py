@@ -341,7 +341,58 @@ def read_local_text(file_path: str) -> PaperContent:
 
 
 def read_local_pdf(file_path: str) -> PaperContent:
-    """从本地PDF文件读取论文"""
+    """
+    从本地PDF文件读取论文（使用增强版解析器）
+
+    优先使用 enhanced_pdf_parser（带清洗+章节识别），
+    失败时回退到基础解析器。
+    """
+    path = Path(file_path)
+    content = PaperContent()
+    content.metadata.paper_id = path.stem
+    content.metadata.source = 'local_pdf'
+
+    # 优先使用增强版解析器
+    try:
+        from enhanced_pdf_parser import EnhancedPDFParser
+        parser = EnhancedPDFParser()
+        pdf_content = parser.parse(str(path))
+
+        if pdf_content.parse_success:
+            content.word_count = pdf_content.char_count
+            content.read_time = datetime.now(timezone.utc).isoformat()
+
+            # 提取标题
+            if pdf_content.sections.introduction:
+                first_line = pdf_content.sections.introduction.split('\n')[0][:200]
+                content.metadata.title = first_line or path.stem
+            else:
+                content.metadata.title = path.stem
+
+            # 将 PDFSections 转换为 PaperSection 列表
+            for attr, sec_type in [('abstract', 'abstract'), ('introduction', 'introduction'),
+                                   ('methods', 'methods'), ('results', 'results'),
+                                   ('discussion', 'discussion'), ('conclusion', 'conclusion'),
+                                   ('references', 'references')]:
+                text = getattr(pdf_content.sections, attr, '')
+                if text:
+                    content.sections.append(PaperSection(
+                        section_type=sec_type, title=attr.capitalize(), text=text[:5000],
+                    ))
+
+            if pdf_content.sections.other:
+                content.sections.append(PaperSection(
+                    section_type='other', title='Other', text=pdf_content.sections.other[:5000],
+                ))
+
+            logger.info(f"Enhanced PDF parsed: {len(content.sections)} sections from {path.name}")
+            return content
+    except ImportError:
+        logger.debug("enhanced_pdf_parser not available, falling back to basic parser")
+    except Exception as e:
+        logger.warning(f"Enhanced PDF parser error: {e}, falling back")
+
+    # 回退到基础解析器
     try:
         from rag_system.ingestion.pdf_parser import parse_pdf
         text = parse_pdf(file_path)
@@ -352,17 +403,10 @@ def read_local_pdf(file_path: str) -> PaperContent:
     if not text:
         return read_local_text(file_path)
 
-    path = Path(file_path)
-    content = PaperContent()
-    content.metadata.paper_id = path.stem
-    content.metadata.source = 'local_pdf'
-
-    # 尝试提取标题（第一行非空文本）
     lines = [l.strip() for l in text.split('\n') if l.strip()]
     if lines:
         content.metadata.title = lines[0][:200]
 
-    # 尝试用paper_structurer解析
     try:
         from rag_system.ingestion.paper_structurer import detect_imrad_sections
         imrad = detect_imrad_sections(text)
@@ -510,6 +554,139 @@ class PaperReader:
             }
             for pid, p in self._papers.items()
         ]
+
+    # --- Zotero 集成 ---
+
+    def read_zotero_library(self, db_path=None, with_pdf_only=True,
+                            max_papers=None, fetch_metadata=False) -> list:
+        """
+        批量导入 Zotero 文献库
+
+        Parameters
+        ----------
+        db_path : str, Zotero 数据库路径（None则自动发现）
+        with_pdf_only : bool, 只导入有PDF的文献
+        max_papers : int, 最大导入数量（None=全部）
+        fetch_metadata : bool, 是否从Semantic Scholar获取元数据
+
+        Returns
+        -------
+        list of PaperContent, 成功导入的论文列表
+        """
+        try:
+            from zotero_connector import discover_zotero, export_zotero_papers, ZoteroExportReport
+        except ImportError:
+            logger.error("zotero_connector module not found")
+            print("✗ Zotero 连接器模块不可用")
+            return []
+
+        # 发现数据库
+        try:
+            db = discover_zotero(db_path)
+        except FileNotFoundError as e:
+            print(f"✗ {e}")
+            return []
+
+        # 导出元数据
+        print(f"[PaperReader] 连接 Zotero 数据库: {db}")
+        report = ZoteroExportReport()
+        papers = export_zotero_papers(db, report=report)
+        report.print_report()
+
+        # 过滤
+        if with_pdf_only:
+            papers = [p for p in papers if p.pdfPath]
+
+        if max_papers:
+            papers = papers[:max_papers]
+
+        print(f"[PaperReader] 开始导入 {len(papers)} 篇文献...")
+
+        # 批量导入
+        imported = []
+        for i, zp in enumerate(papers, 1):
+            pdf_path = zp.pdfPath
+            if not pdf_path or not os.path.exists(pdf_path):
+                # 尝试在 Zotero storage 目录中查找
+                storage_candidates = self._find_zotero_storage(db.parent, zp.key, pdf_path)
+                if storage_candidates:
+                    pdf_path = storage_candidates
+                else:
+                    logger.debug(f"Skip (no PDF): {zp.title[:50]}")
+                    continue
+
+            try:
+                content = read_local_pdf(pdf_path)
+                # 填充 Zotero 元数据
+                content.metadata.paper_id = zp.key
+                content.metadata.title = zp.title or content.metadata.title
+                content.metadata.authors = [str(a) for a in zp.authors]
+                content.metadata.year = zp.year
+                content.metadata.doi = zp.doi
+                content.metadata.venue = zp.journal
+                content.metadata.abstract = zp.abstract
+                content.metadata.source = 'zotero'
+
+                # 缓存和索引
+                self._papers[zp.key] = content
+                self._index_paper(content)
+                self._store_memory(content)
+                imported.append(content)
+
+                if i % 10 == 0 or i == len(papers):
+                    print(f"  [{i}/{len(papers)}] 已导入 {len(imported)} 篇")
+
+            except Exception as e:
+                logger.warning(f"Failed to import {zp.title[:50]}: {e}")
+
+        print(f"\n[PaperReader] Zotero 导入完成: {len(imported)}/{len(papers)} 篇成功")
+        return imported
+
+    def _find_zotero_storage(self, db_dir, paper_key, raw_path):
+        """在 Zotero storage 目录中查找 PDF 文件"""
+        storage_dir = db_dir / "storage" / paper_key
+        if storage_dir.exists():
+            pdfs = list(storage_dir.glob("*.pdf"))
+            if pdfs:
+                return str(pdfs[0])
+
+        # 尝试解析 raw_path
+        if raw_path:
+            resolved = raw_path
+            if resolved.startswith("storage:"):
+                resolved = resolved[len("storage:"):]
+            full_path = db_dir / "storage" / resolved
+            if full_path.exists():
+                return str(full_path)
+
+        return None
+
+    def get_zotero_stats(self, db_path=None) -> dict:
+        """获取 Zotero 文献库统计信息"""
+        try:
+            from zotero_connector import discover_zotero, export_zotero_papers, ZoteroExportReport
+            db = discover_zotero(db_path)
+            report = ZoteroExportReport()
+            papers = export_zotero_papers(db, report=report)
+
+            stats = {
+                'total': len(papers),
+                'with_pdf': sum(1 for p in papers if p.pdfPath),
+                'with_doi': sum(1 for p in papers if p.doi),
+                'with_abstract': sum(1 for p in papers if p.abstract),
+                'years': {},
+                'journals': {},
+            }
+
+            for p in papers:
+                if p.year:
+                    stats['years'][p.year] = stats['years'].get(p.year, 0) + 1
+                j = p.journal or 'Unknown'
+                stats['journals'][j] = stats['journals'].get(j, 0) + 1
+
+            return stats
+        except Exception as e:
+            return {'error': str(e)}
 
     # --- 内部方法 ---
 
@@ -716,8 +893,36 @@ methane production in campus sewage networks.
 
         os.remove(tmp_path)
         print("\n测试通过!")
+    elif len(sys.argv) > 1 and sys.argv[1] == 'zotero':
+        # Zotero 文献库导入
+        reader = PaperReader()
+        max_papers = int(sys.argv[2]) if len(sys.argv) > 2 else None
+        imported = reader.read_zotero_library(max_papers=max_papers)
+        print(f"\n导入完成: {len(imported)} 篇")
+        print(f"已缓存: {len(reader._papers)} 篇")
+
+    elif len(sys.argv) > 1 and sys.argv[1] == 'zotero-stats':
+        # Zotero 统计
+        reader = PaperReader()
+        stats = reader.get_zotero_stats()
+        if 'error' in stats:
+            print(f"错误: {stats['error']}")
+        else:
+            print(f"\nZotero 文献库统计:")
+            print(f"  总文献: {stats['total']}")
+            print(f"  有PDF: {stats['with_pdf']}")
+            print(f"  有DOI: {stats['with_doi']}")
+            print(f"  有摘要: {stats['with_abstract']}")
+            if stats.get('years'):
+                print(f"\n  年份分布 (Top 5):")
+                for y, c in sorted(stats['years'].items(), key=lambda x: -x[1])[:5]:
+                    if y > 0:
+                        print(f"    {y}: {c}篇")
+
     else:
         print("用法:")
-        print("  python paper_reader.py --test")
-        print("  python paper_reader.py https://arxiv.org/abs/2301.12345")
-        print("  python paper_reader.py paper.pdf")
+        print("  python paper_reader.py --test                    # 运行测试")
+        print("  python paper_reader.py https://arxiv.org/abs/...  # 读取arxiv论文")
+        print("  python paper_reader.py paper.pdf                 # 读取本地PDF")
+        print("  python paper_reader.py zotero [N]                # 从Zotero导入N篇(默认全部)")
+        print("  python paper_reader.py zotero-stats              # 查看Zotero统计")
