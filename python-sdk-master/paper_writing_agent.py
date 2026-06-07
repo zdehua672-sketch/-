@@ -1294,7 +1294,379 @@ class MethodsGenerator:
 
 
 # ============================================================================
-# 6. 论文编排器 - 一键生成完整论文
+# 6. 大纲生成器 - 大纲先行，驱动全文结构
+# ============================================================================
+class OutlineGenerator:
+    """
+    大纲先行生成器（借鉴 STORM 两阶段方法）
+
+    Phase 1: 基于数据分析结果生成草稿大纲（纯参数知识）
+    Phase 2: 基于 RAG 检索到的文献优化大纲结构
+
+    输出: 结构化的论文章节大纲，驱动后续逐节生成
+    """
+
+    # 章节专属写作提示（借鉴 AI-Scientist per_section_tips）
+    SECTION_TIPS = {
+        'abstract': {
+            'zh': [
+                '用4-5句话概括：目的、方法、关键发现、结论',
+                '必须包含至少1个定量数据（浓度值、p值、R²）',
+                '不要出现参考文献引用',
+                '不要出现图表引用',
+                '关键词3-5个',
+            ],
+            'en': [
+                'Summarize in 4-5 sentences: purpose, methods, key findings, conclusions',
+                'Include at least 1 quantitative data point',
+                'No reference citations in abstract',
+                'No figure/table references',
+                '3-5 keywords',
+            ],
+        },
+        'introduction': {
+            'zh': [
+                '逻辑链: 宏观背景 → 领域问题 → 研究现状 → 研究空白 → 本研究目标',
+                '每段至少引用2篇文献',
+                '用"然而/但是"等转折词引出研究空白',
+                '最后一段明确列出本研究的具体目标（3-4个）',
+                '避免空洞表述如"具有重要意义"',
+            ],
+            'en': [
+                'Logic chain: background → problem → status → gap → objectives',
+                'Each paragraph cites at least 2 references',
+                'Use "however/yet/but" to introduce research gap',
+                'Last paragraph lists 3-4 specific objectives',
+                'Avoid hollow statements like "is of great significance"',
+            ],
+        },
+        'methods': {
+            'zh': [
+                '引用国标/行标方法（HJ/GB）',
+                '包含采样方案、分析方法、数据处理方法',
+                '注明仪器型号和检测限',
+                '统计方法要写明软件版本和显著性水平',
+            ],
+            'en': [
+                'Cite standard methods (HJ/GB/EPA/ISO)',
+                'Include sampling, analysis, and data processing',
+                'Specify instrument models and detection limits',
+                'State software version and significance level',
+            ],
+        },
+        'results': {
+            'zh': [
+                '只报告实际分析结果，不要推测或解释',
+                '每个发现必须有数据支撑（均值±标准差、p值、r值）',
+                '按逻辑顺序组织：描述统计 → 组间比较 → 相关性 → 降维',
+                '图表引用使用括号格式：(图1) (表2)',
+                '禁止虚构数据',
+            ],
+            'en': [
+                'Report only actual results, no interpretation',
+                'Every finding needs data support (mean±SD, p-value, r-value)',
+                'Order: descriptive → comparison → correlation → PCA',
+                'Use parenthetical figure references: (Fig. 1) (Table 2)',
+                'Never fabricate data',
+            ],
+        },
+        'discussion': {
+            'zh': [
+                '每个发现必须有: (1)机制解释 (2)文献对比 (3)数据支撑',
+                '讨论"为什么"而不只是"是什么"',
+                '至少讨论1个与文献不一致的发现',
+                '碳平衡讨论要说明各相态占比和驱动因素',
+                '局限性要具体（采样时间、频次、微生物分析等）',
+            ],
+            'en': [
+                'Each finding needs: (1)mechanism (2)literature comparison (3)data',
+                'Discuss "why" not just "what"',
+                'Discuss at least 1 finding inconsistent with literature',
+                'Limitations must be specific',
+            ],
+        },
+        'conclusion': {
+            'zh': [
+                '精炼3-4条结论，每条对应一个研究目标',
+                '不要重复Abstract中的数据',
+                '不要引用参考文献',
+                '可以包含实践意义',
+            ],
+            'en': [
+                '3-4 concise conclusions, each corresponding to an objective',
+                'Do not repeat Abstract data',
+                'No reference citations',
+                'May include practical implications',
+            ],
+        },
+    }
+
+    def __init__(self, analysis_results=None, rag_engine=None, direction=None):
+        self.results = analysis_results or {}
+        self.rag = rag_engine
+        self.direction = direction or ResearchDirection()
+        self.outline = {}
+
+    def generate(self, language='zh'):
+        """
+        两阶段大纲生成
+
+        Returns
+        -------
+        dict, 结构化大纲 {section_name: {title, subsections, key_points, tips}}
+        """
+        print("  → [Phase 1] 生成草稿大纲...")
+        draft = self._draft_outline(language)
+
+        print("  → [Phase 2] 基于文献优化大纲...")
+        self.outline = self._refine_with_literature(draft, language)
+
+        return self.outline
+
+    def _draft_outline(self, language='zh'):
+        """Phase 1: 基于数据分析结果生成草稿大纲"""
+        outline = {}
+
+        # 检测有哪些分析结果可用
+        has_desc = '描述统计' in self.results
+        has_compare = '组间比较' in self.results
+        has_corr = 'pearson相关' in self.results or 'spearman相关' in self.results
+        has_pca = 'PCA' in self.results
+        has_hca = 'HCA' in self.results
+
+        # 从结果中提取关键发现用于大纲
+        key_findings = self._extract_key_findings()
+
+        if language == 'zh':
+            outline = {
+                'abstract': {
+                    'title': '摘要',
+                    'subsections': [],
+                    'key_points': ['研究目的', '方法概述', '关键发现', '结论'],
+                    'tips': self.SECTION_TIPS['abstract']['zh'],
+                },
+                'introduction': {
+                    'title': '1 绪论',
+                    'subsections': [
+                        {'title': '1.1 研究背景与意义', 'key_points': [self.direction.topic]},
+                        {'title': '1.2 国内外研究现状', 'key_points': ['碳污染物研究', '校园管网研究']},
+                        {'title': '1.3 现有研究不足', 'key_points': ['多相态分析不足', '校园尺度缺乏']},
+                        {'title': '1.4 研究内容与目标', 'key_points': key_findings[:4]},
+                    ],
+                    'key_points': ['背景→现状→空白→目标'],
+                    'tips': self.SECTION_TIPS['introduction']['zh'],
+                },
+                'methods': {
+                    'title': '2 材料与方法',
+                    'subsections': [
+                        {'title': '2.1 研究区域概况', 'key_points': ['校园概况']},
+                        {'title': '2.2 采样方案', 'key_points': ['采样点', '采样时间']},
+                        {'title': '2.3 分析方法', 'key_points': ['气相', '液相', '固相']},
+                        {'title': '2.4 数据处理与统计分析', 'key_points': ['PCA', 'HCA', '相关性']},
+                    ],
+                    'key_points': ['标准化方法引用'],
+                    'tips': self.SECTION_TIPS['methods']['zh'],
+                },
+                'results': {
+                    'title': '3 结果',
+                    'subsections': [],
+                    'key_points': [],
+                    'tips': self.SECTION_TIPS['results']['zh'],
+                },
+                'discussion': {
+                    'title': '4 讨论',
+                    'subsections': [],
+                    'key_points': [],
+                    'tips': self.SECTION_TIPS['discussion']['zh'],
+                },
+                'conclusion': {
+                    'title': '5 结论',
+                    'subsections': [],
+                    'key_points': [],
+                    'tips': self.SECTION_TIPS['conclusion']['zh'],
+                },
+            }
+        else:
+            outline = {
+                'abstract': {
+                    'title': 'Abstract',
+                    'subsections': [],
+                    'key_points': ['Purpose', 'Methods', 'Key findings', 'Conclusions'],
+                    'tips': self.SECTION_TIPS['abstract']['en'],
+                },
+                'introduction': {
+                    'title': '1 Introduction',
+                    'subsections': [
+                        {'title': '1.1 Background', 'key_points': [self.direction.topic]},
+                        {'title': '1.2 Literature Review', 'key_points': ['Carbon pollutants', 'Campus networks']},
+                        {'title': '1.3 Research Gap', 'key_points': ['Multiphase analysis gap']},
+                        {'title': '1.4 Objectives', 'key_points': key_findings[:4]},
+                    ],
+                    'key_points': ['background→status→gap→objectives'],
+                    'tips': self.SECTION_TIPS['introduction']['en'],
+                },
+                'methods': {
+                    'title': '2 Materials and Methods',
+                    'subsections': [
+                        {'title': '2.1 Study Area', 'key_points': ['Campus description']},
+                        {'title': '2.2 Sampling Strategy', 'key_points': ['Sampling points', 'Seasons']},
+                        {'title': '2.3 Analytical Methods', 'key_points': ['Gas', 'Liquid', 'Solid']},
+                        {'title': '2.4 Statistical Analysis', 'key_points': ['PCA', 'HCA', 'Correlation']},
+                    ],
+                    'key_points': ['Standard method citations'],
+                    'tips': self.SECTION_TIPS['methods']['en'],
+                },
+                'results': {
+                    'title': '3 Results',
+                    'subsections': [],
+                    'key_points': [],
+                    'tips': self.SECTION_TIPS['results']['en'],
+                },
+                'discussion': {
+                    'title': '4 Discussion',
+                    'subsections': [],
+                    'key_points': [],
+                    'tips': self.SECTION_TIPS['discussion']['en'],
+                },
+                'conclusion': {
+                    'title': '5 Conclusions',
+                    'subsections': [],
+                    'key_points': [],
+                    'tips': self.SECTION_TIPS['conclusion']['en'],
+                },
+            }
+
+        # 动态填充 Results 子节
+        if has_desc:
+            outline['results']['subsections'].append(
+                {'title': '描述性统计', 'key_points': ['均值', '标准差', '变异系数']})
+        if has_compare:
+            outline['results']['subsections'].append(
+                {'title': '组间比较', 'key_points': ['冬春差异', '显著性']})
+        if has_corr:
+            outline['results']['subsections'].append(
+                {'title': '相关性分析', 'key_points': ['Pearson', 'Spearman']})
+        if has_pca:
+            outline['results']['subsections'].append(
+                {'title': '主成分分析', 'key_points': ['方差解释率', '载荷']})
+        if has_hca:
+            outline['results']['subsections'].append(
+                {'title': '聚类分析', 'key_points': ['聚类结果']})
+
+        # 动态填充 Discussion 子节
+        outline['discussion']['subsections'] = [
+            {'title': '核心发现讨论', 'key_points': key_findings[:3]},
+            {'title': '相关性机制讨论', 'key_points': ['DO→CH4', 'TOC→CH4']},
+            {'title': '碳平衡分析', 'key_points': ['三相碳分配']},
+            {'title': '研究局限性', 'key_points': ['采样时间', '采样频次']},
+            {'title': '研究展望', 'key_points': ['四季采样', '微生物分析']},
+        ]
+
+        return outline
+
+    def _refine_with_literature(self, draft, language='zh'):
+        """Phase 2: 基于 RAG 检索到的文献优化大纲"""
+        if not self.rag:
+            return draft
+
+        try:
+            # 检索与研究主题相关的文献
+            topic_query = self.direction.topic
+            results = self.rag.retrieve(topic_query, max_results=5)
+
+            if not results:
+                return draft
+
+            # 从文献中提取关键主题
+            lit_topics = []
+            for r in results:
+                text = r.get('text', '')
+                if text:
+                    # 提取关键短语
+                    import re
+                    phrases = re.findall(r'[一-鿿]{2,6}|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*', text)
+                    lit_topics.extend(phrases[:3])
+
+            # 如果找到了文献主题，优化 Introduction 的研究现状
+            if lit_topics and 'introduction' in draft:
+                existing_points = draft['introduction']['subsections'][1].get('key_points', [])
+                # 合并文献主题到研究现状
+                combined = list(set(existing_points + lit_topics[:3]))
+                draft['introduction']['subsections'][1]['key_points'] = combined[:5]
+
+            logger.info(f"Outline refined with {len(results)} literature results")
+
+        except Exception as e:
+            logger.warning(f"Outline refinement failed: {e}")
+
+        return draft
+
+    def _extract_key_findings(self):
+        """从分析结果中提取关键发现"""
+        findings = []
+        import re
+
+        # 从组间比较提取
+        if '组间比较' in self.results:
+            comp = self.results['组间比较']
+            sig = comp[comp['显著性'] != 'n.s.']
+            for _, row in sig.iterrows():
+                var = row['变量']
+                findings.append(f'{var}季节差异显著')
+
+        # 从相关性提取
+        for method in ['pearson', 'spearman']:
+            key = f'{method}相关'
+            if key in self.results:
+                corr = self.results[key]['相关系数']
+                pvals = self.results[key]['p值']
+                for i in range(len(corr)):
+                    for j in range(i + 1, len(corr)):
+                        r = corr.iloc[i, j]
+                        p = pvals.iloc[i, j]
+                        if abs(r) > 0.5 and p < 0.05:
+                            var_i = corr.index[i]
+                            var_j = corr.columns[j]
+                            direction = '正' if r > 0 else '负'
+                            findings.append(f'{var_i}与{var_j}呈{direction}相关')
+                break
+
+        # 从PCA提取
+        if 'PCA' in self.results:
+            pca = self.results['PCA']
+            var_ratio = pca.get('explained_variance_ratio', [])
+            if len(var_ratio) >= 2:
+                findings.append(f'PCA前2主成分解释{sum(var_ratio[:2])*100:.0f}%方差')
+
+        return findings[:8]  # 最多8个关键发现
+
+    def get_tips(self, section_name):
+        """获取指定章节的写作提示"""
+        if section_name in self.outline:
+            return self.outline[section_name].get('tips', [])
+        return []
+
+    def to_markdown(self):
+        """输出大纲为 Markdown 格式"""
+        lines = ['# 论文大纲', '']
+        for sec_name, sec_data in self.outline.items():
+            lines.append(f"## {sec_data['title']}")
+            if sec_data.get('tips'):
+                lines.append('')
+                lines.append('**写作提示:**')
+                for tip in sec_data['tips']:
+                    lines.append(f'- {tip}')
+            for sub in sec_data.get('subsections', []):
+                lines.append(f"  - {sub['title']}")
+                if sub.get('key_points'):
+                    for kp in sub['key_points']:
+                        lines.append(f"    - {kp}")
+            lines.append('')
+        return '\n'.join(lines)
+
+
+# ============================================================================
+# 7. 论文编排器 - 一键生成完整论文
 # ============================================================================
 class PaperWriter:
     """
@@ -1307,6 +1679,7 @@ class PaperWriter:
         os.makedirs(self.output_dir, exist_ok=True)
         self.analysis_agent = None
         self.sections = {}
+        self.outline = {}  # 论文大纲（OutlineGenerator 生成）
         self.language = 'zh'
         self.paper_type = 'thesis'  # thesis / sci / chinese
         self.params = {}  # Methods参数（面积、人口等）
@@ -1340,6 +1713,26 @@ class PaperWriter:
         self.analysis_agent.load_data()
         self.analysis_agent.run(language)
 
+        # Step 1.5: 大纲先行生成（借鉴 STORM 两阶段方法）
+        print("\n[Step 1.5] 生成论文大纲...")
+        rag = None
+        if RAGEngine:
+            try:
+                rag = RAGEngine()
+            except Exception:
+                pass
+        outline_gen = OutlineGenerator(
+            analysis_results=self.analysis_agent.results,
+            rag_engine=rag,
+            direction=self.direction,
+        )
+        self.outline = outline_gen.generate(language)
+        # 保存大纲
+        outline_path = os.path.join(self.output_dir, 'outline.md')
+        with open(outline_path, 'w', encoding='utf-8') as f:
+            f.write(outline_gen.to_markdown())
+        print(f"  → 大纲已保存: {outline_path}")
+
         # Step 2: 生成各章节
         print("\n[Step 2] 生成论文章节...")
 
@@ -1360,13 +1753,6 @@ class PaperWriter:
         # Discussion
         print("  → 生成Discussion（含机制解释）...")
         self.rationale = RationaleMatrix()
-        # 初始化RAG引擎（可选）
-        rag = None
-        if RAGEngine:
-            try:
-                rag = RAGEngine()
-            except Exception:
-                pass
         disc_gen = DiscussionGenerator(
             self.analysis_agent.results,
             self.analysis_agent.captions,
@@ -1392,6 +1778,12 @@ class PaperWriter:
         # Step 3: 组装完整论文
         print("\n[Step 3] 组装完整论文...")
         full_paper = self._assemble_paper()
+
+        # Step 3.1: 写→审→改循环（借鉴 AI-Scientist 反馈改进机制）
+        print("\n[Step 3.1] 执行写→审→改循环...")
+        full_paper, revision_rounds = self._review_and_revise_loop(
+            full_paper, language, max_rounds=3
+        )
 
         # Step 3.5: 论文润色（可选）
         try:
@@ -1529,6 +1921,116 @@ class PaperWriter:
         print("=" * 70)
 
         return full_paper
+
+    def _review_and_revise_loop(self, full_paper, language, max_rounds=3):
+        """
+        写→审→改循环（借鉴 AI-Scientist 的反馈改进机制）
+
+        流程: 生成 → 质量检查 → 修复 CRITICAL/MAJOR → 重新生成受影响章节 → 再检查
+        收敛条件: 无 CRITICAL 问题 + MAJOR 问题 < 3 或达到最大轮次
+
+        Returns
+        -------
+        (revised_paper, rounds_executed)
+        """
+        try:
+            from academic_review_agent import AcademicReviewAgent, Severity
+        except ImportError:
+            print("  → 审稿模块不可用，跳过审改循环")
+            return full_paper, 0
+
+        reviewer = AcademicReviewAgent(paper_type=self.paper_type, language=language)
+
+        for round_num in range(1, max_rounds + 1):
+            print(f"\n  --- 审改轮次 {round_num}/{max_rounds} ---")
+
+            # 审查
+            report = reviewer.review(full_paper)
+
+            # 统计问题
+            critical = [i for i in report.issues if i.severity == Severity.CRITICAL]
+            major = [i for i in report.issues if i.severity == Severity.MAJOR]
+            score = report.scores.get('总分', 0)
+
+            print(f"  → 检查完成: {len(critical)}个CRITICAL, {len(major)}个MAJOR, 总分{score}")
+
+            # 收敛判断
+            if len(critical) == 0 and len(major) < 3:
+                print(f"  → 审改收敛! (轮次{round_num})")
+                break
+
+            # 修复 CRITICAL 问题
+            if critical:
+                print(f"  → 修复 {len(critical)} 个 CRITICAL 问题...")
+                for issue in critical:
+                    self._fix_issue(issue, language)
+
+            # 修复 MAJOR 问题（最多修复前3个）
+            if major:
+                print(f"  → 修复 {min(3, len(major))} 个 MAJOR 问题...")
+                for issue in major[:3]:
+                    self._fix_issue(issue, language)
+
+            # 重新组装论文
+            full_paper = self._assemble_paper()
+
+        return full_paper, round_num
+
+    def _fix_issue(self, issue, language):
+        """根据审稿问题自动修复受影响的章节"""
+        section = issue.section.lower() if issue.section else ''
+
+        # 映射审稿器的章节名到我们的章节名
+        section_map = {
+            'abstract': 'abstract',
+            '摘要': 'abstract',
+            'introduction': 'introduction',
+            '引言': 'introduction',
+            '绪论': 'introduction',
+            'methods': 'methods',
+            '材料': 'methods',
+            '方法': 'methods',
+            'results': 'results',
+            '结果': 'results',
+            'discussion': 'discussion',
+            '讨论': 'discussion',
+            'conclusion': 'conclusion',
+            '结论': 'conclusion',
+        }
+
+        target_section = None
+        for key, val in section_map.items():
+            if key in section:
+                target_section = val
+                break
+
+        if not target_section or target_section not in self.sections:
+            return
+
+        # 针对不同问题类型的修复策略
+        if issue.category == 'AI痕迹':
+            # AI痕迹: 尝试替换问题表达
+            original_text = self.sections[target_section]
+            if issue.original and issue.original in original_text:
+                self.sections[target_section] = original_text.replace(
+                    issue.original, issue.suggestion or ''
+                )
+
+        elif issue.category == '学术语法':
+            # 禁用词: 替换为建议词
+            original_text = self.sections[target_section]
+            if issue.original and issue.original in original_text:
+                self.sections[target_section] = original_text.replace(
+                    issue.original, issue.suggestion or ''
+                )
+
+        elif issue.category == '引文规范':
+            # 引文不足: 标记需要补充（无法自动修复，但记录）
+            logger.info(f"Citation issue in {target_section}: {issue.problem}")
+
+        elif issue.category == 'Discussion逻辑':
+            # Discussion逻辑问题: 标记（通常需要重新生成）
+            logger.info(f"Discussion logic issue: {issue.problem}")
 
     def _assemble_results(self):
         """组装Results章节"""
