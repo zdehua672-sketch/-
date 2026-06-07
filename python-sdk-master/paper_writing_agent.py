@@ -376,20 +376,39 @@ class DiscussionGenerator:
         self._new_mechanisms = []  # 记录新发现的机制，后续写回知识库
         self.max_correlations = max_correlations  # 最多讨论的相关关系数
         self.max_seasonal = max_seasonal  # 最多讨论的季节差异变量数
+        # 引用安全防护（可选）
+        try:
+            from citation_guard import CitationGuard
+            self._citation_guard = CitationGuard()
+        except ImportError:
+            self._citation_guard = None
 
     def _search_literature(self, query, max_results=2):
-        """通过RAG检索相关文献，返回引用列表"""
+        """通过RAG检索相关文献，返回引用列表（带引用安全防护）"""
         if not self.rag:
             return []
         try:
             results = self.rag.retrieve(query, max_results=max_results)
             refs = []
+            ref_dicts = []
             for r in results:
                 title = r.get('title', '')
                 authors = r.get('authors', '')
                 year = r.get('year', '')
                 if title:
                     refs.append(f'{authors} ({year}) {title}' if authors and year else title)
+                    ref_dicts.append({
+                        'title': title,
+                        'authors': authors,
+                        'year': int(year) if str(year).isdigit() else 0,
+                        'doi': r.get('doi', ''),
+                        'journal': r.get('journal', r.get('venue', '')),
+                    })
+
+            # 通过引用安全防护分配不透明键
+            if self._citation_guard and ref_dicts:
+                self._citation_guard.assign_keys(ref_dicts)
+
             return refs
         except Exception:
             return []
@@ -404,6 +423,13 @@ class DiscussionGenerator:
         # 将新发现的机制写回知识库
         if self._new_mechanisms:
             self._write_back_mechanisms()
+
+        # 引用安全验证（如果启用了citation_guard）
+        if self._citation_guard and self._citation_guard._entries:
+            report = self._citation_guard.validate_and_strip(result)
+            if report.hallucinated_citations > 0:
+                result = report.clean_text
+                logger.warning(f"Stripped {report.hallucinated_citations} hallucinated citations from Discussion")
 
         return result
 
@@ -1366,6 +1392,37 @@ class PaperWriter:
         # Step 3: 组装完整论文
         print("\n[Step 3] 组装完整论文...")
         full_paper = self._assemble_paper()
+
+        # Step 3.5: 论文润色（可选）
+        try:
+            from writing_optimizer import polish_paper, check_grammar
+            print("\n[Step 3.5] 论文语言优化...")
+            polish_result = polish_paper(full_paper, language)
+            if polish_result.has_changes():
+                full_paper = polish_result.optimized_text
+                # 保存润色报告
+                polish_path = os.path.join(self.output_dir, 'polish_report.md')
+                with open(polish_path, 'w', encoding='utf-8') as f:
+                    f.write(polish_result.to_markdown())
+                print(f"  → 润色完成: {len(polish_result.changes)}处修改 → {polish_path}")
+            else:
+                print("  → 润色完成: 未发现需要修改的内容")
+
+            # 语法检查
+            grammar_issues = check_grammar(full_paper, language)
+            if grammar_issues:
+                grammar_path = os.path.join(self.output_dir, 'grammar_report.md')
+                with open(grammar_path, 'w', encoding='utf-8') as f:
+                    f.write("# 语法检查报告\n\n")
+                    for i, issue in enumerate(grammar_issues, 1):
+                        f.write(f"## {i}. [{issue.category}] {issue.reason}\n\n")
+                        f.write(f"- 原文: {issue.original}\n")
+                        f.write(f"- 建议: {issue.revised}\n\n")
+                print(f"  → 语法检查: {len(grammar_issues)}个问题 → {grammar_path}")
+        except ImportError:
+            print("  → 润色模块不可用，跳过")
+        except Exception as e:
+            print(f"  → 润色出错: {e}，继续保存")
 
         # Step 4: 保存
         print("\n[Step 4] 保存论文...")

@@ -1183,6 +1183,60 @@ class CitationQualityChecker:
         return issues
 
 
+# ---------- 14. 写作质量增强检查 ----------
+class WritingQualityChecker:
+    """写作质量增强检查（借助 writing_optimizer 模块）"""
+
+    @staticmethod
+    def check(sections, language='en'):
+        issues = []
+        try:
+            from writing_optimizer import AcademicPolisher, GrammarChecker as OptGrammarChecker
+        except ImportError:
+            return issues
+
+        polisher = AcademicPolisher()
+        grammar = OptGrammarChecker()
+
+        for sec_name in ['introduction', 'discussion', 'conclusion', 'abstract']:
+            if sec_name not in sections:
+                continue
+            body = sections[sec_name].body
+            if not body or len(body) < 50:
+                continue
+
+            # 1. 润色检查（口语化、AI痕迹等）
+            result = polisher.polish(body, language)
+            for change in result.changes[:5]:  # 每章节最多报5个
+                severity = Severity.MINOR
+                if change.category in ('AI痕迹', 'AI Pattern'):
+                    severity = Severity.MAJOR
+                issues.append(Issue(
+                    category='写作质量',
+                    severity=severity,
+                    section=sec_name,
+                    location=change.category,
+                    problem=f'{change.category}: {change.reason}',
+                    original=change.original,
+                    suggestion=f'修改为: {change.revised}',
+                ))
+
+            # 2. 语法检查（长句、重复词等）
+            grammar_issues = grammar.check(body, language)
+            for gi in grammar_issues[:3]:  # 每章节最多报3个
+                issues.append(Issue(
+                    category='写作质量',
+                    severity=Severity.MINOR,
+                    section=sec_name,
+                    location=gi.category,
+                    problem=f'{gi.category}: {gi.reason}',
+                    original=gi.original,
+                    suggestion=gi.revised,
+                ))
+
+        return issues
+
+
 # ============================================================================
 # 综合评分系统
 # ============================================================================
@@ -1203,6 +1257,7 @@ class Scorer:
         '推理链完整性': {'weight': 0.08, 'description': '推理链完整性'},
         '逻辑跳跃': {'weight': 0.05, 'description': '逻辑严谨性'},
         '引用质量': {'weight': 0.08, 'description': 'DOI有效性+引用类型多样性'},
+        '写作质量': {'weight': 0.06, 'description': '语言润色+可读性'},
     }
 
     @classmethod
@@ -1256,6 +1311,7 @@ class AcademicReviewAgent:
         ('推理链完整性', RationaleChecker),
         ('逻辑跳跃', LogicalLeapChecker),
         ('引用质量', CitationQualityChecker),
+        ('写作质量', WritingQualityChecker),
     ]
 
     def __init__(self, paper_type='sci', language='auto'):
