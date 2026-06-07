@@ -384,14 +384,47 @@ class DiscussionGenerator:
             self._citation_guard = None
 
     def _search_literature(self, query, max_results=2):
-        """通过RAG检索相关文献，返回引用列表（带引用安全防护）"""
+        """通过RAG检索相关文献（带多视角+迭代增强+引用安全防护）"""
         if not self.rag:
             return []
+
         try:
-            results = self.rag.retrieve(query, max_results=max_results)
+            # === 多视角检索（借鉴 STORM） ===
+            all_results = []
+
+            # 视角1: 领域专家视角（原始查询）
+            results_1 = self.rag.retrieve(query, max_results=max_results)
+            all_results.extend(results_1)
+
+            # 视角2: 方法学视角（关注统计/方法相关文献）
+            method_query = f"{query} statistical method analysis"
+            results_2 = self.rag.retrieve(method_query, max_results=max(1, max_results // 2))
+            all_results.extend(results_2)
+
+            # 视角3: 争议探查视角（关注支持/反对证据）
+            debate_query = f"{query} contradiction debate limitation"
+            results_3 = self.rag.retrieve(debate_query, max_results=max(1, max_results // 2))
+            all_results.extend(results_3)
+
+            # 去重（基于文本相似度）
+            seen_texts = set()
+            unique_results = []
+            for r in all_results:
+                text_key = (r.get('title', '') or r.get('text', ''))[:100]
+                if text_key and text_key not in seen_texts:
+                    seen_texts.add(text_key)
+                    unique_results.append(r)
+
+            # === 迭代式评分过滤（借鉴 PaperQA2） ===
+            scored_results = self._score_and_filter(unique_results, query)
+
+            # 取 Top N
+            final_results = scored_results[:max_results]
+
+            # 构建引用列表
             refs = []
             ref_dicts = []
-            for r in results:
+            for r in final_results:
                 title = r.get('title', '')
                 authors = r.get('authors', '')
                 year = r.get('year', '')
@@ -412,6 +445,50 @@ class DiscussionGenerator:
             return refs
         except Exception:
             return []
+
+    def _score_and_filter(self, results, query):
+        """
+        对检索结果进行相关性评分和过滤（借鉴 PaperQA2）
+
+        评分策略:
+        - 标题关键词匹配度 (0-5分)
+        - 摘要/文本相关性 (0-3分)
+        - 引用数权重 (0-2分)
+        """
+        scored = []
+        query_words = set(re.findall(r'[一-鿿]{2,}|[a-zA-Z]{3,}', query.lower()))
+
+        for r in results:
+            score = 0
+            title = (r.get('title', '') or '').lower()
+            text = (r.get('text', '') or '').lower()
+            combined = title + ' ' + text
+
+            # 标题关键词匹配
+            title_words = set(re.findall(r'[一-鿿]{2,}|[a-zA-Z]{3,}', title))
+            overlap = len(query_words & title_words)
+            score += min(5, overlap * 2)
+
+            # 文本相关性
+            text_words = set(re.findall(r'[一-鿿]{2,}|[a-zA-Z]{3,}', combined))
+            text_overlap = len(query_words & text_words)
+            score += min(3, text_overlap)
+
+            # 引用数权重
+            citations = r.get('citation_count', r.get('citationCount', 0))
+            if citations and int(citations) > 10:
+                score += 1
+            if citations and int(citations) > 50:
+                score += 1
+
+            r['_relevance_score'] = score
+            scored.append(r)
+
+        # 按分数排序
+        scored.sort(key=lambda x: x.get('_relevance_score', 0), reverse=True)
+
+        # 过滤低分（< 2分）
+        return [r for r in scored if r.get('_relevance_score', 0) >= 2] or scored[:3]
 
     def generate(self, language='zh'):
         """生成Discussion全文"""
@@ -1565,39 +1642,47 @@ class OutlineGenerator:
         return outline
 
     def _refine_with_literature(self, draft, language='zh'):
-        """Phase 2: 基于 RAG 检索到的文献优化大纲"""
-        if not self.rag:
-            return draft
+        """Phase 2: 基于 RAG + Semantic Scholar 优化大纲"""
+        import re
+        lit_topics = []
 
+        # 来源1: RAG 检索
+        if self.rag:
+            try:
+                topic_query = self.direction.topic
+                results = self.rag.retrieve(topic_query, max_results=5)
+                for r in results:
+                    text = r.get('text', '')
+                    if text:
+                        phrases = re.findall(r'[一-鿿]{2,6}|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*', text)
+                        lit_topics.extend(phrases[:3])
+            except Exception as e:
+                logger.warning(f"RAG outline refinement failed: {e}")
+
+        # 来源2: Semantic Scholar API（可选）
         try:
-            # 检索与研究主题相关的文献
-            topic_query = self.direction.topic
-            results = self.rag.retrieve(topic_query, max_results=5)
-
-            if not results:
-                return draft
-
-            # 从文献中提取关键主题
-            lit_topics = []
-            for r in results:
-                text = r.get('text', '')
-                if text:
-                    # 提取关键短语
-                    import re
-                    phrases = re.findall(r'[一-鿿]{2,6}|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*', text)
-                    lit_topics.extend(phrases[:3])
-
-            # 如果找到了文献主题，优化 Introduction 的研究现状
-            if lit_topics and 'introduction' in draft:
-                existing_points = draft['introduction']['subsections'][1].get('key_points', [])
-                # 合并文献主题到研究现状
-                combined = list(set(existing_points + lit_topics[:3]))
-                draft['introduction']['subsections'][1]['key_points'] = combined[:5]
-
-            logger.info(f"Outline refined with {len(results)} literature results")
-
+            from semantic_scholar import SemanticScholarClient
+            client = SemanticScholarClient()
+            # 基于研究主题搜索
+            papers = client.search(self.direction.topic, limit=3)
+            for p in papers:
+                if p.abstract:
+                    # 从摘要中提取关键主题
+                    phrases = re.findall(r'[一-鿿]{2,6}|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*', p.abstract[:200])
+                    lit_topics.extend(phrases[:2])
+                if p.title:
+                    lit_topics.append(p.title[:30])
+            logger.info(f"Semantic Scholar: found {len(papers)} papers for outline refinement")
+        except ImportError:
+            pass
         except Exception as e:
-            logger.warning(f"Outline refinement failed: {e}")
+            logger.debug(f"Semantic Scholar outline refinement skipped: {e}")
+
+        # 应用文献主题到大纲
+        if lit_topics and 'introduction' in draft:
+            existing_points = draft['introduction']['subsections'][1].get('key_points', [])
+            combined = list(set(existing_points + lit_topics[:5]))
+            draft['introduction']['subsections'][1]['key_points'] = combined[:6]
 
         return draft
 
@@ -1871,6 +1956,29 @@ class PaperWriter:
         print(f"\n论文已保存: {paper_path}")
         print(f"各章节单独文件: {self.output_dir}/section_*.md")
 
+        # LaTeX/BibTeX 导出（可选）
+        try:
+            from latex_exporter import LatexExporter
+            print("  → 导出 LaTeX/BibTeX...")
+            template_map = {'thesis': 'chinese_thesis', 'sci': 'sci', 'chinese': 'chinese_journal'}
+            template = template_map.get(paper_type, 'sci')
+            exporter = LatexExporter(template=template)
+            # 构建引用列表
+            refs_for_latex = []
+            if hasattr(self, '_citation_refs'):
+                refs_for_latex = self._citation_refs
+            latex_result = exporter.export(
+                sections=self.sections,
+                references=refs_for_latex,
+                output_dir=os.path.join(self.output_dir, 'latex'),
+                title=self.direction.topic if hasattr(self, 'direction') else '',
+            )
+            print(f"  → LaTeX 导出完成: {latex_result['main_path']}")
+        except ImportError:
+            print("  → LaTeX 导出模块不可用，跳过")
+        except Exception as e:
+            print(f"  → LaTeX 导出出错: {e}")
+
         # 引用质量审计
         print("  → 执行引用质量审计...")
         try:
@@ -1944,8 +2052,27 @@ class PaperWriter:
         for round_num in range(1, max_rounds + 1):
             print(f"\n  --- 审改轮次 {round_num}/{max_rounds} ---")
 
-            # 审查
+            # 审查（14类检查器）
             report = reviewer.review(full_paper)
+
+            # 跨章节一致性检查
+            coherence_issues = self._check_cross_section_coherence()
+            if coherence_issues:
+                print(f"  → 跨章节一致性: {len(coherence_issues)}个问题")
+                for ci in coherence_issues:
+                    if ci.get('severity') == 'MAJOR':
+                        major_count = len([i for i in report.issues if i.severity == Severity.MAJOR])
+                        # 添加到major列表
+                        from academic_review_agent import Issue as _Issue
+                        report.issues.append(_Issue(
+                            category='跨章节一致性',
+                            severity=Severity.MAJOR,
+                            section=ci.get('section', ''),
+                            location='coherence',
+                            problem=ci['issue'],
+                            original='',
+                            suggestion=ci.get('suggestion', ''),
+                        ))
 
             # 统计问题
             critical = [i for i in report.issues if i.severity == Severity.CRITICAL]
@@ -2031,6 +2158,104 @@ class PaperWriter:
         elif issue.category == 'Discussion逻辑':
             # Discussion逻辑问题: 标记（通常需要重新生成）
             logger.info(f"Discussion logic issue: {issue.problem}")
+
+    def _check_cross_section_coherence(self):
+        """
+        跨章节一致性检查（借鉴 STORM + MotivationThread）
+
+        检查:
+        1. Introduction 承诺 vs Discussion 回应
+        2. Results 数据 vs Discussion 引用
+        3. 关键术语一致性
+        4. 逻辑链完整性
+
+        Returns
+        -------
+        list of dict, [{issue, severity, suggestion}]
+        """
+        issues = []
+
+        if not self.sections:
+            return issues
+
+        # 1. Introduction-Discussion 一致性
+        intro = self.sections.get('introduction', '')
+        disc = self.sections.get('discussion', '')
+
+        if intro and disc:
+            # 提取 Introduction 中的目标句
+            intro_objectives = []
+            for sent in re.split(r'[。！？.!?]', intro):
+                if any(kw in sent for kw in ['本研究', '旨在', '目的', 'this study', 'aim', 'objective']):
+                    intro_objectives.append(sent.strip())
+
+            # 检查 Discussion 是否回应了这些目标
+            for obj in intro_objectives:
+                if len(obj) < 10:
+                    continue
+                # 提取关键词
+                obj_words = set(re.findall(r'[一-鿿]{2,}|[a-zA-Z]{3,}', obj.lower()))
+                disc_words = set(re.findall(r'[一-鿿]{2,}|[a-zA-Z]{3,}', disc.lower()))
+                overlap = len(obj_words & disc_words)
+                if overlap < 2:
+                    issues.append({
+                        'issue': f'Introduction目标未在Discussion中充分回应: "{obj[:50]}..."',
+                        'severity': 'MAJOR',
+                        'suggestion': '在Discussion中添加对该目标的回应段落',
+                    })
+
+        # 2. Results-Discussion 数据一致性
+        results = self.sections.get('results', '')
+        if results and disc:
+            # 提取 Results 中的数据值
+            results_numbers = set(re.findall(r'\d+\.?\d*\s*(?:mg/L|ppm|%|μS/cm)', results))
+            disc_numbers = set(re.findall(r'\d+\.?\d*\s*(?:mg/L|ppm|%|μS/cm)', disc))
+
+            # Discussion 中引用的数据应该在 Results 中出现
+            for num in disc_numbers:
+                if num not in results_numbers:
+                    issues.append({
+                        'issue': f'Discussion中的数据"{num}"在Results中未找到',
+                        'severity': 'MINOR',
+                        'suggestion': '确保Discussion引用的数据与Results一致',
+                    })
+
+        # 3. 关键术语一致性
+        all_sections_text = ' '.join(self.sections.values())
+        # 检查核心术语是否在各章节中一致使用
+        core_terms = ['碳污染物', '多相态', '赋存特征', '碳平衡']
+        for term in core_terms:
+            count = all_sections_text.count(term)
+            if count == 0:
+                continue
+            # 检查每个主要章节是否包含核心术语
+            for sec_name in ['introduction', 'results', 'discussion', 'conclusion']:
+                sec_text = self.sections.get(sec_name, '')
+                if sec_text and term not in sec_text and len(sec_text) > 200:
+                    issues.append({
+                        'issue': f'核心术语"{term}"在{sec_name}中未出现',
+                        'severity': 'MINOR',
+                        'suggestion': f'考虑在{sec_name}中使用术语"{term}"以保持一致性',
+                    })
+
+        # 4. 逻辑链完整性（Introduction→Methods→Results→Discussion）
+        if 'introduction' in self.sections and 'methods' in self.sections:
+            # Introduction 提到的方法应该在 Methods 中有描述
+            intro_methods = set()
+            for kw in ['PCA', 'HCA', 'Pearson', 'Spearman', 'Mann-Whitney', 't检验']:
+                if kw in intro:
+                    intro_methods.add(kw)
+
+            methods_text = self.sections.get('methods', '')
+            for method in intro_methods:
+                if method not in methods_text:
+                    issues.append({
+                        'issue': f'Introduction提到的"{method}"在Methods中未描述',
+                        'severity': 'MAJOR',
+                        'suggestion': f'在Methods中添加{method}的方法描述',
+                    })
+
+        return issues
 
     def _assemble_results(self):
         """组装Results章节"""
