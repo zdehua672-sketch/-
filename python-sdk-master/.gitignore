@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Data files (large/敏感)
+*.xlsx
+*.xls
+*.csv
+*.dat
+
+# Output
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.eps
+*.svg
+
+# Knowledge store generated JSON (保留初始模板，排除运行时生成的数据)
+knowledge_store/feedback_log.json
+knowledge_store/revision_history.json
+knowledge_store/rationale_matrix.json
+
+# RAG index data
+rag_system/data/
+
+# Analysis output
+paper_output/
+analysis_output/
+figures/
+
+# Version history
+versions/
