@@ -1,0 +1,36 @@
+{
+  "source": "selected_option",
+  "motivation_statement": "系统表征校园污水管网固-液-气多相态碳污染物的赋存特征",
+  "red_thread": "系统表征校园污水管网固-液-气多相态碳污染物的赋存特征",
+  "field_problem": "校园污水管网碳污染物的多相态赋存特征缺乏系统研究",
+  "specific_gap": "缺乏固-液-气三相碳污染物的联合分析",
+  "design_response": "首次对校园污水管网进行固-液-气三相碳污染物的系统联合分析",
+  "main_evidence": "多相态采样+多元统计分析",
+  "prioritized_claims": [],
+  "claims_to_avoid": [],
+  "section_consequences": {
+    "Abstract": {
+      "requires": "Open with 校园污水管网碳污染物的多相态赋存特征缺乏系统研究, close with 系统表征校园污水管网固-液-气多相态碳污染物的赋存特征",
+      "avoid": "No results not presented in main text"
+    },
+    "Introduction": {
+      "requires": "Narrow from 校园污水管网碳污染物的多相态赋存特征缺乏系统研究 to 缺乏固-液-气三相碳污染物的联合分析",
+      "avoid": "No literature dump, no skipping gap to methods"
+    },
+    "Discussion": {
+      "requires": "Mechanism explanations supporting 系统表征校园污水管网固-液-气多相态碳污染物的赋存特征",
+      "avoid": "No repeating Results data, no empty platitudes"
+    }
+  },
+  "rejected_options": [
+    {
+      "option": "系统表征校园污水管网固-液-气多相态碳污染物的赋存特征",
+      "reason": "未被选中"
+    },
+    {
+      "option": "系统表征校园污水管网固-液-气多相态碳污染物的赋存特征",
+      "reason": "未被选中"
+    }
+  ],
+  "timestamp": "2026-06-05T09:24:20.371979+00:00"
+}
