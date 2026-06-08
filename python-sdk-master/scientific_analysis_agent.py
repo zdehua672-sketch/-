@@ -819,6 +819,41 @@ class ScientificAnalysisAgent:
         print("\n[Step 6] 识别Discussion要点...")
         discussion_points = self.orchestrator.identify_discussion_points(self.results)
 
+        # Step 6.5: 高级深度分析（交叉分析+异常深挖+数据故事线）
+        print("\n[Step 6.5] 高级深度分析...")
+        try:
+            from advanced_analysis import CrossAnalyzer, AnomalyDeepDiver, DataStoryExtractor
+
+            # 交叉分析
+            cross = CrossAnalyzer(self.df)
+            cross_results = cross.analyze_all()
+            if cross_results:
+                self.results['交叉分析'] = cross_results
+                print(f"  → 交叉分析: {len(cross_results)}个发现")
+                for cr in cross_results[:3]:
+                    print(f"    [{cr.dimension}] {cr.variable}: {cr.insight[:60]}...")
+
+            # 异常值深挖
+            anomaly = AnomalyDeepDiver(self.df)
+            anomaly_results = anomaly.analyze()
+            if anomaly_results:
+                self.results['异常值洞察'] = anomaly_results
+                print(f"  → 异常值深挖: {len(anomaly_results)}个异常")
+
+            # 数据故事线
+            storyteller = DataStoryExtractor(self.results)
+            stories = storyteller.extract_stories()
+            if stories:
+                self.results['数据故事线'] = stories
+                print(f"  → 数据故事线: {len(stories)}个故事")
+                for s in stories[:3]:
+                    print(f"    [{s.title}] {s.finding[:60]}...")
+
+        except ImportError:
+            print("  → 高级分析模块不可用，跳过")
+        except Exception as e:
+            print(f"  → 高级分析出错: {e}")
+
         # Step 7: 输出完整报告
         print("\n[Step 7] 生成分析报告...")
         report = self._build_report(language)

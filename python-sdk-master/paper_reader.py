@@ -555,6 +555,68 @@ class PaperReader:
             for pid, p in self._papers.items()
         ]
 
+    # --- 文献深度学习 ---
+
+    def learn_from_papers(self, paper_ids=None, max_papers=10) -> dict:
+        """
+        从已读论文中学习写作模式（文献深度学习）
+
+        从论文中提取:
+        - 句间逻辑链（数据→机制→文献）
+        - 段落结构（主题句→支撑句→过渡句）
+        - 学术表达模式库
+
+        Parameters
+        ----------
+        paper_ids : list, 指定论文ID（None则学习所有已读论文）
+        max_papers : int, 最大学习数量
+
+        Returns
+        -------
+        dict, {chains_count, structures_count, patterns_count, exported_path}
+        """
+        try:
+            from literature_learner import LiteratureLearner
+        except ImportError:
+            logger.error("literature_learner module not found")
+            return {'error': 'module not found'}
+
+        learner = LiteratureLearner()
+        papers_to_learn = []
+
+        if paper_ids:
+            for pid in paper_ids:
+                if pid in self._papers:
+                    papers_to_learn.append((pid, self._papers[pid]))
+        else:
+            papers_to_learn = list(self._papers.items())[:max_papers]
+
+        print(f"[LiteratureLearner] 从 {len(papers_to_learn)} 篇论文中学习写作模式...")
+
+        for pid, paper in papers_to_learn:
+            # 组装全文
+            full_text = '\n\n'.join(sec.text for sec in paper.sections if sec.text)
+            if len(full_text) > 100:
+                learner.learn_from_text(full_text, title=paper.metadata.title)
+
+        # 导出到知识库
+        export_result = learner.export_to_knowledge_store()
+
+        result = {
+            'papers_learned': len(papers_to_learn),
+            'chains_count': len(learner.all_chains),
+            'structures_count': len(learner.all_structures),
+            'patterns_count': len(learner.all_patterns),
+            'exported_path': export_result.get('patterns_path', ''),
+        }
+
+        print(f"[LiteratureLearner] 学习完成: "
+              f"{result['chains_count']}条逻辑链, "
+              f"{result['structures_count']}个段落结构, "
+              f"{result['patterns_count']}个表达模式")
+
+        return result
+
     # --- Zotero 集成 ---
 
     def read_zotero_library(self, db_path=None, with_pdf_only=True,

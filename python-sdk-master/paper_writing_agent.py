@@ -514,6 +514,12 @@ class DiscussionGenerator:
         self._new_mechanisms = []  # 记录新发现的机制，后续写回知识库
         self.max_correlations = max_correlations  # 最多讨论的相关关系数
         self.max_seasonal = max_seasonal  # 最多讨论的季节差异变量数
+        # 段落引擎（可选）
+        try:
+            from paragraph_engine import ParagraphGenerator
+            self._para_gen = ParagraphGenerator()
+        except ImportError:
+            self._para_gen = None
         # 引用安全防护（可选）
         try:
             from citation_guard import CitationGuard
