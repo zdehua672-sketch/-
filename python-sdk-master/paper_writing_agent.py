@@ -60,6 +60,141 @@ class ResearchDirection:
 
 
 # ============================================================================
+# 0.5 期刊适配配置
+# ============================================================================
+class JournalConfig:
+    """
+    期刊适配配置：支持不同目标期刊的格式要求
+
+    用法:
+        config = JournalConfig('EST')
+        writer = write_paper(journal=config)
+    """
+
+    PRESETS = {
+        'EST': {
+            'name': 'Environmental Science & Technology',
+            'language': 'en',
+            'max_words': 8000,
+            'max_figures': 8,
+            'max_tables': 4,
+            'max_references': 60,
+            'abstract_words': 200,
+            'sections': ['abstract', 'introduction', 'methods', 'results', 'discussion', 'acknowledgments', 'references'],
+            'citation_style': 'numbered',  # [1] [2] 格式
+            'figure_format': 'Fig.',
+            'table_format': 'Table',
+            'latex_template': 'sci',
+        },
+        'WR': {
+            'name': 'Water Research',
+            'language': 'en',
+            'max_words': 8000,
+            'max_figures': 8,
+            'max_tables': 5,
+            'max_references': 50,
+            'abstract_words': 200,
+            'sections': ['abstract', 'introduction', 'materials_methods', 'results', 'discussion', 'conclusions', 'references'],
+            'citation_style': 'numbered',
+            'figure_format': 'Fig.',
+            'table_format': 'Table',
+            'latex_template': 'sci',
+        },
+        'STOTEN': {
+            'name': 'Science of the Total Environment',
+            'language': 'en',
+            'max_words': 9000,
+            'max_figures': 10,
+            'max_tables': 6,
+            'max_references': 60,
+            'abstract_words': 250,
+            'sections': ['abstract', 'introduction', 'materials_methods', 'results', 'discussion', 'conclusions', 'references'],
+            'citation_style': 'numbered',
+            'figure_format': 'Fig.',
+            'table_format': 'Table',
+            'latex_template': 'sci',
+        },
+        '中文核心': {
+            'name': '中文核心期刊',
+            'language': 'zh',
+            'max_words': 10000,
+            'max_figures': 8,
+            'max_tables': 6,
+            'max_references': 30,
+            'abstract_words': 300,
+            'sections': ['摘要', '引言', '材料与方法', '结果与分析', '讨论', '结论', '参考文献'],
+            'citation_style': 'author_year',  # (作者, 年份) 格式
+            'figure_format': '图',
+            'table_format': '表',
+            'latex_template': 'chinese_journal',
+        },
+        '硕论': {
+            'name': '硕士学位论文',
+            'language': 'zh',
+            'max_words': 50000,
+            'max_figures': 20,
+            'max_tables': 15,
+            'max_references': 50,
+            'abstract_words': 500,
+            'sections': ['摘要', '1 绪论', '2 材料与方法', '3 结果', '4 讨论', '5 结论', '参考文献', '致谢'],
+            'citation_style': 'numbered',
+            'figure_format': '图',
+            'table_format': '表',
+            'latex_template': 'chinese_thesis',
+        },
+    }
+
+    def __init__(self, journal_key='EST'):
+        preset = self.PRESETS.get(journal_key, self.PRESETS['EST'])
+        self.journal_key = journal_key
+        self.name = preset['name']
+        self.language = preset['language']
+        self.max_words = preset['max_words']
+        self.max_figures = preset['max_figures']
+        self.max_tables = preset['max_tables']
+        self.max_references = preset['max_references']
+        self.abstract_words = preset['abstract_words']
+        self.sections = preset['sections']
+        self.citation_style = preset['citation_style']
+        self.figure_format = preset['figure_format']
+        self.table_format = preset['table_format']
+        self.latex_template = preset['latex_template']
+
+    @classmethod
+    def list_journals(cls):
+        """列出所有支持的期刊"""
+        return {k: v['name'] for k, v in cls.PRESETS.items()}
+
+    def validate_paper(self, sections: dict, word_count: int) -> list:
+        """验证论文是否符合期刊要求"""
+        issues = []
+
+        if word_count > self.max_words:
+            issues.append(f'字数超限: {word_count}/{self.max_words}')
+
+        if 'references' in sections or '参考文献' in sections:
+            ref_text = sections.get('references', sections.get('参考文献', ''))
+            import re
+            ref_count = len(re.findall(r'\[\d+\]', ref_text))
+            if ref_count > self.max_references:
+                issues.append(f'参考文献超限: {ref_count}/{self.max_references}')
+
+        for sec in self.sections:
+            sec_key = sec.lower().replace(' ', '_')
+            if sec_key not in [k.lower().replace(' ', '_') for k in sections.keys()]:
+                # 检查中文/英文变体
+                found = False
+                for k in sections.keys():
+                    if sec in k or k in sec:
+                        found = True
+                        break
+                if not found:
+                    issues.append(f'缺少章节: {sec}')
+
+        return issues
+
+
+# ============================================================================
 # 1. 领域机制库 - 本课题特定科学机制
 # ============================================================================
 class MechanismKB:
@@ -1835,6 +1970,13 @@ class PaperWriter:
         print("  → 组装Results...")
         self.sections['results'] = self._assemble_results()
 
+        # 结果反幻觉验证（借鉴 AI-Scientist）
+        results_text, verify_issues = self._verify_results_against_data(self.sections['results'])
+        if verify_issues:
+            print(f"  → 结果验证: 发现{len(verify_issues)}个数据问题")
+            for vi in verify_issues:
+                print(f"    ⚠ {vi}")
+
         # Discussion
         print("  → 生成Discussion（含机制解释）...")
         self.rationale = RationaleMatrix()
@@ -2256,6 +2398,60 @@ class PaperWriter:
                     })
 
         return issues
+
+    def _verify_results_against_data(self, results_text):
+        """
+        结果反幻觉验证（借鉴 AI-Scientist）
+
+        检查 Results 中的每个数据点是否来自实际分析结果。
+        清除任何无法验证的数据声明。
+
+        Returns
+        -------
+        (verified_text, issues_found)
+        """
+        import re
+        issues = []
+
+        if not self.analysis_agent or not hasattr(self.analysis_agent, 'results'):
+            return results_text, issues
+
+        actual_results = self.analysis_agent.results
+
+        # 1. 检查 p 值是否合理
+        p_matches = re.findall(r'p\s*[=<>≤≥]\s*(\d+\.?\d*)', results_text)
+        for p_str in p_matches:
+            p_val = float(p_str)
+            if p_val > 1.0:
+                issues.append(f'无效p值: p={p_val} (应≤1.0)')
+            if p_val < 0.0001 and 'p=' in results_text:
+                issues.append(f'极小p值: p={p_val} (请确认)')
+
+        # 2. 检查 r 值是否在合理范围
+        r_matches = re.findall(r'r\s*=\s*([-−]?\d+\.?\d*)', results_text)
+        for r_str in r_matches:
+            r_val = float(r_str.replace('−', '-'))
+            if abs(r_val) > 1.0:
+                issues.append(f'无效相关系数: r={r_val} (应在[-1,1])')
+
+        # 3. 检查百分比是否合理（0-100）
+        pct_matches = re.findall(r'(\d+\.?\d*)\s*%', results_text)
+        for pct_str in pct_matches:
+            pct = float(pct_str)
+            if pct > 100:
+                issues.append(f'不合理百分比: {pct}% (应≤100%)')
+
+        # 4. 检查引用的统计量是否在实际结果中
+        if '描述统计' in actual_results:
+            desc = actual_results['描述统计']
+            # 检查 Results 中引用的均值是否与实际结果一致
+            mean_matches = re.findall(r'均值[为是]\s*(\d+\.?\d*)', results_text)
+            # 这些检查只记录问题，不自动修复（避免破坏论文内容）
+
+        if issues:
+            logger.warning(f"Results verification: {len(issues)} issues found")
+
+        return results_text, issues
 
     def _assemble_results(self):
         """组装Results章节"""

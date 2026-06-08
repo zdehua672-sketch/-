@@ -441,7 +441,7 @@ class AcademicTranslator:
     可以配合 LLM 使用以获得更好的翻译质量。
     """
 
-    # 学术术语对照表
+    # 学术术语对照表（扩展版）
     TERM_MAP = {
         # 碳污染物领域
         '污水管网': 'sewage network',
@@ -457,10 +457,14 @@ class AcademicTranslator:
         '总有机碳': 'total organic carbon (TOC)',
         '化学需氧量': 'chemical oxygen demand (COD)',
         '总氮': 'total nitrogen (TN)',
+        '总磷': 'total phosphorus (TP)',
         '铵态氮': 'ammonium nitrogen (NH4+-N)',
+        '硝态氮': 'nitrate nitrogen (NO3--N)',
         '产甲烷': 'methanogenesis',
         '甲烷': 'methane (CH4)',
         '二氧化碳': 'carbon dioxide (CO2)',
+        '氧化亚氮': 'nitrous oxide (N2O)',
+        '挥发性有机物': 'volatile organic compounds (VOCs)',
         '主成分分析': 'principal component analysis (PCA)',
         '层次聚类分析': 'hierarchical cluster analysis (HCA)',
         '相关性分析': 'correlation analysis',
@@ -475,6 +479,14 @@ class AcademicTranslator:
         '教学区': 'teaching zone',
         '生活区': 'residential zone',
         '餐饮区': 'dining zone',
+        '管道沉积物': 'pipeline sediment',
+        '生物膜': 'biofilm',
+        '厌氧': 'anaerobic',
+        '好氧': 'aerobic',
+        '微生物': 'microorganism',
+        '降解': 'degradation',
+        '转化': 'transformation',
+        '迁移': 'migration',
         # 通用学术
         '研究背景': 'research background',
         '研究现状': 'research status',
@@ -489,26 +501,64 @@ class AcademicTranslator:
         '显著性': 'significance',
         '置信区间': 'confidence interval',
         '样本量': 'sample size',
+        '表明': 'indicate',
+        '揭示': 'reveal',
+        '阐明': 'elucidate',
+        '探讨': 'investigate',
+        '分析': 'analyze',
+        '影响': 'influence',
+        '控制': 'control',
+        '驱动因素': 'driving factor',
+        '关键因素': 'key factor',
+        '机制': 'mechanism',
+    }
+
+    # 学术句式对照表（借鉴 academic-writing/03-sentence-bank.md）
+    SENTENCE_PATTERNS = {
+        # Introduction 句式
+        '近年来，随着...的加快': 'In recent years, with the acceleration of...',
+        '研究表明': 'Studies have shown that',
+        '然而，现有研究': 'However, existing studies',
+        '针对上述不足': 'To address these shortcomings',
+        '本研究以...为研究对象': 'This study investigated...',
+        '为...提供科学依据': 'to provide scientific basis for...',
+        # Results 句式
+        '结果表明': 'The results showed that',
+        '呈显著正相关': 'showed a significant positive correlation',
+        '呈显著负相关': 'showed a significant negative correlation',
+        '显著高于': 'was significantly higher than',
+        '显著低于': 'was significantly lower than',
+        '无显著差异': 'showed no significant difference',
+        # Discussion 句式
+        '这一结果与...一致': 'This finding is consistent with...',
+        '可能的原因是': 'The possible reason is that',
+        '归因于': 'can be attributed to',
+        '这表明': 'This indicates that',
+        '综上所述': 'In summary',
     }
 
     def translate_zh_to_en(self, text: str) -> str:
-        """中文学术文本→英文（术语替换+句式转换）"""
+        """中文学术文本→英文（句式替换+术语替换+标点转换）"""
         result = text
 
-        # 1. 术语替换
-        for zh, en in self.TERM_MAP.items():
+        # 1. 句式替换（先替换长短语，避免被术语替换截断）
+        for zh, en in self.SENTENCE_PATTERNS.items():
             result = result.replace(zh, en)
 
-        # 2. 中文标点→英文标点
+        # 2. 术语替换
+        for zh, en in sorted(self.TERM_MAP.items(), key=lambda x: -len(x[0])):
+            result = result.replace(zh, en)
+
+        # 3. 中文标点→英文标点
         punct_map = {'，': ', ', '。': '. ', '；': '; ', '：': ': ',
                      '（': '(', '）': ')', '"': '"', '"': '"',
                      ''': "'", ''': "'", '、': ', '}
         for zh_p, en_p in punct_map.items():
             result = result.replace(zh_p, en_p)
 
-        # 3. 删除中文特有的语气词
+        # 4. 删除中文特有的语气词（仅在独立出现时）
         for particle in ['的', '了', '着', '过', '呢', '吧', '啊']:
-            result = re.sub(rf'\b{particle}\b', '', result)
+            result = re.sub(rf'(?<=[一-鿿])\b{particle}\b(?=[，。；：])', '', result)
 
         return result.strip()
 
