@@ -351,7 +351,7 @@ def export_zotero_papers(
     # 导出独立 PDF 附件（没有父条目的 PDF）
     standalone_cur = conn.execute("""
         SELECT i.itemID, i.key, i.dateAdded, i.dateModified,
-               ia.title AS filename, ia.path, ia.contentType
+               ia.path, ia.contentType
         FROM items i
         JOIN itemAttachments ia ON i.itemID = ia.itemID
         WHERE i.itemTypeID = 14
@@ -370,7 +370,7 @@ def export_zotero_papers(
         try:
             raw_path = row["path"] or ""
             resolved = _resolve_attachment_path(raw_path)
-            filename = row["filename"] or Path(resolved).name
+            filename = Path(resolved).name if resolved else "unknown.pdf"
             meta_from_name = _extract_meta_from_filename(filename)
 
             meta = ZoteroPaper(

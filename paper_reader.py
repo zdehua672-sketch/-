@@ -653,28 +653,52 @@ def read_local_text(file_path: str) -> PaperContent:
 
 
 def read_local_pdf(file_path: str) -> PaperContent:
-    """从本地PDF文件读取论文"""
+    """从本地PDF文件读取论文（强化版：使用高级解析提取元数据+参考文献）"""
+    path = Path(file_path)
+
+    # 优先使用高级解析
+    advanced_result = None
     try:
-        from rag_system.ingestion.pdf_parser import parse_pdf
-        text = parse_pdf(file_path)
+        from rag_system.ingestion.pdf_parser import parse_pdf_advanced
+        advanced_result = parse_pdf_advanced(file_path)
+        text = advanced_result["text"]
     except Exception as e:
-        logger.warning(f"PDF parse error: {e}")
-        text = ""
+        logger.warning(f"Advanced PDF parse failed, falling back: {e}")
+        try:
+            from rag_system.ingestion.pdf_parser import parse_pdf
+            text = parse_pdf(file_path)
+        except Exception as e2:
+            logger.warning(f"PDF parse error: {e2}")
+            text = ""
 
     if not text:
         return read_local_text(file_path)
 
-    path = Path(file_path)
     content = PaperContent()
     content.metadata.paper_id = path.stem
     content.metadata.source = 'local_pdf'
 
-    # 尝试提取标题（第一行非空文本）
-    lines = [l.strip() for l in text.split('\n') if l.strip()]
-    if lines:
-        content.metadata.title = lines[0][:200]
+    # 从高级解析结果中提取元数据
+    if advanced_result:
+        content.metadata.title = advanced_result.get("title", "")[:200] or path.stem
+        content.metadata.authors = advanced_result.get("authors", [])
+        content.metadata.doi = advanced_result.get("doi", "")
+        content.metadata.abstract = advanced_result.get("abstract", "")
 
-    # 尝试用paper_structurer解析
+        # 参考文献
+        refs = advanced_result.get("references", [])
+        content.references = refs
+
+        # 如果有摘要，添加为独立 section
+        if advanced_result.get("abstract"):
+            content.sections.append(PaperSection(
+                section_type="abstract", title="Abstract",
+                text=advanced_result["abstract"],
+            ))
+    else:
+        content.metadata.title = path.stem
+
+    # 尝试用paper_structurer解析IMRaD结构
     try:
         from rag_system.ingestion.paper_structurer import detect_imrad_sections
         imrad = detect_imrad_sections(text)

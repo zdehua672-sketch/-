@@ -339,9 +339,11 @@ class DiscussionGenerator:
             self.memory = KnowledgeMemory()
         except Exception:
             self.memory = None
+        # 收集所有使用的引用（用于生成参考文献列表）
+        self.used_references = []  # list[dict]: {text, authors, year, title, doi, source}
 
     def _search_literature(self, query, max_results=2):
-        """通过RAG检索相关文献，返回引用列表"""
+        """通过RAG检索相关文献，返回引用列表，并记录到 used_references"""
         if not self.rag:
             return []
         try:
@@ -351,8 +353,20 @@ class DiscussionGenerator:
                 title = r.get('title', '')
                 authors = r.get('authors', '')
                 year = r.get('year', '')
+                doi = r.get('doi', '')
                 if title:
-                    refs.append(f'{authors} ({year}) {title}' if authors and year else title)
+                    ref_text = f'{authors} ({year}) {title}' if authors and year else title
+                    refs.append(ref_text)
+                    # 记录引用（去重）
+                    if not any(existing.get('title') == title for existing in self.used_references):
+                        self.used_references.append({
+                            'text': ref_text,
+                            'authors': authors if isinstance(authors, str) else ', '.join(authors) if authors else '',
+                            'year': int(year) if str(year).isdigit() else 0,
+                            'title': title,
+                            'doi': doi,
+                            'source': 'rag',
+                        })
             return refs
         except Exception:
             return []
@@ -553,6 +567,12 @@ class DiscussionGenerator:
                         lines.append(f'{mech["mechanism"]}')
                         for ref in mech.get('references', []):
                             lines.append(f'{ref}也报道了类似的相关关系。')
+                            # 记录机制引用到 used_references
+                            if not any(r.get('text') == ref for r in self.used_references):
+                                self.used_references.append({
+                                    'text': ref, 'authors': '', 'year': 0,
+                                    'title': ref, 'doi': '', 'source': 'mechanism_kb',
+                                })
                     else:
                         # 尝试RAG检索相关文献
                         rag_refs = self._search_literature(
@@ -1166,13 +1186,13 @@ class PaperWriter:
                 rag = RAGEngine()
             except Exception:
                 pass
-        disc_gen = DiscussionGenerator(
+        self._discussion_gen = DiscussionGenerator(
             self.analysis_agent.results,
             self.analysis_agent.captions,
             rationale_matrix=self.rationale,
             rag_engine=rag,
         )
-        self.sections['discussion'] = disc_gen.generate(language)
+        self.sections['discussion'] = self._discussion_gen.generate(language)
 
         # Conclusion
         print("  → 生成Conclusion...")
@@ -1349,10 +1369,57 @@ class PaperWriter:
                 parts.append(content)
                 parts.append('\n---\n')
 
-        # 参考文献占位
-        parts.append('# 参考文献\n\n[待补充]\n')
+        # 生成参考文献列表
+        refs_section = self._generate_references_section()
+        parts.append(refs_section)
 
         return '\n'.join(parts)
+
+    def _generate_references_section(self):
+        """从 DiscussionGenerator 收集的引用中生成正式参考文献列表"""
+        # 收集所有引用（从 DiscussionGenerator 和 IntroductionGenerator）
+        all_refs = []
+
+        # 从 DiscussionGenerator 获取
+        if hasattr(self, '_discussion_gen') and hasattr(self._discussion_gen, 'used_references'):
+            all_refs.extend(self._discussion_gen.used_references)
+
+        # 去重（按 title）
+        seen = set()
+        unique_refs = []
+        for ref in all_refs:
+            title = ref.get('title', '').strip()
+            if title and title not in seen:
+                seen.add(title)
+                unique_refs.append(ref)
+
+        if not unique_refs:
+            return '# 参考文献\n\n[待补充]\n'
+
+        # 按年份降序排列
+        unique_refs.sort(key=lambda r: r.get('year', 0), reverse=True)
+
+        # 生成参考文献列表
+        lines = ['# 参考文献\n']
+        for i, ref in enumerate(unique_refs, 1):
+            authors = ref.get('authors', '')
+            year = ref.get('year', 0)
+            title = ref.get('title', '')
+            doi = ref.get('doi', '')
+
+            # 格式: [序号] 作者. 标题. 年份.
+            entry = f'[{i}] '
+            if authors:
+                entry += f'{authors}. '
+            entry += f'{title}. '
+            if year:
+                entry += f'{year}.'
+            if doi:
+                entry += f' DOI: {doi}'
+            lines.append(entry)
+
+        lines.append('')
+        return '\n'.join(lines)
 
 
 # ============================================================================

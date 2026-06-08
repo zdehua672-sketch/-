@@ -504,6 +504,147 @@ class AcademicPipeline:
             self._log("step4_write", msg)
             return msg
 
+    def step4_write_review_loop(self, data_file: str = None, output_dir: str = None,
+                                language: str = 'zh', max_rounds: int = 2,
+                                target_score: float = 7.0) -> dict:
+        """
+        写→审→改 自动循环
+
+        写作 -> 审稿 -> 根据 CRITICAL/MAJOR 问题修改 -> 再审 -> 直到评分达标或循环上限
+
+        Parameters
+        ----------
+        data_file : str, 数据文件路径
+        output_dir : str, 输出目录
+        language : str, 'zh'/'en'
+        max_rounds : int, 最大循环次数
+        target_score : float, 目标综合评分 (0-10)
+
+        Returns
+        -------
+        dict: {final_paper, rounds, final_score, issues_fixed}
+        """
+        import re as _re
+
+        print(f"[Pipeline] Step 4+: 写→审→改循环 (最多{max_rounds}轮, 目标{target_score}分)")
+        output_dir = output_dir or os.path.join(self.base_dir, 'paper_output')
+
+        # 第一轮：生成论文
+        paper_text = self.step4_write(data_file, output_dir, language)
+        if paper_text.startswith("论文生成失败"):
+            return {"final_paper": paper_text, "rounds": 0, "final_score": 0, "issues_fixed": 0}
+
+        total_fixed = 0
+
+        for round_num in range(1, max_rounds + 1):
+            print(f"\n{'='*50}")
+            print(f"  审稿第 {round_num}/{max_rounds} 轮")
+            print(f"{'='*50}")
+
+            # 审稿
+            review = self.step5_review(paper_text, language)
+            summary = review["summary"]
+            issues = review["issues"]
+
+            # 计算综合评分
+            scores = review.get("scores", {})
+            if scores:
+                avg_score = sum(scores.values()) / len(scores)
+            else:
+                avg_score = 10.0 - summary["by_severity"].get("CRITICAL", 0) * 2.0 \
+                           - summary["by_severity"].get("MAJOR", 0) * 1.0 \
+                           - summary["by_severity"].get("MINOR", 0) * 0.3
+                avg_score = max(0, avg_score)
+
+            print(f"  评分: {avg_score:.1f}/{target_score}")
+
+            # 检查是否达标
+            if avg_score >= target_score:
+                print(f"  ✓ 评分达标，结束循环")
+                break
+
+            # 提取需要修复的 CRITICAL 和 MAJOR 问题
+            critical_issues = [i for i in issues if i.severity.value == "CRITICAL"]
+            major_issues = [i for i in issues if i.severity.value == "MAJOR"]
+
+            if not critical_issues and not major_issues:
+                print(f"  ✓ 无 CRITICAL/MAJOR 问题，结束循环")
+                break
+
+            # 生成修改指令
+            fix_instructions = []
+            for issue in critical_issues[:5]:
+                fix_instructions.append(f"[CRITICAL] {issue.category}: {issue.problem}\n  建议: {issue.suggestion}")
+            for issue in major_issues[:5]:
+                fix_instructions.append(f"[MAJOR] {issue.category}: {issue.problem}\n  建议: {issue.suggestion}")
+
+            print(f"  需修复: {len(critical_issues)} CRITICAL + {len(major_issues)} MAJOR")
+
+            # 自动修复（针对引用问题）
+            fixed_count = 0
+            for issue in critical_issues + major_issues:
+                if issue.category == '引用质量':
+                    if '编号' in issue.problem:
+                        # 孤儿引用：在参考文献中补充占位
+                        orphans = _re.findall(r'\d+', issue.problem.split(':')[-1]) if ':' in issue.problem else []
+                        if orphans:
+                            fixed_count += self._fix_orphan_citations(paper_text, orphans)
+                    elif '未在正文' in issue.problem:
+                        # 未使用引用：删除多余条目
+                        unused = _re.findall(r'\d+', issue.problem.split(':')[-1]) if ':' in issue.problem else []
+                        if unused:
+                            paper_text = self._remove_unused_references(paper_text, unused)
+                            fixed_count += len(unused)
+
+            total_fixed += fixed_count
+
+            if fixed_count > 0:
+                print(f"  自动修复了 {fixed_count} 个引用问题")
+                # 保存修复后的论文
+                paper_path = os.path.join(output_dir, f'paper_{language}.md')
+                with open(paper_path, 'w', encoding='utf-8') as f:
+                    f.write(paper_text)
+            else:
+                print(f"  无法自动修复，需要手动处理")
+                break
+
+        self._log("step4_review_loop", f"循环完成: {total_fixed}个问题已修复", {
+            "rounds": round_num if 'round_num' in dir() else 0,
+            "fixed": total_fixed,
+        })
+
+        return {
+            "final_paper": paper_text,
+            "rounds": round_num if 'round_num' in dir() else 0,
+            "final_score": avg_score if 'avg_score' in dir() else 0,
+            "issues_fixed": total_fixed,
+        }
+
+    def _fix_orphan_citations(self, paper_text: str, orphan_nums: list) -> int:
+        """为孤儿引用在参考文献末尾补充占位条目"""
+        import re as _re
+        fixed = 0
+        for num in orphan_nums:
+            num = int(num)
+            # 在参考文献区域查找合适位置插入
+            ref_match = _re.search(r'(#[\s]*参考文献\s*\n)', paper_text)
+            if ref_match:
+                # 在最后一个参考文献条目后插入
+                insert_pos = len(paper_text) - 1
+                placeholder = f"\n[{num}] [待补充 - 自动插入的占位条目]"
+                paper_text = paper_text[:insert_pos] + placeholder + paper_text[insert_pos:]
+                fixed += 1
+        return fixed
+
+    def _remove_unused_references(self, paper_text: str, unused_nums: list) -> str:
+        """从参考文献列表中删除未使用的条目"""
+        import re as _re
+        for num in unused_nums:
+            # 匹配 [N] 开头的行并删除
+            pattern = _re.compile(rf'^\s*\[{num}\]\s+.*$', _re.MULTILINE)
+            paper_text = pattern.sub('', paper_text)
+        return paper_text
+
     # ============================================================
     # Step 5: 审稿
     # ============================================================

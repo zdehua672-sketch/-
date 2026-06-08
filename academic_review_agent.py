@@ -1269,10 +1269,59 @@ class CitationQualityChecker:
         if not ref_lines and not ref_patterns:
             return issues
 
+        # 孤儿引用检测：正文中引用了但参考文献列表中没有的编号
+        if ref_lines and ref_patterns:
+            cited_nums = set()
+            for c in ref_patterns:
+                for part in re.split(r'[,]', c):
+                    if '-' in part:
+                        start, end = part.split('-')
+                        for i in range(int(start), int(end) + 1):
+                            cited_nums.add(i)
+                    else:
+                        cited_nums.add(int(part))
+
+            # 参考文献列表中的编号
+            ref_nums = set()
+            for line in ref_lines:
+                m = re.match(r'\[(\d+)\]', line)
+                if m:
+                    ref_nums.add(int(m.group(1)))
+
+            orphan_cites = cited_nums - ref_nums
+            unused_refs = ref_nums - cited_nums
+
+            if orphan_cites:
+                sorted_orphans = sorted(orphan_cites)[:10]
+                issues.append(Issue(
+                    category='引用质量', severity=Severity.CRITICAL,
+                    section='正文', location='引用编号',
+                    problem=f'正文中引用了{len(orphan_cites)}个参考文献列表中不存在的编号: {sorted_orphans}',
+                    original=f'孤立引用: {sorted_orphans}',
+                    suggestion='检查引用编号是否正确，或补充缺失的参考文献条目',
+                    root_cause='引用编号与参考文献列表不匹配',
+                    fix_action='逐一核对孤立引用编号，补充或修正参考文献列表',
+                    downstream_impact='审稿人会认为论文不严谨，可能直接拒稿',
+                    teaching_note='每一条正文引用都必须在参考文献列表中有对应条目。',
+                ))
+
+            if unused_refs:
+                sorted_unused = sorted(unused_refs)[:10]
+                issues.append(Issue(
+                    category='引用质量', severity=Severity.MINOR,
+                    section='references', location='参考文献',
+                    problem=f'参考文献列表中有{len(unused_refs)}篇未在正文中引用: {sorted_unused}',
+                    original=f'未使用引用: {sorted_unused}',
+                    suggestion='在正文中引用这些文献，或从参考文献列表中删除',
+                    root_cause='参考文献列表包含未使用的条目',
+                    fix_action='删除未使用的参考文献，或在合适位置添加引用',
+                    downstream_impact='冗余参考文献影响论文精炼度',
+                ))
+
         # 如果有完整的参考文献列表，做深度审计
         if ref_lines:
             try:
-                result = audit_citations_batch(ref_lines, verify=False)
+                result = audit_citations_batch(ref_lines[:50], verify=True)
                 overall = result['overall_score']
                 dead = result['dead_count']
                 gap = result.get('gap_analysis', {})
