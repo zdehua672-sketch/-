@@ -267,6 +267,72 @@ class ReviewKB:
     OVERCLAIM_ZH = ['首次发现', '证实', '确证', '重大突破', '开创性',
                     '革命性', '前所未有', '根本性']
 
+    # ===== Nature 级替代表（来自 nature-polishing skill Phrasebank） =====
+
+    # 证据强度动词分级（替代笼统的 "show/prove"）
+    EVIDENCE_VERBS = {
+        'strong': ['show', 'demonstrate', 'establish', 'reveal', 'identify'],
+        'moderate': ['suggest', 'indicate', 'support the view that',
+                     'are consistent with', 'point to'],
+        'speculative': ['may reflect', 'could arise from', 'appears to',
+                        'seems likely', 'might be explained by'],
+    }
+
+    # 差距语言（替代 "no one has ever studied"）
+    GAP_LANGUAGE = {
+        'good': ['remains poorly understood', 'has not been examined in ...',
+                 'has received limited attention', 'few studies have addressed ...',
+                 'evidence remains sparse for ...'],
+        'avoid': ['no one has ever studied', 'completely unknown',
+                  'ignored by all previous work'],
+    }
+
+    # 与前人工作的比较表达
+    COMPARISON_LANGUAGE = {
+        'align': ['These results are consistent with ...',
+                  'This finding accords with ...',
+                  'Our observations broadly support ...'],
+        'diverge': ['In contrast to earlier reports, ...',
+                    'This finding differs from ...',
+                    'One possible reason for this discrepancy is ...'],
+    }
+
+    # 局限性语言（替代空洞的 "有待进一步研究"）
+    LIMITATION_LANGUAGE = [
+        'These findings should be interpreted with caution because ...',
+        'A limitation of this study is that ...',
+        'The generalisability of these results is limited by ...',
+        'We cannot exclude the possibility that ...',
+        'Another source of uncertainty is ...',
+    ]
+
+    # 段落间过渡（替代重复的 "This suggests"）
+    PARAGRAPH_LINKS = {
+        'restatement': 'Such heterogeneity ...',           # 重述名词
+        'definite': 'The resulting gradient ...',          # 定指名词短语
+        'participial': 'Taken together, ...',              # 分词总结
+        'zero': '',                                         # 逻辑明显时不用连接词
+    }
+
+    # ===== 结构性失败模式诊断（来自 nature-polishing skill） =====
+    STRUCTURAL_FAILURE_MODES = {
+        'wrong_paper_type': '论文类型逻辑错误（如综述写成实验论文）',
+        'missing_gap': '缺少研究空白或定位不清',
+        'claim_without_evidence': '有论断无证据支撑',
+        'evidence_without_claim': '有数据无论断统领',
+        'missing_boundary': '缺少局限性或边界说明',
+        'results_discussion_mixed': '结果与讨论混在一起',
+        'weak_title_abstract': '标题或摘要信号弱',
+        'terminology_inconsistent': '术语/缩写/单位/符号不一致',
+        'sentence_clutter_only': '仅有句法层面的杂乱',
+    }
+
+    # 修复优先级顺序
+    FIX_PRIORITY = [
+        'paper_type', 'section_job', 'paragraph_logic',
+        'claim_evidence_boundary', 'sentence_polish'
+    ]
+
 
 # ============================================================================
 # 章节解析器
@@ -1375,25 +1441,175 @@ class CitationQualityChecker:
 
 
 # ============================================================================
+# Nature 结构性诊断（来自 nature-polishing skill failure-modes）
+# ============================================================================
+class StructuralDiagnosisChecker:
+    """
+    基于 nature-polishing skill 的结构性失败模式诊断。
+    优先级：paper_type → section_job → paragraph_logic → claim/evidence/boundary → sentence_polish
+    不在句法层面修补结构问题。
+    """
+
+    @staticmethod
+    def check(sections, language='en'):
+        issues = []
+        section_names = list(sections.keys())
+        section_bodies = {k: v.body if hasattr(v, 'body') else str(v) for k, v in sections.items()}
+
+        # 1. 检查必要章节是否存在
+        required_sections = {
+            'en': ['introduction', 'methods', 'results', 'discussion', 'conclusion'],
+            'zh': ['引言', '方法', '结果', '讨论', '结论'],
+        }
+        req = required_sections.get(language, required_sections['en'])
+        present = [s.lower() for s in section_names]
+        for rs in req:
+            if not any(rs in p for p in present):
+                issues.append(Issue(
+                    category='Nature结构诊断',
+                    severity=Severity.MAJOR,
+                    section='全局',
+                    location='章节结构',
+                    problem=f'缺少必要章节: {rs}',
+                    original='',
+                    suggestion=f'补充{rs}章节',
+                    root_cause='wrong_paper_type',
+                    fix_action='补充缺失章节',
+                    downstream_impact='审稿人可能直接拒稿',
+                    teaching_note='Nature 系列要求完整的 IMRaD 结构',
+                ))
+
+        # 2. 检查 Introduction 是否包含 gap 语句
+        intro_key = None
+        for k in section_names:
+            if 'intro' in k.lower() or '引言' in k:
+                intro_key = k
+                break
+        if intro_key:
+            intro_text = section_bodies[intro_key].lower()
+            gap_indicators = ['however', 'remains', 'poorly understood', 'few studies',
+                              'limited', 'gap', 'not yet', 'has not been',
+                              '然而', '尚不清楚', '研究不足', '空白', '鲜有', '尚未']
+            has_gap = any(g in intro_text for g in gap_indicators)
+            if not has_gap:
+                issues.append(Issue(
+                    category='Nature结构诊断',
+                    severity=Severity.MAJOR,
+                    section=intro_key,
+                    location='Introduction',
+                    problem='Introduction 缺少明确的研究空白（gap）陈述',
+                    original='',
+                    suggestion='在 Introduction 中明确指出 "However, ... remains poorly understood" 或类似 gap 语句',
+                    root_cause='missing_gap',
+                    fix_action='在 Introduction 末段前插入 gap 段落',
+                    downstream_impact='读者无法理解本研究的必要性',
+                    teaching_note='Nature-polishing: Introduction 必须回答 "What is still missing?"',
+                ))
+
+        # 3. 检查 Results 是否混入讨论
+        results_key = None
+        for k in section_names:
+            if 'result' in k.lower() or '结果' in k:
+                results_key = k
+                break
+        if results_key:
+            results_text = section_bodies[results_key].lower()
+            discussion_markers = ['this suggests', 'this indicates', 'one explanation',
+                                  'a possible reason', 'this may be due to',
+                                  'the mechanism', 'we speculate',
+                                  '这表明', '可能原因', '机制可能是', '推测']
+            mixed_count = sum(1 for m in discussion_markers if m in results_text)
+            if mixed_count >= 3:
+                issues.append(Issue(
+                    category='Nature结构诊断',
+                    severity=Severity.MAJOR,
+                    section=results_key,
+                    location='Results',
+                    problem=f'Results 中发现 {mixed_count} 处讨论性表述，结果与讨论混合',
+                    original='',
+                    suggestion='将解释性语句移至 Discussion，Results 只陈述观察到的事实',
+                    root_cause='results_discussion_mixed',
+                    fix_action='分离 Results 和 Discussion',
+                    downstream_impact='混淆事实与推测，降低可信度',
+                    teaching_note='Nature-polishing: Results 回答 "What was observed?"，Discussion 回答 "What does it mean?"',
+                ))
+
+        # 4. 检查 Discussion 是否有边界/局限性
+        disc_key = None
+        for k in section_names:
+            if 'discuss' in k.lower() or '讨论' in k:
+                disc_key = k
+                break
+        if disc_key:
+            disc_text = section_bodies[disc_key].lower()
+            boundary_indicators = ['limitation', 'caveat', 'caution', 'cannot exclude',
+                                   'should be interpreted', 'generalisability',
+                                   '局限', '限制', '谨慎', '不能排除', '推广性']
+            has_boundary = any(b in disc_text for b in boundary_indicators)
+            if not has_boundary:
+                issues.append(Issue(
+                    category='Nature结构诊断',
+                    severity=Severity.MINOR,
+                    section=disc_key,
+                    location='Discussion',
+                    problem='Discussion 缺少局限性或边界说明',
+                    original='',
+                    suggestion='添加 "These findings should be interpreted with caution because ..." 或 "A limitation of this study is that ..."',
+                    root_cause='missing_boundary',
+                    fix_action='在 Discussion 末段前插入 Limitations 段落',
+                    downstream_impact='审稿人会质疑作者的学术严谨性',
+                    teaching_note='Nature-polishing: Discussion 必须回答 "What limitations constrain interpretation?"',
+                ))
+
+        # 5. 术语一致性检查（跨章节）
+        all_text = ' '.join(section_bodies.values())
+        # 检测常见不一致模式
+        inconsistencies = [
+            (['CO₂', 'CO2', 'CO_2'], 'CO₂ 写法不一致'),
+            (['CH₄', 'CH4', 'CH_4'], 'CH₄ 写法不一致'),
+            (['N₂O', 'N2O', 'N_2O'], 'N₂O 写法不一致'),
+        ]
+        for variants, msg in inconsistencies:
+            found = [v for v in variants if v in all_text]
+            if len(found) > 1:
+                issues.append(Issue(
+                    category='Nature结构诊断',
+                    severity=Severity.MINOR,
+                    section='全局',
+                    location='术语一致性',
+                    problem=f'{msg}: 使用了 {found}',
+                    original=str(found),
+                    suggestion=f'统一为 {found[0]}',
+                    root_cause='terminology_inconsistent',
+                    fix_action=f'全文替换为 {found[0]}',
+                    downstream_impact='显得不专业',
+                    teaching_note='Nature-polishing: 构建 Terminology Ledger，全文强制一致',
+                ))
+
+        return issues
+
+
+# ============================================================================
 # 综合评分系统
 # ============================================================================
 class Scorer:
     """论文质量评分"""
 
     DIMENSIONS = {
-        'SCI格式': {'weight': 0.10, 'description': '格式规范性'},
-        '中文格式': {'weight': 0.08, 'description': '中文格式规范'},
-        '错别字': {'weight': 0.06, 'description': '拼写正确性'},
-        '学术语法': {'weight': 0.06, 'description': '语言学术性'},
-        '引文规范': {'weight': 0.07, 'description': '引用规范性'},
-        '图表规范': {'weight': 0.07, 'description': '图表规范性'},
-        '数据逻辑': {'weight': 0.10, 'description': '数据一致性'},
-        'Discussion逻辑': {'weight': 0.08, 'description': '讨论深度'},
+        'SCI格式': {'weight': 0.08, 'description': '格式规范性'},
+        '中文格式': {'weight': 0.06, 'description': '中文格式规范'},
+        '错别字': {'weight': 0.05, 'description': '拼写正确性'},
+        '学术语法': {'weight': 0.05, 'description': '语言学术性'},
+        '引文规范': {'weight': 0.06, 'description': '引用规范性'},
+        '图表规范': {'weight': 0.06, 'description': '图表规范性'},
+        '数据逻辑': {'weight': 0.08, 'description': '数据一致性'},
+        'Discussion逻辑': {'weight': 0.07, 'description': '讨论深度'},
         'AI痕迹': {'weight': 0.04, 'description': '自然度'},
         '学术重复': {'weight': 0.04, 'description': '原创性'},
-        '推理链完整性': {'weight': 0.08, 'description': '推理链完整性'},
+        '推理链完整性': {'weight': 0.07, 'description': '推理链完整性'},
         '逻辑跳跃': {'weight': 0.05, 'description': '逻辑严谨性'},
-        '引用质量': {'weight': 0.08, 'description': 'DOI有效性+引用类型多样性'},
+        '引用质量': {'weight': 0.07, 'description': 'DOI有效性+引用类型多样性'},
+        'Nature结构诊断': {'weight': 0.10, 'description': '结构完整性（Nature标准）'},
     }
 
     @classmethod
@@ -1448,6 +1664,7 @@ class AcademicReviewAgent:
         ('推理链完整性', RationaleChecker),
         ('逻辑跳跃', LogicalLeapChecker),
         ('引用质量', CitationQualityChecker),
+        ('Nature结构诊断', StructuralDiagnosisChecker),  # nature-polishing skill
     ]
 
     def __init__(self, paper_type='sci', language='auto'):

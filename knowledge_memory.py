@@ -324,3 +324,223 @@ def recall_knowledge(query: str, store_dir=None, top_k: int = 5) -> List[Dict]:
     """快捷查询"""
     memory = KnowledgeMemory(store_dir=store_dir)
     return memory.recall(query, top_k=top_k)
+
+
+# ============================================================================
+# FAIR 元数据审计（来自 nature-data skill）
+# ============================================================================
+
+# FAIR 原则检查表
+FAIR_CHECKLIST = {
+    'findable': {
+        'persistent_id': '数据集是否有持久标识符（DOI/Accession/Handle/ARK）？',
+        'rich_metadata': '是否有丰富的标题/摘要/关键词？',
+        'searchable_record': '是否在可搜索的仓库中有记录？',
+        'metadata_links_id': '元数据中是否包含数据标识符？',
+    },
+    'accessible': {
+        'standard_protocol': '标识符是否通过标准协议可访问？',
+        'explicit_conditions': '访问条件是否明确？',
+        'public_metadata': '即使数据受限，元数据是否公开？',
+    },
+    'interoperable': {
+        'community_formats': '文件是否使用社区标准格式？',
+        'shared_vocabulary': '元数据是否使用共享词汇/单位/标识符？',
+        'qualified_links': '是否有到相关数据/代码/出版物的合格链接？',
+    },
+    'reusable': {
+        'licence_clear': '许可证是否明确？',
+        'provenance': '数据来源/方法/版本是否清晰？',
+        'quality_notes': '是否有质量控制说明？',
+        'community_metadata': '是否有足够的社区标准元数据？',
+    },
+}
+
+# 数据访问路径分类
+DATA_ACCESS_ROUTES = {
+    'public_repository': '公共仓库（如 Zenodo, Figshare, Dryad, GBIF）',
+    'controlled_access': '受控访问仓库（如 dbGaP, EGA）',
+    'within_paper': '论文/补充材料中',
+    'reused_public': '复用的公共数据源',
+    'third_party_restricted': '第三方受限数据',
+    'justified_request': '合理请求获取',
+    'not_applicable': '不适用',
+}
+
+# 推荐仓库映射
+REPOSITORY_MAP = {
+    'environmental': ['Zenodo', 'Figshare', 'Dryad', 'PANGAEA'],
+    'genomics': ['NCBI SRA', 'ENA', 'DDBJ'],
+    'chemical': ['PubChem', 'ChemSpider'],
+    'geospatial': ['GBIF', 'OpenStreetMap'],
+    'general': ['Zenodo', 'Figshare', 'Harvard Dataverse'],
+}
+
+
+def audit_fair_metadata(datasets: list) -> dict:
+    """
+    FAIR 元数据审计（来自 nature-data skill）。
+
+    Parameters
+    ----------
+    datasets : list of dict
+        每个数据集的信息：
+        [{
+            'name': str,
+            'description': str,
+            'identifier': str (DOI/accession/None),
+            'repository': str,
+            'access_route': str (DATA_ACCESS_ROUTES 的 key),
+            'licence': str,
+            'format': str,
+            'has_readme': bool,
+            'variables_documented': bool,
+            'provenance': str,
+        }]
+
+    Returns
+    -------
+    dict: {
+        'overall_score': str ('PASS'/'WARN'/'FAIL'),
+        'per_dataset': [{'name', 'score', 'issues', 'recommendations'}],
+        'blocking_issues': [str],
+        'summary': str,
+    }
+    """
+    per_dataset = []
+    blocking_issues = []
+
+    for ds in datasets:
+        ds_issues = []
+        ds_recs = []
+        name = ds.get('name', 'unnamed')
+
+        # Findable
+        if not ds.get('identifier'):
+            ds_issues.append('F: 缺少持久标识符（DOI/Accession）')
+            ds_recs.append('为数据集注册 DOI（推荐 Zenodo/Figshare）')
+
+        if not ds.get('description') or len(ds.get('description', '')) < 20:
+            ds_issues.append('F: 描述过短或缺失')
+            ds_recs.append('补充数据集描述（包含内容、支持的结论）')
+
+        # Accessible
+        if ds.get('access_route') in ('third_party_restricted', 'justified_request'):
+            if not ds.get('access_procedure'):
+                ds_issues.append('A: 受限数据缺少访问流程说明')
+                ds_recs.append('说明谁控制访问、如何申请、评估标准')
+                blocking_issues.append(f'{name}: 受限数据无访问流程')
+
+        # Interoperable
+        bad_formats = ['.xlsx', '.xls', '.doc', '.docx']
+        if ds.get('format') and any(ds['format'].endswith(f) for f in bad_formats):
+            ds_issues.append('I: 使用了非标准格式，建议转为 CSV/TSV/HDF5')
+            ds_recs.append(f'将 {ds["format"]} 转换为开放格式（CSV/TSV）')
+
+        # Reusable
+        if not ds.get('licence'):
+            ds_issues.append('R: 缺少许可证')
+            ds_recs.append('添加 CC0/CC-BY 或适用的许可证')
+            blocking_issues.append(f'{name}: 无许可证')
+
+        if not ds.get('has_readme'):
+            ds_issues.append('R: 缺少 README 文件')
+            ds_recs.append('创建 README（含变量定义、方法、软件版本）')
+
+        if not ds.get('variables_documented'):
+            ds_issues.append('R: 变量/单位未文档化')
+            ds_recs.append('创建数据字典（列名|定义|单位|允许值）')
+
+        # 评分
+        n_issues = len(ds_issues)
+        if n_issues == 0:
+            score = 'PASS'
+        elif n_issues <= 2:
+            score = 'WARN'
+        else:
+            score = 'FAIL'
+
+        per_dataset.append({
+            'name': name,
+            'score': score,
+            'issues': ds_issues,
+            'recommendations': ds_recs,
+        })
+
+    # 总体评分
+    scores = [d['score'] for d in per_dataset]
+    if 'FAIL' in scores:
+        overall = 'FAIL'
+    elif 'WARN' in scores:
+        overall = 'WARN'
+    else:
+        overall = 'PASS'
+
+    return {
+        'overall_score': overall,
+        'per_dataset': per_dataset,
+        'blocking_issues': blocking_issues,
+        'summary': f'{scores.count("PASS")}PASS / {scores.count("WARN")}WARN / {scores.count("FAIL")}FAIL',
+    }
+
+
+def generate_data_availability_statement(datasets: list, journal: str = 'nature') -> str:
+    """
+    生成数据可用性声明（来自 nature-data skill 八步工作流）。
+
+    Parameters
+    ----------
+    datasets : list of dict
+        每个数据集信息（同 audit_fair_metadata）
+    journal : str
+        目标期刊
+
+    Returns
+    -------
+    str: 可直接粘贴的数据可用性声明
+    """
+    lines = ['Data Availability\n']
+
+    for ds in datasets:
+        name = ds.get('name', 'the dataset')
+        route = ds.get('access_route', 'not_applicable')
+        identifier = ds.get('identifier', '')
+        repository = ds.get('repository', '')
+
+        if route == 'public_repository':
+            if identifier:
+                lines.append(
+                    f'The {name} data are available at {repository} '
+                    f'under accession number {identifier}.'
+                )
+            else:
+                lines.append(
+                    f'The {name} data are available at {repository}.'
+                )
+        elif route == 'controlled_access':
+            lines.append(
+                f'The {name} data are available from {repository} '
+                f'under controlled access. Requests should be directed to '
+                f'{ds.get("access_contact", "[contact]")}.'
+            )
+        elif route == 'within_paper':
+            lines.append(
+                f'The {name} data are provided in the Supplementary Information.'
+            )
+        elif route == 'reused_public':
+            lines.append(
+                f'The {name} data were obtained from {repository} '
+                f'(accession number {identifier}).'
+            )
+        elif route == 'third_party_restricted':
+            lines.append(
+                f'The {name} data are available from {ds.get("source", "[third party]")} '
+                f'under a data-use agreement and are not publicly shared.'
+            )
+        elif route == 'justified_request':
+            lines.append(
+                f'The {name} data are available from the corresponding author '
+                f'upon reasonable request.'
+            )
+
+    return '\n'.join(lines)

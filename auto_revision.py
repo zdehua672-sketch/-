@@ -52,7 +52,54 @@ AI_PHRASES = {
     '本研究结果表明': '结果表明',
     '研究发现': '结果发现',
     '本研究发现': '结果发现',
+    # ===== Nature 级替代表（来自 nature-polishing skill Phrasebank） =====
+    # 证据强度动词 — 根据证据强弱选择合适动词
+    '证实了': '表明',           # moderate: indicate, 不用 prove/confirm
+    '确证了': '支持',           # moderate: support
+    '首次发现': '观察到',       # 避免 overclaim
+    '填补了研究空白': '扩展了对...的理解',  # 避免 overclaim
+    '具有重大意义': '为...提供了数据支撑',
+    '取得了显著成效': '显示了可测量的改进',
+    '有待进一步研究': '需要在更大样本中验证',   # 更具体的局限性语言
+    '提供了新思路': '指向了...方向',
+    '效果明显': '改善了...指标',
+    '起到了关键作用': '对...有显著贡献',
+    '为...奠定了基础': '为...提供了前期数据',
 }
+
+# 英文证据强度动词分级（Nature Phrasebank）
+EVIDENCE_VERB_REPLACEMENTS = {
+    # 过强 → 适度降级
+    'prove': 'demonstrate',
+    'proves': 'demonstrates',
+    'proven': 'demonstrated',
+    'confirm': 'indicate',
+    'confirms': 'indicates',
+    'confirmed': 'indicated',
+    'definitive': 'suggestive',
+    'unprecedented': 'not previously reported',
+    'groundbreaking': 'notable',
+    'revolutionary': 'significant',
+    'first ever': 'among the first',
+    'novel discovery': 'observation',
+    'breakthrough': 'advance',
+}
+
+# 差距语言替换（Nature 标准）
+GAP_LANGUAGE_REPLACEMENTS = {
+    'no one has ever studied': 'few studies have examined',
+    'completely unknown': 'remains poorly understood',
+    'ignored by all previous work': 'has received limited attention',
+}
+
+# 局限性语言模板（替代空洞的 "有待进一步研究"）
+LIMITATION_TEMPLATES = [
+    'These findings should be interpreted with caution because {reason}.',
+    'A limitation of this study is that {limitation}.',
+    'The generalisability of these results is limited by {factor}.',
+    'We cannot exclude the possibility that {alternative}.',
+    'Another source of uncertainty is {uncertainty}.',
+]
 
 # 错别字修正
 TYPOS = {

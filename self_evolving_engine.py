@@ -59,6 +59,7 @@ class KnowledgeStore:
         "literature_matrix": "文献矩阵（来源×主题交叉+证据收敛+知识缺口）",
         "paper_assessments": "论文质量评估（证据分级+来源可信度）",
         "literature_links": "论文关联网络（主题关联+矛盾+作者关联）",
+        "data_availability": "数据可用性声明（数据集+仓库+许可证+FAIR元数据）",
     }
 
     def __init__(self, base_dir: str = None):
@@ -397,6 +398,33 @@ class FeedbackCollector:
         key = f"{source_type}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
         self.store.set("resources", key, entry, source="auto_discovery",
                         confidence=relevance)
+
+    def log_data_availability(self, datasets: list, statement: str,
+                              audit_result: dict, journal: str = 'nature'):
+        """
+        记录数据可用性声明（来自 nature-data skill）。
+
+        Parameters
+        ----------
+        datasets : list of dict - 数据集信息
+        statement : str - 生成的声明文本
+        audit_result : dict - FAIR 审计结果
+        journal : str - 目标期刊
+        """
+        entry = {
+            "type": "data_availability",
+            "journal": journal,
+            "n_datasets": len(datasets),
+            "dataset_names": [d.get('name', '') for d in datasets],
+            "access_routes": [d.get('access_route', '') for d in datasets],
+            "audit_score": audit_result.get('overall_score', 'UNKNOWN'),
+            "blocking_issues": audit_result.get('blocking_issues', []),
+            "statement_length": len(statement),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+        key = f"data_avail_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        self.store.set("data_availability", key, entry, source="nature_data_skill")
 
     def _adjust_review_weights(self, accepted: list, rejected: list):
         """根据审稿反馈调整规则权重"""

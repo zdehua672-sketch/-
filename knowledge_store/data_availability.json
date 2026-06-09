@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "category": "data_availability",
+    "description": "数据可用性声明（数据集+仓库+许可证+FAIR元数据）",
+    "version": 1,
+    "created": "2026-06-09T09:46:13.483987+00:00",
+    "updated": "2026-06-09T09:46:13.483987+00:00",
+    "source": "initial"
+  },
+  "entries": {},
+  "changelog": []
+}

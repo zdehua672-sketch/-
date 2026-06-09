@@ -26,6 +26,21 @@ from academic_plot_style import (
 from plotting_functions import ThesisPlotter
 from statistical_analysis import StandardScaler, PCA, LinearRegression, r2_score
 
+# Nature 交付级 QA（来自 nature-figure skill）
+try:
+    from chart_qa import (
+        check_chart_quality, print_qa_report,
+        check_nature_delivery, nature_export_bundle,
+        NATURE_PALETTE, NATURE_SIZES,
+    )
+except ImportError:
+    check_chart_quality = None
+    print_qa_report = None
+    check_nature_delivery = None
+    nature_export_bundle = None
+    NATURE_PALETTE = {}
+    NATURE_SIZES = {}
+
 # 可选依赖检测
 _HAS_SCIENCEPLOTS = False
 _HAS_STATANNOTATIONS = False
@@ -103,21 +118,21 @@ class StylePresets:
         'nature': {
             'font.family': 'sans-serif',
             'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-            'font.size': 5.5,
-            'axes.titlesize': 7,
-            'axes.labelsize': 6,
-            'xtick.labelsize': 5.5,
-            'ytick.labelsize': 5.5,
-            'legend.fontsize': 5.5,
-            'figure.figsize': (3.50, 2.63),
+            'font.size': 7,              # Nature 2026: 5-7pt for dense panels
+            'axes.titlesize': 9,
+            'axes.labelsize': 8,
+            'xtick.labelsize': 7,
+            'ytick.labelsize': 7,
+            'legend.fontsize': 7,
+            'figure.figsize': (3.50, 2.63),  # 89mm single column
             'figure.dpi': 300,
             'lines.linewidth': 0.8,
             'lines.markersize': 4,
-            'axes.linewidth': 0.5,
-            'xtick.major.width': 0.5,
-            'ytick.major.width': 0.5,
-            'xtick.major.size': 3,
-            'ytick.major.size': 3,
+            'axes.linewidth': 0.8,        # Nature 2026: 0.8-1.2
+            'xtick.major.width': 0.8,
+            'ytick.major.width': 0.8,
+            'xtick.major.size': 4,
+            'ytick.major.size': 4,
             'xtick.direction': 'out',
             'ytick.direction': 'out',
             'axes.grid': False,
@@ -212,9 +227,21 @@ class StylePresets:
 
     @classmethod
     def get_palette(cls, style=None):
-        """获取当前风格推荐的配色方案"""
+        """获取当前风格推荐的配色方案（Nature 使用 figures4papers 色盲安全色板）"""
         style = style or cls._current_style
         if style == 'nature':
+            # 来自 nature-figure skill: figures4papers 色盲安全色板
+            if NATURE_PALETTE:
+                return [
+                    NATURE_PALETTE['blue_main'],
+                    NATURE_PALETTE['blue_secondary'],
+                    NATURE_PALETTE['green_3'],
+                    NATURE_PALETTE['red_strong'],
+                    NATURE_PALETTE['teal'],
+                    NATURE_PALETTE['violet'],
+                    NATURE_PALETTE['neutral_mid'],
+                    NATURE_PALETTE['neutral_dark'],
+                ]
             return [
                 '#0072B2', '#E69F00', '#009E73', '#CC79A7',
                 '#D55E00', '#56B4E9', '#F0E442', '#000000',
@@ -223,6 +250,24 @@ class StylePresets:
             return list(TABLEAU_10)
         else:
             return list(OKABE_ITO.values())
+
+    @classmethod
+    def nature_rcparams(cls):
+        """
+        Nature 2026 年版 rcParams 预设（来自 nature-figure skill design-theory）。
+        直接调用 rcParams.update() 应用。
+        """
+        return {
+            'font.family': 'sans-serif',
+            'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans', 'sans-serif'],
+            'svg.fonttype': 'none',       # SVG 可编辑文本
+            'pdf.fonttype': 42,           # PDF TrueType 文本
+            'font.size': 7,               # Nature 2026: 7-9pt for publication width
+            'axes.spines.right': False,
+            'axes.spines.top': False,
+            'axes.linewidth': 0.8,
+            'legend.frameon': False,
+        }
 
 
 # ============================================================================
@@ -1055,10 +1100,19 @@ class VisualizationAgent:
 
             attempt_record = {'attempt': attempt + 1}
 
-            # 2. 第一层：规则检查
+            # 2. 第一层：规则检查（基础 QA + Nature 交付级）
             if self.enable_review:
                 check_results = self._chart_reviewer.review(fig)
                 attempt_record['rule_checks'] = [str(r) for r in check_results]
+
+                # Nature 风格时追加交付级检查
+                if self.style == 'nature' and check_nature_delivery:
+                    nature_result = check_nature_delivery(fig, auto_fix=True)
+                    attempt_record['nature_qa'] = nature_result
+                    if nature_result.get('nature_checks'):
+                        for iss in nature_result['issues']:
+                            if iss[1] in ('CRITICAL', 'HIGH', 'MAJOR'):
+                                print(f"    [Nature QA] {iss[0]}: {iss[2]}")
 
                 if self._chart_reviewer.has_critical_issues(check_results):
                     fixes = self._chart_reviewer.get_fixes(check_results)
