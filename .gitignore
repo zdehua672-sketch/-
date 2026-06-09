@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Data files (large/敏感)
+*.xlsx
+*.xls
+*.csv
+*.dat
+
+# Output
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.eps
+*.svg

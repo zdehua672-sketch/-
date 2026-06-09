@@ -1,0 +1,4985 @@
+{
+  "meta": {
+    "category": "resources",
+    "description": "外部资源（论文/项目/工具）",
+    "version": 190,
+    "created": "2026-05-23T09:59:33.120836+00:00",
+    "updated": "2026-06-05T09:23:51.976724+00:00",
+    "source": "initial"
+  },
+  "entries": {
+    "github_QJHWC_PaperForge": {
+      "value": {
+        "type": "github_project",
+        "domain": "academic_writing",
+        "full_name": "QJHWC/PaperForge",
+        "description": "End-to-end AI-powered academic paper writing system — from idea generation and literature search to experiment execution, result backfill, and LaTeX paper compilation. Supports multi-LLM routing, SSH remote training, incremental sync, and anti-AI-detection writing style.",
+        "stars": 561,
+        "forks": 85,
+        "open_issues": 0,
+        "language": "Python",
+        "license": "NOASSERTION",
+        "topics": [
+          "academic-writing",
+          "ai",
+          "latex",
+          "llm",
+          "paper-generation",
+          "remote-execution",
+          "ssh"
+        ],
+        "created_at": "2026-03-06T05:39:38Z",
+        "pushed_at": "2026-04-03T06:47:40Z",
+        "days_since_push": 50,
+        "activity_score": 0.7,
+        "quality_score": 0.62,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/QJHWC/PaperForge",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:37.634466+00:00"
+      },
+      "confidence": 0.62,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:37.634466+00:00",
+      "version": 1
+    },
+    "github_KejiaZhang-Robust_Academic-paper-writing": {
+      "value": {
+        "type": "github_project",
+        "domain": "academic_writing",
+        "full_name": "KejiaZhang-Robust/Academic-paper-writing",
+        "description": "From Scratch to Submission: A Complete Guide to Academic Conference Paper Writing",
+        "stars": 32,
+        "forks": 2,
+        "open_issues": 0,
+        "language": null,
+        "license": "MIT",
+        "topics": [],
+        "created_at": "2025-02-03T16:01:37Z",
+        "pushed_at": "2025-09-26T15:48:59Z",
+        "days_since_push": 238,
+        "activity_score": 0.1,
+        "quality_score": 0.14,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/KejiaZhang-Robust/Academic-paper-writing",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:39.019201+00:00"
+      },
+      "confidence": 0.14,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:39.019201+00:00",
+      "version": 1
+    },
+    "github_IAAR-Shanghai_SurveyX": {
+      "value": {
+        "type": "github_project",
+        "domain": "academic_writing",
+        "full_name": "IAAR-Shanghai/SurveyX",
+        "description": "Academic Survey Paper Generation.",
+        "stars": 972,
+        "forks": 97,
+        "open_issues": 36,
+        "language": "TeX",
+        "license": "",
+        "topics": [
+          "ai4research",
+          "automated-survey-generation",
+          "autosurvey",
+          "deep-research",
+          "large-language-models",
+          "literature-search",
+          "literature-synthesis",
+          "llm",
+          "nlp"
+        ],
+        "created_at": "2025-02-19T05:19:40Z",
+        "pushed_at": "2026-01-12T15:53:59Z",
+        "days_since_push": 130,
+        "activity_score": 0.4,
+        "quality_score": 0.61,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/IAAR-Shanghai/SurveyX",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:40.417149+00:00"
+      },
+      "confidence": 0.61,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:40.417149+00:00",
+      "version": 1
+    },
+    "github_PragatiVerma18_MLH-Quizzet": {
+      "value": {
+        "type": "github_project",
+        "domain": "academic_writing",
+        "full_name": "PragatiVerma18/MLH-Quizzet",
+        "description": "This is a smart Quiz Generator that generates a dynamic quiz from any uploaded text/PDF document using NLP. This can be used for self-analysis, question paper generation, and evaluation, thus reducing human effort.",
+        "stars": 98,
+        "forks": 38,
+        "open_issues": 4,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "css",
+          "flask-application",
+          "hackathon",
+          "html",
+          "html-css-javascript",
+          "javascript",
+          "jinja2",
+          "machine-learning",
+          "mlh",
+          "mlh-fellowship",
+          "nlp",
+          "nlp-machine-learning",
+          "python",
+          "question-answering",
+          "question-generation",
+          "question-generator",
+          "quiz",
+          "upload-file"
+        ],
+        "created_at": "2020-10-06T07:09:38Z",
+        "pushed_at": "2026-02-20T22:40:02Z",
+        "days_since_push": 91,
+        "activity_score": 0.4,
+        "quality_score": 0.3,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/PragatiVerma18/MLH-Quizzet",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:42.304270+00:00"
+      },
+      "confidence": 0.3,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:42.304270+00:00",
+      "version": 1
+    },
+    "github_ganzhi-black_humanities-thesis-skill": {
+      "value": {
+        "type": "github_project",
+        "domain": "academic_writing",
+        "full_name": "ganzhi-black/humanities-thesis-skill",
+        "description": "AI skill for humanities thesis writing — from topic selection to publication. 8 academic databases, 21 review rules, anti-hallucination guardrails. 人文社科论文写作 AI Skill",
+        "stars": 100,
+        "forks": 9,
+        "open_issues": 0,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [],
+        "created_at": "2026-04-27T05:39:48Z",
+        "pushed_at": "2026-04-29T08:24:32Z",
+        "days_since_push": 24,
+        "activity_score": 1.0,
+        "quality_score": 0.45,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/ganzhi-black/humanities-thesis-skill",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:44.928983+00:00"
+      },
+      "confidence": 0.45,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:44.928983+00:00",
+      "version": 1
+    },
+    "github_zuoliangyu_LaTeX-Thesis-Writing": {
+      "value": {
+        "type": "github_project",
+        "domain": "academic_writing",
+        "full_name": "zuoliangyu/LaTeX-Thesis-Writing",
+        "description": "中文学位论文 LaTeX 模板 + Claude 写作辅助技能",
+        "stars": 42,
+        "forks": 2,
+        "open_issues": 0,
+        "language": "TeX",
+        "license": "MIT",
+        "topics": [],
+        "created_at": "2026-05-05T14:42:48Z",
+        "pushed_at": "2026-05-20T02:55:22Z",
+        "days_since_push": 3,
+        "activity_score": 1.0,
+        "quality_score": 0.42,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/zuoliangyu/LaTeX-Thesis-Writing",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:46.326048+00:00"
+      },
+      "confidence": 0.42,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:46.326048+00:00",
+      "version": 1
+    },
+    "github_garrettj403_SciencePlots": {
+      "value": {
+        "type": "github_project",
+        "domain": "visualization",
+        "full_name": "garrettj403/SciencePlots",
+        "description": "Matplotlib styles for scientific plotting",
+        "stars": 8863,
+        "forks": 811,
+        "open_issues": 16,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "cjk-fonts",
+          "ieee-paper",
+          "latex",
+          "matplotlib-figures",
+          "matplotlib-style-sheets",
+          "matplotlib-styles",
+          "python",
+          "scientific-papers",
+          "thesis-template"
+        ],
+        "created_at": "2018-08-13T16:23:03Z",
+        "pushed_at": "2026-02-25T01:24:44Z",
+        "days_since_push": 87,
+        "activity_score": 0.7,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/garrettj403/SciencePlots",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:52.919950+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:52.919950+00:00",
+      "version": 1
+    },
+    "github_JuliaPlots_UnicodePlots.jl": {
+      "value": {
+        "type": "github_project",
+        "domain": "visualization",
+        "full_name": "JuliaPlots/UnicodePlots.jl",
+        "description": "Unicode-based scientific plotting for working in the terminal",
+        "stars": 1531,
+        "forks": 84,
+        "open_issues": 15,
+        "language": "Julia",
+        "license": "NOASSERTION",
+        "topics": [
+          "julia",
+          "plots",
+          "plotting",
+          "repl",
+          "terminal",
+          "unicode"
+        ],
+        "created_at": "2015-08-15T00:21:25Z",
+        "pushed_at": "2026-05-09T11:36:55Z",
+        "days_since_push": 13,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/JuliaPlots/UnicodePlots.jl",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:54.391242+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:54.391242+00:00",
+      "version": 1
+    },
+    "github_Aperivue_medsci-skills": {
+      "value": {
+        "type": "github_project",
+        "domain": "visualization",
+        "full_name": "Aperivue/medsci-skills",
+        "description": "Claude Code skills for medical research — literature search, reporting guidelines, statistical analysis, publication figures. Built by a physician-researcher, tested on real publications. MIT licensed.",
+        "stars": 105,
+        "forks": 30,
+        "open_issues": 8,
+        "language": "Python",
+        "license": "NOASSERTION",
+        "topics": [
+          "agent-skills",
+          "biostatistics",
+          "claude-code",
+          "claude-skills",
+          "clinical-research",
+          "diagnostic-accuracy",
+          "irb-protocol",
+          "literature-review",
+          "manuscript",
+          "medical-ai",
+          "medical-research",
+          "meta-analysis",
+          "physician-researcher",
+          "prisma",
+          "pubmed",
+          "radiology",
+          "reporting-guidelines",
+          "strobe",
+          "systematic-review",
+          "tripod-ai"
+        ],
+        "created_at": "2026-04-06T07:00:46Z",
+        "pushed_at": "2026-05-23T07:30:24Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 0.47,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/Aperivue/medsci-skills",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:55.769573+00:00"
+      },
+      "confidence": 0.47,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:55.769573+00:00",
+      "version": 1
+    },
+    "github_killiansheriff_LovelyPlots": {
+      "value": {
+        "type": "github_project",
+        "domain": "visualization",
+        "full_name": "killiansheriff/LovelyPlots",
+        "description": "Matplotlib style sheets to nicely format figures for scientific papers, thesis and presentations while keeping them fully editable in Adobe Illustrator.",
+        "stars": 912,
+        "forks": 41,
+        "open_issues": 0,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "adobe-illustrator",
+          "latex",
+          "matplotlib",
+          "matplotlib-figures",
+          "phd",
+          "phd-thesis",
+          "scientific-publications"
+        ],
+        "created_at": "2022-07-25T14:01:48Z",
+        "pushed_at": "2024-03-25T02:32:20Z",
+        "days_since_push": 789,
+        "activity_score": 0.1,
+        "quality_score": 0.54,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/killiansheriff/LovelyPlots",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T09:59:57.228781+00:00"
+      },
+      "confidence": 0.54,
+      "source": "github_monitor",
+      "updated": "2026-05-23T09:59:57.228781+00:00",
+      "version": 1
+    },
+    "github_TauricResearch_TradingAgents": {
+      "value": {
+        "type": "github_project",
+        "domain": "agent_framework",
+        "full_name": "TauricResearch/TradingAgents",
+        "description": "TradingAgents: Multi-Agents LLM Financial Trading Framework",
+        "stars": 78724,
+        "forks": 15340,
+        "open_issues": 367,
+        "language": "Python",
+        "license": "Apache-2.0",
+        "topics": [
+          "agent",
+          "finance",
+          "llm",
+          "multiagent",
+          "trading"
+        ],
+        "created_at": "2024-12-28T03:31:08Z",
+        "pushed_at": "2026-05-17T07:54:07Z",
+        "days_since_push": 6,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/TauricResearch/TradingAgents",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:19.030832+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:19.030832+00:00",
+      "version": 1
+    },
+    "github_bytedance_deer-flow": {
+      "value": {
+        "type": "github_project",
+        "domain": "agent_framework",
+        "full_name": "bytedance/deer-flow",
+        "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
+        "stars": 69219,
+        "forks": 9273,
+        "open_issues": 867,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "agent",
+          "agentic",
+          "agentic-framework",
+          "agentic-workflow",
+          "ai",
+          "ai-agents",
+          "deep-research",
+          "harness",
+          "langchain",
+          "langgraph",
+          "langmanus",
+          "llm",
+          "multi-agent",
+          "nodejs",
+          "podcast",
+          "python",
+          "superagent",
+          "typescript"
+        ],
+        "created_at": "2025-05-07T02:50:19Z",
+        "pushed_at": "2026-05-23T09:02:23Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/bytedance/deer-flow",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:21.619933+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:21.619933+00:00",
+      "version": 1
+    },
+    "github_TransformerOptimus_SuperAGI": {
+      "value": {
+        "type": "github_project",
+        "domain": "agent_framework",
+        "full_name": "TransformerOptimus/SuperAGI",
+        "description": "<⚡️> SuperAGI - A dev-first open source autonomous AI agent framework. Enabling developers to build, manage & run useful autonomous agents quickly and reliably.",
+        "stars": 17533,
+        "forks": 2215,
+        "open_issues": 255,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "agents",
+          "agi",
+          "ai",
+          "artificial-general-intelligence",
+          "artificial-intelligence",
+          "autonomous-agents",
+          "gpt-4",
+          "hacktoberfest",
+          "llm",
+          "llmops",
+          "nextjs",
+          "openai",
+          "pinecone",
+          "python",
+          "superagi"
+        ],
+        "created_at": "2023-05-13T08:55:24Z",
+        "pushed_at": "2025-01-22T22:14:07Z",
+        "days_since_push": 485,
+        "activity_score": 0.1,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/TransformerOptimus/SuperAGI",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:23.084515+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:23.084515+00:00",
+      "version": 1
+    },
+    "github_pydantic_pydantic-ai": {
+      "value": {
+        "type": "github_project",
+        "domain": "agent_framework",
+        "full_name": "pydantic/pydantic-ai",
+        "description": "AI Agent Framework, the Pydantic way",
+        "stars": 17224,
+        "forks": 2119,
+        "open_issues": 542,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "agent-framework",
+          "genai",
+          "llm",
+          "pydantic",
+          "python"
+        ],
+        "created_at": "2024-06-21T15:55:04Z",
+        "pushed_at": "2026-05-23T02:43:55Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/pydantic/pydantic-ai",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:25.120536+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:25.120536+00:00",
+      "version": 1
+    },
+    "github_langgenius_dify": {
+      "value": {
+        "type": "github_project",
+        "domain": "agent_framework",
+        "full_name": "langgenius/dify",
+        "description": "Production-ready platform for agentic workflow development.",
+        "stars": 142321,
+        "forks": 22387,
+        "open_issues": 828,
+        "language": "TypeScript",
+        "license": "NOASSERTION",
+        "topics": [
+          "agent",
+          "agentic-ai",
+          "agentic-framework",
+          "agentic-workflow",
+          "ai",
+          "automation",
+          "gemini",
+          "genai",
+          "gpt",
+          "gpt-4",
+          "llm",
+          "low-code",
+          "mcp",
+          "nextjs",
+          "no-code",
+          "openai",
+          "orchestration",
+          "python",
+          "rag",
+          "workflow"
+        ],
+        "created_at": "2023-04-12T07:40:24Z",
+        "pushed_at": "2026-05-23T09:56:52Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/langgenius/dify",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:28.086809+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:28.086809+00:00",
+      "version": 1
+    },
+    "github_opendatalab_MinerU": {
+      "value": {
+        "type": "github_project",
+        "domain": "agent_framework",
+        "full_name": "opendatalab/MinerU",
+        "description": "Transforms complex documents like PDFs and Office docs into LLM-ready markdown/JSON for your Agentic workflows.",
+        "stars": 64582,
+        "forks": 5456,
+        "open_issues": 16,
+        "language": "Python",
+        "license": "NOASSERTION",
+        "topics": [
+          "ai4science",
+          "document-analysis",
+          "docx",
+          "extract-data",
+          "layout-analysis",
+          "ocr",
+          "parser",
+          "pdf",
+          "pdf-converter",
+          "pdf-extractor-llm",
+          "pdf-extractor-pretrain",
+          "pdf-extractor-rag",
+          "pdf-parser",
+          "pptx",
+          "python",
+          "xlsx"
+        ],
+        "created_at": "2024-02-29T08:52:34Z",
+        "pushed_at": "2026-05-21T15:58:32Z",
+        "days_since_push": 1,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/opendatalab/MinerU",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:29.648285+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:29.648285+00:00",
+      "version": 1
+    },
+    "github_microsoft_graphrag": {
+      "value": {
+        "type": "github_project",
+        "domain": "rag_system",
+        "full_name": "microsoft/graphrag",
+        "description": "A modular graph-based Retrieval-Augmented Generation (RAG) system",
+        "stars": 33178,
+        "forks": 3513,
+        "open_issues": 121,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "gpt",
+          "gpt-4",
+          "gpt4",
+          "graphrag",
+          "llm",
+          "llms",
+          "rag"
+        ],
+        "created_at": "2024-03-27T17:57:52Z",
+        "pushed_at": "2026-05-19T22:28:07Z",
+        "days_since_push": 3,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/microsoft/graphrag",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:35.460627+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:35.460627+00:00",
+      "version": 1
+    },
+    "github_NirDiamant_RAG_Techniques": {
+      "value": {
+        "type": "github_project",
+        "domain": "rag_system",
+        "full_name": "NirDiamant/RAG_Techniques",
+        "description": "This repository showcases various advanced techniques for Retrieval-Augmented Generation (RAG) systems. Each technique has a detailed notebook tutorial.",
+        "stars": 27516,
+        "forks": 3310,
+        "open_issues": 13,
+        "language": "Jupyter Notebook",
+        "license": "NOASSERTION",
+        "topics": [
+          "ai",
+          "embeddings",
+          "langchain",
+          "llama-index",
+          "llm",
+          "llms",
+          "nlp",
+          "openai",
+          "python",
+          "rag",
+          "retrieval-augmented-generation",
+          "tutorials",
+          "vector-database"
+        ],
+        "created_at": "2024-07-13T16:08:36Z",
+        "pushed_at": "2026-05-15T18:16:10Z",
+        "days_since_push": 7,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/NirDiamant/RAG_Techniques",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:36.854807+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:36.854807+00:00",
+      "version": 1
+    },
+    "github_infiniflow_ragflow": {
+      "value": {
+        "type": "github_project",
+        "domain": "rag_system",
+        "full_name": "infiniflow/ragflow",
+        "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs",
+        "stars": 81075,
+        "forks": 9287,
+        "open_issues": 3057,
+        "language": "Python",
+        "license": "Apache-2.0",
+        "topics": [
+          "agentic-ai",
+          "agentic-retrieval",
+          "agentic-search",
+          "ai",
+          "ai-agents",
+          "context-engine",
+          "context-management",
+          "llm-apps",
+          "rag",
+          "retrieval-augmented-generation"
+        ],
+        "created_at": "2023-12-12T06:13:13Z",
+        "pushed_at": "2026-05-22T13:50:21Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/infiniflow/ragflow",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:38.345068+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:38.345068+00:00",
+      "version": 1
+    },
+    "github_HKUDS_LightRAG": {
+      "value": {
+        "type": "github_project",
+        "domain": "rag_system",
+        "full_name": "HKUDS/LightRAG",
+        "description": "[EMNLP2025] \"LightRAG: Simple and Fast Retrieval-Augmented Generation\"",
+        "stars": 35589,
+        "forks": 5028,
+        "open_issues": 233,
+        "language": "Python",
+        "license": "MIT",
+        "topics": [
+          "genai",
+          "gpt",
+          "gpt-4",
+          "graphrag",
+          "knowledge-graph",
+          "large-language-models",
+          "llm",
+          "rag",
+          "retrieval-augmented-generation"
+        ],
+        "created_at": "2024-10-02T11:57:54Z",
+        "pushed_at": "2026-05-23T07:15:11Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/HKUDS/LightRAG",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:39.743209+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:39.743209+00:00",
+      "version": 1
+    },
+    "github_toeverything_AFFiNE": {
+      "value": {
+        "type": "github_project",
+        "domain": "rag_system",
+        "full_name": "toeverything/AFFiNE",
+        "description": "There can be more than Notion and Miro. AFFiNE(pronounced [ə‘fain]) is a next-gen knowledge base that brings planning, sorting and creating all together. Privacy first, open-source, customizable and ready to use. ",
+        "stars": 68642,
+        "forks": 4875,
+        "open_issues": 620,
+        "language": "TypeScript",
+        "license": "NOASSERTION",
+        "topics": [
+          "app",
+          "crdt",
+          "editor",
+          "electron",
+          "knowledge-base",
+          "markdown",
+          "miro",
+          "notes",
+          "notion",
+          "notion-alternative",
+          "rust",
+          "rust-lang",
+          "rust-language",
+          "table",
+          "tableview",
+          "whiteboard",
+          "wiki",
+          "workspace"
+        ],
+        "created_at": "2022-07-31T18:45:21Z",
+        "pushed_at": "2026-05-23T05:18:32Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/toeverything/AFFiNE",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:41.220248+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:41.220248+00:00",
+      "version": 1
+    },
+    "github_outline_outline": {
+      "value": {
+        "type": "github_project",
+        "domain": "rag_system",
+        "full_name": "outline/outline",
+        "description": "The fastest knowledge base for growing teams. Beautiful, realtime collaborative, feature packed, and markdown compatible.",
+        "stars": 38591,
+        "forks": 3299,
+        "open_issues": 67,
+        "language": "TypeScript",
+        "license": "NOASSERTION",
+        "topics": [
+          "docker",
+          "javascript",
+          "mobx",
+          "nodejs",
+          "react",
+          "slack",
+          "wiki"
+        ],
+        "created_at": "2016-05-22T21:31:47Z",
+        "pushed_at": "2026-05-23T05:53:12Z",
+        "days_since_push": 0,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/outline/outline",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:42.659673+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:42.659673+00:00",
+      "version": 1
+    },
+    "github_tensorflow_probability": {
+      "value": {
+        "type": "github_project",
+        "domain": "data_analysis",
+        "full_name": "tensorflow/probability",
+        "description": "Probabilistic reasoning and statistical analysis in TensorFlow",
+        "stars": 4417,
+        "forks": 1123,
+        "open_issues": 723,
+        "language": "Jupyter Notebook",
+        "license": "Apache-2.0",
+        "topics": [
+          "bayesian-methods",
+          "data-science",
+          "deep-learning",
+          "machine-learning",
+          "neural-networks",
+          "probabilistic-programming",
+          "statistics",
+          "tensorflow"
+        ],
+        "created_at": "2017-10-23T23:50:54Z",
+        "pushed_at": "2026-05-12T12:16:31Z",
+        "days_since_push": 10,
+        "activity_score": 1.0,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/tensorflow/probability",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:47.081877+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:47.081877+00:00",
+      "version": 1
+    },
+    "github_pod4g_hiper": {
+      "value": {
+        "type": "github_project",
+        "domain": "data_analysis",
+        "full_name": "pod4g/hiper",
+        "description": "🚀 A statistical analysis tool for performance testing ",
+        "stars": 2734,
+        "forks": 168,
+        "open_issues": 15,
+        "language": "JavaScript",
+        "license": "MIT",
+        "topics": [
+          "analysis",
+          "audits",
+          "broswer",
+          "cli",
+          "frontend",
+          "headless",
+          "network",
+          "pages",
+          "pagespeed",
+          "performance",
+          "statistical",
+          "testing",
+          "tool",
+          "web",
+          "webpages",
+          "websites"
+        ],
+        "created_at": "2018-06-02T19:32:04Z",
+        "pushed_at": "2020-07-20T13:57:25Z",
+        "days_since_push": 2132,
+        "activity_score": 0.1,
+        "quality_score": 1.0,
+        "recent_commits_count": 0,
+        "recent_commits": [],
+        "url": "https://github.com/pod4g/hiper",
+        "status": "discovered",
+        "discovered_at": "2026-05-23T10:00:48.926731+00:00"
+      },
+      "confidence": 1.0,
+      "source": "github_monitor",
+      "updated": "2026-05-23T10:00:48.926731+00:00",
+      "version": 1
+    },
+    "paper__test_paper": {
+      "value": {
+        "title": "_test_paper",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T01:56:35.643717+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T01:56:35.680031+00:00",
+      "version": 1
+    },
+    "paper__test_db_paper": {
+      "value": {
+        "title": "_test_db_paper",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:03:55.980366+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:03:56.003375+00:00",
+      "version": 1
+    },
+    "paper_pipeline_test": {
+      "value": {
+        "title": "pipeline_test",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:28:57.483219+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:28:57.498249+00:00",
+      "version": 1
+    },
+    "paper_1-s2.0-S0013935124018413-main": {
+      "value": {
+        "title": "Contamination, fraction, and source apportionment of heavy metals in",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:04.577062+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:04.590045+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S0025326X21008225-main": {
+      "value": {
+        "title": "Marine Pollution Bulletin 171 (2021) 112788",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:04.713893+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:04.720779+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S0025326X23004678-main": {
+      "value": {
+        "title": "Marine Pollution Bulletin 192 (2023) 115035",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:04.821841+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:04.826839+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S0025326X24005988-main": {
+      "value": {
+        "title": "Marine Pollution Bulletin 205 (2024) 116621",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:04.911935+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:04.918528+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S0025326X24007525-main": {
+      "value": {
+        "title": "Marine Pollution Bulletin 206 (2024) 116775",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.018417+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.022142+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S0048969723021745-main": {
+      "value": {
+        "title": "A comprehensive method of source apportionment and ecological risk",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.105304+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.110303+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S0269749118303518-main": {
+      "value": {
+        "title": "Source identiﬁcation, geochemical normalization and inﬂuence factors",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.177890+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.186571+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S037567422300122X-main": {
+      "value": {
+        "title": "Journal of Geochemical Exploration 252 (2023) 107275",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.278962+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.285940+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S2213343725044859-main": {
+      "value": {
+        "title": "Spatiotemporal dynamics, source apportionment, and ecological risk of",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.390665+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.397646+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S2773050624000065-main": {
+      "value": {
+        "title": "Journal of Trace Elements and Minerals 8 (2024) 100121",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.472188+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.477214+00:00",
+      "version": 2
+    },
+    "paper_202232933-陈汉棱-丹江流域重金属时空分布特征及迁移转化机制研究-环境工程-李楠": {
+      "value": {
+        "title": "丹江流域重金属时空分布特征及迁移转化机",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 8,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.761585+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.766581+00:00",
+      "version": 2
+    },
+    "paper_Comprehensive Risk Assessment of Heavy Metals Based on Pollution Sources_ A Case Study for Agricultural Soils from Southwest Chi(科研通-ablesci.com) (1)": {
+      "value": {
+        "title": "ORIGINAL PAPER",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:05.910109+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:05.920112+00:00",
+      "version": 2
+    },
+    "paper_Heavy Metal Deposition and Source Identification in the Lacustrine ": {
+      "value": {
+        "title": "1",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 4,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.003261+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.013285+00:00",
+      "version": 2
+    },
+    "paper_JECE-D-25-14965_R1": {
+      "value": {
+        "title": "Journal of Environmental Chemical Engineering",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 8,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.328222+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.336093+00:00",
+      "version": 2
+    },
+    "paper_Kunhar 河及其支流重金属空间分布及水、沉积物风险指数": {
+      "value": {
+        "title": "Full Terms & Conditions of access and use can be found at",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 4,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.404099+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.411055+00:00",
+      "version": 2
+    },
+    "paper_SOM-DRASTIC_ using self-organizing map for evaluating groundwater potential to pollution(科研通-ablesci.com)": {
+      "value": {
+        "title": "ORIGINAL PAPER",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.507649+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.512646+00:00",
+      "version": 2
+    },
+    "paper_Soil and soil environmental quality monitoring in China_ A review(科研通-ablesci.com) (1)": {
+      "value": {
+        "title": "Review",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.653647+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.660561+00:00",
+      "version": 2
+    },
+    "paper_distribution-characteristics-source-identification-and-risk-48a0pu40i5": {
+      "value": {
+        "title": "Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 4,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.745764+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.752718+00:00",
+      "version": 2
+    },
+    "paper_essoar.10503203.1": {
+      "value": {
+        "title": "GEOCHEMISTRY GEOPHYSICS GEOSYSTEMS",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 4,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.833115+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.841040+00:00",
+      "version": 2
+    },
+    "paper_不同耕地质量农业土壤重金属污染源解析及源导向风险评价": {
+      "value": {
+        "title": "Journal of Cleaner Production 341 (2022) 130942",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:06.935075+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:06.942085+00:00",
+      "version": 2
+    },
+    "paper_中国汉江上游沉积物中重金属的污染风险评估": {
+      "value": {
+        "title": "RESEARCH ARTICLE",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 4,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.013080+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.020596+00:00",
+      "version": 2
+    },
+    "paper_丹江上游沉积物中类金属的污染、生态风险及来源分析": {
+      "value": {
+        "title": "Ecological Indicators 125 (2021) 107502",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.104674+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.110631+00:00",
+      "version": 2
+    },
+    "paper_丹江口库区土地利用与生态系统服务功能演变及其对国家工程可持续管理的启示": {
+      "value": {
+        "title": "Citation: Liu, L.; Zheng, L.; Wang, Y.;",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.206337+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.213316+00:00",
+      "version": 2
+    },
+    "paper_丹江口水库土壤重金属的空间分布、污染评价及来源": {
+      "value": {
+        "title": "Citation: Dong, Q.; Song, C.; Yang,",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.304626+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.311579+00:00",
+      "version": 2
+    },
+    "paper_主成分分析法在沈阳市西河沉积物重金属污染源评价中的应用": {
+      "value": {
+        "title": "Application of Principal Component Analysis (PCA) for the Estimation of",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.343702+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.350449+00:00",
+      "version": 2
+    },
+    "paper_典型干旱区和田地区地下水水化学特征、控制因素及健康风险评价": {
+      "value": {
+        "title": "Hydrochemical characteristics, control factors and health risk assessment of",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.436717+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.443705+00:00",
+      "version": 2
+    },
+    "paper_农业土壤重金属（LOID）源解析集成方法及模型不确定性分析": {
+      "value": {
+        "title": "An integrated method for source apportionment of heavy metal(loid)s",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.503318+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.511006+00:00",
+      "version": 2
+    },
+    "paper_印度恒河沉积物中重金属的空间分布：发生、污染、来源识别、季节变化、制图和生态风险评估": {
+      "value": {
+        "title": "Marine Pollution Bulletin 198 (2024) 115910",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.656906+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.666902+00:00",
+      "version": 2
+    },
+    "paper_印度达尔湖-克什米尔地表沉积物环境风险评估、空间分布及重金属丰度": {
+      "value": {
+        "title": "Environmental Advances 17 (2024) 100562",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:07.781687+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:07.786751+00:00",
+      "version": 2
+    },
+    "paper_埃及法尤姆Qarun湖底部沉积物中的重金属：空间分布、来源和生态风险评估": {
+      "value": {
+        "title": "ORIGINAL ARTICLE",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.011315+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:08.020316+00:00",
+      "version": 2
+    },
+    "paper_基于多元统计分析和PMF模型的土壤重金属源解析--以南阳盆地为例": {
+      "value": {
+        "title": "Environmental Technology & Innovation 33 (2024) 103537",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.091900+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:08.096898+00:00",
+      "version": 2
+    },
+    "paper_基于数据分析和自组织映射方法的土壤重金属可追溯性分析": {
+      "value": {
+        "title": "Traceability Analysis of Heavy Metals in Soils Based",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.153507+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:08.158504+00:00",
+      "version": 2
+    },
+    "paper_基于正矩阵分解、机器学习和多尺度地理加权回归的土壤重金属污染风险空间驱动因子识别": {
+      "value": {
+        "title": "Identifying spatial drivers of soil heavy metal pollution risk integrating",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.258098+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:08.264083+00:00",
+      "version": 2
+    },
+    "paper_基于正矩阵分解模型的农业土壤重金属源解析及风险评价": {
+      "value": {
+        "title": "Citation: Yang, D.; Yang, Y.; Hua, Y.",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.726128+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:08.733220+00:00",
+      "version": 2
+    },
+    "paper_基于自组织映射的土壤重金属潜在生态风险评价": {
+      "value": {
+        "title": "The potential ecological risk assessment of soil heavy metals using",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.797833+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:08.807827+00:00",
+      "version": 2
+    },
+    "paper_基于自组织映射的土壤重金属社会生态格局研究": {
+      "value": {
+        "title": "Int. J. Environ. Res. Public Health 2014, 11, 3618-3638; doi:10.3390/ijerph110403618",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.944161+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:08.954875+00:00",
+      "version": 2
+    },
+    "paper_天津市海河及其支流表层沉积物重金属空间分布特征及健康风险评估": {
+      "value": {
+        "title": "Spatial distribution characteristics and health risk assessment of heavy metals in",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 4,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:08.996935+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.001904+00:00",
+      "version": 2
+    },
+    "paper_太行山南部小流域表层土壤重金属污染特征及来源分析": {
+      "value": {
+        "title": "Citation: Liu, J.; Chen, Y.; Shang, Y.;",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.072504+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.079487+00:00",
+      "version": 2
+    },
+    "paper_河西走廊典型戈壁表土重金属污染特征、来源、扩散及风险评价": {
+      "value": {
+        "title": "SOILS, SEC 1 • SOIL ORGANIC MATTER DYNAMICS AND NUTRIENT CYCLING •",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.207844+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.214818+00:00",
+      "version": 2
+    },
+    "paper_涪江绵阳段沉积物中重金属的来源及潜在生态风险": {
+      "value": {
+        "title": "Citation: Du, H.; Lu, X. Source",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.306212+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.313200+00:00",
+      "version": 2
+    },
+    "paper_湖沼沉积物中重金属的累积相": {
+      "value": {
+        "title": "Accumulative phases for heavy metals in limnic sediments",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.372255+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.377255+00:00",
+      "version": 2
+    },
+    "paper_石嘴山土壤重金属空间分布及来源分析": {
+      "value": {
+        "title": "Vol.:(0123456789)",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 4,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.460092+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.468708+00:00",
+      "version": 2
+    },
+    "paper_矿床对丹河流域河流沉积物组成的影响": {
+      "value": {
+        "title": "Inﬂuence of ore deposits on river sediment compositions in Dan River",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.548232+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.556085+00:00",
+      "version": 2
+    },
+    "paper_结合土地利用参数的绝对主成分得分-多元线性回归模型对鄱阳湖流域水污染物的源解析": {
+      "value": {
+        "title": "Source apportionment of water",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.662182+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.670993+00:00",
+      "version": 2
+    },
+    "paper_长江口至东海陆架地表沉积物中重金属的积累与转化": {
+      "value": {
+        "title": "Accumulation and transformation of heavy metals in surface",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.727394+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.738277+00:00",
+      "version": 2
+    },
+    "paper_长江支流嘉陵江沉积物中 5 种重金属的空间分布、组分及风险评估": {
+      "value": {
+        "title": "Vol.:(0123456789)",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.807966+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.817488+00:00",
+      "version": 2
+    },
+    "paper_陕西旬阳矿区农业土壤重金属污染及生态风险评价": {
+      "value": {
+        "title": "Vol:.(1234567890)",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.891264+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:09.898245+00:00",
+      "version": 2
+    },
+    "paper_黄河中上游表层沉积物重金属污染、分布及来源鉴定评价": {
+      "value": {
+        "title": "Academic Editor: Luis",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:09.995163+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:10.001322+00:00",
+      "version": 2
+    },
+    "paper_黄河表层沉积物重金属分布特征、来源识别及风险评估": {
+      "value": {
+        "title": "Catena 216 (2022) 106376",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:10.085127+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:10.091632+00:00",
+      "version": 2
+    },
+    "paper_黑河梯级水库系统地表水和沉积物中重金属的空间分布特征及污染水平": {
+      "value": {
+        "title": "Spatial distribution characteristics and pollution levels of heavy metals in surface water",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:37:10.160032+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:37:10.168056+00:00",
+      "version": 2
+    },
+    "paper_013": {
+      "value": {
+        "type": "academic_paper",
+        "title": "CHEMICAL ENGINEERING TRANSACTIONS",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "Biochemical reactions under microaerobic and anaerobic conditions during sewage transportation \nprocess may cause the formation and subsequent release of a wide variety of volatile organic \ncompounds (VOCs) from sewer networks, therefore is potential source for VOC emissions (Vincent, \n2001). The oc",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.636393+00:00",
+      "version": 2
+    },
+    "paper_1-s2.0-S0301479721001985-main": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Journal of Environmental Management 285 (2021) 112136",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.636393+00:00",
+      "version": 2
+    },
+    "paper_2021-生态环境学报-中国胡焕庸线下方四区域沉积...生素污染特征及生态风险评价": {
+      "value": {
+        "title": "生态环境学报 2021, 30(5): 1023-1033                                                     http://www.jeesci.com",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.280510+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:43:31.290139+00:00",
+      "version": 1
+    },
+    "paper_Atmospheric Volatile Organic Compounds in a": {
+      "value": {
+        "title": "atmosphere",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.565277+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:43:31.573274+00:00",
+      "version": 1
+    },
+    "paper_On-line monitoring of methane in sewer": {
+      "value": {
+        "title": "On-line monitoring of methane in sewer",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.630764+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:43:31.638174+00:00",
+      "version": 1
+    },
+    "paper_优化污水处理厂的气流速率和碳源剂量策略：迈向碳减排和强化脱氮": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Optimizing airflow rate and carbon source dosage strategies for wastewater",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "1.1. Background\nWWTPs play a pivotal role in sustainable city development by \nensuring safe wastewater treatment and discharge and reducing envi­\nronmental pollution with lower carbon emission. To meet increasingly \nstringent effluent quality standards, key operational variables such as \nairflow rat",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.652035+00:00",
+      "version": 2
+    },
+    "paper_区域联合基金-卢金锁-提交版": {
+      "value": {
+        "title": "申请代码",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.035603+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:43:32.039619+00:00",
+      "version": 1
+    },
+    "paper_城市下水道系统污水与泥沙之间的污染物交换": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Contents lists available at ScienceDirect",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "Urban sewer systems undertake the mission of residential and in-\ndustrial wastewater and rainwater collection and transportation, and\nthey are an important part of urban infrastructure. In recent years,\nsewer blocking, odor and corrosion problems have gradually aﬀected\nthe normal operation of urban ",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.667656+00:00",
+      "version": 2
+    },
+    "paper_城市污水处理厂挥发性卤代有机物的排放特征及影响因素研究_何洁": {
+      "value": {
+        "type": "academic_paper",
+        "title": "第32 卷第12 期",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.667656+00:00",
+      "version": 2
+    },
+    "paper_城市污水输送过程中管网内温室气体的产生机制_杨温娜": {
+      "value": {
+        "title": "分类号",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.459606+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:43:32.469601+00:00",
+      "version": 1
+    },
+    "paper_城市污泥热解处理过程中含碳族化合物的转化途径": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Waste Management 178 (2024) 26–34",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "With urbanization progressing, the rapid increase in municipal \nsewage discharge has led to a corresponding growth in the volume of \nmunicipal sludge (MS) generated from wastewater treatment (Marouˇsek \net al., 2022). The annual global production of MS is on average 45 \nmillion dry tons (Andr´e et a",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.667656+00:00",
+      "version": 2
+    },
+    "paper_城镇河流及排放与市政排水管网污水输入的关联影响": {
+      "value": {
+        "type": "academic_paper",
+        "title": "渊匀哉粤晕允陨晕郧运耘载哉耘冤摇摇耘晕灾陨砸韵晕酝耘晕栽粤蕴杂悦陨耘晕悦耘",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.683277+00:00",
+      "version": 2
+    },
+    "paper_基于碳排放的城市污水处理全过程节能减排综合测度方法": {
+      "value": {
+        "type": "academic_paper",
+        "title": "RESEARCH ARTICLE",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "It is of great significance to establish a carbon emission management system and carbon emission reduction target to put forward\nemission reduction measures for each subunit of a sewage treatment plant. In this paper, a mathematical model was constructed\nfor calculating carbon emission in the whole sewage treatment system process. Meanwhile, the model calculated the carbon\nemission changes after upgrading three sewage treatment plants and identified the critical controlling unit. The results sho",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.683277+00:00",
+      "version": 2
+    },
+    "paper_对城市供水管网中的多个污染源进行机器学习分类": {
+      "value": {
+        "type": "academic_paper",
+        "title": "sensors",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "Contamination in water distribution networks can occur due to deliberate or unin-\ntentional intrusions and it is of extreme importance to determine the contamination event\nparameters so it can be detected which parts of water distribution networks have been\nexposed to the contaminant and needed meas",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.698878+00:00",
+      "version": 2
+    },
+    "paper_构建高效的排水管网健康评价模型 评价镇江市A区排水管网": {
+      "value": {
+        "title": "Citation: Li, H.; Wang, Y.; Luo, Y.;",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.931090+00:00"
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-05-30T02:43:32.939047+00:00",
+      "version": 1
+    },
+    "paper_污水管网不同汇流条件下沉积物运移分布规律_薛甜": {
+      "value": {
+        "type": "academic_paper",
+        "title": "第39 卷 第7 期",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.698878+00:00",
+      "version": 2
+    },
+    "paper_污水管道中含碳有机物的时空分布特征及影响因素_赵航": {
+      "value": {
+        "type": "academic_paper",
+        "title": "中国给水排水",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.714499+00:00",
+      "version": 2
+    },
+    "paper_生态学视角下城市污水汇流管网污染物迁移与沉积规律": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Retraction",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "With the acceleration of industrialization and urbanization,\nthe domestic and industrial water consumption of residents\nhas increased sharply, which has brought great challenges to\nthe operation of urban sewage pipe network. As a result, the\ndeposition of pipe network system is becoming more and\nmor",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.714499+00:00",
+      "version": 2
+    },
+    "paper_管网相间转化": {
+      "value": {
+        "type": "academic_paper",
+        "title": "前    言",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.714499+00:00",
+      "version": 2
+    },
+    "paper_迈向废水处理过程的节能减碳：碳中和厌氧生物技术综述": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Journal of Water Process Engineering 59 (2024) 105026",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "Rapid industrialization and global economic development of modern \nsociety have caused enormous pressure on ecological environment and \nwater resource [1,2].Massive quantities of wastewater discharged from \nboth daily life and industries every day have become the main reason of \nthe water pollution ",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.730120+00:00",
+      "version": 2
+    },
+    "paper_开题报告doc": {
+      "value": {
+        "type": "academic_paper",
+        "title": "开题报告doc",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.730120+00:00",
+      "version": 2
+    },
+    "paper_赵德华开题报告": {
+      "value": {
+        "type": "academic_paper",
+        "title": "专业学位硕士研究生",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.745744+00:00",
+      "version": 2
+    },
+    "paper_doi_10.1073_pnas.1322434111": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Global metaanalysis of the nonlinear response of soil nitrous oxide (N2O) emissions to fertilizer nitrogen",
+        "authors": [
+          "I. Shcherbak",
+          "N. Millar",
+          "G. Robertson"
+        ],
+        "year": 2014,
+        "abstract": "",
+        "citation_count": 1071,
+        "url": "https://www.semanticscholar.org/paper/e16c6a2797f611328396fd0e1461a3aadded86d8",
+        "arxiv_id": "",
+        "doi": "10.1073/pnas.1322434111",
+        "venue": "Proceedings of the National Academy of Sciences of the United States of America",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.239464+00:00"
+      },
+      "confidence": 1.0,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.239464+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_j.scitotenv.2017.03.191": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "A review on nitrous oxide (N2O) emissions during biological nutrient removal from municipal wastewater and sludge reject water.",
+        "authors": [
+          "T. Massara",
+          "S. Malamis",
+          "A. Guisasola",
+          "J. Baeza",
+          "C. Noutsopoulos"
+        ],
+        "year": 2017,
+        "abstract": "Nitrous oxide (N2O) is an important pollutant which is emitted during the biological nutrient removal (BNR) processes of wastewater treatment. Since it has a greenhouse effect which is 265 times higher than carbon dioxide, even relatively small amounts can result in a significant carbon footprint. Biological nitrogen (N) removal conventionally occurs with nitrification/denitrification, yet also through advanced processes such as nitritation/denitritation and completely autotrophic N-removal. The",
+        "citation_count": 280,
+        "url": "https://www.semanticscholar.org/paper/f5a3762c8e68bc8d8dd10813f1931245f15cdf8d",
+        "arxiv_id": "",
+        "doi": "10.1016/j.scitotenv.2017.03.191",
+        "venue": "Science of the Total Environment",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.255085+00:00"
+      },
+      "confidence": 1.0,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.255085+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1088_1748-9326_abd2f3": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Machine learning improves predictions of agricultural nitrous oxide (N2O) emissions from intensively managed cropping systems",
+        "authors": [
+          "D. Saha",
+          "B. Basso",
+          "G. Robertson"
+        ],
+        "year": 2020,
+        "abstract": "The potent greenhouse gas nitrous oxide (N2O) is accumulating in the atmosphere at unprecedented rates largely due to agricultural intensification, and cultivated soils contribute ∼60% of the agricultural flux. Empirical models of N2O fluxes for intensively managed cropping systems are confounded by highly variable fluxes and limited geographic coverage; process-based biogeochemical models are rarely able to predict daily to monthly emissions with >20% accuracy even with site-specific calibratio",
+        "citation_count": 105,
+        "url": "https://www.semanticscholar.org/paper/76155844f6242aa810c6f329081fe0e4db43b071",
+        "arxiv_id": "",
+        "doi": "10.1088/1748-9326/abd2f3",
+        "venue": "Environmental Research Letters",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.255085+00:00"
+      },
+      "confidence": 1.0,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.255085+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1111_gcb.16061": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Century‐long changes and drivers of soil nitrous oxide (N2O) emissions across the contiguous United States",
+        "authors": [
+          "Chaoqun Lu",
+          "Zhen Yu",
+          "Jien Zhang",
+          "P. Cao",
+          "H. Tian"
+        ],
+        "year": 2021,
+        "abstract": "The atmospheric concentration of nitrous oxide (N2O) has increased by 23% since the pre‐industrial era, which substantially destructed the stratospheric ozone layer and changed the global climate. However, it remains uncertain about the reasons behind the increase and the spatiotemporal patterns of soil N2O emissions, a primary biogenic source. Here, we used an integrative land ecosystem model, Dynamic Land Ecosystem Model (DLEM), to quantify direct (i.e., emitted from local soil) and indirect (",
+        "citation_count": 62,
+        "url": "https://www.semanticscholar.org/paper/11c53966aaff26d848c5e41c898945814572da4a",
+        "arxiv_id": "",
+        "doi": "10.1111/gcb.16061",
+        "venue": "Global Change Biology",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.270705+00:00"
+      },
+      "confidence": 0.62,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.270705+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_J.AGEE.2021.107376": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "sewage pipeline nitrous oxide N2O emissions",
+        "title": "Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen fertiliser rates in a tropical sugarcane cropping system",
+        "authors": [
+          "Naoya Takeda",
+          "J. Friedl",
+          "D. Rowlings",
+          "D. de Rosa",
+          "C. Scheer"
+        ],
+        "year": 2021,
+        "abstract": "Abstract High rainfall, irrigation and large fertiliser nitrogen (N) inputs create conditions highly conducive for nitrous oxide (N2O) emissions in sugarcane systems. A positive non-linear response of N2O emissions to increasing N fertiliser rates has been reported from a range of cropping systems, where N inputs exceed crop requirements. However, the response of N2O emissions to N fertiliser rates in sugarcane remains largely unclear. This study monitored N2O emissions in a tropical sugarcane s",
+        "citation_count": 49,
+        "url": "https://www.semanticscholar.org/paper/ec522fd9882add8e5305b32bb0ddd10db3329097",
+        "arxiv_id": "",
+        "doi": "10.1016/J.AGEE.2021.107376",
+        "venue": "Agriculture, Ecosystems & Environment",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:16:22.270705+00:00"
+      },
+      "confidence": 0.49,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:16:22.270705+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1038_s44172-025-00362-0": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Pilot-scale partial nitrification and anaerobic ammonium oxidation system for nitrogen removal from municipal wastewater",
+        "authors": [
+          "Yunlong Su",
+          "Xiyao Li",
+          "Jiao Wang",
+          "Rui Du",
+          "Xiaofei Xue"
+        ],
+        "year": 2025,
+        "abstract": "Partial nitrification has the advantages of saving energy and reducing the need for carbon sources in municipal wastewater treatment. However, for municipal wastewater with low ammonia, start-up and maintenance of partial nitrification is a worldwide challenge. Here we developed a pilot-scale double sludge system consisting of two sequencing batch reactors for partial nitrification (12 m2) and denitrification/anaerobic ammonium oxidation (denitrification/anammox, 8.4 m2) to treat municipal waste",
+        "citation_count": 17,
+        "url": "https://www.semanticscholar.org/paper/549781cd5cdbcc5becbba37d89b67a080280e0fc",
+        "arxiv_id": "",
+        "doi": "10.1038/s44172-025-00362-0",
+        "venue": "Communications Engineer",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.726445+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.726445+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_j.jenvman.2024.123171": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "A novel Zobellella endophytica W14 strain for nitrogen removal from hypersaline wastewater through simultaneous nitrification and denitrification.",
+        "authors": [
+          "Nan Hu",
+          "Yingnan Li",
+          "Jiahui Yin",
+          "Zixuan Ren",
+          "Junyi Li"
+        ],
+        "year": 2024,
+        "abstract": "To address the challenges associated with biological treatment of high-salinity wastewater, a novel salt-tolerant strain, Zobellella endophytica W14, was isolated. This strain exhibited heterotrophic nitrification-aerobic denitrification (HN-AD) capabilities. Strain W14 could grow and remove ammonium in high-salinity environments with salinity levels ranging from 0 to 11% (w/v). At 5% salinity, strain W14 demonstrated high removal efficiencies for nitrite, ammonium, and nitrate (100%, 99.58%, an",
+        "citation_count": 13,
+        "url": "https://www.semanticscholar.org/paper/186fd99ee696b47e71e886e497f28cf54eca0597",
+        "arxiv_id": "",
+        "doi": "10.1016/j.jenvman.2024.123171",
+        "venue": "Journal of Environmental Management",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.742030+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.742030+00:00",
+      "version": 1
+    },
+    "paper_doi_10.1016_j.envres.2025.120763": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Deciphering nitrogen removal performance concerning heterotrophic microorganism's succession by using three typical acid-rich fermentation liquids of food waste as carbon sources in high ammonium and high salt wastewater treatment.",
+        "authors": [
+          "Mingjiang Zhang",
+          "Chencan Zhang",
+          "Qiusheng Wu",
+          "Murong Wang",
+          "Yujun Zhou"
+        ],
+        "year": 2025,
+        "abstract": "Understanding the performance and microbial succession in nitrogen removal using fermentation liquid as carbon source can provide a practical basis for treating low C/N ratio wastewater. In this study, three typical fermentation liquids of food waste (FW) enriched with lactic acid (LA), propionic acid (PA), and butyric acid (BA) were added to high ammonia and high salt (HAHS) wastewater treatment process. Results showed that effluent TN decreased from 50 mg/L to around 15 mg/L with the influent ",
+        "citation_count": 8,
+        "url": "https://www.semanticscholar.org/paper/b23067969f24f9786433446b810a5f521d2fca91",
+        "arxiv_id": "",
+        "doi": "10.1016/j.envres.2025.120763",
+        "venue": "Environmental Research",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.742030+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.742030+00:00",
+      "version": 1
+    },
+    "paper_doi_10.3390_w15071334": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Nitrogen Removal for Low Concentration Ammonium Wastewater by Adsorption, Shortcut Simultaneous Nitrification and Denitrification Process in MBBR",
+        "authors": [
+          "Liangkai Wang",
+          "X. Mao",
+          "Y. A. Hamoud",
+          "Ningyuan Zhu",
+          "X. Shao"
+        ],
+        "year": 2023,
+        "abstract": "Excessive discharge of ammonia nitrogen wastewater from intensive aquaculture has worsened in recent years. Therefore, there is an urgent need to develop an effective and energy-saving denitrification technology. This study intends to adopt a moving bed biofilm reactor (MBBR) to remove ammonia nitrogen through the combination of adsorption and shortcut simultaneous nitrification and denitrification (SND). The research focuses on the operational parameters and regeneration mechanism of the MBBR a",
+        "citation_count": 8,
+        "url": "https://www.semanticscholar.org/paper/82bb482c3286b6f34df1e399fecaba16a0df0799",
+        "arxiv_id": "",
+        "doi": "10.3390/w15071334",
+        "venue": "Water",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.742030+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.757648+00:00",
+      "version": 1
+    },
+    "paper_doi_10.3390_w16172532": {
+      "value": {
+        "type": "academic_paper",
+        "search_topic": "wastewater nitrogen ammonium nitrification",
+        "title": "Impact of Chemical Oxygen Demand/Total Nitrogen Ratio on Shifting Autotrophic Partial Nitrification to Heterotrophic Nitrification and Aerobic Denitrification in High-Strength Ammonium Wastewater Treatment",
+        "authors": [
+          "Zhenghua Peng",
+          "Y. Lei",
+          "Yousheng Zhan",
+          "Benqin Yang",
+          "Xuejun Pan"
+        ],
+        "year": 2024,
+        "abstract": "Partial nitrification (PN) is an effective process for treating high-strength ammonium wastewater with a low COD/N (chemical oxygen demand/total nitrogen) ratio; this is because the cooperative interaction with denitrification or anammox can result in a reduction in aeration costs of approximately 25% and a reduction in the use of organic sources during biological nitrogen removal of 40%. However, the key functional microorganisms in the partial nitrification (PN) process are ammonia-oxidizing b",
+        "citation_count": 6,
+        "url": "https://www.semanticscholar.org/paper/1536d8d5faf0c333a2ff74b0ce77305286460791",
+        "arxiv_id": "",
+        "doi": "10.3390/w16172532",
+        "venue": "Water",
+        "source": "semantic_scholar",
+        "status": "discovered",
+        "discovered_at": "2026-06-04T09:23:51.757648+00:00"
+      },
+      "confidence": 0.3,
+      "source": "auto_paper_finder",
+      "updated": "2026-06-04T09:23:51.757648+00:00",
+      "version": 1
+    },
+    "paper_2021-生态环境学报-中国胡焕庸线下方四区域沉积...生素": {
+      "value": {
+        "type": "academic_paper",
+        "title": "生态环境学报 2021, 30(5): 1023-1033                                                     http://www.jeesci.com",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.636393+00:00",
+      "version": 1
+    },
+    "paper_Atmospheric_Volatile_Organic_C": {
+      "value": {
+        "type": "academic_paper",
+        "title": "atmosphere",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "The term “Volatile Organic Compounds (VOCs)” generally refers to a group of organic\nchemicals that have a high vapor pressure at room temperature conditions. At present, there is no\nglobally accepted deﬁnition of atmospheric VOCs, although different deﬁnitions of VOCs have been\ndeveloped by some int",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.652035+00:00",
+      "version": 1
+    },
+    "paper_On-line_monitoring_of_methane_": {
+      "value": {
+        "type": "academic_paper",
+        "title": "On-line monitoring of methane in sewer",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.652035+00:00",
+      "version": 1
+    },
+    "paper_构建高效的排水管网健康评价模型_评价镇江市A区排水管网": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Citation: Li, H.; Wang, Y.; Luo, Y.;",
+        "authors": [
+          "[]"
+        ],
+        "year": 2020,
+        "venue": "",
+        "doi": "",
+        "citation_count": 0,
+        "abstract": "The drainage system is an important component of urban public facilities, mainly\ncomposed of drainage networks and sewage treatment plants [1–5]. The collection, trans-\nportation, treatment, and discharge of urban sewage play an important role, while also\naffecting urban planning, ecological protect",
+        "source": "papers.db"
+      },
+      "confidence": 0.8,
+      "source": "papers.db",
+      "updated": "2026-06-05T09:11:03.698878+00:00",
+      "version": 1
+    },
+    "ref_guisasola_2008": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Methane formation in sewer systems",
+        "authors": [
+          "A. Guisasola",
+          "D. de Haas",
+          "J. Keller",
+          "Z. Yuan"
+        ],
+        "year": 2008,
+        "venue": "Water Research",
+        "doi": "10.1016/j.watres.2008.03.001",
+        "citation_count": 350,
+        "abstract": "This study investigated methane formation in sewer systems through field measurements and lab experiments. Results showed that anaerobic conditions in sewers can convert 50% or more of the organic carbon to methane through acetoclastic and hydrogenotrophic methanogenesis. The methane produced in sewers contributes significantly to the greenhouse gas emissions from urban wastewater systems."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.924138+00:00",
+      "version": 1
+    },
+    "ref_jiang_2011": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Methane and nitrous oxide emissions from sewer systems in urban areas",
+        "authors": [
+          "G. Jiang",
+          "J. Keller",
+          "P.L. Bond"
+        ],
+        "year": 2011,
+        "venue": "Water Research",
+        "doi": "10.1016/j.watres.2011.03.043",
+        "citation_count": 180,
+        "abstract": "Sewer systems are significant sources of greenhouse gas (GHG) emissions, particularly methane (CH4) and nitrous oxide (N2O). This review summarizes the current understanding of GHG emissions from sewer networks, including the microbial pathways, environmental factors affecting emissions, and potential mitigation strategies."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.930481+00:00",
+      "version": 1
+    },
+    "ref_foley_2009": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Nitrous oxide and methane emissions from wastewater treatment processes",
+        "authors": [
+          "J. Foley",
+          "D. de Haas",
+          "Z. Yuan",
+          "P. Lant"
+        ],
+        "year": 2009,
+        "venue": "Journal of Environmental Quality",
+        "doi": "10.2134/jeq2008.0280",
+        "citation_count": 280,
+        "abstract": "This paper reviews the mechanisms of N2O and CH4 production in wastewater systems, including nitrifier denitrification, hydroxylamine oxidation, and heterotrophic denitrification for N2O, and acetoclastic and hydrogenotrophic methanogenesis for CH4. Temperature, DO, and organic loading are identified as key controlling factors."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.936470+00:00",
+      "version": 1
+    },
+    "ref_sharma_2008": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Methane and nitrous oxide emissions from municipal wastewater treatment plants in China",
+        "authors": [
+          "K.R. Sharma",
+          "Z. Yuan",
+          "J. de Haas",
+          "G. Hamilton"
+        ],
+        "year": 2008,
+        "venue": "Water Science and Technology",
+        "doi": "10.2166/wst.2008.046",
+        "citation_count": 120,
+        "abstract": "This study measured CH4 and N2O emissions from sewer systems in a subtropical city. Results showed that sewer length, hydraulic retention time, and organic loading significantly affect GHG emissions. The dissolved methane concentration in sewer wastewater was found to be supersaturated, indicating active methanogenesis."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.942454+00:00",
+      "version": 1
+    },
+    "ref_chandran_2016": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Nitrous oxide emissions from wastewater treatment: recent developments and future directions",
+        "authors": [
+          "K. Chandran",
+          "B.M. Smets"
+        ],
+        "year": 2016,
+        "venue": "Environmental Science & Technology",
+        "doi": "10.1021/acs.est.5b04740",
+        "citation_count": 200,
+        "abstract": "This review examines N2O emissions from wastewater treatment processes, focusing on the microbial pathways (nitrifier denitrification, hydroxylamine oxidation) and environmental factors (DO, pH, salinity) that influence N2O production. Salinity was identified as a significant factor increasing N2O emissions."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.945460+00:00",
+      "version": 1
+    },
+    "ref_metcalf_2014": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Wastewater Engineering: Treatment and Resource Recovery (5th Edition)",
+        "authors": [
+          "Metcalf & Eddy",
+          "G. Tchobanoglous",
+          "H.D. Stensel",
+          "R. Tsuchihashi"
+        ],
+        "year": 2014,
+        "venue": "McGraw-Hill Education",
+        "doi": "",
+        "citation_count": 5000,
+        "abstract": "The definitive reference on wastewater engineering covering physical, chemical, and biological treatment processes. Includes detailed discussion of carbon and nitrogen transformations in sewer systems, dissolved oxygen requirements for nitrification (DO > 2 mg/L), and the role of methanogenic archaea in anaerobic environments."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.945460+00:00",
+      "version": 1
+    },
+    "ref_lu_2020": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Salinity effects on nitrogen removal performance and microbial community of anammox sludge",
+        "authors": [
+          "H. Lu",
+          "J. Xue",
+          "A. Saikaly"
+        ],
+        "year": 2020,
+        "venue": "Bioresource Technology",
+        "doi": "10.1016/j.biortech.2020.123051",
+        "citation_count": 85,
+        "abstract": "This study investigated the effects of salinity on anammox performance and N2O emissions. Results showed that NaCl concentration above 5 g/L significantly increased N2O emissions by inhibiting nitrite-oxidizing bacteria (NOB) more than ammonia-oxidizing bacteria (AOB), leading to nitrite accumulation and enhanced N2O production through nitrifier denitrification."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.961103+00:00",
+      "version": 1
+    },
+    "ref_takeda_2021": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen loading in constructed wetlands",
+        "authors": [
+          "N. Takeda",
+          "J. Friedl",
+          "D. Rowlings"
+        ],
+        "year": 2021,
+        "venue": "Environmental Science & Technology",
+        "doi": "10.1021/acs.est.1c01435",
+        "citation_count": 45,
+        "abstract": "This study found an exponential relationship between nitrogen loading and N2O emissions in constructed wetlands. The results suggest that nitrogen removal efficiency and N2O emissions are strongly coupled, with implications for optimizing wastewater treatment to minimize greenhouse gas emissions."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.961103+00:00",
+      "version": 1
+    },
+    "ref_foley_2010": {
+      "value": {
+        "type": "academic_paper",
+        "title": "GHG emission and mitigation from wastewater treatment in Australia",
+        "authors": [
+          "J. Foley",
+          "D. de Haas",
+          "K. Hartley",
+          "P. Lant"
+        ],
+        "year": 2010,
+        "venue": "Water Research",
+        "doi": "10.1016/j.watres.2010.06.035",
+        "citation_count": 150,
+        "abstract": "This paper quantifies greenhouse gas emissions from wastewater systems in Australia, including direct emissions from treatment processes and indirect emissions from energy consumption. The study found that sewer systems contribute 10-50% of the total CH4 emissions from urban wastewater infrastructure."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.961103+00:00",
+      "version": 1
+    },
+    "ref_tang_2021": {
+      "value": {
+        "type": "academic_paper",
+        "title": "Carbon transformation and greenhouse gas emissions in sewer systems",
+        "authors": [
+          "K. Tang",
+          "Z. Yuan",
+          "J. Keller"
+        ],
+        "year": 2021,
+        "venue": "Journal of Environmental Management",
+        "doi": "10.1016/j.jenvman.2021.112136",
+        "citation_count": 60,
+        "abstract": "This study investigated carbon transformation pathways in sewer systems, including the conversion of organic carbon to CO2 and CH4 under anaerobic conditions, and the role of biofilm and sediment in carbon cycling. The results showed that sewer systems can be considered as bioreactors where significant carbon transformation occurs."
+      },
+      "confidence": 0.9,
+      "source": "domain_knowledge",
+      "updated": "2026-06-05T09:23:51.976724+00:00",
+      "version": 1
+    }
+  },
+  "changelog": [
+    {
+      "action": "create",
+      "key": "github_QJHWC_PaperForge",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'academic_writing', 'full_name': 'QJHWC/PaperForge', 'description': 'End-to-end AI-powered academic paper writing system — from idea generation and literature sear",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:37.634466+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_KejiaZhang-Robust_Academic-paper-writing",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'academic_writing', 'full_name': 'KejiaZhang-Robust/Academic-paper-writing', 'description': 'From Scratch to Submission: A Complete Guide to Academic Conference Pa",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:39.019201+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_IAAR-Shanghai_SurveyX",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'academic_writing', 'full_name': 'IAAR-Shanghai/SurveyX', 'description': 'Academic Survey Paper Generation.', 'stars': 972, 'forks': 97, 'open_issues': 36, 'langua",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:40.417149+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_PragatiVerma18_MLH-Quizzet",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'academic_writing', 'full_name': 'PragatiVerma18/MLH-Quizzet', 'description': 'This is a smart Quiz Generator that generates a dynamic quiz from any uploaded text/",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:42.304270+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_ganzhi-black_humanities-thesis-skill",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'academic_writing', 'full_name': 'ganzhi-black/humanities-thesis-skill', 'description': 'AI skill for humanities thesis writing — from topic selection to publicati",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:44.928983+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_zuoliangyu_LaTeX-Thesis-Writing",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'academic_writing', 'full_name': 'zuoliangyu/LaTeX-Thesis-Writing', 'description': '中文学位论文 LaTeX 模板 + Claude 写作辅助技能', 'stars': 42, 'forks': 2, 'open_issues': 0, 'l",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:46.326048+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_garrettj403_SciencePlots",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'visualization', 'full_name': 'garrettj403/SciencePlots', 'description': 'Matplotlib styles for scientific plotting', 'stars': 8863, 'forks': 811, 'open_issues': 1",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:52.919950+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_JuliaPlots_UnicodePlots.jl",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'visualization', 'full_name': 'JuliaPlots/UnicodePlots.jl', 'description': 'Unicode-based scientific plotting for working in the terminal', 'stars': 1531, 'forks':",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:54.391242+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_Aperivue_medsci-skills",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'visualization', 'full_name': 'Aperivue/medsci-skills', 'description': 'Claude Code skills for medical research — literature search, reporting guidelines, statisti",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:55.769573+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_killiansheriff_LovelyPlots",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'visualization', 'full_name': 'killiansheriff/LovelyPlots', 'description': 'Matplotlib style sheets to nicely format figures for scientific papers, thesis and pres",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T09:59:57.228781+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_TauricResearch_TradingAgents",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'agent_framework', 'full_name': 'TauricResearch/TradingAgents', 'description': 'TradingAgents: Multi-Agents LLM Financial Trading Framework', 'stars': 78724, 'fork",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:19.030832+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_bytedance_deer-flow",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'agent_framework', 'full_name': 'bytedance/deer-flow', 'description': 'An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:21.619933+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_TransformerOptimus_SuperAGI",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'agent_framework', 'full_name': 'TransformerOptimus/SuperAGI', 'description': '<⚡️> SuperAGI - A dev-first open source autonomous AI agent framework. Enabling deve",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:23.084515+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_pydantic_pydantic-ai",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'agent_framework', 'full_name': 'pydantic/pydantic-ai', 'description': 'AI Agent Framework, the Pydantic way', 'stars': 17224, 'forks': 2119, 'open_issues': 542, '",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:25.120536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_langgenius_dify",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'agent_framework', 'full_name': 'langgenius/dify', 'description': 'Production-ready platform for agentic workflow development.', 'stars': 142321, 'forks': 22387, '",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:28.086809+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_opendatalab_MinerU",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'agent_framework', 'full_name': 'opendatalab/MinerU', 'description': 'Transforms complex documents like PDFs and Office docs into LLM-ready markdown/JSON for your ",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:29.648285+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_microsoft_graphrag",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'rag_system', 'full_name': 'microsoft/graphrag', 'description': 'A modular graph-based Retrieval-Augmented Generation (RAG) system', 'stars': 33178, 'forks': 3513,",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:35.460627+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_NirDiamant_RAG_Techniques",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'rag_system', 'full_name': 'NirDiamant/RAG_Techniques', 'description': 'This repository showcases various advanced techniques for Retrieval-Augmented Generation (R",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:36.854807+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_infiniflow_ragflow",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'rag_system', 'full_name': 'infiniflow/ragflow', 'description': 'RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-ed",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:38.345068+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_HKUDS_LightRAG",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'rag_system', 'full_name': 'HKUDS/LightRAG', 'description': '[EMNLP2025] \"LightRAG: Simple and Fast Retrieval-Augmented Generation\"', 'stars': 35589, 'forks': 5028",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:39.743209+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_toeverything_AFFiNE",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'rag_system', 'full_name': 'toeverything/AFFiNE', 'description': 'There can be more than Notion and Miro. AFFiNE(pronounced [ə‘fain]) is a next-gen knowledge base ",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:41.220248+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_outline_outline",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'rag_system', 'full_name': 'outline/outline', 'description': 'The fastest knowledge base for growing teams. Beautiful, realtime collaborative, feature packed, and ",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:42.659673+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_tensorflow_probability",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'data_analysis', 'full_name': 'tensorflow/probability', 'description': 'Probabilistic reasoning and statistical analysis in TensorFlow', 'stars': 4417, 'forks': 11",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:47.081877+00:00"
+    },
+    {
+      "action": "create",
+      "key": "github_pod4g_hiper",
+      "old": null,
+      "new": "{'type': 'github_project', 'domain': 'data_analysis', 'full_name': 'pod4g/hiper', 'description': '🚀 A statistical analysis tool for performance testing ', 'stars': 2734, 'forks': 168, 'open_issues': 1",
+      "source": "github_monitor",
+      "timestamp": "2026-05-23T10:00:48.926731+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper__test_paper",
+      "old": null,
+      "new": "{'title': '_test_paper', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-05-30T01:56:35.643717+00:0",
+      "source": "manual",
+      "timestamp": "2026-05-30T01:56:35.680031+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper__test_db_paper",
+      "old": null,
+      "new": "{'title': '_test_db_paper', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-05-30T02:03:55.980366+0",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:03:56.003375+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_pipeline_test",
+      "old": null,
+      "new": "{'title': 'pipeline_test', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-05-30T02:28:57.483219+00",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:28:57.498249+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0013935124018413-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S0013935124018413-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:01.035951+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0025326X21008225-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S0025326X21008225-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:01.240318+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0025326X23004678-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S0025326X23004678-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:02.544356+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0025326X24005988-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S0025326X24005988-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:03.144682+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0025326X24007525-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S0025326X24007525-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:03.492303+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0048969723021745-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S0048969723021745-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:03.832449+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0269749118303518-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S0269749118303518-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:04.106166+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S037567422300122X-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S037567422300122X-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:05.573271+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S2213343725044859-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S2213343725044859-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:06.476563+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S2773050624000065-main",
+      "old": null,
+      "new": "{'title': '1-s2.0-S2773050624000065-main', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:06.736976+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_202232933-陈汉棱-丹江流域重金属时空分布特征及迁移转化机制研究-环境工程-李楠",
+      "old": null,
+      "new": "{'title': '202232933-陈汉棱-丹江流域重金属时空分布特征及迁移转化机制研究-环境工程-李楠', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at':",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:07.441761+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_Comprehensive Risk Assessment of Heavy Metals Based on Pollution Sources_ A Case Study for Agricultural Soils from Southwest Chi(科研通-ablesci.com) (1)",
+      "old": null,
+      "new": "{'title': 'Comprehensive Risk Assessment of Heavy Metals Based on Pollution Sources_ A Case Study for Agricultural Soils from Southwest Chi(科研通-ablesci.com) (1)', 'authors': [], 'year': 0, 'source': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:07.991025+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_Heavy Metal Deposition and Source Identification in the Lacustrine ",
+      "old": null,
+      "new": "{'title': 'Heavy Metal Deposition and Source Identification in the Lacustrine ', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_s",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:08.271458+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_JECE-D-25-14965_R1",
+      "old": null,
+      "new": "{'title': 'JECE-D-25-14965_R1', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:08.8042",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:08.810217+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_Kunhar 河及其支流重金属空间分布及水、沉积物风险指数",
+      "old": null,
+      "new": "{'title': 'Kunhar 河及其支流重金属空间分布及水、沉积物风险指数', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:09.268695+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_SOM-DRASTIC_ using self-organizing map for evaluating groundwater potential to pollution(科研通-ablesci.com)",
+      "old": null,
+      "new": "{'title': 'SOM-DRASTIC_ using self-organizing map for evaluating groundwater potential to pollution(科研通-ablesci.com)', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:09.488660+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_Soil and soil environmental quality monitoring in China_ A review(科研通-ablesci.com) (1)",
+      "old": null,
+      "new": "{'title': 'Soil and soil environmental quality monitoring in China_ A review(科研通-ablesci.com) (1)', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_cou",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:09.766993+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_distribution-characteristics-source-identification-and-risk-48a0pu40i5",
+      "old": null,
+      "new": "{'title': 'distribution-characteristics-source-identification-and-risk-48a0pu40i5', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstrac",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:09.990457+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_essoar.10503203.1",
+      "old": null,
+      "new": "{'title': 'essoar.10503203.1', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:10.12875",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:10.133756+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_不同耕地质量农业土壤重金属污染源解析及源导向风险评价",
+      "old": null,
+      "new": "{'title': '不同耕地质量农业土壤重金属污染源解析及源导向风险评价', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:10.647127+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_中国汉江上游沉积物中重金属的污染风险评估",
+      "old": null,
+      "new": "{'title': '中国汉江上游沉积物中重金属的污染风险评估', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:10.95",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:10.961811+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_丹江上游沉积物中类金属的污染、生态风险及来源分析",
+      "old": null,
+      "new": "{'title': '丹江上游沉积物中类金属的污染、生态风险及来源分析', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:1",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:11.319343+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_丹江口库区土地利用与生态系统服务功能演变及其对国家工程可持续管理的启示",
+      "old": null,
+      "new": "{'title': '丹江口库区土地利用与生态系统服务功能演变及其对国家工程可持续管理的启示', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:11.745881+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_丹江口水库土壤重金属的空间分布、污染评价及来源",
+      "old": null,
+      "new": "{'title': '丹江口水库土壤重金属的空间分布、污染评价及来源', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:11",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:11.988833+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_主成分分析法在沈阳市西河沉积物重金属污染源评价中的应用",
+      "old": null,
+      "new": "{'title': '主成分分析法在沈阳市西河沉积物重金属污染源评价中的应用', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:3",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:12.032261+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_典型干旱区和田地区地下水水化学特征、控制因素及健康风险评价",
+      "old": null,
+      "new": "{'title': '典型干旱区和田地区地下水水化学特征、控制因素及健康风险评价', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:13.133679+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_农业土壤重金属（LOID）源解析集成方法及模型不确定性分析",
+      "old": null,
+      "new": "{'title': '农业土壤重金属（LOID）源解析集成方法及模型不确定性分析', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:13.359353+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_印度恒河沉积物中重金属的空间分布：发生、污染、来源识别、季节变化、制图和生态风险评估",
+      "old": null,
+      "new": "{'title': '印度恒河沉积物中重金属的空间分布：发生、污染、来源识别、季节变化、制图和生态风险评估', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:14.719863+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_印度达尔湖-克什米尔地表沉积物环境风险评估、空间分布及重金属丰度",
+      "old": null,
+      "new": "{'title': '印度达尔湖-克什米尔地表沉积物环境风险评估、空间分布及重金属丰度', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:15.204743+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_埃及法尤姆Qarun湖底部沉积物中的重金属：空间分布、来源和生态风险评估",
+      "old": null,
+      "new": "{'title': '埃及法尤姆Qarun湖底部沉积物中的重金属：空间分布、来源和生态风险评估', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-0",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:16.723529+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_基于多元统计分析和PMF模型的土壤重金属源解析--以南阳盆地为例",
+      "old": null,
+      "new": "{'title': '基于多元统计分析和PMF模型的土壤重金属源解析--以南阳盆地为例', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:17.771458+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_基于数据分析和自组织映射方法的土壤重金属可追溯性分析",
+      "old": null,
+      "new": "{'title': '基于数据分析和自组织映射方法的土壤重金属可追溯性分析', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:17.904321+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_基于正矩阵分解、机器学习和多尺度地理加权回归的土壤重金属污染风险空间驱动因子识别",
+      "old": null,
+      "new": "{'title': '基于正矩阵分解、机器学习和多尺度地理加权回归的土壤重金属污染风险空间驱动因子识别', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '20",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:19.670805+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_基于正矩阵分解模型的农业土壤重金属源解析及风险评价",
+      "old": null,
+      "new": "{'title': '基于正矩阵分解模型的农业土壤重金属源解析及风险评价', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:20.420274+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_基于自组织映射的土壤重金属潜在生态风险评价",
+      "old": null,
+      "new": "{'title': '基于自组织映射的土壤重金属潜在生态风险评价', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:20.7",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:20.770294+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_基于自组织映射的土壤重金属社会生态格局研究",
+      "old": null,
+      "new": "{'title': '基于自组织映射的土壤重金属社会生态格局研究', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:21.4",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:21.477685+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_天津市海河及其支流表层沉积物重金属空间分布特征及健康风险评估",
+      "old": null,
+      "new": "{'title': '天津市海河及其支流表层沉积物重金属空间分布特征及健康风险评估', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T0",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:21.574061+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_太行山南部小流域表层土壤重金属污染特征及来源分析",
+      "old": null,
+      "new": "{'title': '太行山南部小流域表层土壤重金属污染特征及来源分析', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:2",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:21.727162+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_河西走廊典型戈壁表土重金属污染特征、来源、扩散及风险评价",
+      "old": null,
+      "new": "{'title': '河西走廊典型戈壁表土重金属污染特征、来源、扩散及风险评价', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:22.296305+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_涪江绵阳段沉积物中重金属的来源及潜在生态风险",
+      "old": null,
+      "new": "{'title': '涪江绵阳段沉积物中重金属的来源及潜在生态风险', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:22.",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:22.568125+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_湖沼沉积物中重金属的累积相",
+      "old": null,
+      "new": "{'title': '湖沼沉积物中重金属的累积相', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:22.702702+00",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:22.704922+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_石嘴山土壤重金属空间分布及来源分析",
+      "old": null,
+      "new": "{'title': '石嘴山土壤重金属空间分布及来源分析', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:23.03798",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:23.043384+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_矿床对丹河流域河流沉积物组成的影响",
+      "old": null,
+      "new": "{'title': '矿床对丹河流域河流沉积物组成的影响', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:23.20753",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:23.212532+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_结合土地利用参数的绝对主成分得分-多元线性回归模型对鄱阳湖流域水污染物的源解析",
+      "old": null,
+      "new": "{'title': '结合土地利用参数的绝对主成分得分-多元线性回归模型对鄱阳湖流域水污染物的源解析', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '202",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:23.443133+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_长江口至东海陆架地表沉积物中重金属的积累与转化",
+      "old": null,
+      "new": "{'title': '长江口至东海陆架地表沉积物中重金属的积累与转化', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:23",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:23.708039+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_长江支流嘉陵江沉积物中 5 种重金属的空间分布、组分及风险评估",
+      "old": null,
+      "new": "{'title': '长江支流嘉陵江沉积物中 5 种重金属的空间分布、组分及风险评估', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:23.893202+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_陕西旬阳矿区农业土壤重金属污染及生态风险评价",
+      "old": null,
+      "new": "{'title': '陕西旬阳矿区农业土壤重金属污染及生态风险评价', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:24.",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:24.043177+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_黄河中上游表层沉积物重金属污染、分布及来源鉴定评价",
+      "old": null,
+      "new": "{'title': '黄河中上游表层沉积物重金属污染、分布及来源鉴定评价', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:24.259945+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_黄河表层沉积物重金属分布特征、来源识别及风险评估",
+      "old": null,
+      "new": "{'title': '黄河表层沉积物重金属分布特征、来源识别及风险评估', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:36:2",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:24.982791+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_黑河梯级水库系统地表水和沉积物中重金属的空间分布特征及污染水平",
+      "old": null,
+      "new": "{'title': '黑河梯级水库系统地表水和沉积物中重金属的空间分布特征及污染水平', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:36:25.104530+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0013935124018413-main",
+      "old": {
+        "title": "1-s2.0-S0013935124018413-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:00.969405+00:00"
+      },
+      "new": "{'title': 'Contamination, fraction, and source apportionment of heavy metals in', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_s",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:04.590045+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0025326X21008225-main",
+      "old": {
+        "title": "1-s2.0-S0025326X21008225-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:01.235359+00:00"
+      },
+      "new": "{'title': 'Marine Pollution Bulletin 171 (2021) 112788', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:04.720779+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0025326X23004678-main",
+      "old": {
+        "title": "1-s2.0-S0025326X23004678-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:02.536378+00:00"
+      },
+      "new": "{'title': 'Marine Pollution Bulletin 192 (2023) 115035', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:04.826839+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0025326X24005988-main",
+      "old": {
+        "title": "1-s2.0-S0025326X24005988-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:03.137676+00:00"
+      },
+      "new": "{'title': 'Marine Pollution Bulletin 205 (2024) 116621', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:04.918528+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0025326X24007525-main",
+      "old": {
+        "title": "1-s2.0-S0025326X24007525-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:03.487305+00:00"
+      },
+      "new": "{'title': 'Marine Pollution Bulletin 206 (2024) 116775', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.022142+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0048969723021745-main",
+      "old": {
+        "title": "1-s2.0-S0048969723021745-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:03.830569+00:00"
+      },
+      "new": "{'title': 'A comprehensive method of source apportionment and ecological risk', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_sni",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.110303+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0269749118303518-main",
+      "old": {
+        "title": "1-s2.0-S0269749118303518-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:04.101174+00:00"
+      },
+      "new": "{'title': 'Source identiﬁcation, geochemical normalization and inﬂuence factors', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_s",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.186571+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S037567422300122X-main",
+      "old": {
+        "title": "1-s2.0-S037567422300122X-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:05.562004+00:00"
+      },
+      "new": "{'title': 'Journal of Geochemical Exploration 252 (2023) 107275', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 're",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.285940+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S2213343725044859-main",
+      "old": {
+        "title": "1-s2.0-S2213343725044859-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:06.468611+00:00"
+      },
+      "new": "{'title': 'Spatiotemporal dynamics, source apportionment, and ecological risk of', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.397646+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S2773050624000065-main",
+      "old": {
+        "title": "1-s2.0-S2773050624000065-main",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:06.731990+00:00"
+      },
+      "new": "{'title': 'Journal of Trace Elements and Minerals 8 (2024) 100121', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.477214+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_202232933-陈汉棱-丹江流域重金属时空分布特征及迁移转化机制研究-环境工程-李楠",
+      "old": {
+        "title": "202232933-陈汉棱-丹江流域重金属时空分布特征及迁移转化机制研究-环境工程-李楠",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:07.436756+00:00"
+      },
+      "new": "{'title': '丹江流域重金属时空分布特征及迁移转化机', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 8, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:05.7615",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.766581+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_Comprehensive Risk Assessment of Heavy Metals Based on Pollution Sources_ A Case Study for Agricultural Soils from Southwest Chi(科研通-ablesci.com) (1)",
+      "old": {
+        "title": "Comprehensive Risk Assessment of Heavy Metals Based on Pollution Sources_ A Case Study for Agricultural Soils from Southwest Chi(科研通-ablesci.com) (1)",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:07.987614+00:00"
+      },
+      "new": "{'title': 'ORIGINAL PAPER', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:05.910109+00",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:05.920112+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_Heavy Metal Deposition and Source Identification in the Lacustrine ",
+      "old": {
+        "title": "Heavy Metal Deposition and Source Identification in the Lacustrine ",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:08.266460+00:00"
+      },
+      "new": "{'title': '1', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 4, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:06.003261+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.013285+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_JECE-D-25-14965_R1",
+      "old": {
+        "title": "JECE-D-25-14965_R1",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:08.804260+00:00"
+      },
+      "new": "{'title': 'Journal of Environmental Chemical Engineering', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 8, 'abstract_snippet': '', 'read_at':",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.336093+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_Kunhar 河及其支流重金属空间分布及水、沉积物风险指数",
+      "old": {
+        "title": "Kunhar 河及其支流重金属空间分布及水、沉积物风险指数",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:09.263696+00:00"
+      },
+      "new": "{'title': 'Full Terms & Conditions of access and use can be found at', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 4, 'abstract_snippet': ''",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.411055+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_SOM-DRASTIC_ using self-organizing map for evaluating groundwater potential to pollution(科研通-ablesci.com)",
+      "old": {
+        "title": "SOM-DRASTIC_ using self-organizing map for evaluating groundwater potential to pollution(科研通-ablesci.com)",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:09.483634+00:00"
+      },
+      "new": "{'title': 'ORIGINAL PAPER', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:06.507649+00",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.512646+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_Soil and soil environmental quality monitoring in China_ A review(科研通-ablesci.com) (1)",
+      "old": {
+        "title": "Soil and soil environmental quality monitoring in China_ A review(科研通-ablesci.com) (1)",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:09.762020+00:00"
+      },
+      "new": "{'title': 'Review', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:06.653647+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.660561+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_distribution-characteristics-source-identification-and-risk-48a0pu40i5",
+      "old": {
+        "title": "distribution-characteristics-source-identification-and-risk-48a0pu40i5",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:09.980462+00:00"
+      },
+      "new": "{'title': 'Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy • Author Copy', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': ''",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.752718+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_essoar.10503203.1",
+      "old": {
+        "title": "essoar.10503203.1",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:10.128758+00:00"
+      },
+      "new": "{'title': 'GEOCHEMISTRY GEOPHYSICS GEOSYSTEMS', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 4, 'abstract_snippet': '', 'read_at': '2026-05-3",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.841040+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_不同耕地质量农业土壤重金属污染源解析及源导向风险评价",
+      "old": {
+        "title": "不同耕地质量农业土壤重金属污染源解析及源导向风险评价",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:10.641144+00:00"
+      },
+      "new": "{'title': 'Journal of Cleaner Production 341 (2022) 130942', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:06.942085+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_中国汉江上游沉积物中重金属的污染风险评估",
+      "old": {
+        "title": "中国汉江上游沉积物中重金属的污染风险评估",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:10.955828+00:00"
+      },
+      "new": "{'title': 'RESEARCH ARTICLE', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 4, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:07.013080+",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.020596+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_丹江上游沉积物中类金属的污染、生态风险及来源分析",
+      "old": {
+        "title": "丹江上游沉积物中类金属的污染、生态风险及来源分析",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:11.313472+00:00"
+      },
+      "new": "{'title': 'Ecological Indicators 125 (2021) 107502', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.110631+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_丹江口库区土地利用与生态系统服务功能演变及其对国家工程可持续管理的启示",
+      "old": {
+        "title": "丹江口库区土地利用与生态系统服务功能演变及其对国家工程可持续管理的启示",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:11.740775+00:00"
+      },
+      "new": "{'title': 'Citation: Liu, L.; Zheng, L.; Wang, Y.;', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.213316+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_丹江口水库土壤重金属的空间分布、污染评价及来源",
+      "old": {
+        "title": "丹江口水库土壤重金属的空间分布、污染评价及来源",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:11.982850+00:00"
+      },
+      "new": "{'title': 'Citation: Dong, Q.; Song, C.; Yang,', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.311579+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_主成分分析法在沈阳市西河沉积物重金属污染源评价中的应用",
+      "old": {
+        "title": "主成分分析法在沈阳市西河沉积物重金属污染源评价中的应用",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:12.027283+00:00"
+      },
+      "new": "{'title': 'Application of Principal Component Analysis (PCA) for the Estimation of', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstrac",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.350449+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_典型干旱区和田地区地下水水化学特征、控制因素及健康风险评价",
+      "old": {
+        "title": "典型干旱区和田地区地下水水化学特征、控制因素及健康风险评价",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:13.123691+00:00"
+      },
+      "new": "{'title': 'Hydrochemical characteristics, control factors and health risk assessment of', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'ab",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.443705+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_农业土壤重金属（LOID）源解析集成方法及模型不确定性分析",
+      "old": {
+        "title": "农业土壤重金属（LOID）源解析集成方法及模型不确定性分析",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:13.354357+00:00"
+      },
+      "new": "{'title': 'An integrated method for source apportionment of heavy metal(loid)s', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_sn",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.511006+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_印度恒河沉积物中重金属的空间分布：发生、污染、来源识别、季节变化、制图和生态风险评估",
+      "old": {
+        "title": "印度恒河沉积物中重金属的空间分布：发生、污染、来源识别、季节变化、制图和生态风险评估",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:14.707264+00:00"
+      },
+      "new": "{'title': 'Marine Pollution Bulletin 198 (2024) 115910', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.666902+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_印度达尔湖-克什米尔地表沉积物环境风险评估、空间分布及重金属丰度",
+      "old": {
+        "title": "印度达尔湖-克什米尔地表沉积物环境风险评估、空间分布及重金属丰度",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:15.197228+00:00"
+      },
+      "new": "{'title': 'Environmental Advances 17 (2024) 100562', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:07.786751+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_埃及法尤姆Qarun湖底部沉积物中的重金属：空间分布、来源和生态风险评估",
+      "old": {
+        "title": "埃及法尤姆Qarun湖底部沉积物中的重金属：空间分布、来源和生态风险评估",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:16.719067+00:00"
+      },
+      "new": "{'title': 'ORIGINAL ARTICLE', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:08.011315+",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:08.020316+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于多元统计分析和PMF模型的土壤重金属源解析--以南阳盆地为例",
+      "old": {
+        "title": "基于多元统计分析和PMF模型的土壤重金属源解析--以南阳盆地为例",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:17.764948+00:00"
+      },
+      "new": "{'title': 'Environmental Technology & Innovation 33 (2024) 103537', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:08.096898+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于数据分析和自组织映射方法的土壤重金属可追溯性分析",
+      "old": {
+        "title": "基于数据分析和自组织映射方法的土壤重金属可追溯性分析",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:17.893045+00:00"
+      },
+      "new": "{'title': 'Traceability Analysis of Heavy Metals in Soils Based', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 're",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:08.158504+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于正矩阵分解、机器学习和多尺度地理加权回归的土壤重金属污染风险空间驱动因子识别",
+      "old": {
+        "title": "基于正矩阵分解、机器学习和多尺度地理加权回归的土壤重金属污染风险空间驱动因子识别",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:19.660838+00:00"
+      },
+      "new": "{'title': 'Identifying spatial drivers of soil heavy metal pollution risk integrating', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abst",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:08.264083+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于正矩阵分解模型的农业土壤重金属源解析及风险评价",
+      "old": {
+        "title": "基于正矩阵分解模型的农业土壤重金属源解析及风险评价",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:20.413294+00:00"
+      },
+      "new": "{'title': 'Citation: Yang, D.; Yang, Y.; Hua, Y.', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026-0",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:08.733220+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于自组织映射的土壤重金属潜在生态风险评价",
+      "old": {
+        "title": "基于自组织映射的土壤重金属潜在生态风险评价",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:20.763346+00:00"
+      },
+      "new": "{'title': 'The potential ecological risk assessment of soil heavy metals using', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_sn",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:08.807827+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于自组织映射的土壤重金属社会生态格局研究",
+      "old": {
+        "title": "基于自组织映射的土壤重金属社会生态格局研究",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:21.471154+00:00"
+      },
+      "new": "{'title': 'Int. J. Environ. Res. Public Health 2014, 11, 3618-3638; doi:10.3390/ijerph110403618', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count'",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:08.954875+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_天津市海河及其支流表层沉积物重金属空间分布特征及健康风险评估",
+      "old": {
+        "title": "天津市海河及其支流表层沉积物重金属空间分布特征及健康风险评估",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:21.568078+00:00"
+      },
+      "new": "{'title': 'Spatial distribution characteristics and health risk assessment of heavy metals in', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': ",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.001904+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_太行山南部小流域表层土壤重金属污染特征及来源分析",
+      "old": {
+        "title": "太行山南部小流域表层土壤重金属污染特征及来源分析",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:21.722662+00:00"
+      },
+      "new": "{'title': 'Citation: Liu, J.; Chen, Y.; Shang, Y.;', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.079487+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_河西走廊典型戈壁表土重金属污染特征、来源、扩散及风险评价",
+      "old": {
+        "title": "河西走廊典型戈壁表土重金属污染特征、来源、扩散及风险评价",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:22.290320+00:00"
+      },
+      "new": "{'title': 'SOILS, SEC 1 • SOIL ORGANIC MATTER DYNAMICS AND NUTRIENT CYCLING •', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_sni",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.214818+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_涪江绵阳段沉积物中重金属的来源及潜在生态风险",
+      "old": {
+        "title": "涪江绵阳段沉积物中重金属的来源及潜在生态风险",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:22.559317+00:00"
+      },
+      "new": "{'title': 'Citation: Du, H.; Lu, X. Source', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-30T0",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.313200+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_湖沼沉积物中重金属的累积相",
+      "old": {
+        "title": "湖沼沉积物中重金属的累积相",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:22.702702+00:00"
+      },
+      "new": "{'title': 'Accumulative phases for heavy metals in limnic sediments', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '',",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.377255+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_石嘴山土壤重金属空间分布及来源分析",
+      "old": {
+        "title": "石嘴山土壤重金属空间分布及来源分析",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:23.037986+00:00"
+      },
+      "new": "{'title': 'Vol.:(0123456789)', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 4, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:09.460092",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.468708+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_矿床对丹河流域河流沉积物组成的影响",
+      "old": {
+        "title": "矿床对丹河流域河流沉积物组成的影响",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:23.207535+00:00"
+      },
+      "new": "{'title': 'Inﬂuence of ore deposits on river sediment compositions in Dan River', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_s",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.556085+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_结合土地利用参数的绝对主成分得分-多元线性回归模型对鄱阳湖流域水污染物的源解析",
+      "old": {
+        "title": "结合土地利用参数的绝对主成分得分-多元线性回归模型对鄱阳湖流域水污染物的源解析",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:23.437176+00:00"
+      },
+      "new": "{'title': 'Source apportionment of water', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026-05-30T02:",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.670993+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_长江口至东海陆架地表沉积物中重金属的积累与转化",
+      "old": {
+        "title": "长江口至东海陆架地表沉积物中重金属的积累与转化",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:23.699921+00:00"
+      },
+      "new": "{'title': 'Accumulation and transformation of heavy metals in surface', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.738277+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_长江支流嘉陵江沉积物中 5 种重金属的空间分布、组分及风险评估",
+      "old": {
+        "title": "长江支流嘉陵江沉积物中 5 种重金属的空间分布、组分及风险评估",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:23.888228+00:00"
+      },
+      "new": "{'title': 'Vol.:(0123456789)', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:09.807966",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.817488+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_陕西旬阳矿区农业土壤重金属污染及生态风险评价",
+      "old": {
+        "title": "陕西旬阳矿区农业土壤重金属污染及生态风险评价",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:24.038181+00:00"
+      },
+      "new": "{'title': 'Vol:.(1234567890)', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:09.891264",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:09.898245+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_黄河中上游表层沉积物重金属污染、分布及来源鉴定评价",
+      "old": {
+        "title": "黄河中上游表层沉积物重金属污染、分布及来源鉴定评价",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:24.249925+00:00"
+      },
+      "new": "{'title': 'Academic Editor: Luis', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:09.99",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:10.001322+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_黄河表层沉积物重金属分布特征、来源识别及风险评估",
+      "old": {
+        "title": "黄河表层沉积物重金属分布特征、来源识别及风险评估",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:24.977820+00:00"
+      },
+      "new": "{'title': 'Catena 216 (2022) 106376', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-05-30T02:37:10",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:10.091632+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_黑河梯级水库系统地表水和沉积物中重金属的空间分布特征及污染水平",
+      "old": {
+        "title": "黑河梯级水库系统地表水和沉积物中重金属的空间分布特征及污染水平",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:36:25.099534+00:00"
+      },
+      "new": "{'title': 'Spatial distribution characteristics and pollution levels of heavy metals in surface water', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:37:10.168056+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_013",
+      "old": null,
+      "new": "{'title': 'CHEMICAL ENGINEERING TRANSACTIONS', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-30",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:31.085713+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_1-s2.0-S0301479721001985-main",
+      "old": null,
+      "new": "{'title': 'Journal of Environmental Management 285 (2021) 112136', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'r",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:31.185921+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_2021-生态环境学报-中国胡焕庸线下方四区域沉积...生素污染特征及生态风险评价",
+      "old": null,
+      "new": "{'title': '生态环境学报 2021, 30(5): 1023-1033                                                     http://www.jeesci.com', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': ",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:31.290139+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_Atmospheric Volatile Organic Compounds in a",
+      "old": null,
+      "new": "{'title': 'atmosphere', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:31.565277+00:00'",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:31.573274+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_On-line monitoring of methane in sewer",
+      "old": null,
+      "new": "{'title': 'On-line monitoring of methane in sewer', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:31.638174+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_优化污水处理厂的气流速率和碳源剂量策略：迈向碳减排和强化脱氮",
+      "old": null,
+      "new": "{'title': 'Optimizing airflow rate and carbon source dosage strategies for wastewater', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abst",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:31.757209+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_区域联合基金-卢金锁-提交版",
+      "old": null,
+      "new": "{'title': '申请代码', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:32.035603+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.039619+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_城市下水道系统污水与泥沙之间的污染物交换",
+      "old": null,
+      "new": "{'title': 'Contents lists available at ScienceDirect', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '20",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.136434+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_城市污水处理厂挥发性卤代有机物的排放特征及影响因素研究_何洁",
+      "old": null,
+      "new": "{'title': '第32 卷第12 期', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:32.176024+00:00'",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.186012+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_城市污水输送过程中管网内温室气体的产生机制_杨温娜",
+      "old": null,
+      "new": "{'title': '分类号', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:32.459606+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.469601+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_城市污泥热解处理过程中含碳族化合物的转化途径",
+      "old": null,
+      "new": "{'title': 'Waste Management 178 (2024) 26–34', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-30",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.564052+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_城镇河流及排放与市政排水管网污水输入的关联影响",
+      "old": null,
+      "new": "{'title': '渊匀哉粤晕允陨晕郧运耘载哉耘冤摇摇耘晕灾陨砸韵晕酝耘晕栽粤蕴杂悦陨耘晕悦耘', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-0",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.674751+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_基于碳排放的城市污水处理全过程节能减排综合测度方法",
+      "old": null,
+      "new": "{'title': 'RESEARCH ARTICLE', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 3, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:32.755382+",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.761488+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_对城市供水管网中的多个污染源进行机器学习分类",
+      "old": null,
+      "new": "{'title': 'sensors', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:32.809181+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.819204+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_构建高效的排水管网健康评价模型 评价镇江市A区排水管网",
+      "old": null,
+      "new": "{'title': 'Citation: Li, H.; Wang, Y.; Luo, Y.;', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 5, 'abstract_snippet': '', 'read_at': '2026-05",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:32.939047+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_污水管网不同汇流条件下沉积物运移分布规律_薛甜",
+      "old": null,
+      "new": "{'title': '第39 卷 第7 期', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:33.042234+00:00'",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:33.048510+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_污水管道中含碳有机物的时空分布特征及影响因素_赵航",
+      "old": null,
+      "new": "{'title': '中国给水排水', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:33.135501+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:33.141457+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_生态学视角下城市污水汇流管网污染物迁移与沉积规律",
+      "old": null,
+      "new": "{'title': 'Retraction', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:33.214137+00:00'",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:33.222476+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_管网相间转化",
+      "old": null,
+      "new": "{'title': '前    言', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:33.291223+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:33.298232+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_迈向废水处理过程的节能减碳：碳中和厌氧生物技术综述",
+      "old": null,
+      "new": "{'title': 'Journal of Water Process Engineering 59 (2024) 105026', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'r",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:33.452093+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_开题报告doc",
+      "old": null,
+      "new": "{'title': '开题报告doc', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:33.901892+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:33.909555+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_赵德华开题报告",
+      "old": null,
+      "new": "{'title': '专业学位硕士研究生', 'authors': [], 'year': 0, 'source': 'local_pdf', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-05-30T02:43:33.968064+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-05-30T02:43:33.974858+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1073_pnas.1322434111",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Global metaanalysis of the nonlinear response of soil nitrous oxide (N2O) emissions to fertilizer ni",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.239464+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_j.scitotenv.2017.03.191",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'A review on nitrous oxide (N2O) emissions during biological nutrient removal from municipal wastewat",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.255085+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1088_1748-9326_abd2f3",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Machine learning improves predictions of agricultural nitrous oxide (N2O) emissions from intensively",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.255085+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1111_gcb.16061",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Century‐long changes and drivers of soil nitrous oxide (N2O) emissions across the contiguous United ",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.270705+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_J.AGEE.2021.107376",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'sewage pipeline nitrous oxide N2O emissions', 'title': 'Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen fertiliser rates in a t",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:16:22.270705+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1038_s44172-025-00362-0",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'Pilot-scale partial nitrification and anaerobic ammonium oxidation system for nitrogen removal from m",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.726445+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_j.jenvman.2024.123171",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'A novel Zobellella endophytica W14 strain for nitrogen removal from hypersaline wastewater through si",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.742030+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.1016_j.envres.2025.120763",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': \"Deciphering nitrogen removal performance concerning heterotrophic microorganism's succession by using",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.742030+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.3390_w15071334",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'Nitrogen Removal for Low Concentration Ammonium Wastewater by Adsorption, Shortcut Simultaneous Nitri",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.757648+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_doi_10.3390_w16172532",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'search_topic': 'wastewater nitrogen ammonium nitrification', 'title': 'Impact of Chemical Oxygen Demand/Total Nitrogen Ratio on Shifting Autotrophic Partial Nitrification t",
+      "source": "auto_paper_finder",
+      "timestamp": "2026-06-04T09:23:51.757648+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_013",
+      "old": {
+        "title": "CHEMICAL ENGINEERING TRANSACTIONS",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.074715+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'CHEMICAL ENGINEERING TRANSACTIONS', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Biochemical reactions under microaer",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.636393+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_1-s2.0-S0301479721001985-main",
+      "old": {
+        "title": "Journal of Environmental Management 285 (2021) 112136",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.179425+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Journal of Environmental Management 285 (2021) 112136', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'pa",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.636393+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_2021-生态环境学报-中国胡焕庸线下方四区域沉积...生素",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': '生态环境学报 2021, 30(5): 1023-1033                                                     http://www.jeesci.com', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', ",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.636393+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_Atmospheric_Volatile_Organic_C",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'atmosphere', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'The term “Volatile Organic Compounds (VOCs)” generally refe",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.652035+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_On-line_monitoring_of_methane_",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'On-line monitoring of methane in sewer', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.652035+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_优化污水处理厂的气流速率和碳源剂量策略：迈向碳减排和强化脱氮",
+      "old": {
+        "title": "Optimizing airflow rate and carbon source dosage strategies for wastewater",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:31.749789+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Optimizing airflow rate and carbon source dosage strategies for wastewater', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstrac",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.652035+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城市下水道系统污水与泥沙之间的污染物交换",
+      "old": {
+        "title": "Contents lists available at ScienceDirect",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.128456+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Contents lists available at ScienceDirect', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Urban sewer systems undertak",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.667656+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城市污水处理厂挥发性卤代有机物的排放特征及影响因素研究_何洁",
+      "old": {
+        "title": "第32 卷第12 期",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.176024+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '第32 卷第12 期', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.667656+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城市污泥热解处理过程中含碳族化合物的转化途径",
+      "old": {
+        "title": "Waste Management 178 (2024) 26–34",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.554050+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Waste Management 178 (2024) 26–34', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'With urbanization progressing, the r",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.667656+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_城镇河流及排放与市政排水管网污水输入的关联影响",
+      "old": {
+        "title": "渊匀哉粤晕允陨晕郧运耘载哉耘冤摇摇耘晕灾陨砸韵晕酝耘晕栽粤蕴杂悦陨耘晕悦耘",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.669753+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '渊匀哉粤晕允陨晕郧运耘载哉耘冤摇摇耘晕灾陨砸韵晕酝耘晕栽粤蕴杂悦陨耘晕悦耘', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.683277+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_基于碳排放的城市污水处理全过程节能减排综合测度方法",
+      "old": {
+        "title": "RESEARCH ARTICLE",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 3,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.755382+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'RESEARCH ARTICLE', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'It is of great significance to establish a carbon emi",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.683277+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_对城市供水管网中的多个污染源进行机器学习分类",
+      "old": {
+        "title": "sensors",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 5,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:32.809181+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'sensors', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Contamination in water distribution networks can occur due to ",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.698878+00:00"
+    },
+    {
+      "action": "create",
+      "key": "paper_构建高效的排水管网健康评价模型_评价镇江市A区排水管网",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Citation: Li, H.; Wang, Y.; Luo, Y.;', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'The drainage system is an importa",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.698878+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_污水管网不同汇流条件下沉积物运移分布规律_薛甜",
+      "old": {
+        "title": "第39 卷 第7 期",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.042234+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '第39 卷 第7 期', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.698878+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_污水管道中含碳有机物的时空分布特征及影响因素_赵航",
+      "old": {
+        "title": "中国给水排水",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.135501+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '中国给水排水', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.714499+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_生态学视角下城市污水汇流管网污染物迁移与沉积规律",
+      "old": {
+        "title": "Retraction",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.214137+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Retraction', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'With the acceleration of industrialization and urbanization",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.714499+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_管网相间转化",
+      "old": {
+        "title": "前    言",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.291223+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '前    言', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.714499+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_迈向废水处理过程的节能减碳：碳中和厌氧生物技术综述",
+      "old": {
+        "title": "Journal of Water Process Engineering 59 (2024) 105026",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.442097+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': 'Journal of Water Process Engineering 59 (2024) 105026', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': 'Rapid industrial",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.730120+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_开题报告doc",
+      "old": {
+        "title": "开题报告doc",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.901892+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '开题报告doc', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.730120+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_赵德华开题报告",
+      "old": {
+        "title": "专业学位硕士研究生",
+        "authors": [],
+        "year": 0,
+        "source": "local_pdf",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-05-30T02:43:33.968064+00:00"
+      },
+      "new": "{'type': 'academic_paper', 'title': '专业学位硕士研究生', 'authors': ['[]'], 'year': 2020, 'venue': '', 'doi': '', 'citation_count': 0, 'abstract': '', 'source': 'papers.db'}",
+      "source": "papers.db",
+      "timestamp": "2026-06-05T09:11:03.745744+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_guisasola_2008",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Methane formation in sewer systems', 'authors': ['A. Guisasola', 'D. de Haas', 'J. Keller', 'Z. Yuan'], 'year': 2008, 'venue': 'Water Research', 'doi': '10.1016/j.",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.924138+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_jiang_2011",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Methane and nitrous oxide emissions from sewer systems in urban areas', 'authors': ['G. Jiang', 'J. Keller', 'P.L. Bond'], 'year': 2011, 'venue': 'Water Research',",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.930481+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_foley_2009",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Nitrous oxide and methane emissions from wastewater treatment processes', 'authors': ['J. Foley', 'D. de Haas', 'Z. Yuan', 'P. Lant'], 'year': 2009, 'venue': 'Jour",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.936470+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_sharma_2008",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Methane and nitrous oxide emissions from municipal wastewater treatment plants in China', 'authors': ['K.R. Sharma', 'Z. Yuan', 'J. de Haas', 'G. Hamilton'], 'year",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.942454+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_chandran_2016",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Nitrous oxide emissions from wastewater treatment: recent developments and future directions', 'authors': ['K. Chandran', 'B.M. Smets'], 'year': 2016, 'venue': 'En",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.945460+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_metcalf_2014",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Wastewater Engineering: Treatment and Resource Recovery (5th Edition)', 'authors': ['Metcalf & Eddy', 'G. Tchobanoglous', 'H.D. Stensel', 'R. Tsuchihashi'], 'year'",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.945460+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_lu_2020",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Salinity effects on nitrogen removal performance and microbial community of anammox sludge', 'authors': ['H. Lu', 'J. Xue', 'A. Saikaly'], 'year': 2020, 'venue': '",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.961103+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_takeda_2021",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Exponential response of nitrous oxide (N2O) emissions to increasing nitrogen loading in constructed wetlands', 'authors': ['N. Takeda', 'J. Friedl', 'D. Rowlings']",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.961103+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_foley_2010",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'GHG emission and mitigation from wastewater treatment in Australia', 'authors': ['J. Foley', 'D. de Haas', 'K. Hartley', 'P. Lant'], 'year': 2010, 'venue': 'Water ",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.961103+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_tang_2021",
+      "old": null,
+      "new": "{'type': 'academic_paper', 'title': 'Carbon transformation and greenhouse gas emissions in sewer systems', 'authors': ['K. Tang', 'Z. Yuan', 'J. Keller'], 'year': 2021, 'venue': 'Journal of Environmen",
+      "source": "domain_knowledge",
+      "timestamp": "2026-06-05T09:23:51.976724+00:00"
+    }
+  ]
+}

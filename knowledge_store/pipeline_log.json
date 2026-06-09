@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "count": 5,
+    "updated": "2026-05-30T02:28:59.175969+00:00"
+  },
+  "log": [
+    {
+      "timestamp": "2026-05-30T02:28:57.510188+00:00",
+      "step": "step1_read",
+      "detail": "读取: pipeline_test",
+      "data": {
+        "paper_id": "pipeline_test",
+        "sections": 6,
+        "words": 1129,
+        "evidence_level": 6,
+        "credibility": 0.32
+      }
+    },
+    {
+      "timestamp": "2026-05-30T02:28:57.513180+00:00",
+      "step": "step2_matrix",
+      "detail": "矩阵构建完成",
+      "data": {
+        "papers": 1,
+        "themes": 0
+      }
+    },
+    {
+      "timestamp": "2026-05-30T02:28:57.520160+00:00",
+      "step": "step5_review",
+      "detail": "发现2个问题",
+      "data": {
+        "total": 2,
+        "by_severity": {
+          "MAJOR": 2
+        },
+        "by_category": {
+          "SCI格式": 1,
+          "引文规范": 1
+        }
+      }
+    },
+    {
+      "timestamp": "2026-05-30T02:28:57.520160+00:00",
+      "step": "step6_checklist",
+      "detail": "1不通过, 6警告",
+      "data": {
+        "total": 37,
+        "fail": 1,
+        "warn": 6
+      }
+    },
+    {
+      "timestamp": "2026-05-30T02:28:59.175969+00:00",
+      "step": "step8_evolve",
+      "detail": "进化周期完成",
+      "data": {}
+    }
+  ]
+}

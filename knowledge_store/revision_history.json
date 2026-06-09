@@ -1,0 +1,11 @@
+{
+  "last_snapshot": "[mechanisms] 31 entries\n  c_n_coupling_pattern: TOC与TN/铵态氮相关\n  c_n_coupling_mechanism: 碳氮耦合是污水管道生物转化的核心过程。有机碳降解释放含氮有机物中的氮（氨化作用），使NH4+浓度升高。同时，反硝化过程需\n\n[review_rules] 77 entries\n  ai_pattern_en_0: It is (?:important|crucial|essential|worth noting) to (?:not\n  ai_pattern_en_1: (?:delve|dive) into\n  ai_pattern_en_2: in the realm of\n\n[writing_templates] 13 entries\n  intro_opening_zh: 近年来，{领域}受到了广泛关注。{具体问题}是该领域的关键问题之一。\n  intro_gap_zh: 然而，现有研究主要集中在{方向}，对{空白}的研究仍然不足。\n  intro_objective_zh: 本研究旨在{目标}，以{方法}为核心手段，探究{问题}。\n\n[domain_terms] 14 entries\n\n[methods] 8 entries\n\n[parameters] 17 entries\n\n[resources] 99 entries\n\n[feedback_log] 2 entries",
+  "last_audit": {
+    "unchanged_ratio": 1.0,
+    "new_ratio": 0.0,
+    "shallow_warning": true,
+    "paragraphs_original": 8,
+    "paragraphs_revised": 8
+  },
+  "updated": "2026-06-02T09:01:36.778870+00:00"
+}
