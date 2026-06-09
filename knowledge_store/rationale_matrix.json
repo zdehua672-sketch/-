@@ -1,5 +1,22 @@
 {
   "version": 1,
-  "updated": "2026-06-04T08:44:50.083958+00:00",
-  "rows": []
+  "updated": "2026-06-09T16:28:15.096144+00:00",
+  "total_rows": 1,
+  "papers": [
+    "test"
+  ],
+  "rows": [
+    {
+      "finding": "DO与CH4负相关",
+      "mechanism": "厌氧产甲烷",
+      "mechanism_en": "",
+      "evidence": "r=-0.72",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "discussion",
+      "language": "zh",
+      "paper_id": "test",
+      "timestamp": "2026-06-09T16:21:38.874191+00:00"
+    }
+  ]
 }
