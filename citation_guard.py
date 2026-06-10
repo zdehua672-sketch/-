@@ -50,8 +50,8 @@ logger = logging.getLogger(__name__)
 # ── 数据模型 ──────────────────────────────────────────────
 
 @dataclass
-class CitationEntry:
-    """一条引用记录"""
+class GuardEntry:
+    """一条引用记录（引用安全防护专用）"""
     key: str = ""                # 不透明键 (ref-xxxxxxxx)
     title: str = ""
     authors: str = ""
@@ -213,7 +213,7 @@ class CitationGuard:
     """
 
     def __init__(self):
-        self._entries: dict[str, CitationEntry] = {}  # {key: entry}
+        self._entries: dict[str, GuardEntry] = {}  # {key: entry}
         self._title_to_key: dict[str, str] = {}       # {title_lower: key}
 
     def assign_keys(self, references: list) -> list:
@@ -236,7 +236,7 @@ class CitationGuard:
             hash_val = hashlib.md5(hash_input.encode()).hexdigest()[:8]
             key = f"ref-{hash_val}"
 
-            entry = CitationEntry(
+            entry = GuardEntry(
                 key=key,
                 title=ref.get('title', ''),
                 authors=ref.get('authors', ''),
@@ -270,7 +270,7 @@ class CitationGuard:
         """获取所有有效引用键"""
         return set(self._entries.keys())
 
-    def get_entry(self, key: str) -> Optional[CitationEntry]:
+    def get_entry(self, key: str) -> Optional[GuardEntry]:
         """根据键获取引用条目"""
         return self._entries.get(key)
 
@@ -420,7 +420,7 @@ class CitationGuard:
         with open(path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         for key, entry_dict in data.get("entries", {}).items():
-            self._entries[key] = CitationEntry(**entry_dict)
+            self._entries[key] = GuardEntry(**entry_dict)
             if self._entries[key].title:
                 self._title_to_key[self._entries[key].title.lower()] = key
 

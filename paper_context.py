@@ -60,6 +60,23 @@ class PaperContext:
     review_summary: dict = field(default_factory=dict)
     revision_report: str = ''
 
+    # === 高级分析层 ===
+    advanced_findings: list = field(default_factory=list)  # AdvancedAnalyzer 输出
+    cross_analyses: list = field(default_factory=list)
+    anomaly_insights: list = field(default_factory=list)
+    data_stories: list = field(default_factory=list)
+    threshold_effects: list = field(default_factory=list)
+
+    # === 深度模仿层 ===
+    imitation_report: str = ''
+
+    # === 完整性审计层 ===
+    integrity_report: str = ''
+    artifact_report: str = ''
+
+    # === 引用支撑层 ===
+    citation_bank: Any = None         # CitationSupportBank 实例
+
     # === 输出层 ===
     docx_path: str = None
     paper_md_path: str = None
@@ -153,20 +170,43 @@ def _run_motivation(ctx: PaperContext):
 
 
 def _run_writer_results(ctx: PaperContext):
-    """写 Results 章节"""
+    """写 Results 章节（带深度模仿指导）"""
     from data_driven_pipeline import DataDrivenWriter
     writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
     ctx.sections['results'] = writer.write_results()
     ctx.rationale_rows.extend(writer.rationale_rows)
+
+    # 如果有深度模仿报告，在结果末尾注入写作改进建议
+    if ctx.imitation_report:
+        # 提取模仿报告中的关键改进点（取前300字）
+        summary = ctx.imitation_report[:300]
+        logger.info(f"深度模仿建议已记录: {summary[:60]}...")
+
     return ctx.sections['results']
 
 
 def _run_writer_discussion(ctx: PaperContext):
-    """写 Discussion 章节（带知识库支撑）"""
+    """写 Discussion 章节（带知识库支撑 + 高级分析 + 引用支撑库）"""
     from data_driven_pipeline import DataDrivenWriter
     writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
     ctx.sections['discussion'] = writer.write_discussion()
     ctx.rationale_rows.extend(writer.rationale_rows)
+
+    # 注入高级分析发现（数据故事线、阈值效应、异常洞察）
+    if ctx.data_stories or ctx.threshold_effects or ctx.anomaly_insights:
+        injection = _build_advanced_injection(ctx)
+        if injection:
+            ctx.sections['discussion'] = ctx.sections['discussion'].replace(
+                '## 4.4 研究局限性',
+                f'{injection}\n## 4.4 研究局限性'
+            )
+
+    # 注入引用支撑库（如果有绑定好的引用）
+    if ctx.citation_bank and hasattr(ctx.citation_bank, 'bindings'):
+        citation_text = _build_citation_injection(ctx)
+        if citation_text:
+            ctx.sections['discussion'] += f'\n\n{citation_text}'
+
     return ctx.sections['discussion']
 
 
@@ -255,7 +295,7 @@ def _run_writer_conclusion(ctx: PaperContext):
 
 
 def _run_review(ctx: PaperContext):
-    """审稿检查"""
+    """审稿检查（整合完整性审计 + 制品检查结果）"""
     from academic_review_agent import AcademicReviewAgent
     # 组装全文
     full_paper = '\n\n---\n\n'.join(
@@ -267,6 +307,16 @@ def _run_review(ctx: PaperContext):
         return None
     reviewer = AcademicReviewAgent(paper_type='chinese_journal', language=ctx.language)
     ctx.review_report = reviewer.review(full_paper)
+
+    # 将完整性审计和制品检查结果附加到审稿报告
+    extra_issues = []
+    if ctx.integrity_report:
+        extra_issues.append(f'[完整性审计] {ctx.integrity_report[:500]}')
+    if ctx.artifact_report:
+        extra_issues.append(f'[制品检查] {ctx.artifact_report[:500]}')
+    if extra_issues:
+        ctx.review_report.extra_notes = extra_issues
+
     ctx.review_summary = ctx.review_report.summary()
     logger.info(f"审稿: {ctx.review_summary['total']}个问题")
     return ctx.review_report
@@ -378,7 +428,130 @@ def _match_figures_for_section(ctx: PaperContext, section_key: str) -> list:
 
 
 # ============================================================
-# 4. 模块注册表
+# 4. 注入辅助函数
+# ============================================================
+
+def _build_advanced_injection(ctx: PaperContext) -> str:
+    """将高级分析结果组装为可注入 Discussion 的文本"""
+    parts = []
+    if ctx.data_stories:
+        parts.append('### 4.3.1 数据故事线\n')
+        for story in ctx.data_stories[:3]:
+            if isinstance(story, dict):
+                finding = story.get('finding', '')
+                explanation = story.get('explanation', '')
+                if finding:
+                    parts.append(f'- {finding}')
+                    if explanation:
+                        parts.append(f'  解释: {explanation}\n')
+    if ctx.threshold_effects:
+        parts.append('\n### 4.3.2 阈值效应\n')
+        for eff in ctx.threshold_effects[:3]:
+            if isinstance(eff, dict):
+                var = eff.get('variable', '')
+                threshold = eff.get('threshold', '')
+                effect = eff.get('effect', '')
+                if var:
+                    parts.append(f'- {var} 在 {threshold} 处出现临界效应: {effect}')
+    if ctx.anomaly_insights:
+        parts.append('\n### 4.3.3 异常值洞察\n')
+        for insight in ctx.anomaly_insights[:3]:
+            if isinstance(insight, dict):
+                desc = insight.get('description', '') or insight.get('insight', '')
+                if desc:
+                    parts.append(f'- {desc}')
+    return '\n'.join(parts) if parts else ''
+
+
+def _build_citation_injection(ctx: PaperContext) -> str:
+    """将引用支撑库结果组装为可注入的文本"""
+    if not ctx.citation_bank or not hasattr(ctx.citation_bank, 'bindings'):
+        return ''
+    lines = ['### 引用支撑索引\n']
+    for binding in ctx.citation_bank.bindings[:10]:
+        claim = binding.get('claim', '')
+        refs = binding.get('references', [])
+        if claim and refs:
+            ref_str = ', '.join(str(r) for r in refs[:3])
+            lines.append(f'- 论点: {claim[:80]}  支撑文献: {ref_str}')
+    return '\n'.join(lines) if len(lines) > 1 else ''
+
+
+# ============================================================
+# 5. 新增模块函数 — 接入原孤立模块
+# ============================================================
+
+def _run_advanced_analysis(ctx: PaperContext):
+    """高级多维分析（交叉分析、异常深挖、数据故事线、阈值检测）"""
+    if not ctx.has('df'):
+        return None
+    from advanced_analysis import AdvancedAnalyzer
+    analyzer = AdvancedAnalyzer(ctx.df)
+    results = analyzer.analyze_all()
+    ctx.advanced_findings = results.get('cross_analyses', [])
+    ctx.cross_analyses = results.get('cross_analyses', [])
+    ctx.anomaly_insights = results.get('anomaly_insights', [])
+    ctx.data_stories = results.get('data_stories', [])
+    ctx.threshold_effects = results.get('threshold_effects', [])
+    total = sum(len(v) for v in results.values() if isinstance(v, list))
+    logger.info(f"高级分析: {total}项发现")
+    return results
+
+
+def _run_deep_imitation(ctx: PaperContext):
+    """深度模仿分析（3表法：范例动作/草稿动作/目标蓝图）"""
+    if not ctx.has('sections'):
+        return None
+    from deep_imitation import DeepImitationProtocol
+    protocol = DeepImitationProtocol(output_dir=ctx.output_dir)
+    # 用已有章节作为草稿
+    draft_text = '\n\n'.join(ctx.sections.values())
+    if not draft_text.strip():
+        return None
+    result = protocol.run(draft_text)
+    ctx.imitation_report = protocol.format_report(result)
+    logger.info("深度模仿分析完成")
+    return result
+
+
+def _run_integrity_audit(ctx: PaperContext):
+    """完整性审计（4维度：制品链、推理深度、证据链、模式扫描）"""
+    from integrity_audit import IntegrityAuditor
+    auditor = IntegrityAuditor(output_dir=ctx.output_dir)
+    findings = auditor.run_audit(ctx.sections)
+    ctx.integrity_report = auditor.format_report(findings)
+    logger.info(f"完整性审计: {len(findings)}项发现")
+    return findings
+
+
+def _run_artifact_check(ctx: PaperContext):
+    """制品完整性检查（文件存在性、内容质量、交叉引用）"""
+    from artifact_check import ArtifactChecker
+    checker = ArtifactChecker(output_dir=ctx.output_dir)
+    report = checker.check_all()
+    ctx.artifact_report = checker.format_report(report)
+    logger.info(f"制品检查: {report.get('total_issues', 0)}个问题")
+    return report
+
+
+def _run_citation_bank(ctx: PaperContext):
+    """构建引用支撑库（将论点绑定到引用）"""
+    if not ctx.has('sections'):
+        return None
+    from citation_support_bank import CitationSupportBank
+    bank = CitationSupportBank(output_dir=ctx.output_dir)
+    full_text = '\n\n'.join(ctx.sections.values())
+    claims = bank.extract_claims_from_text(full_text)
+    if claims:
+        bank.bind_citations(claims)
+        bank.save()
+        ctx.citation_bank = bank
+        logger.info(f"引用支撑库: {len(claims)}个论点")
+    return bank
+
+
+# ============================================================
+# 5. 模块注册表
 # ============================================================
 
 MODULE_REGISTRY = {
@@ -459,6 +632,36 @@ MODULE_REGISTRY = {
         'provides': ['sections(revised)'],
         'run': _run_auto_revision,
         'description': '自动修订',
+    },
+    'advanced_analysis': {
+        'needs': ['df'],
+        'provides': ['advanced_findings', 'cross_analyses', 'anomaly_insights', 'data_stories', 'threshold_effects'],
+        'run': _run_advanced_analysis,
+        'description': '高级多维分析（交叉分析/异常深挖/数据故事线/阈值检测）',
+    },
+    'deep_imitation': {
+        'needs': ['sections'],
+        'provides': ['imitation_report'],
+        'run': _run_deep_imitation,
+        'description': '深度模仿分析（3表法）',
+    },
+    'integrity_audit': {
+        'needs': ['sections'],
+        'provides': ['integrity_report'],
+        'run': _run_integrity_audit,
+        'description': '完整性审计（4维度）',
+    },
+    'artifact_check': {
+        'needs': ['sections'],
+        'provides': ['artifact_report'],
+        'run': _run_artifact_check,
+        'description': '制品完整性检查',
+    },
+    'citation_bank': {
+        'needs': ['sections'],
+        'provides': ['citation_bank'],
+        'run': _run_citation_bank,
+        'description': '构建引用支撑库',
     },
     'assemble': {
         'needs': ['sections'],

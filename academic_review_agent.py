@@ -834,8 +834,8 @@ class TypoChecker:
 
 
 # ---------- 4. 学术语法检查 ----------
-class GrammarChecker:
-    """学术语法检查（禁用词+口语化）"""
+class ForbiddenWordChecker:
+    """学术禁用词检查（禁用词+口语化）"""
 
     @staticmethod
     def check(sections, language='en'):
@@ -1732,7 +1732,7 @@ class AcademicReviewAgent:
         ('中文格式', ChineseChecker),
         ('中文核心专项', ChineseChecker),  # check_cn_core_rules
         ('错别字', TypoChecker),
-        ('学术语法', GrammarChecker),
+        ('学术语法', ForbiddenWordChecker),
         ('引文规范', CitationChecker),
         ('图表规范', FigureChecker),
         ('数据逻辑', DataLogicChecker),

@@ -24,6 +24,7 @@ from academic_plot_style import (
     add_significance_bars, save_figure, set_plot_style
 )
 from statistical_analysis import StandardScaler, PCA, LinearRegression, r2_score
+from variable_registry import PHASE_KEYWORDS, classify_phase, GAS_VARS, LIQUID_VARS, SOLID_VARS
 
 # Nature 交付级 QA（来自 nature-figure skill）
 try:
@@ -309,9 +310,8 @@ class AutoRecommender:
                 domain_vars.add(pair['var2'])
             phase_cols = [c for c in numeric_cols if c in domain_vars]
         if not phase_cols:
-            # 回退：关键词匹配
-            phase_keywords = ['CH4', 'CO2', 'TOC', 'COD', 'DO', '气相', '液相', '固相', 'NH4', 'TN', 'TP']
-            phase_cols = [c for c in numeric_cols if any(k in str(c) for k in phase_keywords)]
+            # 回退：使用 variable_registry 的统一分类
+            phase_cols = [c for c in numeric_cols if classify_phase(c) != 'unknown']
 
         profile = {
             'n_rows': len(df),
@@ -1709,24 +1709,7 @@ class VisualizationAgent:
         phase_cols = profile.get('phase_cols', [])
         numeric_cols = profile.get('numeric_cols', [])
 
-        # 相态分类规则：从列名关键词推断
-        gas_keywords = ['CH4', 'CO2', 'N2O', 'VOCs', 'H2S', '气相']
-        liquid_keywords = ['TOC', 'IC', 'TC', 'DOC', 'COD', 'DO', '液相', 'mg/L', 'mg/l']
-        solid_keywords = ['固总碳', '有机碳', '无机碳', '固相', 'g/kg', 'mg/kg']
-
-        def classify_phase(col_name):
-            col_upper = str(col_name).upper()
-            for k in gas_keywords:
-                if k.upper() in col_upper:
-                    return 'gas'
-            for k in solid_keywords:
-                if k in str(col_name):
-                    return 'solid'
-            for k in liquid_keywords:
-                if k.upper() in col_upper:
-                    return 'liquid'
-            return None
-
+        # 相态分类：使用 variable_registry 的统一分类函数
         # 收集各相态的变量
         phase_vars = {'gas': [], 'liquid': [], 'solid': []}
         all_candidates = list(set(phase_cols + numeric_cols))
@@ -1950,22 +1933,14 @@ class VisualizationAgent:
             phase_cols = profile.get('phase_cols', [])
             numeric_cols = profile.get('numeric_cols', [])
 
-            gas_keywords = ['CH4', 'CO2', 'N2O', 'VOCs', 'H2S', '气相']
-            liquid_keywords = ['TOC', 'IC', 'TC', 'DOC', 'COD', 'DO', '液相', 'mg/L']
-            solid_keywords = ['固总碳', '有机碳', '无机碳', '固相', 'g/kg', 'mg/kg']
-
             all_candidates = list(set(phase_cols + numeric_cols))
 
-            for phase, keywords, default_type in [
-                ('gas', gas_keywords, 'box'),
-                ('liquid', liquid_keywords, 'box'),
-                ('solid', solid_keywords, 'bar'),
+            for phase, default_type in [
+                ('gas', 'box'),
+                ('liquid', 'box'),
+                ('solid', 'bar'),
             ]:
-                found = []
-                for col in all_candidates:
-                    col_str = str(col)
-                    if any(k.upper() in col_str.upper() for k in keywords):
-                        found.append(col)
+                found = [c for c in all_candidates if classify_phase(c) == phase]
                 if found:
                     panels.append({'type': default_type, 'variables': found, 'phase': phase})
 
