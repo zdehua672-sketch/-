@@ -43,19 +43,23 @@ print("=" * 60)
 # 先生成图表（需要在编排前，因为图表是独立的）
 print("\n[预处理] 生成图表...")
 from data_loader import DataLoader
-from plotting_functions import ThesisPlotter
+from scientific_visualization_agent import VisualizationAgent
 
 loader = DataLoader(DATA_FILE)
 df = loader.load_data()
 
-plotter = ThesisPlotter(df, ANALYSIS_DIR)
+plotter = VisualizationAgent(df, ANALYSIS_DIR, style='chinese')
 
 # 基础图
 plotter.plot_phase_composition()
-plotter.plot_gas_boxplot()
-plotter.plot_liquid_boxplot()
-plotter.plot_correlation_heatmap()
-plotter.plot_all_regressions()
+gas_vars = [c for c in ['CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)'] if c in df.columns]
+if gas_vars:
+    plotter.plot_multivariate(variables=gas_vars, kind='box')
+liquid_vars = [c for c in ['TOC（mg/L)', 'IC(mg/L)', 'DO(mg/L)', 'pH'] if c in df.columns]
+if liquid_vars:
+    plotter.plot_multivariate(variables=liquid_vars, kind='box')
+plotter.plot_heatmap()
+plotter.plot_batch_regressions()
 
 # 新增图
 plotter.plot_pca_biplot()

@@ -15,7 +15,7 @@ from datetime import datetime
 
 from data_loader import DataLoader
 from statistical_analysis import StatisticalAnalyzer
-from plotting_functions import ThesisPlotter
+from scientific_visualization_agent import VisualizationAgent
 from academic_plot_style import get_label, format_chemical
 from variable_registry import (
     DERIVED_VARS, classify_phase, get_phase_cols,
@@ -748,25 +748,29 @@ class ScientificAnalysisAgent:
 
         # Step 3: 生成图表
         print("\n[Step 3] 生成论文级图表...")
-        self.plotter = ThesisPlotter(self.df, self.output_dir)
+        self.plotter = VisualizationAgent(self.df, self.output_dir, style='chinese')
 
         figure_list = []
         if fig_decisions.get('phase_pie', {}).get('do'):
             self.plotter.plot_phase_composition()
             figure_list.append('phase_pie')
 
-        for phase in ['gas', 'liquid', 'solid']:
+        for phase in ['gas', 'liquid']:
             key = f'{phase}_boxplot'
             if fig_decisions.get(key, {}).get('do'):
-                getattr(self.plotter, f'plot_{phase}_boxplot', lambda: None)()
+                vars_key = {'gas': ['CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)'],
+                           'liquid': ['TOC（mg/L)', 'IC(mg/L)', 'DO(mg/L)', 'pH']}
+                vars = [c for c in vars_key.get(phase, []) if c in self.df.columns]
+                if vars:
+                    self.plotter.plot_multivariate(variables=vars, kind='box')
                 figure_list.append(key)
 
         if fig_decisions.get('correlation_heatmap', {}).get('do'):
-            self.plotter.plot_correlation_heatmap()
+            self.plotter.plot_heatmap()
             figure_list.append('correlation_heatmap')
 
         if fig_decisions.get('pca_biplot', {}).get('do'):
-            self.plotter.plot_pca_biplot()
+            self.plotter.plot_pca_hca(mode='biplot')
             figure_list.append('pca_biplot')
 
         if fig_decisions.get('hca_dendrogram', {}).get('do'):
@@ -774,7 +778,7 @@ class ScientificAnalysisAgent:
             figure_list.append('hca_dendrogram')
 
         if fig_decisions.get('regression', {}).get('do'):
-            self.plotter.plot_all_regressions()
+            self.plotter.plot_batch_regressions()
             figure_list.append('regression')
 
         # Step 4: 生成图注

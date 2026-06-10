@@ -23,7 +23,6 @@ from academic_plot_style import (
     get_label, format_chemical, significance_stars,
     add_significance_bars, save_figure, set_plot_style
 )
-from plotting_functions import ThesisPlotter
 from statistical_analysis import StandardScaler, PCA, LinearRegression, r2_score
 
 # Nature 交付级 QA（来自 nature-figure skill）
@@ -1006,7 +1005,6 @@ class VisualizationAgent:
         os.makedirs(output_dir, exist_ok=True)
 
         self._recommender = AutoRecommender(self.df, deep_profile_result)
-        self._legacy_plotter = ThesisPlotter(self.df, output_dir)
         self._caption_gen = EnhancedCaptionGenerator()
         self._chart_reviewer = ChartReviewer()
         StylePresets.apply(style)
@@ -2108,11 +2106,423 @@ class VisualizationAgent:
         save_figure(fig, f'regression_{x_col}_{y_col}', self.output_dir)
         return fig, meta
 
-    # ==================== 委托原ThesisPlotter ====================
+    # ==================== 从 plotting_functions.py 迁移的图表 ====================
 
-    def legacy(self):
-        """委托调用原ThesisPlotter的全部12种图"""
-        self._legacy_plotter.generate_all_figures()
+    def plot_phase_composition(self, phase_data=None, title=None):
+        """
+        三相碳组成饼图（环形图）
+
+        Parameters
+        ----------
+        phase_data : dict or None, 相态数据 {'气相': value, '液相': value, '固相': value}
+            None时自动从df中检测
+        title : str or None, 图表标题
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        df = self.df
+        if phase_data is None:
+            phase_data = {}
+            if '气相碳' in df.columns:
+                phase_data['气相'] = pd.to_numeric(df['气相碳'], errors='coerce').mean()
+            if '液相碳' in df.columns:
+                phase_data['液相'] = pd.to_numeric(df['液相碳'], errors='coerce').mean()
+            if '固相碳' in df.columns:
+                phase_data['固相'] = pd.to_numeric(df['固相碳'], errors='coerce').mean()
+
+        if len(phase_data) < 2:
+            print("  警告: 相态数据不足，跳过饼图")
+            return None, {}
+
+        labels = list(phase_data.keys())
+        sizes = list(phase_data.values())
+        colors = [PHASE_COLORS.get(l, '#999999') for l in labels]
+
+        fig, ax = plt.subplots(figsize=(8, 8), facecolor='white')
+        explode = [0.03] * len(labels)
+        wedges, texts, autotexts = ax.pie(
+            sizes, labels=None, colors=colors,
+            autopct='%1.1f%%', pctdistance=0.78,
+            startangle=90, explode=explode,
+            wedgeprops={'edgecolor': 'white', 'linewidth': 2},
+            textprops={'fontsize': 13})
+        for t in autotexts:
+            t.set_fontsize(13)
+            t.set_fontweight('bold')
+            t.set_color('white')
+
+        centre_circle = plt.Circle((0, 0), 0.40, fc='white', linewidth=0)
+        ax.add_artist(centre_circle)
+
+        if title is None:
+            title = '固液气三相碳污染物组成比例'
+        ax.set_title(title, fontsize=16, pad=20, fontweight='bold')
+
+        legend_labels = [f'{l} ({s:.1f})' for l, s in zip(labels, sizes)]
+        legend = ax.legend(wedges, legend_labels, title='相态 (均值)',
+                          loc='center left', bbox_to_anchor=(1.05, 0.5),
+                          frameon=True, edgecolor='#BBBBBB', facecolor='white',
+                          fontsize=12)
+        legend.get_title().set_fontsize(13)
+
+        plt.tight_layout()
+        save_figure(fig, 'phase_composition', self.output_dir)
+        meta = {'chart_type': 'phase_composition', 'data': phase_data}
+        return fig, meta
+
+    def plot_stacked_bar(self, cols=None, group_col=None, title=None, kind='carbon'):
+        """
+        堆叠柱状图（液相碳组成、固相碳组成等）
+
+        Parameters
+        ----------
+        cols : list or None, 要堆叠的列名
+        group_col : str or None, 分组列（如'季节'）
+        title : str or None, 图表标题
+        kind : str, 'carbon' / 'liquid' / 'solid'（用于自动检测列）
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        df = self.df
+
+        # 自动检测列
+        if cols is None:
+            if kind == 'liquid':
+                cols = [c for c in ['TOC（mg/L)', 'IC(mg/L)'] if c in df.columns]
+            elif kind == 'solid':
+                cols = [c for c in ['有机碳（g/kg)', '无机碳（g/kg)'] if c in df.columns]
+            else:
+                # 通用：找数值列
+                cols = df.select_dtypes(include=[np.number]).columns[:5].tolist()
+
+        if len(cols) < 2:
+            print("  警告: 堆叠柱状图需要至少2列数据")
+            return None, {}
+
+        # 自动检测分组
+        if group_col is None and '季节' in df.columns:
+            group_col = '季节'
+
+        if group_col:
+            groups = df[group_col].unique()
+            group_means = {col: [] for col in cols}
+            for g in groups:
+                gdf = df[df[group_col] == g]
+                for col in cols:
+                    group_means[col].append(pd.to_numeric(gdf[col], errors='coerce').mean())
+        else:
+            groups = ['总体']
+            group_means = {col: [pd.to_numeric(df[col], errors='coerce').mean()] for col in cols}
+
+        fig, ax = plt.subplots(figsize=(7, 6), facecolor='white')
+        x = np.arange(len(groups))
+        width = 0.5
+        bottom = np.zeros(len(groups))
+
+        for i, col in enumerate(cols):
+            color = CARBON_COLORS.get(col, TABLEAU_10[i % 10])
+            label = get_label(col)
+            ax.bar(x, group_means[col], width, bottom=bottom,
+                   label=label, color=color, edgecolor='white', linewidth=1.5)
+            # 添加数值标签
+            for j, val in enumerate(group_means[col]):
+                if val > 0:
+                    ax.text(j, bottom[j] + val / 2, f'{val:.1f}',
+                            ha='center', va='center', fontsize=10,
+                            color='white', fontweight='bold')
+            bottom += np.array(group_means[col])
+
+        # 总值标签
+        for j in range(len(groups)):
+            ax.text(j, bottom[j] + bottom[j] * 0.02, f'{bottom[j]:.1f}',
+                    ha='center', va='bottom', fontsize=11, fontweight='bold')
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(groups, fontsize=13)
+        ax.set_ylabel('浓度', fontsize=13)
+        if title is None:
+            title = f'{kind}组成'
+        ax.set_title(title, fontsize=16, fontweight='bold', pad=15)
+        ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB')
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+
+        save_figure(fig, f'stacked_bar_{kind}', self.output_dir)
+        meta = {'chart_type': 'stacked_bar', 'kind': kind, 'cols': cols}
+        return fig, meta
+
+    def plot_hca_dendrogram(self, cols=None, method='ward', n_clusters=None):
+        """
+        独立的层次聚类树状图
+
+        Parameters
+        ----------
+        cols : list or None, 用于聚类的列
+        method : str, 聚类方法 ('ward', 'complete', 'average', 'single')
+        n_clusters : int or None, 截断线位置
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        from scipy.cluster.hierarchy import linkage, dendrogram, set_link_color_palette
+
+        df = self.df
+        if cols is None:
+            cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            cols = [c for c in cols if c not in ['采样时间', '采样点']]
+
+        hca_df = df[cols].copy().dropna()
+        if len(hca_df) < 5:
+            print("  警告: HCA有效样本不足")
+            return None, {}
+
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(hca_df.values)
+        linked = linkage(scaled_data, method=method)
+
+        fig, ax = plt.subplots(figsize=(12, 6), facecolor='white')
+        set_link_color_palette(['#4E79A7', '#F28E2B', '#E15759', '#76B7B2'])
+
+        labels = [f'R{i+1}' for i in range(len(hca_df))]
+        color_threshold = 0.7 * max(linked[:, 2]) if n_clusters is None else None
+
+        dendrogram(linked, ax=ax, leaf_rotation=90, leaf_font_size=10,
+                   labels=labels,
+                   color_threshold=color_threshold,
+                   above_threshold_color='#999999')
+
+        ax.set_title(f'层次聚类分析 ({method}法) 树状图', fontsize=15, fontweight='bold', pad=15)
+        ax.set_xlabel('样本', fontsize=13)
+        ax.set_ylabel('欧氏距离', fontsize=13)
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+
+        save_figure(fig, 'hca_dendrogram', self.output_dir)
+        meta = {'chart_type': 'hca_dendrogram', 'method': method, 'n_samples': len(hca_df)}
+        return fig, meta
+
+    def plot_distribution(self, col=None, group_col=None, title=None):
+        """
+        分布图（直方图+KDE+箱线图）
+
+        Parameters
+        ----------
+        col : str or None, 要分析的列
+        group_col : str or None, 分组列
+        title : str or None, 图表标题
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        df = self.df
+
+        # 自动选择列
+        if col is None:
+            numeric_cols = df.select_dtypes(include=[np.number]).columns
+            if len(numeric_cols) > 0:
+                col = numeric_cols[0]
+            else:
+                print("  警告: 无数值列")
+                return None, {}
+
+        if group_col is None and '季节' in df.columns:
+            group_col = '季节'
+
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5), facecolor='white')
+
+        # 左图：直方图+KDE
+        ax1 = axes[0]
+        valid_data = pd.to_numeric(df[col], errors='coerce').dropna()
+        if len(valid_data) > 5:
+            ax1.hist(valid_data, bins=15, color=TABLEAU_10[0], edgecolor='white',
+                    alpha=0.7, density=True)
+            kde_x = np.linspace(valid_data.min(), valid_data.max(), 100)
+            kde = scipy_stats.gaussian_kde(valid_data)
+            ax1.plot(kde_x, kde(kde_x), color='#D55E00', linewidth=2)
+            ax1.axvline(valid_data.mean(), color='#333333', linestyle='--', linewidth=1.5,
+                       label=f'均值: {valid_data.mean():.3f}')
+            ax1.legend(fontsize=11)
+
+        ax1.set_xlabel(get_label(col), fontsize=13)
+        ax1.set_ylabel('密度', fontsize=13)
+        if title is None:
+            title = f'{get_label(col)} 分布'
+        ax1.set_title(title, fontsize=14, fontweight='bold')
+        ax1.grid(alpha=0.3, linestyle='--')
+
+        # 右图：箱线图
+        ax2 = axes[1]
+        if group_col:
+            data_list = []
+            labels = []
+            for group in df[group_col].unique():
+                data = pd.to_numeric(df[df[group_col] == group][col], errors='coerce').dropna()
+                if len(data) > 0:
+                    data_list.append(data)
+                    labels.append(str(group))
+            if len(data_list) > 0:
+                bp = ax2.boxplot(data_list, patch_artist=True, widths=0.5,
+                               medianprops={'color': 'black', 'linewidth': 2})
+                colors = [SEASON_COLORS.get(l, TABLEAU_10[i]) for i, l in enumerate(labels)]
+                for patch, color in zip(bp['boxes'], colors):
+                    patch.set_facecolor(color)
+                    patch.set_alpha(0.7)
+                for j, data in enumerate(data_list):
+                    jitter = np.random.normal(j + 1, 0.04, size=len(data))
+                    ax2.scatter(jitter, data, alpha=0.5, s=30,
+                              color=colors[j], edgecolors='none', linewidth=0.5, zorder=5)
+                ax2.set_xticklabels(labels, fontsize=11)
+        else:
+            ax2.boxplot(valid_data.dropna(), patch_artist=True,
+                       boxprops={'facecolor': TABLEAU_10[0], 'alpha': 0.7})
+
+        ax2.set_ylabel(get_label(col), fontsize=13)
+        ax2.set_title(f'{get_label(col)} 箱线图', fontsize=14, fontweight='bold')
+        ax2.grid(alpha=0.3, linestyle='--')
+        ax2.set_axisbelow(True)
+        plt.tight_layout()
+
+        save_figure(fig, f'distribution_{col}', self.output_dir)
+        meta = {'chart_type': 'distribution', 'col': col, 'n': len(valid_data)}
+        return fig, meta
+
+    def plot_batch_regressions(self, pairs=None, top_n=6):
+        """
+        批量生成回归分析图
+
+        Parameters
+        ----------
+        pairs : list of tuple or None, [(x_col, y_col), ...]
+        top_n : int, 自动选择的回归对数量
+
+        Returns
+        -------
+        list of (fig, metadata)
+        """
+        df = self.df
+
+        # 自动选择回归对
+        if pairs is None:
+            from variable_registry import get_regression_pairs
+            pairs = get_regression_pairs(df)
+            pairs = pairs[:top_n]
+
+        results = []
+        for pair in pairs:
+            if isinstance(pair, dict):
+                x_col = pair.get('x')
+                y_col = pair.get('y')
+            elif isinstance(pair, (list, tuple)) and len(pair) >= 2:
+                x_col, y_col = pair[0], pair[1]
+            else:
+                continue
+
+            if x_col in df.columns and y_col in df.columns:
+                try:
+                    result = self.plot_regression(x_col, y_col)
+                    if result is not None and len(result) == 2:
+                        fig, meta = result
+                        if fig is not None:
+                            results.append((fig, meta))
+                except Exception as e:
+                    print(f"  警告: {x_col} vs {y_col} 回归失败: {e}")
+
+        return results
+
+    def generate_all_figures(self):
+        """
+        一键生成全部图表（兼容原ThesisPlotter接口）
+
+        Returns
+        -------
+        list of (fig, metadata)
+        """
+        print("\n" + "=" * 60)
+        print("开始生成全部论文图件")
+        print("=" * 60)
+
+        results = []
+
+        # 1. 三相碳组成
+        fig, meta = self.plot_phase_composition()
+        if fig:
+            results.append((fig, meta))
+
+        # 2. 液相碳组成
+        fig, meta = self.plot_stacked_bar(kind='liquid', title='液相碳组成 (TOC vs IC)')
+        if fig:
+            results.append((fig, meta))
+
+        # 3. 固相碳组成
+        fig, meta = self.plot_stacked_bar(kind='solid', title='固相碳组成')
+        if fig:
+            results.append((fig, meta))
+
+        # 4. 气体箱线图
+        gas_vars = [c for c in ['CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)'] if c in self.df.columns]
+        if gas_vars:
+            fig, meta = self.plot_multivariate(variables=gas_vars, kind='box')
+            if fig:
+                results.append((fig, meta))
+
+        # 5. 液相箱线图
+        liquid_vars = [c for c in ['TOC（mg/L)', 'IC(mg/L)', 'DO(mg/L)', 'pH'] if c in self.df.columns]
+        if liquid_vars:
+            fig, meta = self.plot_multivariate(variables=liquid_vars, kind='box')
+            if fig:
+                results.append((fig, meta))
+
+        # 6. 相关性热图
+        fig, meta = self.plot_heatmap()
+        if fig:
+            results.append((fig, meta))
+
+        # 7. PCA双标图
+        fig, meta = self.plot_pca_hca(mode='biplot')
+        if fig:
+            results.append((fig, meta))
+
+        # 8. HCA树状图
+        fig, meta = self.plot_hca_dendrogram()
+        if fig:
+            results.append((fig, meta))
+
+        # 9. 批量回归
+        reg_results = self.plot_batch_regressions()
+        results.extend(reg_results)
+
+        # 10. 空间分布
+        fig, meta = self.plot_spatiotemporal()
+        if fig:
+            results.append((fig, meta))
+
+        # 11. 分布图
+        numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+        if len(numeric_cols) > 0:
+            fig, meta = self.plot_distribution(col=numeric_cols[0])
+            if fig:
+                results.append((fig, meta))
+
+        # 12. 碳平衡
+        fig, meta = self.plot_carbon_flow()
+        if fig:
+            results.append((fig, meta))
+
+        print("\n" + "=" * 60)
+        print(f"全部图件生成完成! 共 {len(results)} 张")
+        print("=" * 60)
+
+        return results
+
+    # ==================== 反馈系统 ====================
 
     def submit_feedback(self, chart_type: str, chart_data: dict = None,
                         rating: int = 3, comment: str = ""):
