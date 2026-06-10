@@ -468,7 +468,7 @@ def parse_arxiv_html(html: str) -> PaperContent:
             section_type=section_type,
             title=heading_text,
             level=level,
-            text=section_text[:5000],  # 限制长度
+            text=section_text[:20000],  # 限制长度（从5000提高到20000）
         )
         content.sections.append(section)
 
@@ -756,6 +756,8 @@ class PaperReader:
         self._papers: dict[str, PaperContent] = {}  # 内存缓存
         self._lit_memory = None  # 延迟初始化
         self.db = PaperDatabase()  # SQLite持久化
+        import atexit
+        atexit.register(self._close_db)
         # 从数据库恢复已有论文
         self._papers = self.db.load_all()
         if self._papers:
@@ -1126,6 +1128,13 @@ class PaperReader:
         ])
 
         return "\n".join(lines)
+
+    def _close_db(self):
+        """程序退出时关闭数据库连接"""
+        try:
+            self.db.close()
+        except Exception:
+            pass
 
     def get_network_report(self) -> str:
         """P4: 获取论文关联网络报告"""

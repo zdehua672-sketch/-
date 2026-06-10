@@ -17,10 +17,11 @@ python-docx>=1.0
 # Network (for citation verification, paper reading)
 requests>=2.28
 
-# Testing
-pytest>=7.0
+# LLM API (uncomment the one you use)
+# openai>=1.0      # For OpenAI / Azure OpenAI / Any OpenAI-compatible API
+# anthropic>=0.30  # For Claude API
 
-# RAG system (optional)
+# RAG system (optional - uncomment to enable vector search)
 # chromadb>=0.4
 
 # Scientific plotting (optional)
@@ -30,3 +31,9 @@ pytest>=7.0
 # Interactive plots (optional)
 # plotly>=5.0
 # kaleido>=0.2
+
+# PDF parsing (optional - for better PDF extraction)
+# pymupdf>=1.23    # for pdf_parser.py advanced parsing
+
+# Testing
+pytest>=7.0

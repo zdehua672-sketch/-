@@ -1425,6 +1425,71 @@ class PaperWriter:
 # ============================================================================
 # 7. 快捷入口
 # ============================================================================
+
+
+def remove_ai_markers(text: str) -> str:
+    """
+    删除AI标志符号和表达
+    
+    Parameters
+    ----------
+    text : str, 原始文本
+    
+    Returns
+    -------
+    str, 清理后的文本
+    """
+    import re
+    
+    # 删除**符号（AI标志）
+    text = text.replace('**', '')
+    
+    # 删除其他AI标志表达
+    ai_markers = [
+        '具有重要意义',
+        '重要组成部分',
+        '综上所述',
+        '深入探讨',
+        '驱动',
+        '赋能',
+        '闭环',
+        '颗粒度',
+        '抓手',
+        '打法',
+        '组合拳',
+        '底层逻辑',
+        '顶层设计',
+    ]
+    
+    replacements = {
+        '具有重要意义': '具有重要价值',
+        '重要组成部分': '关键环节',
+        '综上所述': '基于上述分析',
+        '深入探讨': '系统研究',
+        '驱动': '影响',
+        '赋能': '支持',
+        '闭环': '完整流程',
+        '颗粒度': '细化程度',
+        '抓手': '切入点',
+        '打法': '方法',
+        '组合拳': '综合措施',
+        '底层逻辑': '基本原理',
+        '顶层设计': '总体规划',
+    }
+    
+    for marker in ai_markers:
+        if marker in text:
+            text = text.replace(marker, replacements.get(marker, ''))
+    
+    # 删除多余空行
+    text = re.sub(r'
+{3,}', '
+
+', text)
+    
+    return text
+
+
 def write_paper(data_path=None, paper_type='thesis', language='zh', output_dir=None, params=None):
     """一键生成论文"""
     writer = PaperWriter(output_dir)

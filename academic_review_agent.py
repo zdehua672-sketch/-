@@ -28,6 +28,84 @@ except ImportError:
 # ============================================================================
 # 数据结构
 # ============================================================================
+
+
+# AI标志符号和表达检测规则
+AI_MARKER_RULES = {
+    'symbols': ['**', '__', '~~'],  # Markdown格式符号
+    'phrases': [
+        '具有重要意义',
+        '重要组成部分',
+        '综上所述',
+        '深入探讨',
+        '驱动',
+        '赋能',
+        '闭环',
+        '颗粒度',
+        '抓手',
+        '打法',
+        '组合拳',
+        '底层逻辑',
+        '顶层设计',
+        '不仅是...更是',
+        '不仅...而且',
+        '一方面...另一方面',
+        '首先...其次...最后',
+    ],
+    'sentence_patterns': [
+        r'本研究.*具有重要意义',
+        r'综上所述.*',
+        r'基于上述分析.*',
+    ]
+}
+
+def detect_ai_markers(text: str) -> list:
+    """
+    检测文本中的AI标志符号和表达
+    
+    Parameters
+    ----------
+    text : str, 待检测文本
+    
+    Returns
+    -------
+    list of dict: 检测到的AI标志列表
+    """
+    import re
+    
+    issues = []
+    
+    # 检测符号
+    for symbol in AI_MARKER_RULES['symbols']:
+        if symbol in text:
+            issues.append({
+                'type': 'symbol',
+                'content': symbol,
+                'suggestion': f'删除AI标志符号: {symbol}'
+            })
+    
+    # 检测短语
+    for phrase in AI_MARKER_RULES['phrases']:
+        if phrase in text:
+            issues.append({
+                'type': 'phrase',
+                'content': phrase,
+                'suggestion': f'替换AI标志表达: {phrase}'
+            })
+    
+    # 检测句式
+    for pattern in AI_MARKER_RULES['sentence_patterns']:
+        matches = re.findall(pattern, text)
+        for match in matches:
+            issues.append({
+                'type': 'pattern',
+                'content': match[:50],
+                'suggestion': f'改写AI标志句式: {match[:50]}...'
+            })
+    
+    return issues
+
+
 class Severity(Enum):
     CRITICAL = 'CRITICAL'   # 致命问题，拒稿级别
     MAJOR = 'MAJOR'         # 重大问题，需要修改
