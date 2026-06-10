@@ -10,34 +10,8 @@ import numpy as np
 import os
 from datetime import datetime
 
-# ============================================================================
-# 1. 变量分类定义
-# ============================================================================
-GAS_VARS = [
-    '甲烷(ppm)', 'CH4平均值', '甲烷PPM', '甲烷（PPM）',
-    '氧化亚氮(ppm)', '氧化亚氮（ppm）', '氧化亚氮PPM', '氧化亚氮（PPM）',
-    'N2O平均值', 'CO2(ppm)', 'CO2(PPM)', 'CO2', 'CO2(mg/L)',
-    'VOCs(ppb)', 'O2(%vol)', 'H2S',
-]
-
-LIQUID_VARS = [
-    'DO(mg/L)', 'pH', '液温', '液温(℃）', '电导率(uS/cm)', '电导率(us/cm)',
-    'TOC（mg/L)', 'TC(mg/L)', 'IC(mg/L)', 'COD（mg/L)', 'COD（锰）（mg/L)',
-    '总氮（mg/L)', '总磷（mg/L)', '铵态氮（mg/L)', '硝态氮（mg/L)',
-    'NaCl(mg/L)', 'NaCl(g/L)',
-]
-
-SOLID_VARS = [
-    '固总碳（g/kg)', '有机碳（g/kg)', '无机碳（g/kg)',
-    'DOC(mg/kg)', '全磷（g/kg)',
-    '（固）铵态氮（mg/kg）', '（固）硝态氮（mg/kg）',
-]
-
-ENV_VARS = [
-    '气温/℃', '气温℃', '气温（℃）', '泥水状况', '采样时间', '采样时段',
-    '井深(m)', '管径（mm)', 'O2(%vol)', 'O2本底值',
-    'CO2本底值', 'VOCs本底值',
-]
+# 变量分类定义（统一从注册中心读取）
+from variable_registry import GAS_VARS, LIQUID_VARS, SOLID_VARS, ENV_VARS
 
 
 # ============================================================================
@@ -46,41 +20,22 @@ ENV_VARS = [
 class DataLoader:
     """
     数据加载器：从多个数据源读取并合并冬春数据
-
-    用法:
-        # 方式1: 传入包含数据文件的目录
-        loader = DataLoader(data_dir=r'C:\\Users\\xxx\\data')
-
-        # 方式2: 传入主数据文件路径（自动推断同目录下的其他文件）
-        loader = DataLoader(file_path=r'C:\\Users\\xxx\\data\\采样数据表.xlsx')
-
-        # 方式3: 不传参数，使用当前目录
-        loader = DataLoader()
     """
-
-    def __init__(self, file_path=None, data_dir=None):
-        # 优先使用 data_dir，其次从 file_path 推断，最后用当前目录
-        if data_dir:
-            self.base_dir = data_dir
-        elif file_path and os.path.isfile(file_path):
+    
+    def __init__(self, file_path=None):
+        if file_path:
             self.base_dir = os.path.dirname(os.path.abspath(file_path))
+            self.single_file = file_path
         else:
-            self.base_dir = os.getcwd()
-
-        # 自动查找数据文件
-        if file_path and os.path.isfile(file_path):
-            # 如果传入了具体文件路径，直接使用（兼容任意文件名）
-            self.sampling_file = file_path
-            self.winter_summary_file = file_path  # 单文件模式
-        else:
-            self.sampling_file = self._find_file(
-                ['采样数据表.xlsx', '采样数据表.xls', 'sampling_data.xlsx'],
-                None,
-            )
-            self.winter_summary_file = self._find_file(
-                ['冬季数据汇总.xlsx', '冬季数据汇总.xls', 'winter_summary.xlsx'],
-                None,
-            )
+            desktop_file = os.path.join(os.path.expanduser('~'), 'Desktop', '冬春数据.xlsx')
+            if os.path.exists(desktop_file):
+                self.base_dir = os.path.dirname(desktop_file)
+                self.single_file = desktop_file
+            else:
+                self.base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+                self.single_file = None
+        self.sampling_file = os.path.join(self.base_dir, '采样数据表.xlsx')
+        self.winter_summary_file = os.path.join(self.base_dir, '冬季数据汇总.xlsx')
 
         self.winter = None
         self.spring = None
@@ -89,55 +44,61 @@ class DataLoader:
         self.data_dict = {}
         self.quality_report = {}
 
-    def _find_file(self, candidates, explicit_path=None):
-        """在 base_dir 中查找候选文件名，返回完整路径或第一个候选"""
-        if explicit_path and os.path.isfile(explicit_path):
-            return explicit_path
-        for name in candidates:
-            path = os.path.join(self.base_dir, name)
-            if os.path.isfile(path):
-                return path
-        # 返回第一个候选（后续 load_data 会报清晰的 FileNotFoundError）
-        return os.path.join(self.base_dir, candidates[0])
-
     def load_data(self):
-        """加载并合并所有数据源"""
-        print("=" * 60)
-        print("数据加载中...")
-        print(f"数据目录: {self.base_dir}")
-        print("=" * 60)
+        """加载并合并所有数据源（自动选单文件或双文件）"""
+        if self.single_file and os.path.exists(self.single_file):
+            return self._load_single_file(self.single_file)
+        return self._load_dual_files()
 
-        # ========== 1. 加载采样数据表（气相数据） ==========
-        print(f"\n[数据源1] {os.path.basename(self.sampling_file)} (气相数据)")
-        if not os.path.isfile(self.sampling_file):
-            raise FileNotFoundError(
-                f"找不到采样数据表: {self.sampling_file}\n"
-                f"请确认文件存在于: {self.base_dir}\n"
-                f"或通过 DataLoader(file_path='...') / DataLoader(data_dir='...') 指定路径"
-            )
-
-        # 尝试读取冬季/春季sheet，如果不存在则读取全部sheet
-        try:
-            xl = pd.ExcelFile(self.sampling_file)
-            sheet_names = xl.sheet_names
-            if '冬季' in sheet_names and '春季' in sheet_names:
-                self.winter = pd.read_excel(self.sampling_file, sheet_name='冬季')
-                self.spring = pd.read_excel(self.sampling_file, sheet_name='春季')
-            elif len(sheet_names) >= 2:
-                # 使用前两个sheet
-                self.winter = pd.read_excel(self.sampling_file, sheet_name=sheet_names[0])
-                self.spring = pd.read_excel(self.sampling_file, sheet_name=sheet_names[1])
-            else:
-                # 只有一个sheet，按季节列分割
-                all_data = pd.read_excel(self.sampling_file)
-                if '季节' in all_data.columns:
-                    self.winter = all_data[all_data['季节'] == '冬季'].copy()
-                    self.spring = all_data[all_data['季节'] == '春季'].copy()
+    def _load_single_file(self, file_path):
+        """单文件模式：冬春数据.xlsx含冬季/春季sheet"""
+        print("=" * 60)
+        print("数据加载中（单文件模式）...")
+        print("=" * 60)
+        xls = pd.ExcelFile(file_path)
+        sheets = xls.sheet_names
+        print(f"  文件: {os.path.basename(file_path)}, Sheets: {sheets}")
+        winter_s, spring_s = None, None
+        for s in sheets:
+            if any(k in s for k in ['冬', 'winter']): winter_s = s
+            elif any(k in s for k in ['春', 'spring']): spring_s = s
+        if not winter_s: winter_s = sheets[0]
+        if not spring_s and len(sheets) > 1: spring_s = sheets[1]
+        self.winter = pd.read_excel(file_path, sheet_name=winter_s)
+        self.spring = pd.read_excel(file_path, sheet_name=spring_s)
+        print(f"  冬季: {self.winter.shape}, 春季: {self.spring.shape}")
+        self._unify_columns()
+        self.winter['季节'] = '冬季'
+        self.spring['季节'] = '春季'
+        for dfp in [self.winter, self.spring]:
+            if '采样点' not in dfp.columns:
+                fc = dfp.columns[0]
+                if dfp[fc].dtype == object:
+                    dfp.rename(columns={fc: '采样点'}, inplace=True)
                 else:
-                    self.winter = all_data
-                    self.spring = pd.DataFrame()
-        except Exception as e:
-            raise ValueError(f"读取Excel文件失败: {e}")
+                    dfp['采样点'] = [f'R{i}' for i in range(1, len(dfp) + 1)]
+        df = pd.concat([self.winter, self.spring], ignore_index=True)
+        unnamed = [c for c in df.columns if 'Unnamed' in str(c)]
+        if unnamed:
+            df = df.drop(columns=unnamed)
+        skip = ['采样点', '季节', '泥水状况', '采样时间', '采样时段',
+                '进水/出水', '管口/管中', '管口/管尾']
+        for col in df.columns:
+            if col not in skip:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+        self.df = df
+        self._detect_and_report()
+        return self.df
+
+    def _load_dual_files(self):
+        """双文件模式：采样数据表+冬季数据汇总"""
+        print("=" * 60)
+        print("数据加载中（双文件模式）...")
+        print("=" * 60)
+        # ========== 1. 加载采样数据表（气相数据） ==========
+        print("\n[数据源1] 采样数据表.xlsx (气相数据)")
+        self.winter = pd.read_excel(self.sampling_file, sheet_name='冬季')
+        self.spring = pd.read_excel(self.sampling_file, sheet_name='春季')
         
         print(f"  冬季: {self.winter.shape[0]} 行 x {self.winter.shape[1]} 列")
         print(f"  春季: {self.spring.shape[0]} 行 x {self.spring.shape[1]} 列")
@@ -165,70 +126,64 @@ class DataLoader:
             print(f"  已删除 {len(unnamed_cols)} 个Unnamed列")
         
         # ========== 2. 加载冬季数据汇总（液相数据） ==========
-        if self.winter_summary_file == self.sampling_file:
-            # 单文件模式：所有数据已在step1加载，跳过重复加载
-            print(f"\n[数据源2] 单文件模式，数据已在数据源1中加载")
-            self.winter_summary = None
-        else:
-            print(f"\n[数据源2] {os.path.basename(self.winter_summary_file)} (液相数据)")
-            if not os.path.isfile(self.winter_summary_file):
-                raise FileNotFoundError(
-                    f"找不到冬季数据汇总: {self.winter_summary_file}\n"
-                    f"请确认文件存在于: {self.base_dir}"
-                )
-            self.winter_summary = pd.read_excel(self.winter_summary_file)
-
+        print("\n[数据源2] 冬季数据汇总.xlsx (液相数据)")
+        self.winter_summary = pd.read_excel(self.winter_summary_file)
+        print(f"  数据: {self.winter_summary.shape[0]} 行 x {self.winter_summary.shape[1]} 列")
+        
         # 统一列名
-        if self.winter_summary is not None and len(self.winter_summary) > 0:
-            print(f"  数据: {self.winter_summary.shape[0]} 行 x {self.winter_summary.shape[1]} 列")
-            rename_summary = {
-                'CO2(mg/L)': 'CO2',
-                '液温(℃）': '液温',
-                'NaCl(g/L)': 'NaCl(mg/L)',
-                'COD（锰）（mg/L)': 'COD（mg/L)',
-            }
-            rename_summary = {k: v for k, v in rename_summary.items() if k in self.winter_summary.columns}
-            self.winter_summary = self.winter_summary.rename(columns=rename_summary)
-            self.winter_summary['季节'] = '冬季'
-
+        rename_summary = {
+            'CO2(mg/L)': 'CO2',
+            '液温(℃）': '液温',
+            'NaCl(g/L)': 'NaCl(mg/L)',
+            'COD（锰）（mg/L)': 'COD（mg/L)',
+        }
+        rename_summary = {k: v for k, v in rename_summary.items() if k in self.winter_summary.columns}
+        self.winter_summary = self.winter_summary.rename(columns=rename_summary)
+        
+        # 添加季节标签
+        self.winter_summary['季节'] = '冬季'
+        
         # ========== 3. 合并数据 ==========
         print("\n[合并] 合并气相和液相数据...")
-
-        # 清理采样数据表
-        if '采样点' in df_gas.columns:
-            df_gas = df_gas.dropna(subset=['采样点'])
-
-        if self.winter_summary is not None and len(self.winter_summary) > 0:
-            # 双文件模式：合并气相和液相数据
-            ws = self.winter_summary.copy()
-            if '采样点' in ws.columns:
-                ws = ws[ws['采样点'] != '采样点']
-                ws = ws.dropna(subset=['采样点'])
-                ws = ws.drop_duplicates(subset=['采样点'], keep='first')
-            for col in ws.columns:
-                if col not in ['采样点']:
-                    ws[col] = pd.to_numeric(ws[col], errors='coerce')
-            print(f"  清理后冬季数据汇总: {ws.shape[0]} 行")
-
-            winter_gas = df_gas[df_gas['季节'] == '冬季'].copy() if '季节' in df_gas.columns else df_gas.copy()
-            spring_gas = df_gas[df_gas['季节'] == '春季'].copy() if '季节' in df_gas.columns else pd.DataFrame()
-
-            if '采样点' in ws.columns and '采样点' in winter_gas.columns:
-                winter_merged = winter_gas.merge(ws, on='采样点', how='left', suffixes=('', '_汇总'))
-                for col in list(winter_merged.columns):
-                    if col.endswith('_汇总'):
-                        base = col.replace('_汇总', '')
-                        if base in winter_merged.columns:
-                            winter_merged[base] = winter_merged[base].fillna(winter_merged[col])
-                            winter_merged = winter_merged.drop(columns=[col])
-            else:
-                winter_merged = winter_gas
-
-            spring_merged = spring_gas.copy()
-            df_merged = pd.concat([winter_merged, spring_merged], ignore_index=True)
-        else:
-            # 单文件模式
-            df_merged = df_gas
+        
+        # 清理冬季数据汇总：删除重复表头行和重复采样点
+        ws = self.winter_summary.copy()
+        # 删除包含'采样点'字符串的行（重复表头）
+        ws = ws[ws['采样点'] != '采样点']
+        # 删除第一行（NaN行）
+        ws = ws.dropna(subset=['采样点'])
+        # 删除重复的采样点，保留第一个
+        ws = ws.drop_duplicates(subset=['采样点'], keep='first')
+        # 转数值类型
+        for col in ws.columns:
+            if col not in ['采样点']:
+                ws[col] = pd.to_numeric(ws[col], errors='coerce')
+        
+        print(f"  清理后冬季数据汇总: {ws.shape[0]} 行")
+        
+        # 清理采样数据表冬季数据：删除第一行（NaN采样点）
+        df_gas = df_gas.dropna(subset=['采样点'])
+        
+        # 分离冬季和春季数据
+        winter_gas = df_gas[df_gas['季节'] == '冬季'].copy()
+        spring_gas = df_gas[df_gas['季节'] == '春季'].copy()
+        
+        # 冬季数据：用merge合并气相和液相数据
+        winter_merged = winter_gas.merge(ws, on='采样点', how='left', suffixes=('', '_汇总'))
+        # 删除重复列
+        for col in list(winter_merged.columns):
+            if col.endswith('_汇总'):
+                base = col.replace('_汇总', '')
+                if base in winter_merged.columns:
+                    # 用汇总数据填充缺失值
+                    winter_merged[base] = winter_merged[base].fillna(winter_merged[col])
+                    winter_merged = winter_merged.drop(columns=[col])
+        
+        # 春季数据保持不变
+        spring_merged = spring_gas.copy()
+        
+        # 合并冬春数据
+        df_merged = pd.concat([winter_merged, spring_merged], ignore_index=True)
         
         # 转数值类型
         for col in df_merged.columns:
@@ -243,6 +198,29 @@ class DataLoader:
         
         return self.df
     
+    def _detect_and_report(self):
+        """自动检测变量类型并生成报告"""
+        df = self.df
+        gas = [c for c in df.columns if c in GAS_VARS]
+        liquid = [c for c in df.columns if c in LIQUID_VARS]
+        solid = [c for c in df.columns if c in SOLID_VARS]
+        # 也按关键词匹配
+        for c in df.columns:
+            if c in gas + liquid + solid + ['采样点', '季节']:
+                continue
+            cl = c.lower()
+            if any(k in cl for k in ['ch4', '甲烷', 'co2', 'n2o', '氧化亚氮', 'vocs', 'h2s', 'o2']):
+                if c not in gas: gas.append(c)
+            elif any(k in cl for k in ['do', 'toc', 'tc', 'ic', 'cod', 'ph', '氮', '磷', '氯', '导']):
+                if c not in liquid: liquid.append(c)
+            elif any(k in cl for k in ['固', '有机碳', '无机碳', '全碳', 'doc', 'g/kg']):
+                if c not in solid: solid.append(c)
+        print(f"\n  气相变量({len(gas)}): {gas}")
+        print(f"  液相变量({len(liquid)}): {liquid}")
+        print(f"  固相变量({len(solid)}): {solid}")
+        print(f"  样本数: {len(df)}, 季节: {df['季节'].value_counts().to_dict()}")
+        self.data_dict = {'gas': gas, 'liquid': liquid, 'solid': solid}
+
     def _unify_columns(self):
         """统一冬季和春季的列名"""
         # 冬季列名统一
@@ -457,87 +435,10 @@ class DataLoader:
         print(f"\n数据质量报告已保存: {filepath}")
         return filepath
     
-    def validate_data(self):
-        """
-        数据验证：检查数据是否满足分析要求
-
-        Returns
-        -------
-        dict: {valid: bool, errors: list, warnings: list}
-        """
-        errors = []
-        warnings = []
-
-        if self.df is None:
-            self.load_data()
-
-        df = self.df
-
-        # 1. 空数据检查
-        if len(df) == 0:
-            errors.append("数据为空（0行）")
-            return {"valid": False, "errors": errors, "warnings": warnings}
-
-        # 2. 关键列存在性检查
-        has_season = '季节' in df.columns
-        has_sampling = '采样点' in df.columns
-        if not has_season:
-            warnings.append("缺少'季节'列，无法进行组间比较分析")
-        if not has_sampling:
-            warnings.append("缺少'采样点'列，无法进行空间分布分析")
-
-        # 3. 数值列检查
-        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-        if len(numeric_cols) < 3:
-            errors.append(f"数值列不足（仅{len(numeric_cols)}个），至少需要3个数值变量")
-        else:
-            # 4. 每列有效数据量检查
-            for col in numeric_cols:
-                valid_count = df[col].notna().sum()
-                if valid_count < 3:
-                    warnings.append(f"列'{col}'有效数据仅{valid_count}个，可能无法进行统计分析")
-                elif valid_count < len(df) * 0.5:
-                    warnings.append(f"列'{col}'缺失率>{(1-valid_count/len(df))*100:.0f}%")
-
-        # 5. 样本量检查
-        if has_season:
-            groups = df['季节'].value_counts()
-            for group, count in groups.items():
-                if count < 3:
-                    errors.append(f"季节'{group}'仅{count}个样本，无法进行组间比较")
-        if len(df) < 5:
-            warnings.append(f"总样本量仅{len(df)}个，PCA/HCA等分析可能不可靠")
-
-        # 6. 全NA列检查
-        all_na_cols = [c for c in df.columns if df[c].isna().all()]
-        if all_na_cols:
-            warnings.append(f"以下列全为空值: {', '.join(all_na_cols[:5])}")
-
-        valid = len(errors) == 0
-        if errors:
-            print(f"\n⚠ 数据验证失败 ({len(errors)}个错误):")
-            for e in errors:
-                print(f"  ✗ {e}")
-        if warnings:
-            print(f"\n⚠ 数据验证警告 ({len(warnings)}个):")
-            for w in warnings:
-                print(f"  △ {w}")
-        if valid and not warnings:
-            print("\n[OK] 数据验证通过")
-
-        return {"valid": valid, "errors": errors, "warnings": warnings}
-
     def get_analysis_ready_data(self):
-        """返回分析就绪的数据（自动验证）"""
+        """返回分析就绪的数据"""
         if self.df is None:
             self.load_data()
-
-        # 自动验证
-        validation = self.validate_data()
-        if not validation["valid"]:
-            raise ValueError(
-                f"数据验证失败:\n" + "\n".join(f"  - {e}" for e in validation["errors"])
-            )
         
         df = self.df.copy()
         
@@ -583,9 +484,7 @@ class DataLoader:
 # 3. 测试代码
 # ============================================================================
 if __name__ == '__main__':
-    import sys
-    data_dir = sys.argv[1] if len(sys.argv) > 1 else None
-    loader = DataLoader(data_dir=data_dir)
+    loader = DataLoader()
     df = loader.load_data()
     categories = loader.get_variable_categories()
     print("\n变量分类:")
@@ -593,8 +492,7 @@ if __name__ == '__main__':
         print(f"  {cat}: {vars_list}")
     loader.check_data_quality()
     loader.generate_data_dictionary()
-
-    output_dir = os.path.join(loader.base_dir, 'output')
-    os.makedirs(output_dir, exist_ok=True)
+    
+    output_dir = r'C:\Users\Administrator\Desktop\硕士毕业论文\论文图件_优化版'
     loader.save_data_dictionary(output_dir)
     loader.save_quality_report(output_dir)

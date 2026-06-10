@@ -23,8 +23,22 @@ from academic_plot_style import (
     get_label, format_chemical, significance_stars,
     add_significance_bars, save_figure, set_plot_style
 )
-from plotting_functions import ThesisPlotter
 from statistical_analysis import StandardScaler, PCA, LinearRegression, r2_score
+
+# Nature 交付级 QA（来自 nature-figure skill）
+try:
+    from chart_qa import (
+        check_chart_quality, print_qa_report,
+        check_nature_delivery, nature_export_bundle,
+        NATURE_PALETTE, NATURE_SIZES,
+    )
+except ImportError:
+    check_chart_quality = None
+    print_qa_report = None
+    check_nature_delivery = None
+    nature_export_bundle = None
+    NATURE_PALETTE = {}
+    NATURE_SIZES = {}
 
 # 可选依赖检测
 _HAS_SCIENCEPLOTS = False
@@ -103,21 +117,21 @@ class StylePresets:
         'nature': {
             'font.family': 'sans-serif',
             'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-            'font.size': 5.5,
-            'axes.titlesize': 7,
-            'axes.labelsize': 6,
-            'xtick.labelsize': 5.5,
-            'ytick.labelsize': 5.5,
-            'legend.fontsize': 5.5,
-            'figure.figsize': (3.50, 2.63),
+            'font.size': 7,              # Nature 2026: 5-7pt for dense panels
+            'axes.titlesize': 9,
+            'axes.labelsize': 8,
+            'xtick.labelsize': 7,
+            'ytick.labelsize': 7,
+            'legend.fontsize': 7,
+            'figure.figsize': (3.50, 2.63),  # 89mm single column
             'figure.dpi': 300,
             'lines.linewidth': 0.8,
             'lines.markersize': 4,
-            'axes.linewidth': 0.5,
-            'xtick.major.width': 0.5,
-            'ytick.major.width': 0.5,
-            'xtick.major.size': 3,
-            'ytick.major.size': 3,
+            'axes.linewidth': 0.8,        # Nature 2026: 0.8-1.2
+            'xtick.major.width': 0.8,
+            'ytick.major.width': 0.8,
+            'xtick.major.size': 4,
+            'ytick.major.size': 4,
             'xtick.direction': 'out',
             'ytick.direction': 'out',
             'axes.grid': False,
@@ -184,7 +198,7 @@ class StylePresets:
         if style_name not in cls.PRESETS:
             raise ValueError(f"Unknown style: {style_name}. Choose from {list(cls.PRESETS.keys())}")
 
-        # 先重置基础样式
+        # 先重置基础样式（内部会设置中文字体）
         set_plot_style()
 
         # 尝试使用SciencePlots
@@ -198,6 +212,12 @@ class StylePresets:
         rcParams.update(cls.PRESETS[style_name])
         cls._current_style = style_name
 
+        # SciencePlots 会重置字体，需要重新设置中文字体
+        if CHINESE_FONT:
+            rcParams['font.sans-serif'] = [CHINESE_FONT, 'DejaVu Sans', 'Arial']
+            rcParams['font.family'] = 'sans-serif'
+            rcParams['axes.unicode_minus'] = False
+
     @classmethod
     def figure_size(cls, layout='single', style=None):
         """获取指定布局的图尺寸"""
@@ -206,9 +226,21 @@ class StylePresets:
 
     @classmethod
     def get_palette(cls, style=None):
-        """获取当前风格推荐的配色方案"""
+        """获取当前风格推荐的配色方案（Nature 使用 figures4papers 色盲安全色板）"""
         style = style or cls._current_style
         if style == 'nature':
+            # 来自 nature-figure skill: figures4papers 色盲安全色板
+            if NATURE_PALETTE:
+                return [
+                    NATURE_PALETTE['blue_main'],
+                    NATURE_PALETTE['blue_secondary'],
+                    NATURE_PALETTE['green_3'],
+                    NATURE_PALETTE['red_strong'],
+                    NATURE_PALETTE['teal'],
+                    NATURE_PALETTE['violet'],
+                    NATURE_PALETTE['neutral_mid'],
+                    NATURE_PALETTE['neutral_dark'],
+                ]
             return [
                 '#0072B2', '#E69F00', '#009E73', '#CC79A7',
                 '#D55E00', '#56B4E9', '#F0E442', '#000000',
@@ -218,44 +250,70 @@ class StylePresets:
         else:
             return list(OKABE_ITO.values())
 
+    @classmethod
+    def nature_rcparams(cls):
+        """
+        Nature 2026 年版 rcParams 预设（来自 nature-figure skill design-theory）。
+        直接调用 rcParams.update() 应用。
+        """
+        return {
+            'font.family': 'sans-serif',
+            'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans', 'sans-serif'],
+            'svg.fonttype': 'none',       # SVG 可编辑文本
+            'pdf.fonttype': 42,           # PDF TrueType 文本
+            'font.size': 7,               # Nature 2026: 7-9pt for publication width
+            'axes.spines.right': False,
+            'axes.spines.top': False,
+            'axes.linewidth': 0.8,
+            'legend.frameon': False,
+        }
+
 
 # ============================================================================
-# AutoRecommender - 数据驱动图表推荐
+# AutoRecommender - 数据驱动图表推荐（基于 deep_profile 结果）
 # ============================================================================
 class AutoRecommender:
-    """分析DataFrame特征，自动推荐最适合的图表类型"""
+    """分析DataFrame特征，基于数据理解自动推荐最适合的图表类型"""
 
-    def __init__(self, df):
+    def __init__(self, df, deep_profile_result=None):
+        """
+        Parameters
+        ----------
+        df : DataFrame
+        deep_profile_result : dict or None, 来自 data_profiler.deep_profile() 的结果。
+            如果提供，推荐逻辑从数据特征驱动；否则退化为基础列名匹配。
+        """
         self.df = df
+        self.deep = deep_profile_result
         self.profile = self._profile_data()
 
     def _profile_data(self):
-        """数据画像"""
+        """数据画像：优先使用 deep_profile 结果，否则做基础扫描"""
         df = self.df
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
         cat_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
 
-        # 检测分组列
         group_cols = [c for c in cat_cols if df[c].nunique() <= 10 and df[c].nunique() >= 2]
+        time_cols = [c for c in df.columns if any(k in str(c).lower() for k in
+                     ['时间', '日期', 'date', 'time', 'month', 'season', '季节'])]
+        spatial_cols = [c for c in df.columns if any(k in str(c).lower() for k in
+                        ['采样点', '位置', 'location', 'point', 'site', 'distance', '管口', '中段', '末端'])]
 
-        # 检测时间列
-        time_cols = [c for c in df.columns if any(k in str(c).lower() for k in ['时间', '日期', 'date', 'time', 'month', 'season', '季节'])]
+        # 相态列：优先从 deep_profile 的领域分类获取
+        phase_cols = []
+        if self.deep and 'variable_relations' in self.deep:
+            # 从领域因果对中提取涉及的变量
+            domain_vars = set()
+            for pair in self.deep['variable_relations'].get('domain_pairs', []):
+                domain_vars.add(pair['var1'])
+                domain_vars.add(pair['var2'])
+            phase_cols = [c for c in numeric_cols if c in domain_vars]
+        if not phase_cols:
+            # 回退：关键词匹配
+            phase_keywords = ['CH4', 'CO2', 'TOC', 'COD', 'DO', '气相', '液相', '固相', 'NH4', 'TN', 'TP']
+            phase_cols = [c for c in numeric_cols if any(k in str(c) for k in phase_keywords)]
 
-        # 检测空间列
-        spatial_cols = [c for c in df.columns if any(k in str(c).lower() for k in ['采样点', '位置', 'location', 'point', 'site', 'distance', '管口', '中段', '末端'])]
-
-        # 检测相态列（区分气相/液相/固相指标）
-        gas_keywords = ['CH4', 'CO2', 'N2O', 'VOCs', 'O2', 'H2S', '甲烷']
-        liquid_keywords = ['TOC', 'TC(mg', 'IC(mg', 'COD', 'DO(mg', '总氮', '铵态氮', '硝态氮',
-                          '总磷', 'pH', '液温', '电导率', 'NaCl']
-        solid_keywords = ['固总碳', '有机碳（g', '无机碳（g', 'DOC(mg/kg', '全磷（g', '固）铵态氮', '固）硝态氮']
-
-        gas_cols = [c for c in numeric_cols if any(k in str(c) for k in gas_keywords)]
-        liquid_cols = [c for c in numeric_cols if any(k in str(c) for k in liquid_keywords)]
-        solid_cols = [c for c in numeric_cols if any(k in str(c) for k in solid_keywords)]
-        phase_cols = gas_cols + liquid_cols + solid_cols
-
-        return {
+        profile = {
             'n_rows': len(df),
             'n_cols': len(df.columns),
             'numeric_cols': numeric_cols,
@@ -266,96 +324,132 @@ class AutoRecommender:
             'phase_cols': phase_cols,
         }
 
+        # 从 deep_profile 补充信息
+        if self.deep:
+            profile['seasonal_diff'] = self.deep.get('spatiotemporal', {}).get('seasonal_diff', [])
+            profile['spatial_trend'] = self.deep.get('spatiotemporal', {}).get('spatial_trend', [])
+            profile['strong_pairs'] = self.deep.get('variable_relations', {}).get('strong_pairs', [])
+            profile['domain_pairs'] = self.deep.get('variable_relations', {}).get('domain_pairs', [])
+            profile['distributions'] = self.deep.get('distributions', {})
+            profile['quality_scores'] = self.deep.get('quality_scores', [])
+
+        return profile
+
     def recommend(self, top_n=5):
-        """推荐图表类型列表，按分数排序"""
+        """推荐图表类型列表，按分数排序。基于数据特征驱动，而非列名模板。"""
         p = self.profile
         recs = []
 
-        # 箱线图/小提琴图：有分组 + 数值列
-        if p['group_cols'] and p['numeric_cols']:
-            score = 0.90 if len(p['numeric_cols']) <= 6 else 0.75
+        # --- 基于数据洞察的推荐 ---
+
+        # 1. 有季节差异的变量 → 分组对比图
+        seasonal_vars = [d['variable'] for d in p.get('seasonal_diff', [])]
+        if seasonal_vars and p['group_cols']:
+            score = 0.95  # 最高优先级：数据明确告诉你有差异
+            # 构建洞察字符串
+            seasonal_map = {d['variable']: d for d in p.get('seasonal_diff', [])}
+            insight_parts = []
+            for v in seasonal_vars[:3]:
+                sd = seasonal_map.get(v, {})
+                insight_parts.append(f"{v}(p={sd.get('p', '?')})")
             recs.append({
                 'chart_type': 'multivariate',
                 'score': score,
-                'reason': f"检测到{len(p['group_cols'])}个分组列 + {len(p['numeric_cols'])}个数值列，适合分组对比",
-                'kwargs': {'variables': p['numeric_cols'][:6], 'group_col': p['group_cols'][0]},
+                'reason': f"数据驱动: {len(seasonal_vars)}个变量存在显著季节差异({', '.join(seasonal_vars[:3])})，分组对比可直观展示",
+                'data_insight': f"冬季 vs 春季: {', '.join(insight_parts)}",
+                'kwargs': {'variables': seasonal_vars[:6], 'group_col': p['group_cols'][0]},
             })
 
-        # PCA：≥3数值列 + ≥10行
-        if len(p['numeric_cols']) >= 3 and p['n_rows'] >= 10:
-            score = 0.85
+        # 2. 有空间梯度的变量 → 沿程变化图
+        spatial_vars = [d['variable'] for d in p.get('spatial_trend', [])]
+        if spatial_vars:
+            score = 0.92
             recs.append({
-                'chart_type': 'pca_hca',
+                'chart_type': 'spatiotemporal',
                 'score': score,
-                'reason': f"{len(p['numeric_cols'])}个数值变量适合降维分析(PCA)",
-                'kwargs': {'cols': p['numeric_cols'], 'mode': 'biplot'},
+                'reason': f"数据驱动: {len(spatial_vars)}个变量存在空间梯度({', '.join(spatial_vars[:3])})，沿程图可展示趋势",
+                'data_insight': ', '.join([f"{d['variable']}({d['direction']}, r={d['r']})" for d in p.get('spatial_trend', [])[:3]]),
+                'kwargs': {'variables': spatial_vars[:4], 'mode': 'line'},
             })
 
-        # 相关性热图：≥5数值列
+        # 3. 有强相关对 → 回归散点图
+        strong_pairs = p.get('strong_pairs', [])
+        if strong_pairs:
+            best_pair = strong_pairs[0]
+            score = 0.90
+            recs.append({
+                'chart_type': 'regression_scatter',
+                'score': score,
+                'reason': f"数据驱动: {best_pair['var1']}与{best_pair['var2']}呈{best_pair['direction']}(r={best_pair['r']}, p={best_pair['p']})",
+                'data_insight': f"强相关: r={best_pair['r']}, p={best_pair['p']}",
+                'kwargs': {'x_col': best_pair['var1'], 'y_col': best_pair['var2']},
+            })
+
+        # 4. 领域因果对验证 → 回归图（如果显著）
+        domain_pairs = p.get('domain_pairs', [])
+        sig_domain = [dp for dp in domain_pairs if dp.get('significant')]
+        if sig_domain:
+            dp = sig_domain[0]
+            score = 0.88
+            recs.append({
+                'chart_type': 'regression_scatter',
+                'score': score,
+                'reason': f"领域验证: {dp['description']}假设成立(r={dp['r']}, p={dp['p']})",
+                'data_insight': f"假设验证: {dp['var1']}→{dp['var2']}, r={dp['r']}",
+                'kwargs': {'x_col': dp['var1'], 'y_col': dp['var2']},
+            })
+
+        # 5. 多变量相关性 → 热图
         if len(p['numeric_cols']) >= 5:
+            has_correlations = len(strong_pairs) > 0
+            score = 0.85 if has_correlations else 0.70
+            reason = f"数据驱动: 发现{len(strong_pairs)}对强相关变量，热图可展示全局相关结构" if has_correlations else f"{len(p['numeric_cols'])}个数值变量适合相关性分析"
             recs.append({
                 'chart_type': 'heatmap',
-                'score': 0.80,
-                'reason': f"{len(p['numeric_cols'])}个数值变量适合相关性分析",
+                'score': score,
+                'reason': reason,
                 'kwargs': {'method': 'pearson'},
             })
 
-        # 时空分布：有空间+时间列
-        if p['spatial_cols'] and (p['time_cols'] or p['group_cols']):
+        # 6. PCA：变量多 + 样本够
+        if len(p['numeric_cols']) >= 3 and p['n_rows'] >= 10:
+            # 检查是否有强相关（共线性高则PCA更有意义）
+            has_collinearity = len(strong_pairs) >= 2
+            score = 0.83 if has_collinearity else 0.70
+            reason = f"数据驱动: {len(p['numeric_cols'])}个变量存在共线性，PCA可降维揭示主要模式" if has_collinearity else f"{len(p['numeric_cols'])}个变量适合降维"
             recs.append({
-                'chart_type': 'spatiotemporal',
-                'score': 0.80,
-                'reason': '检测到空间和时间维度，适合时空分布图',
-                'kwargs': {'mode': 'line'},
+                'chart_type': 'pca_hca',
+                'score': score,
+                'reason': reason,
+                'kwargs': {'cols': p['numeric_cols'], 'mode': 'biplot'},
             })
 
-        # 多相态耦合：有相态列
+        # 7. 多相态耦合
         if len(p['phase_cols']) >= 3:
             recs.append({
                 'chart_type': 'multiphase_coupling',
                 'score': 0.75,
-                'reason': f"检测到{len(p['phase_cols'])}个碳相关指标，适合多相态耦合图",
+                'reason': f"数据驱动: {len(p['phase_cols'])}个相态相关指标，耦合图可展示相态间关系",
                 'kwargs': {},
             })
 
-        # 碳流/Sankey：有相态列
-        if len(p['phase_cols']) >= 2:
-            recs.append({
-                'chart_type': 'carbon_flow',
-                'score': 0.70,
-                'reason': '适合碳流/物质流向可视化',
-                'kwargs': {},
-            })
-
-        # Sankey桑基图
-        if len(p['phase_cols']) >= 3:
-            recs.append({
-                'chart_type': 'sankey',
-                'score': 0.65,
-                'reason': '适合桑基图展示碳在相态间流转',
-                'kwargs': {},
-            })
-
-        # 散点回归：2个连续变量
-        if len(p['numeric_cols']) >= 2 and p['n_rows'] >= 10:
-            recs.append({
-                'chart_type': 'regression_scatter',
-                'score': 0.70,
-                'reason': f"数值变量间可做回归分析",
-                'kwargs': {'x_col': p['numeric_cols'][0], 'y_col': p['numeric_cols'][1]},
-            })
-
-        # 聚类热图：≥5数值列
+        # 8. 聚类热图
         if len(p['numeric_cols']) >= 5 and p['n_rows'] >= 8:
             recs.append({
                 'chart_type': 'heatmap',
                 'score': 0.68,
-                'reason': '数值变量多，聚类热图可发现分组模式',
+                'reason': '聚类热图可发现变量分组模式',
                 'kwargs': {'clustered': True},
             })
 
-        # 按分数排序
-        recs.sort(key=lambda x: x['score'], reverse=True)
+        # 去重（同一 chart_type 保留最高分的）
+        seen = {}
+        for rec in recs:
+            ct = rec['chart_type']
+            if ct not in seen or rec['score'] > seen[ct]['score']:
+                seen[ct] = rec
+        recs = sorted(seen.values(), key=lambda x: x['score'], reverse=True)
+
         return recs[:top_n]
 
     def suggest_layout(self):
@@ -490,12 +584,399 @@ class MultiPanelComposer:
 
 
 # ============================================================================
+# ChartReviewer - 图表规则检查（第一层自评）
+# ============================================================================
+class ChartReviewer:
+    """
+    图表质量规则检查器。
+    检查标签重叠、信息密度、数据墨水比、可读性、色彩等硬伤。
+    每条检查返回 PASS/WARN/FAIL + 具体问题 + 修复建议。
+    """
+
+    class CheckResult:
+        def __init__(self, name, status, message='', fix=None):
+            self.name = name
+            self.status = status  # 'PASS' / 'WARN' / 'FAIL'
+            self.message = message
+            self.fix = fix  # 修复建议（callable 或 str）
+
+        def __repr__(self):
+            icon = {'PASS': '✓', 'WARN': '⚠', 'FAIL': '✗'}[self.status]
+            return f'{icon} [{self.name}] {self.message}'
+
+    def review(self, fig, verbose=False):
+        """
+        对 matplotlib Figure 执行全部规则检查。
+
+        Returns
+        -------
+        list of CheckResult
+        """
+        results = []
+        results.append(self._check_label_overlap(fig))
+        results.append(self._check_font_size(fig))
+        results.append(self._check_line_width(fig))
+        results.append(self._check_info_density(fig))
+        results.append(self._check_color_count(fig))
+        results.append(self._check_axis_labels(fig))
+        results.append(self._check_legend(fig))
+        results.append(self._check_data_ink_ratio(fig))
+
+        if verbose:
+            for r in results:
+                print(f'  {r}')
+
+        return results
+
+    def has_critical_issues(self, results):
+        """是否有必须修复的 FAIL 级别问题"""
+        return any(r.status == 'FAIL' for r in results)
+
+    def get_fixes(self, results):
+        """收集所有修复建议"""
+        return [r for r in results if r.status in ('FAIL', 'WARN') and r.fix]
+
+    def _check_label_overlap(self, fig):
+        """检查标签是否重叠"""
+        try:
+            renderer = fig.canvas.get_renderer()
+            for ax in fig.get_axes():
+                # 获取所有文本对象的 bounding box
+                texts = [t for t in ax.texts if t.get_text().strip()]
+                bboxes = []
+                for t in texts:
+                    try:
+                        bb = t.get_window_extent(renderer)
+                        bboxes.append(bb)
+                    except Exception:
+                        pass
+
+                # 检查两两重叠
+                for i in range(len(bboxes)):
+                    for j in range(i + 1, len(bboxes)):
+                        if bboxes[i].overlaps(bboxes[j]):
+                            overlap_area = (min(bboxes[i].x1, bboxes[j].x1) - max(bboxes[i].x0, bboxes[j].x0)) * \
+                                           (min(bboxes[i].y1, bboxes[j].y1) - max(bboxes[i].y0, bboxes[j].y0))
+                            if overlap_area > 100:  # 超过100平方像素
+                                return self.CheckResult(
+                                    '标签重叠', 'FAIL',
+                                    f'文本标签存在重叠(面积{overlap_area:.0f}px²)',
+                                    'auto_rotate_labels'
+                                )
+            return self.CheckResult('标签重叠', 'PASS', '无重叠')
+        except Exception:
+            return self.CheckResult('标签重叠', 'WARN', '无法检测(需要渲染)')
+
+    def _check_font_size(self, fig):
+        """检查字号是否过小"""
+        small_texts = []
+        for ax in fig.get_axes():
+            for text in ax.texts:
+                fs = text.get_fontsize()
+                if fs and fs < 6 and text.get_text().strip():
+                    small_texts.append(f'{text.get_text()[:10]}(size={fs})')
+            # 也检查 tick labels
+            for label in ax.get_xticklabels() + ax.get_yticklabels():
+                fs = label.get_fontsize()
+                if fs and fs < 6:
+                    small_texts.append(f'tick(size={fs})')
+        if small_texts:
+            return self.CheckResult(
+                '字号', 'FAIL',
+                f'{len(small_texts)}个文本字号<6pt，打印不可读',
+                'increase_font_size'
+            )
+        return self.CheckResult('字号', 'PASS', '字号均≥6pt')
+
+    def _check_line_width(self, fig):
+        """检查线条是否过细"""
+        thin_lines = []
+        for ax in fig.get_axes():
+            for line in ax.get_lines():
+                lw = line.get_linewidth()
+                if lw and lw < 0.3 and line.get_visible():
+                    thin_lines.append(lw)
+        if thin_lines:
+            return self.CheckResult(
+                '线条', 'WARN',
+                f'{len(thin_lines)}条线宽<0.3pt，打印可能不可见',
+                'increase_line_width'
+            )
+        return self.CheckResult('线条', 'PASS', '线条粗细合适')
+
+    def _check_info_density(self, fig):
+        """检查信息密度"""
+        total_points = 0
+        for ax in fig.get_axes():
+            for line in ax.get_lines():
+                xdata = line.get_xdata()
+                if xdata is not None:
+                    total_points += len(xdata)
+            for coll in ax.collections:
+                if hasattr(coll, 'get_offsets'):
+                    offsets = coll.get_offsets()
+                    if len(offsets) > 0:
+                        total_points += len(offsets)
+
+        # 获取图面积（平方英寸）
+        w, h = fig.get_size_inches()
+        area = w * h
+
+        density = total_points / area if area > 0 else 0
+
+        if density > 500:
+            return self.CheckResult(
+                '信息密度', 'WARN',
+                f'数据点密度高({density:.0f}点/英寸²)，考虑分面或抽样',
+                'reduce_density'
+            )
+        elif density < 5 and total_points > 0:
+            return self.CheckResult(
+                '信息密度', 'WARN',
+                f'数据点稀疏({density:.1f}点/英寸²)，考虑缩小图尺寸',
+                'reduce_figure_size'
+            )
+        return self.CheckResult('信息密度', 'PASS', f'{total_points}个数据点, 密度{density:.0f}点/英寸²')
+
+    def _check_color_count(self, fig):
+        """检查颜色数量"""
+        colors = set()
+        for ax in fig.get_axes():
+            for line in ax.get_lines():
+                c = line.get_color()
+                if c and c != 'none':
+                    colors.add(c)
+            for coll in ax.collections:
+                if hasattr(coll, 'get_facecolor'):
+                    fc = coll.get_facecolor()
+                    if len(fc) > 0:
+                        for c in fc[:5]:  # 只取前5个
+                            colors.add(tuple(c))
+
+        n_colors = len(colors)
+        if n_colors > 8:
+            return self.CheckResult(
+                '色彩', 'WARN',
+                f'使用了{n_colors}种颜色(>8)，可能造成视觉混乱',
+                'reduce_colors'
+            )
+        return self.CheckResult('色彩', 'PASS', f'{n_colors}种颜色')
+
+    def _check_axis_labels(self, fig):
+        """检查坐标轴标签完整性"""
+        missing = []
+        for ax in fig.get_axes():
+            if not ax.get_visible():
+                continue
+            xlabel = ax.get_xlabel()
+            ylabel = ax.get_ylabel()
+            if not xlabel.strip() and ax.xaxis.get_visible():
+                missing.append('xlabel')
+            if not ylabel.strip() and ax.yaxis.get_visible():
+                missing.append('ylabel')
+        if missing:
+            return self.CheckResult(
+                '轴标签', 'WARN',
+                f'缺少{", ".join(set(missing))}，读者无法理解坐标含义',
+                'add_axis_labels'
+            )
+        return self.CheckResult('轴标签', 'PASS', '坐标轴标签完整')
+
+    def _check_legend(self, fig):
+        """检查图例是否被遮挡"""
+        for ax in fig.get_axes():
+            legend = ax.get_legend()
+            if legend and legend.get_visible():
+                try:
+                    renderer = fig.canvas.get_renderer()
+                    legend_bb = legend.get_window_extent(renderer)
+                    # 检查图例是否超出图边界
+                    fig_bb = fig.get_window_extent(renderer)
+                    if (legend_bb.x1 > fig_bb.x1 + 10 or
+                        legend_bb.y1 > fig_bb.y1 + 10 or
+                        legend_bb.x0 < fig_bb.x0 - 10 or
+                        legend_bb.y0 < fig_bb.y0 - 10):
+                        return self.CheckResult(
+                            '图例', 'WARN', '图例可能超出图边界', 'adjust_legend_position'
+                        )
+                except Exception:
+                    pass
+        return self.CheckResult('图例', 'PASS', '图例位置正常')
+
+    def _check_data_ink_ratio(self, fig):
+        """检查数据墨水比（简化版：检查网格线和边框）"""
+        grid_count = 0
+        spine_count = 0
+        for ax in fig.get_axes():
+            if ax.xaxis.get_gridlines()[0].get_visible():
+                grid_count += 1
+            for spine in ax.spines.values():
+                if spine.get_visible():
+                    spine_count += 1
+
+        total_elements = grid_count + spine_count
+        if total_elements > 10:
+            return self.CheckResult(
+                '数据墨水比', 'WARN',
+                f'非数据元素较多({total_elements}个网格/边框)，考虑简化',
+                'simplify_decorations'
+            )
+        return self.CheckResult('数据墨水比', 'PASS', f'非数据元素{total_elements}个')
+
+
+# ============================================================================
+# LLMChartCritic - LLM 图表叙事评价（第二层自评）
+# ============================================================================
+class LLMChartCritic:
+    """
+    通过 LLM 评价图表的叙事质量。
+    输入：图表截图 + 数据摘要 → 输出：评分(1-5) + 改进建议。
+    """
+
+    def __init__(self, api_key=None, model=None, base_url=None):
+        """
+        Parameters
+        ----------
+        api_key : str or None, LLM API key。None 时从环境变量读取。
+        model : str or None, 模型名。None 时使用默认。
+        base_url : str or None, API base URL。
+        """
+        self.api_key = api_key
+        self.model = model
+        self.base_url = base_url
+        self._available = None
+
+    def is_available(self):
+        """检查 LLM 是否可用"""
+        if self._available is not None:
+            return self._available
+        try:
+            import openai
+            self._available = True
+        except ImportError:
+            self._available = False
+        return self._available
+
+    def evaluate(self, fig, chart_type, data_summary, language='zh'):
+        """
+        评价图表的叙事质量。
+
+        Parameters
+        ----------
+        fig : matplotlib Figure
+        chart_type : str, 图表类型
+        data_summary : dict, 数据摘要（变量名、样本数、关键统计量等）
+        language : str, 'zh' / 'en'
+
+        Returns
+        -------
+        dict: {
+            'score': int (1-5),
+            'feedback': str,
+            'suggestions': [str, ...],
+        }
+        """
+        if not self.is_available():
+            return {'score': 4, 'feedback': 'LLM不可用，跳过叙事评价', 'suggestions': []}
+
+        # 将图转为 base64
+        import io, base64
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=150, bbox_inches='tight')
+        buf.seek(0)
+        img_b64 = base64.b64encode(buf.read()).decode('utf-8')
+        buf.close()
+
+        # 构建 prompt
+        prompt = self._build_prompt(chart_type, data_summary, language)
+
+        try:
+            import openai
+            client_kwargs = {}
+            if self.api_key:
+                client_kwargs['api_key'] = self.api_key
+            if self.base_url:
+                client_kwargs['base_url'] = self.base_url
+
+            client = openai.OpenAI(**client_kwargs)
+            model = self.model or 'gpt-4o-mini'
+
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {'role': 'user', 'content': [
+                        {'type': 'text', 'text': prompt},
+                        {'type': 'image_url', 'image_url': {'url': f'data:image/png;base64,{img_b64}'}},
+                    ]}
+                ],
+                max_tokens=500,
+            )
+
+            content = response.choices[0].message.content
+            return self._parse_response(content)
+
+        except Exception as e:
+            return {'score': 3, 'feedback': f'LLM调用失败: {e}', 'suggestions': []}
+
+    def _build_prompt(self, chart_type, data_summary, language):
+        """构建评价 prompt"""
+        summary_str = ', '.join([f'{k}={v}' for k, v in list(data_summary.items())[:10]])
+
+        if language == 'zh':
+            return f"""你是科研图表审稿专家。请评价这张{chart_type}图表的质量。
+
+数据摘要: {summary_str}
+
+请从以下维度评价（1-5分）：
+1. 这张图是否有效传达了数据的核心发现？
+2. 视觉编码是否合理（该用位置表示的没用颜色）？
+3. 是否有误导性（截断坐标轴、不恰当的比例尺）？
+4. 对环境工程领域读者是否易懂？
+
+请用以下JSON格式回复：
+{{"score": 1-5, "feedback": "总体评价", "suggestions": ["建议1", "建议2"]}}"""
+        else:
+            return f"""You are a scientific figure reviewer. Evaluate this {chart_type} chart.
+
+Data summary: {summary_str}
+
+Rate 1-5 on:
+1. Does it effectively communicate the core finding?
+2. Is the visual encoding appropriate?
+3. Is there anything misleading?
+4. Is it accessible to environmental engineering researchers?
+
+Reply in JSON: {{"score": 1-5, "feedback": "...", "suggestions": ["..."]}}"""
+
+    def _parse_response(self, content):
+        """解析 LLM 返回"""
+        import json, re
+        # 尝试提取 JSON
+        json_match = re.search(r'\{[^{}]*\}', content, re.DOTALL)
+        if json_match:
+            try:
+                result = json.loads(json_match.group())
+                result.setdefault('score', 3)
+                result.setdefault('feedback', content)
+                result.setdefault('suggestions', [])
+                return result
+            except json.JSONDecodeError:
+                pass
+
+        # 降级：从文本提取分数
+        score_match = re.search(r'(\d)\s*/?\s*5', content)
+        score = int(score_match.group(1)) if score_match else 3
+        return {'score': score, 'feedback': content, 'suggestions': []}
+
+
+# ============================================================================
 # VisualizationAgent - 主绘图类
 # ============================================================================
 class VisualizationAgent:
-    """论文级自动绘图系统，支持10种图表类型"""
+    """论文级自动绘图系统，支持10种图表类型 + 自评循环"""
 
-    def __init__(self, df, output_dir, style='sci', language='zh'):
+    def __init__(self, df, output_dir, style='sci', language='zh',
+                 deep_profile_result=None, enable_review=True, llm_critic=None):
         """
         Parameters
         ----------
@@ -507,16 +988,25 @@ class VisualizationAgent:
             'sci' / 'nature' / 'chinese'
         language : str
             'zh' / 'en'
+        deep_profile_result : dict or None
+            来自 data_profiler.deep_profile() 的结果，用于数据驱动推荐
+        enable_review : bool
+            是否启用规则自评（第一层）
+        llm_critic : LLMChartCritic or None
+            LLM评价器（第二层）。None 时不启用 LLM 评价。
         """
         self.df = df.copy()
         self.output_dir = output_dir
         self.style = style
         self.language = language
+        self.enable_review = enable_review
+        self.llm_critic = llm_critic
+        self._review_log = []  # 记录每次自评的结果
         os.makedirs(output_dir, exist_ok=True)
 
-        self._recommender = AutoRecommender(self.df)
-        self._legacy_plotter = ThesisPlotter(self.df, output_dir)
+        self._recommender = AutoRecommender(self.df, deep_profile_result)
         self._caption_gen = EnhancedCaptionGenerator()
+        self._chart_reviewer = ChartReviewer()
         StylePresets.apply(style)
 
     # ==================== 风格切换 ====================
@@ -536,56 +1026,244 @@ class VisualizationAgent:
 
     # ==================== 自动绘图 ====================
 
-    def auto_plot(self, top_n=5, auto_feedback=True):
-        """自动推荐并绘制最适合的图表"""
+    def auto_plot(self, top_n=5, max_review_attempts=3):
+        """
+        自动推荐并绘制最适合的图表，带自评循环。
+
+        Parameters
+        ----------
+        top_n : int, 推荐图表数量
+        max_review_attempts : int, 每张图最多自评重画次数
+
+        Returns
+        -------
+        list of dict: [{'chart_type', 'fig', 'metadata', 'recommendation', 'review_history'}]
+        """
         recs = self._recommender.recommend(top_n)
         results = []
         for i, rec in enumerate(recs, 1):
             chart_type = rec['chart_type']
             kwargs = rec.get('kwargs', {})
-            print(f"[自动绘图 {i}/{len(recs)}] {chart_type} (分数: {rec['score']:.2f}) - {rec['reason']}")
+            insight = rec.get('data_insight', '')
+            print(f"\n[自动绘图 {i}/{len(recs)}] {chart_type} (分数: {rec['score']:.2f})")
+            print(f"  推荐理由: {rec['reason']}")
+            if insight:
+                print(f"  数据洞察: {insight}")
+
             try:
-                method = getattr(self, f'plot_{chart_type}', None)
-                if method:
-                    fig, meta = method(**kwargs)
-                    results.append({'chart_type': chart_type, 'fig': fig, 'metadata': meta, 'recommendation': rec})
-                elif chart_type == 'regression_scatter':
-                    x = kwargs.get('x_col', '')
-                    y = kwargs.get('y_col', '')
-                    fig, meta = self.plot_regression(x, y)
-                    results.append({'chart_type': 'regression', 'fig': fig, 'metadata': meta, 'recommendation': rec})
-                else:
-                    print(f"  跳过: 未实现的方法 plot_{chart_type}")
+                fig, meta, review_history = self._plot_with_review(
+                    chart_type, kwargs, max_review_attempts
+                )
+                if fig is not None:
+                    meta['review_history'] = review_history
+                    results.append({
+                        'chart_type': chart_type, 'fig': fig,
+                        'metadata': meta, 'recommendation': rec,
+                        'review_history': review_history,
+                    })
             except Exception as e:
                 print(f"  错误: {e}")
+                import traceback
+                traceback.print_exc()
 
-        # 自动记录可视化反馈
-        if auto_feedback and results:
-            self._auto_log_feedback(results)
+        # 打印自评总结
+        if self.enable_review and self._review_log:
+            n_total = len(self._review_log)
+            n_passed = sum(1 for r in self._review_log if r.get('final_status') == 'PASS')
+            print(f"\n{'='*50}")
+            print(f"自评总结: {n_passed}/{n_total} 张图通过规则检查")
+            if self.llm_critic and self.llm_critic.is_available():
+                n_llm = sum(1 for r in self._review_log if r.get('llm_score', 0) >= 4)
+                print(f"LLM评价: {n_llm}/{n_total} 张图叙事质量达标(≥4分)")
 
         return results
 
-    def _auto_log_feedback(self, results):
-        """自动记录绘图结果到知识库（用于进化引擎学习）"""
-        try:
-            from self_evolving_engine import KnowledgeStore, FeedbackCollector
-            store = KnowledgeStore()
-            fb = FeedbackCollector(store)
-            for r in results:
-                chart_type = r.get('chart_type', 'unknown')
-                meta = r.get('metadata', {})
-                fb.log_analysis_feedback(
-                    chart_type=chart_type,
-                    data_profile={
-                        "n_variables": len(meta.get('variables', [])),
-                        "style": self.style,
-                        "language": self.language,
-                    },
-                    rating=3,  # 默认中性评分，用户可后续调整
-                    comment=f"auto-generated by {chart_type}",
-                )
-        except Exception:
-            pass  # 静默失败，不影响主流程
+    def _plot_with_review(self, chart_type, kwargs, max_attempts=3):
+        """
+        带自评循环的绘图：画图 → 规则检查 → 修硬伤 → LLM评价 → 改进 → 输出
+
+        Returns
+        -------
+        (fig, metadata, review_history)
+        """
+        review_history = []
+        best_fig = None
+        best_meta = {}
+
+        for attempt in range(max_attempts):
+            # 1. 绘图
+            fig, meta = self._do_plot(chart_type, kwargs)
+            if fig is None:
+                return None, {}, []
+
+            attempt_record = {'attempt': attempt + 1}
+
+            # 2. 第一层：规则检查（基础 QA + Nature 交付级）
+            if self.enable_review:
+                check_results = self._chart_reviewer.review(fig)
+                attempt_record['rule_checks'] = [str(r) for r in check_results]
+
+                # Nature 风格时追加交付级检查
+                if self.style == 'nature' and check_nature_delivery:
+                    nature_result = check_nature_delivery(fig, auto_fix=True)
+                    attempt_record['nature_qa'] = nature_result
+                    if nature_result.get('nature_checks'):
+                        for iss in nature_result['issues']:
+                            if iss[1] in ('CRITICAL', 'HIGH', 'MAJOR'):
+                                print(f"    [Nature QA] {iss[0]}: {iss[2]}")
+
+                if self._chart_reviewer.has_critical_issues(check_results):
+                    fixes = self._chart_reviewer.get_fixes(check_results)
+                    attempt_record['status'] = 'FAIL'
+                    attempt_record['fixes_applied'] = [f.name for f in fixes]
+
+                    # 自动修复
+                    fixed = self._apply_auto_fixes(fig, fixes)
+                    if fixed:
+                        print(f"  [自评 第{attempt+1}轮] 规则检查不通过，已自动修复: {[f.name for f in fixes]}")
+                    else:
+                        print(f"  [自评 第{attempt+1}轮] 规则检查不通过，无法自动修复")
+                        review_history.append(attempt_record)
+                        best_fig = fig
+                        best_meta = meta
+                        continue
+                else:
+                    attempt_record['status'] = 'PASS'
+                    print(f"  [自评 第{attempt+1}轮] 规则检查通过")
+
+            # 3. 第二层：LLM 评价
+            if self.llm_critic and self.llm_critic.is_available():
+                data_summary = self._build_data_summary(meta)
+                llm_result = self.llm_critic.evaluate(fig, chart_type, data_summary, self.language)
+                attempt_record['llm_score'] = llm_result['score']
+                attempt_record['llm_feedback'] = llm_result['feedback']
+                attempt_record['llm_suggestions'] = llm_result.get('suggestions', [])
+
+                print(f"  [LLM评价 第{attempt+1}轮] 评分: {llm_result['score']}/5")
+                if llm_result.get('suggestions'):
+                    for s in llm_result['suggestions'][:2]:
+                        print(f"    建议: {s}")
+
+                if llm_result['score'] >= 4:
+                    attempt_record['final_status'] = 'PASS'
+                    review_history.append(attempt_record)
+                    best_fig = fig
+                    best_meta = meta
+                    break
+                else:
+                    attempt_record['final_status'] = 'IMPROVE'
+                    # 尝试应用 LLM 建议（下一轮改进）
+                    if llm_result.get('suggestions'):
+                        kwargs = self._merge_llm_suggestions(kwargs, llm_result['suggestions'])
+            else:
+                attempt_record['final_status'] = 'PASS'
+                review_history.append(attempt_record)
+                best_fig = fig
+                best_meta = meta
+                break
+
+            review_history.append(attempt_record)
+            best_fig = fig
+            best_meta = meta
+
+        self._review_log.append({
+            'chart_type': chart_type,
+            'attempts': len(review_history),
+            'final_status': review_history[-1].get('final_status', 'UNKNOWN') if review_history else 'NO_ATTEMPT',
+            'llm_score': review_history[-1].get('llm_score', 0) if review_history else 0,
+        })
+
+        return best_fig, best_meta, review_history
+
+    def _do_plot(self, chart_type, kwargs):
+        """执行实际绘图，返回 (fig, meta)"""
+        method = getattr(self, f'plot_{chart_type}', None)
+        if method:
+            return method(**kwargs)
+        elif chart_type == 'regression_scatter':
+            x = kwargs.get('x_col', '')
+            y = kwargs.get('y_col', '')
+            return self.plot_regression(x, y)
+        else:
+            print(f"  跳过: 未实现的方法 plot_{chart_type}")
+            return None, {}
+
+    def _apply_auto_fixes(self, fig, fixes):
+        """尝试自动修复图表问题"""
+        fixed = False
+        for fix_result in fixes:
+            fix_name = fix_result.fix if isinstance(fix_result.fix, str) else ''
+            try:
+                if fix_name == 'auto_rotate_labels':
+                    for ax in fig.get_axes():
+                        for label in ax.get_xticklabels():
+                            label.set_rotation(45)
+                            label.set_ha('right')
+                    fixed = True
+                elif fix_name == 'increase_font_size':
+                    for ax in fig.get_axes():
+                        for text in ax.texts:
+                            fs = text.get_fontsize()
+                            if fs and fs < 6:
+                                text.set_fontsize(7)
+                        for label in ax.get_xticklabels() + ax.get_yticklabels():
+                            fs = label.get_fontsize()
+                            if fs and fs < 7:
+                                label.set_fontsize(7)
+                    fixed = True
+                elif fix_name == 'increase_line_width':
+                    for ax in fig.get_axes():
+                        for line in ax.get_lines():
+                            if line.get_linewidth() < 0.5:
+                                line.set_linewidth(0.8)
+                    fixed = True
+                elif fix_name == 'reduce_colors':
+                    pass  # 颜色问题不好自动修
+                elif fix_name == 'add_axis_labels':
+                    for ax in fig.get_axes():
+                        if not ax.get_xlabel().strip():
+                            ax.set_xlabel('Variable')
+                        if not ax.get_ylabel().strip():
+                            ax.set_ylabel('Value')
+                    fixed = True
+                elif fix_name == 'simplify_decorations':
+                    for ax in fig.get_axes():
+                        ax.grid(False)
+                    fixed = True
+            except Exception:
+                pass
+        return fixed
+
+    def _build_data_summary(self, meta):
+        """从 meta 构建数据摘要供 LLM 评价"""
+        summary = {
+            'n_samples': len(self.df),
+            'n_variables': len(self.df.columns),
+        }
+        if 'variables' in meta:
+            summary['variables'] = meta['variables']
+        if 'group_col' in meta:
+            summary['group_col'] = meta['group_col']
+        if 'r2' in meta:
+            summary['r2'] = meta['r2']
+        if 'p' in meta:
+            summary['p_value'] = meta['p']
+        if 'variance_ratio' in meta:
+            summary['pca_variance'] = meta['variance_ratio']
+        return summary
+
+    def _merge_llm_suggestions(self, kwargs, suggestions):
+        """将 LLM 建议合并到下一轮绘图参数中（启发式）"""
+        new_kwargs = dict(kwargs)
+        for s in suggestions:
+            s_lower = s.lower()
+            if '旋转' in s or 'rotate' in s_lower:
+                new_kwargs['_rotate_labels'] = True
+            if '字号' in s or 'font' in s_lower:
+                new_kwargs['_increase_font'] = True
+            if '简化' in s or 'simplify' in s_lower:
+                new_kwargs['_simplify'] = True
+        return new_kwargs
 
     # ==================== 需求1-3: 风格绘图 ====================
 
@@ -1021,53 +1699,63 @@ class VisualizationAgent:
         return fig, meta
 
     def _infer_carbon_flows(self):
-        """从数据推断碳流"""
+        """从数据推断碳流（数据驱动，不硬编码列名）"""
         df = self.df
         sources, targets, values = [], [], []
         labels = ['Input Carbon']
 
-        # 气相碳
-        if 'CH4平均值' in df.columns:
-            ch4_mean = pd.to_numeric(df['CH4平均值'], errors='coerce').mean()
-            if not np.isnan(ch4_mean) and ch4_mean > 0:
-                sources.append(0)
-                targets.append(len(labels))
-                values.append(ch4_mean)
-                labels.append('CH4')
+        # 从 recommender 的 profile 中获取变量分类
+        profile = self._recommender.profile
+        phase_cols = profile.get('phase_cols', [])
+        numeric_cols = profile.get('numeric_cols', [])
 
-        if 'CO2' in df.columns:
-            co2_mean = pd.to_numeric(df['CO2'], errors='coerce').mean()
-            if not np.isnan(co2_mean) and co2_mean > 0:
-                sources.append(0)
-                targets.append(len(labels))
-                values.append(co2_mean)
-                labels.append('CO2')
+        # 相态分类规则：从列名关键词推断
+        gas_keywords = ['CH4', 'CO2', 'N2O', 'VOCs', 'H2S', '气相']
+        liquid_keywords = ['TOC', 'IC', 'TC', 'DOC', 'COD', 'DO', '液相', 'mg/L', 'mg/l']
+        solid_keywords = ['固总碳', '有机碳', '无机碳', '固相', 'g/kg', 'mg/kg']
 
-        # 液相碳
-        if 'TOC（mg/L)' in df.columns:
-            toc_mean = pd.to_numeric(df['TOC（mg/L)'], errors='coerce').mean()
-            if not np.isnan(toc_mean) and toc_mean > 0:
-                sources.append(0)
-                targets.append(len(labels))
-                values.append(toc_mean)
-                labels.append('TOC')
+        def classify_phase(col_name):
+            col_upper = str(col_name).upper()
+            for k in gas_keywords:
+                if k.upper() in col_upper:
+                    return 'gas'
+            for k in solid_keywords:
+                if k in str(col_name):
+                    return 'solid'
+            for k in liquid_keywords:
+                if k.upper() in col_upper:
+                    return 'liquid'
+            return None
 
-        if 'IC(mg/L)' in df.columns:
-            ic_mean = pd.to_numeric(df['IC(mg/L)'], errors='coerce').mean()
-            if not np.isnan(ic_mean) and ic_mean > 0:
-                sources.append(0)
-                targets.append(len(labels))
-                values.append(ic_mean)
-                labels.append('IC')
+        # 收集各相态的变量
+        phase_vars = {'gas': [], 'liquid': [], 'solid': []}
+        all_candidates = list(set(phase_cols + numeric_cols))
+        for col in all_candidates:
+            phase = classify_phase(col)
+            if phase:
+                phase_vars[phase].append(col)
 
-        # 固相碳
-        if '固总碳（g/kg)' in df.columns:
-            solid_mean = pd.to_numeric(df['固总碳（g/kg)'], errors='coerce').mean()
-            if not np.isnan(solid_mean) and solid_mean > 0:
+        # 对每个相态取均值最大的变量作为代表
+        for phase, phase_label in [('gas', 'Gas'), ('liquid', 'Liquid'), ('solid', 'Solid')]:
+            vars_in_phase = phase_vars[phase]
+            if not vars_in_phase:
+                continue
+            # 取均值最大的变量
+            best_col = None
+            best_mean = 0
+            for col in vars_in_phase:
+                try:
+                    mean_val = pd.to_numeric(df[col], errors='coerce').mean()
+                    if not np.isnan(mean_val) and abs(mean_val) > abs(best_mean):
+                        best_mean = mean_val
+                        best_col = col
+                except Exception:
+                    pass
+            if best_col:
                 sources.append(0)
                 targets.append(len(labels))
-                values.append(solid_mean)
-                labels.append('Solid C')
+                values.append(abs(best_mean))
+                labels.append(f'{phase_label}: {best_col[:15]}')
 
         if not values:
             sources = [0, 0, 0]
@@ -1257,15 +1945,29 @@ class VisualizationAgent:
 
         if panels is None:
             panels = []
-            phase_configs = [
-                ('gas', ['CH4平均值', 'CO2'], 'Boxplot'),
-                ('liquid', ['TOC（mg/L)', 'COD（mg/L)', 'DO(mg/L)'], 'Boxplot'),
-                ('solid', ['固总碳（g/kg)', '有机碳（g/kg)'], 'Bar'),
-            ]
-            for phase, candidates, ptype in phase_configs:
-                found = [v for v in candidates if v in df.columns]
+            # 数据驱动：从 recommender 的变量分类中推断相态
+            profile = self._recommender.profile
+            phase_cols = profile.get('phase_cols', [])
+            numeric_cols = profile.get('numeric_cols', [])
+
+            gas_keywords = ['CH4', 'CO2', 'N2O', 'VOCs', 'H2S', '气相']
+            liquid_keywords = ['TOC', 'IC', 'TC', 'DOC', 'COD', 'DO', '液相', 'mg/L']
+            solid_keywords = ['固总碳', '有机碳', '无机碳', '固相', 'g/kg', 'mg/kg']
+
+            all_candidates = list(set(phase_cols + numeric_cols))
+
+            for phase, keywords, default_type in [
+                ('gas', gas_keywords, 'box'),
+                ('liquid', liquid_keywords, 'box'),
+                ('solid', solid_keywords, 'bar'),
+            ]:
+                found = []
+                for col in all_candidates:
+                    col_str = str(col)
+                    if any(k.upper() in col_str.upper() for k in keywords):
+                        found.append(col)
                 if found:
-                    panels.append({'type': ptype.lower(), 'variables': found, 'phase': phase})
+                    panels.append({'type': default_type, 'variables': found, 'phase': phase})
 
         if not panels:
             print("  警告: 无有效面板数据")
@@ -1404,11 +2106,423 @@ class VisualizationAgent:
         save_figure(fig, f'regression_{x_col}_{y_col}', self.output_dir)
         return fig, meta
 
-    # ==================== 委托原ThesisPlotter ====================
+    # ==================== 从 plotting_functions.py 迁移的图表 ====================
 
-    def legacy(self):
-        """委托调用原ThesisPlotter的全部12种图"""
-        self._legacy_plotter.generate_all_figures()
+    def plot_phase_composition(self, phase_data=None, title=None):
+        """
+        三相碳组成饼图（环形图）
+
+        Parameters
+        ----------
+        phase_data : dict or None, 相态数据 {'气相': value, '液相': value, '固相': value}
+            None时自动从df中检测
+        title : str or None, 图表标题
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        df = self.df
+        if phase_data is None:
+            phase_data = {}
+            if '气相碳' in df.columns:
+                phase_data['气相'] = pd.to_numeric(df['气相碳'], errors='coerce').mean()
+            if '液相碳' in df.columns:
+                phase_data['液相'] = pd.to_numeric(df['液相碳'], errors='coerce').mean()
+            if '固相碳' in df.columns:
+                phase_data['固相'] = pd.to_numeric(df['固相碳'], errors='coerce').mean()
+
+        if len(phase_data) < 2:
+            print("  警告: 相态数据不足，跳过饼图")
+            return None, {}
+
+        labels = list(phase_data.keys())
+        sizes = list(phase_data.values())
+        colors = [PHASE_COLORS.get(l, '#999999') for l in labels]
+
+        fig, ax = plt.subplots(figsize=(8, 8), facecolor='white')
+        explode = [0.03] * len(labels)
+        wedges, texts, autotexts = ax.pie(
+            sizes, labels=None, colors=colors,
+            autopct='%1.1f%%', pctdistance=0.78,
+            startangle=90, explode=explode,
+            wedgeprops={'edgecolor': 'white', 'linewidth': 2},
+            textprops={'fontsize': 13})
+        for t in autotexts:
+            t.set_fontsize(13)
+            t.set_fontweight('bold')
+            t.set_color('white')
+
+        centre_circle = plt.Circle((0, 0), 0.40, fc='white', linewidth=0)
+        ax.add_artist(centre_circle)
+
+        if title is None:
+            title = '固液气三相碳污染物组成比例'
+        ax.set_title(title, fontsize=16, pad=20, fontweight='bold')
+
+        legend_labels = [f'{l} ({s:.1f})' for l, s in zip(labels, sizes)]
+        legend = ax.legend(wedges, legend_labels, title='相态 (均值)',
+                          loc='center left', bbox_to_anchor=(1.05, 0.5),
+                          frameon=True, edgecolor='#BBBBBB', facecolor='white',
+                          fontsize=12)
+        legend.get_title().set_fontsize(13)
+
+        plt.tight_layout()
+        save_figure(fig, 'phase_composition', self.output_dir)
+        meta = {'chart_type': 'phase_composition', 'data': phase_data}
+        return fig, meta
+
+    def plot_stacked_bar(self, cols=None, group_col=None, title=None, kind='carbon'):
+        """
+        堆叠柱状图（液相碳组成、固相碳组成等）
+
+        Parameters
+        ----------
+        cols : list or None, 要堆叠的列名
+        group_col : str or None, 分组列（如'季节'）
+        title : str or None, 图表标题
+        kind : str, 'carbon' / 'liquid' / 'solid'（用于自动检测列）
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        df = self.df
+
+        # 自动检测列
+        if cols is None:
+            if kind == 'liquid':
+                cols = [c for c in ['TOC（mg/L)', 'IC(mg/L)'] if c in df.columns]
+            elif kind == 'solid':
+                cols = [c for c in ['有机碳（g/kg)', '无机碳（g/kg)'] if c in df.columns]
+            else:
+                # 通用：找数值列
+                cols = df.select_dtypes(include=[np.number]).columns[:5].tolist()
+
+        if len(cols) < 2:
+            print("  警告: 堆叠柱状图需要至少2列数据")
+            return None, {}
+
+        # 自动检测分组
+        if group_col is None and '季节' in df.columns:
+            group_col = '季节'
+
+        if group_col:
+            groups = df[group_col].unique()
+            group_means = {col: [] for col in cols}
+            for g in groups:
+                gdf = df[df[group_col] == g]
+                for col in cols:
+                    group_means[col].append(pd.to_numeric(gdf[col], errors='coerce').mean())
+        else:
+            groups = ['总体']
+            group_means = {col: [pd.to_numeric(df[col], errors='coerce').mean()] for col in cols}
+
+        fig, ax = plt.subplots(figsize=(7, 6), facecolor='white')
+        x = np.arange(len(groups))
+        width = 0.5
+        bottom = np.zeros(len(groups))
+
+        for i, col in enumerate(cols):
+            color = CARBON_COLORS.get(col, TABLEAU_10[i % 10])
+            label = get_label(col)
+            ax.bar(x, group_means[col], width, bottom=bottom,
+                   label=label, color=color, edgecolor='white', linewidth=1.5)
+            # 添加数值标签
+            for j, val in enumerate(group_means[col]):
+                if val > 0:
+                    ax.text(j, bottom[j] + val / 2, f'{val:.1f}',
+                            ha='center', va='center', fontsize=10,
+                            color='white', fontweight='bold')
+            bottom += np.array(group_means[col])
+
+        # 总值标签
+        for j in range(len(groups)):
+            ax.text(j, bottom[j] + bottom[j] * 0.02, f'{bottom[j]:.1f}',
+                    ha='center', va='bottom', fontsize=11, fontweight='bold')
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(groups, fontsize=13)
+        ax.set_ylabel('浓度', fontsize=13)
+        if title is None:
+            title = f'{kind}组成'
+        ax.set_title(title, fontsize=16, fontweight='bold', pad=15)
+        ax.legend(fontsize=11, frameon=True, edgecolor='#BBBBBB')
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+
+        save_figure(fig, f'stacked_bar_{kind}', self.output_dir)
+        meta = {'chart_type': 'stacked_bar', 'kind': kind, 'cols': cols}
+        return fig, meta
+
+    def plot_hca_dendrogram(self, cols=None, method='ward', n_clusters=None):
+        """
+        独立的层次聚类树状图
+
+        Parameters
+        ----------
+        cols : list or None, 用于聚类的列
+        method : str, 聚类方法 ('ward', 'complete', 'average', 'single')
+        n_clusters : int or None, 截断线位置
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        from scipy.cluster.hierarchy import linkage, dendrogram, set_link_color_palette
+
+        df = self.df
+        if cols is None:
+            cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            cols = [c for c in cols if c not in ['采样时间', '采样点']]
+
+        hca_df = df[cols].copy().dropna()
+        if len(hca_df) < 5:
+            print("  警告: HCA有效样本不足")
+            return None, {}
+
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(hca_df.values)
+        linked = linkage(scaled_data, method=method)
+
+        fig, ax = plt.subplots(figsize=(12, 6), facecolor='white')
+        set_link_color_palette(['#4E79A7', '#F28E2B', '#E15759', '#76B7B2'])
+
+        labels = [f'R{i+1}' for i in range(len(hca_df))]
+        color_threshold = 0.7 * max(linked[:, 2]) if n_clusters is None else None
+
+        dendrogram(linked, ax=ax, leaf_rotation=90, leaf_font_size=10,
+                   labels=labels,
+                   color_threshold=color_threshold,
+                   above_threshold_color='#999999')
+
+        ax.set_title(f'层次聚类分析 ({method}法) 树状图', fontsize=15, fontweight='bold', pad=15)
+        ax.set_xlabel('样本', fontsize=13)
+        ax.set_ylabel('欧氏距离', fontsize=13)
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+
+        save_figure(fig, 'hca_dendrogram', self.output_dir)
+        meta = {'chart_type': 'hca_dendrogram', 'method': method, 'n_samples': len(hca_df)}
+        return fig, meta
+
+    def plot_distribution(self, col=None, group_col=None, title=None):
+        """
+        分布图（直方图+KDE+箱线图）
+
+        Parameters
+        ----------
+        col : str or None, 要分析的列
+        group_col : str or None, 分组列
+        title : str or None, 图表标题
+
+        Returns
+        -------
+        (fig, metadata)
+        """
+        df = self.df
+
+        # 自动选择列
+        if col is None:
+            numeric_cols = df.select_dtypes(include=[np.number]).columns
+            if len(numeric_cols) > 0:
+                col = numeric_cols[0]
+            else:
+                print("  警告: 无数值列")
+                return None, {}
+
+        if group_col is None and '季节' in df.columns:
+            group_col = '季节'
+
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5), facecolor='white')
+
+        # 左图：直方图+KDE
+        ax1 = axes[0]
+        valid_data = pd.to_numeric(df[col], errors='coerce').dropna()
+        if len(valid_data) > 5:
+            ax1.hist(valid_data, bins=15, color=TABLEAU_10[0], edgecolor='white',
+                    alpha=0.7, density=True)
+            kde_x = np.linspace(valid_data.min(), valid_data.max(), 100)
+            kde = scipy_stats.gaussian_kde(valid_data)
+            ax1.plot(kde_x, kde(kde_x), color='#D55E00', linewidth=2)
+            ax1.axvline(valid_data.mean(), color='#333333', linestyle='--', linewidth=1.5,
+                       label=f'均值: {valid_data.mean():.3f}')
+            ax1.legend(fontsize=11)
+
+        ax1.set_xlabel(get_label(col), fontsize=13)
+        ax1.set_ylabel('密度', fontsize=13)
+        if title is None:
+            title = f'{get_label(col)} 分布'
+        ax1.set_title(title, fontsize=14, fontweight='bold')
+        ax1.grid(alpha=0.3, linestyle='--')
+
+        # 右图：箱线图
+        ax2 = axes[1]
+        if group_col:
+            data_list = []
+            labels = []
+            for group in df[group_col].unique():
+                data = pd.to_numeric(df[df[group_col] == group][col], errors='coerce').dropna()
+                if len(data) > 0:
+                    data_list.append(data)
+                    labels.append(str(group))
+            if len(data_list) > 0:
+                bp = ax2.boxplot(data_list, patch_artist=True, widths=0.5,
+                               medianprops={'color': 'black', 'linewidth': 2})
+                colors = [SEASON_COLORS.get(l, TABLEAU_10[i]) for i, l in enumerate(labels)]
+                for patch, color in zip(bp['boxes'], colors):
+                    patch.set_facecolor(color)
+                    patch.set_alpha(0.7)
+                for j, data in enumerate(data_list):
+                    jitter = np.random.normal(j + 1, 0.04, size=len(data))
+                    ax2.scatter(jitter, data, alpha=0.5, s=30,
+                              color=colors[j], edgecolors='none', linewidth=0.5, zorder=5)
+                ax2.set_xticklabels(labels, fontsize=11)
+        else:
+            ax2.boxplot(valid_data.dropna(), patch_artist=True,
+                       boxprops={'facecolor': TABLEAU_10[0], 'alpha': 0.7})
+
+        ax2.set_ylabel(get_label(col), fontsize=13)
+        ax2.set_title(f'{get_label(col)} 箱线图', fontsize=14, fontweight='bold')
+        ax2.grid(alpha=0.3, linestyle='--')
+        ax2.set_axisbelow(True)
+        plt.tight_layout()
+
+        save_figure(fig, f'distribution_{col}', self.output_dir)
+        meta = {'chart_type': 'distribution', 'col': col, 'n': len(valid_data)}
+        return fig, meta
+
+    def plot_batch_regressions(self, pairs=None, top_n=6):
+        """
+        批量生成回归分析图
+
+        Parameters
+        ----------
+        pairs : list of tuple or None, [(x_col, y_col), ...]
+        top_n : int, 自动选择的回归对数量
+
+        Returns
+        -------
+        list of (fig, metadata)
+        """
+        df = self.df
+
+        # 自动选择回归对
+        if pairs is None:
+            from variable_registry import get_regression_pairs
+            pairs = get_regression_pairs(df)
+            pairs = pairs[:top_n]
+
+        results = []
+        for pair in pairs:
+            if isinstance(pair, dict):
+                x_col = pair.get('x')
+                y_col = pair.get('y')
+            elif isinstance(pair, (list, tuple)) and len(pair) >= 2:
+                x_col, y_col = pair[0], pair[1]
+            else:
+                continue
+
+            if x_col in df.columns and y_col in df.columns:
+                try:
+                    result = self.plot_regression(x_col, y_col)
+                    if result is not None and len(result) == 2:
+                        fig, meta = result
+                        if fig is not None:
+                            results.append((fig, meta))
+                except Exception as e:
+                    print(f"  警告: {x_col} vs {y_col} 回归失败: {e}")
+
+        return results
+
+    def generate_all_figures(self):
+        """
+        一键生成全部图表（兼容原ThesisPlotter接口）
+
+        Returns
+        -------
+        list of (fig, metadata)
+        """
+        print("\n" + "=" * 60)
+        print("开始生成全部论文图件")
+        print("=" * 60)
+
+        results = []
+
+        # 1. 三相碳组成
+        fig, meta = self.plot_phase_composition()
+        if fig:
+            results.append((fig, meta))
+
+        # 2. 液相碳组成
+        fig, meta = self.plot_stacked_bar(kind='liquid', title='液相碳组成 (TOC vs IC)')
+        if fig:
+            results.append((fig, meta))
+
+        # 3. 固相碳组成
+        fig, meta = self.plot_stacked_bar(kind='solid', title='固相碳组成')
+        if fig:
+            results.append((fig, meta))
+
+        # 4. 气体箱线图
+        gas_vars = [c for c in ['CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)'] if c in self.df.columns]
+        if gas_vars:
+            fig, meta = self.plot_multivariate(variables=gas_vars, kind='box')
+            if fig:
+                results.append((fig, meta))
+
+        # 5. 液相箱线图
+        liquid_vars = [c for c in ['TOC（mg/L)', 'IC(mg/L)', 'DO(mg/L)', 'pH'] if c in self.df.columns]
+        if liquid_vars:
+            fig, meta = self.plot_multivariate(variables=liquid_vars, kind='box')
+            if fig:
+                results.append((fig, meta))
+
+        # 6. 相关性热图
+        fig, meta = self.plot_heatmap()
+        if fig:
+            results.append((fig, meta))
+
+        # 7. PCA双标图
+        fig, meta = self.plot_pca_hca(mode='biplot')
+        if fig:
+            results.append((fig, meta))
+
+        # 8. HCA树状图
+        fig, meta = self.plot_hca_dendrogram()
+        if fig:
+            results.append((fig, meta))
+
+        # 9. 批量回归
+        reg_results = self.plot_batch_regressions()
+        results.extend(reg_results)
+
+        # 10. 空间分布
+        fig, meta = self.plot_spatiotemporal()
+        if fig:
+            results.append((fig, meta))
+
+        # 11. 分布图
+        numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+        if len(numeric_cols) > 0:
+            fig, meta = self.plot_distribution(col=numeric_cols[0])
+            if fig:
+                results.append((fig, meta))
+
+        # 12. 碳平衡
+        fig, meta = self.plot_carbon_flow()
+        if fig:
+            results.append((fig, meta))
+
+        print("\n" + "=" * 60)
+        print(f"全部图件生成完成! 共 {len(results)} 张")
+        print("=" * 60)
+
+        return results
+
+    # ==================== 反馈系统 ====================
 
     def submit_feedback(self, chart_type: str, chart_data: dict = None,
                         rating: int = 3, comment: str = ""):
@@ -1958,9 +3072,10 @@ ggsave("violin.pdf", width = 7, height = 5, dpi = 600)
 # ============================================================================
 # 便捷入口函数
 # ============================================================================
-def visualize(data_path, output_dir='./figures', style='sci', language='zh'):
+def visualize(data_path, output_dir='./figures', style='sci', language='zh',
+              deep_profile_result=None, enable_review=True, llm_critic=None):
     """
-    一键自动绘图
+    一键自动绘图（数据驱动 + 自评循环）
 
     Parameters
     ----------
@@ -1968,6 +3083,9 @@ def visualize(data_path, output_dir='./figures', style='sci', language='zh'):
     output_dir : str, 输出目录
     style : str, 'sci'|'nature'|'chinese'
     language : str, 'zh'|'en'
+    deep_profile_result : dict or None, 来自 data_profiler.deep_profile() 的结果
+    enable_review : bool, 是否启用规则自评
+    llm_critic : LLMChartCritic or None, LLM评价器
     """
     # 加载数据
     if data_path.endswith('.csv'):
@@ -1977,16 +3095,22 @@ def visualize(data_path, output_dir='./figures', style='sci', language='zh'):
     else:
         raise ValueError(f"不支持的文件格式: {data_path}")
 
-    agent = VisualizationAgent(df, output_dir, style=style, language=language)
+    agent = VisualizationAgent(
+        df, output_dir, style=style, language=language,
+        deep_profile_result=deep_profile_result,
+        enable_review=enable_review,
+        llm_critic=llm_critic,
+    )
 
     print(f"\n{'='*60}")
     print(f"Scientific Visualization Agent")
     print(f"风格: {style} | 语言: {language}")
     print(f"数据: {len(df)}行 × {len(df.columns)}列")
+    print(f"自评: {'规则检查' + (' + LLM评价' if llm_critic else '') if enable_review else '关闭'}")
     print(f"输出: {output_dir}")
     print(f"{'='*60}\n")
 
-    # 自动推荐+绘图
+    # 自动推荐+绘图+自评
     results = agent.auto_plot(top_n=5)
 
     # 生成R代码

@@ -54,7 +54,7 @@ def extract_year(text: str) -> int:
     if match:
         return int(match.group(1))
     # 匹配独立的20XX年份
-    matches = re.findall(r'(20[0-2]\d)', text)
+    matches = re.findall(r'(20\d{2})', text)
     if matches:
         return int(matches[-1])  # 取最后一个（通常是出版年）
     return 0
@@ -94,12 +94,9 @@ def compute_recency_score(year: int, current_year: int = None) -> int:
     return 20
 
 
-# DOI验证缓存（避免重复请求Crossref API）
-_doi_cache: dict = {}
-
 def verify_doi(doi: str, timeout: int = 10) -> dict:
     """
-    通过Crossref API验证DOI（带缓存）
+    通过Crossref API验证DOI
 
     Returns
     -------
@@ -107,10 +104,6 @@ def verify_doi(doi: str, timeout: int = 10) -> dict:
     """
     if not doi:
         return {"resolves": False, "title": "", "year": 0, "error": "no doi"}
-
-    # 检查缓存
-    if doi in _doi_cache:
-        return _doi_cache[doi]
 
     try:
         import urllib.request
@@ -128,13 +121,9 @@ def verify_doi(doi: str, timeout: int = 10) -> dict:
             pub_date = message.get('published-print', message.get('published-online', {}))
             date_parts = pub_date.get('date-parts', [[]])
             year = date_parts[0][0] if date_parts and date_parts[0] else 0
-            result = {"resolves": True, "title": title, "year": year, "error": ""}
-            _doi_cache[doi] = result
-            return result
+            return {"resolves": True, "title": title, "year": year, "error": ""}
     except Exception as e:
-        result = {"resolves": False, "title": "", "year": 0, "error": str(e)}
-        _doi_cache[doi] = result
-        return result
+        return {"resolves": False, "title": "", "year": 0, "error": str(e)}
 
 
 def title_similarity(text1: str, text2: str) -> float:

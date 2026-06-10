@@ -9,9 +9,11 @@ Pearson/Spearman相关、PCA、HCA、多元回归
 import pandas as pd
 import numpy as np
 from scipy import stats
-from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
+from scipy.cluster.hierarchy import linkage, fcluster
 import warnings
 warnings.filterwarnings('ignore')
+
+from variable_registry import DERIVED_VARS, get_analysis_cols, get_regression_pairs
 
 
 class StandardScaler:
@@ -100,56 +102,19 @@ def r2_score(y_true, y_pred):
 
 class StatisticalAnalyzer:
     """统计分析器：对冬春数据进行全面的统计分析"""
-
-    # 用于排除的衍生变量（不应直接参与分析）
-    EXCLUDE_COLS = ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例',
-                    '气液碳比', 'CH4_TOC比', 'CH4_ppm', 'CO2_ppm', 'N_P比']
-
-    # 用于相关性/PCA的优先变量关键词（按重要性排序）
-    KEY_VAR_KEYWORDS = [
-        'CH4', 'CO2', 'N2O', 'VOCs', 'O2',
-        'TOC', 'TC', 'IC', 'COD', 'DO',
-        '总氮', '铵态氮', '硝态氮', '总磷',
-        '固总碳', '有机碳', '无机碳', 'DOC',
-        'pH', '液温', '电导率',
-    ]
-
+    
     def __init__(self, df):
         self.df = df
         self.results = {}
-
-    def _get_numeric_cols(self, exclude_derived=True):
-        """获取数值列，排除衍生变量"""
-        numeric_cols = self.df.select_dtypes(include=[np.number]).columns.tolist()
-        if exclude_derived:
-            numeric_cols = [c for c in numeric_cols if c not in self.EXCLUDE_COLS]
-        return numeric_cols
-
-    def _get_key_cols(self, min_cols=5):
-        """自动检测关键分析变量（基于关键词匹配）"""
-        numeric_cols = self._get_numeric_cols()
-        # 按关键词匹配排序
-        matched = []
-        for keyword in self.KEY_VAR_KEYWORDS:
-            for col in numeric_cols:
-                if keyword.lower() in col.lower() and col not in matched:
-                    matched.append(col)
-        # 如果匹配不足，补充其他数值列
-        if len(matched) < min_cols:
-            for col in numeric_cols:
-                if col not in matched:
-                    matched.append(col)
-                    if len(matched) >= min_cols:
-                        break
-        return matched
     
     def descriptive_statistics(self, group_col='季节'):
         """描述性统计：按季节分组计算均值、标准差、中位数等"""
         print("\n" + "=" * 60)
         print("描述性统计分析")
         print("=" * 60)
-
-        numeric_cols = self._get_numeric_cols()
+        
+        numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+        numeric_cols = [c for c in numeric_cols if c not in DERIVED_VARS]
         
         desc_all = self.df[numeric_cols].describe()
         
@@ -174,8 +139,10 @@ class StatisticalAnalyzer:
         print("=" * 60)
         
         if cols is None:
-            cols = self._get_numeric_cols()
-
+            numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+            exclude_cols = ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例', '气液碳比', 'CH4_TOCT比']
+            cols = [c for c in numeric_cols if c not in exclude_cols]
+        
         results = []
         for col in cols:
             data = self.df[col].dropna()
@@ -203,8 +170,10 @@ class StatisticalAnalyzer:
         print("=" * 60)
         
         if cols is None:
-            cols = self._get_numeric_cols()
-
+            numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+            exclude_cols = ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例', '气液碳比', 'CH4_TOCT比']
+            cols = [c for c in numeric_cols if c not in exclude_cols]
+        
         if group_col not in self.df.columns:
             print("错误: 找不到分组列")
             return None
@@ -266,11 +235,9 @@ class StatisticalAnalyzer:
         print(f"\n" + "=" * 60)
         print(f"相关性分析 ({method.capitalize()})")
         print("=" * 60)
-
+        
         if cols is None:
-            cols = self._get_key_cols(min_cols=5)
-        else:
-            cols = [c for c in cols if c in self.df.columns]
+            cols = get_analysis_cols(self.df)
         
         corr_df = self.df[cols].copy()
         corr_matrix = corr_df.corr(method=method)
@@ -306,12 +273,10 @@ class StatisticalAnalyzer:
         print("\n" + "=" * 60)
         print("PCA主成分分析")
         print("=" * 60)
-
-        if cols is None:
-            cols = self._get_key_cols(min_cols=3)
-        else:
-            cols = [c for c in cols if c in self.df.columns]
         
+        if cols is None:
+            cols = get_analysis_cols(self.df)
+
         pca_df = self.df[cols].copy()
         pca_df = pca_df.dropna()
         
@@ -367,12 +332,10 @@ class StatisticalAnalyzer:
         print("\n" + "=" * 60)
         print("层次聚类分析 (HCA)")
         print("=" * 60)
-
-        if cols is None:
-            cols = self._get_key_cols(min_cols=5)
-        else:
-            cols = [c for c in cols if c in self.df.columns]
         
+        if cols is None:
+            cols = get_analysis_cols(self.df)
+
         hca_df = self.df[cols].copy()
         hca_df = hca_df.dropna()
         
@@ -479,15 +442,9 @@ class StatisticalAnalyzer:
         except Exception as e:
             print(f"HCA分析出错: {e}")
         
-        regression_pairs = [
-            ('TOC（mg/L)', 'CH4平均值'),
-            ('TOC（mg/L)', 'CO2'),
-            ('DO(mg/L)', 'CH4平均值'),
-            ('COD（mg/L)', 'CH4平均值'),
-            ('总氮（mg/L)', 'TOC（mg/L)'),
-            ('铵态氮（mg/L)', 'CH4平均值'),
-        ]
-        for x_col, y_col in regression_pairs:
+        pairs = get_regression_pairs(self.df)
+        for pair in pairs:
+            x_col, y_col = pair['x'], pair['y']
             if x_col in self.df.columns and y_col in self.df.columns:
                 try:
                     self.regression_analysis(x_col, y_col)

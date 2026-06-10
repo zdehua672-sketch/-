@@ -15,8 +15,12 @@ from datetime import datetime
 
 from data_loader import DataLoader
 from statistical_analysis import StatisticalAnalyzer
-from plotting_functions import ThesisPlotter
+from scientific_visualization_agent import VisualizationAgent
 from academic_plot_style import get_label, format_chemical
+from variable_registry import (
+    DERIVED_VARS, classify_phase, get_phase_cols,
+    get_analysis_cols, get_regression_pairs,
+)
 
 
 # ============================================================================
@@ -35,42 +39,27 @@ class AnalysisOrchestrator:
         self.recommendations = {}
 
     def _classify_variables(self):
-        """自动识别变量类型和可用性"""
+        """自动识别变量类型和可用性（使用统一注册中心）"""
         info = {
-            'gas': [],      # 气相变量
-            'liquid': [],   # 液相变量
-            'solid': [],    # 固相变量
-            'env': [],      # 环境变量
+            'gas': [],
+            'liquid': [],
+            'solid': [],
+            'env': [],
             'all_numeric': []
         }
-
-        gas_keywords = ['CH4', 'CO2', 'N2O', 'VOCs', 'H2S', 'O2', '甲烷', '氧化亚氮']
-        solid_keywords = ['固总碳', '有机碳', '无机碳', 'DOC(mg/kg)', '全磷', '铵态氮（mg/kg', '硝态氮（mg/kg']
-        env_keywords = ['气温', '泥水', '采样', '井深', '管径', '本底']
 
         for col in self.df.columns:
             if not pd.api.types.is_numeric_dtype(self.df[col]):
                 continue
-            if col in ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例', '气液碳比', 'CH4_TOCT比']:
+            if col in DERIVED_VARS:
                 continue
-
-            non_null = self.df[col].dropna()
-            if len(non_null) < 3:
+            if self.df[col].dropna().shape[0] < 3:
                 continue
 
             info['all_numeric'].append(col)
-            col_lower = str(col).lower()
-
-            is_gas = any(k.lower() in col_lower for k in gas_keywords)
-            is_solid = any(k in col for k in solid_keywords)
-            is_env = any(k in col for k in env_keywords)
-
-            if is_gas:
-                info['gas'].append(col)
-            elif is_solid:
-                info['solid'].append(col)
-            elif is_env:
-                info['env'].append(col)
+            phase = classify_phase(col)
+            if phase in info:
+                info[phase].append(col)
             else:
                 info['liquid'].append(col)
 
@@ -154,21 +143,8 @@ class AnalysisOrchestrator:
         return decisions
 
     def _find_regression_pairs(self):
-        """找到有科研意义的回归变量对"""
-        pairs = []
-        key_pairs = [
-            ('TOC（mg/L)', 'CH4平均值', '有机碳-甲烷关系'),
-            ('TOC（mg/L)', 'CO2', '有机碳-二氧化碳关系'),
-            ('DO(mg/L)', 'CH4平均值', '溶解氧-甲烷关系'),
-            ('COD（mg/L)', 'CH4平均值', '化学需氧量-甲烷关系'),
-            ('TOC（mg/L)', '总氮（mg/L)', '碳氮耦合关系'),
-            ('铵态氮（mg/L)', 'CH4平均值', '氮转化-甲烷关系'),
-        ]
-        cols = set(self.variable_info['all_numeric'])
-        for x, y, desc in key_pairs:
-            if x in cols and y in cols:
-                pairs.append({'x': x, 'y': y, 'description': desc})
-        return pairs
+        """找到有科研意义的回归变量对（使用统一注册中心）"""
+        return get_regression_pairs(self.df)
 
     def decide_figures(self):
         """智能决策：应该画哪些图"""
@@ -254,7 +230,7 @@ class AnalysisOrchestrator:
                             })
 
         # 检查PCA结果
-        if 'PCA' in analysis_results:
+        if 'PCA' in analysis_results and analysis_results['PCA'] is not None:
             var_ratio = analysis_results['PCA'].get('方差贡献率', [])
             if len(var_ratio) >= 2 and sum(var_ratio[:2]) > 0.7:
                 points.append({
@@ -451,7 +427,7 @@ class TextGenerator:
 
     def _gen_pca(self):
         """生成PCA分析文字"""
-        if 'PCA' not in self.results:
+        if 'PCA' not in self.results or self.results['PCA'] is None:
             return ''
 
         pca = self.results['PCA']
@@ -772,25 +748,29 @@ class ScientificAnalysisAgent:
 
         # Step 3: 生成图表
         print("\n[Step 3] 生成论文级图表...")
-        self.plotter = ThesisPlotter(self.df, self.output_dir)
+        self.plotter = VisualizationAgent(self.df, self.output_dir, style='chinese')
 
         figure_list = []
         if fig_decisions.get('phase_pie', {}).get('do'):
             self.plotter.plot_phase_composition()
             figure_list.append('phase_pie')
 
-        for phase in ['gas', 'liquid', 'solid']:
+        for phase in ['gas', 'liquid']:
             key = f'{phase}_boxplot'
             if fig_decisions.get(key, {}).get('do'):
-                getattr(self.plotter, f'plot_{phase}_boxplot', lambda: None)()
+                vars_key = {'gas': ['CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)'],
+                           'liquid': ['TOC（mg/L)', 'IC(mg/L)', 'DO(mg/L)', 'pH']}
+                vars = [c for c in vars_key.get(phase, []) if c in self.df.columns]
+                if vars:
+                    self.plotter.plot_multivariate(variables=vars, kind='box')
                 figure_list.append(key)
 
         if fig_decisions.get('correlation_heatmap', {}).get('do'):
-            self.plotter.plot_correlation_heatmap()
+            self.plotter.plot_heatmap()
             figure_list.append('correlation_heatmap')
 
         if fig_decisions.get('pca_biplot', {}).get('do'):
-            self.plotter.plot_pca_biplot()
+            self.plotter.plot_pca_hca(mode='biplot')
             figure_list.append('pca_biplot')
 
         if fig_decisions.get('hca_dendrogram', {}).get('do'):
@@ -798,7 +778,7 @@ class ScientificAnalysisAgent:
             figure_list.append('hca_dendrogram')
 
         if fig_decisions.get('regression', {}).get('do'):
-            self.plotter.plot_all_regressions()
+            self.plotter.plot_batch_regressions()
             figure_list.append('regression')
 
         # Step 4: 生成图注
@@ -818,41 +798,6 @@ class ScientificAnalysisAgent:
         # Step 6: 识别讨论要点
         print("\n[Step 6] 识别Discussion要点...")
         discussion_points = self.orchestrator.identify_discussion_points(self.results)
-
-        # Step 6.5: 高级深度分析（交叉分析+异常深挖+数据故事线）
-        print("\n[Step 6.5] 高级深度分析...")
-        try:
-            from advanced_analysis import CrossAnalyzer, AnomalyDeepDiver, DataStoryExtractor
-
-            # 交叉分析
-            cross = CrossAnalyzer(self.df)
-            cross_results = cross.analyze_all()
-            if cross_results:
-                self.results['交叉分析'] = cross_results
-                print(f"  → 交叉分析: {len(cross_results)}个发现")
-                for cr in cross_results[:3]:
-                    print(f"    [{cr.dimension}] {cr.variable}: {cr.insight[:60]}...")
-
-            # 异常值深挖
-            anomaly = AnomalyDeepDiver(self.df)
-            anomaly_results = anomaly.analyze()
-            if anomaly_results:
-                self.results['异常值洞察'] = anomaly_results
-                print(f"  → 异常值深挖: {len(anomaly_results)}个异常")
-
-            # 数据故事线
-            storyteller = DataStoryExtractor(self.results)
-            stories = storyteller.extract_stories()
-            if stories:
-                self.results['数据故事线'] = stories
-                print(f"  → 数据故事线: {len(stories)}个故事")
-                for s in stories[:3]:
-                    print(f"    [{s.title}] {s.finding[:60]}...")
-
-        except ImportError:
-            print("  → 高级分析模块不可用，跳过")
-        except Exception as e:
-            print(f"  → 高级分析出错: {e}")
 
         # Step 7: 输出完整报告
         print("\n[Step 7] 生成分析报告...")
@@ -914,13 +859,17 @@ class ScientificAnalysisAgent:
     def _make_serializable(self, obj):
         """将numpy/pandas对象转为可JSON序列化的格式"""
         if isinstance(obj, dict):
-            return {k: self._make_serializable(v) for k, v in obj.items()}
+            return {str(k) if not isinstance(k, (str, int, float, bool, type(None))) else k:
+                    self._make_serializable(v) for k, v in obj.items()}
         elif isinstance(obj, (pd.DataFrame, pd.Series)):
-            return obj.to_dict()
+            d = obj.to_dict()
+            return self._make_serializable(d)
         elif isinstance(obj, np.ndarray):
             return obj.tolist()
         elif isinstance(obj, (np.integer, np.floating)):
             return float(obj)
+        elif isinstance(obj, tuple):
+            return str(obj)
         return obj
 
     def submit_feedback(self, analysis_type: str, rating: int = 3, comment: str = ""):

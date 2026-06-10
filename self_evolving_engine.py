@@ -3,6 +3,9 @@ Self-Evolving Academic AI Engine
 ================================
 可持续进化的科研AI系统核心引擎
 
+import logging
+logger = logging.getLogger(__name__)
+
 组件:
   KnowledgeStore   - JSON结构化知识库（替代硬编码字典）
   FeedbackCollector - 反馈收集与学习
@@ -19,15 +22,12 @@ import json
 import os
 import re
 import hashlib
-import logging
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field, asdict
 from collections import Counter
 from copy import deepcopy
-
-logger = logging.getLogger(__name__)
 
 try:
     from revision_audit import audit_revision
@@ -56,6 +56,10 @@ class KnowledgeStore:
         "feedback_log": "反馈日志",
         "rationale_matrix": "写作推理矩阵（发现→机制→证据→引用）",
         "revision_history": "修订历史（版本间变化追踪）",
+        "literature_matrix": "文献矩阵（来源×主题交叉+证据收敛+知识缺口）",
+        "paper_assessments": "论文质量评估（证据分级+来源可信度）",
+        "literature_links": "论文关联网络（主题关联+矛盾+作者关联）",
+        "data_availability": "数据可用性声明（数据集+仓库+许可证+FAIR元数据）",
     }
 
     def __init__(self, base_dir: str = None):
@@ -67,26 +71,6 @@ class KnowledgeStore:
         self._stores: Dict[str, dict] = {}
         for cat in self.CATEGORIES:
             self._stores[cat] = self._load(cat)
-
-        # 首次使用时自动从现有代码和markdown导入知识
-        self._auto_init_if_empty()
-
-    def _auto_init_if_empty(self):
-        """检测知识库是否为空，如果是则自动从现有代码和markdown导入"""
-        total_entries = sum(
-            len(s.get("entries", {}))
-            for s in self._stores.values()
-        )
-        if total_entries > 0:
-            return  # 已有数据，不需要初始化
-
-        logger.info("Knowledge store is empty, auto-initializing from code and markdown files...")
-        try:
-            results = self.import_all()
-            imported = sum(1 for v in results.values() if v)
-            logger.info(f"Auto-initialized {imported} knowledge sources: {list(results.keys())}")
-        except Exception as e:
-            logger.warning(f"Auto-initialization failed: {e}")
 
     def _path(self, category: str) -> Path:
         return self.store_dir / f"{category}.json"
@@ -143,6 +127,8 @@ class KnowledgeStore:
         """设置知识条目（带版本和置信度）"""
         store = self._stores.setdefault(category, self._default_store(category))
         entries = store.setdefault("entries", {})
+        store.setdefault("changelog", [])
+        store.setdefault("meta", {"version": 1})
 
         old_value = entries.get(key, {}).get("value")
         entries[key] = {
@@ -306,60 +292,6 @@ class KnowledgeStore:
         except ImportError:
             return False
 
-    def import_from_academic_writing_md(self):
-        """从 academic-writing/ 目录下的 .md 文件导入知识到对应 JSON 分类"""
-        md_dir = self.base_dir / "academic-writing"
-        if not md_dir.exists():
-            return False
-
-        imported = 0
-
-        # 映射文件到知识分类
-        file_category_map = {
-            "01-sci-rules.md": ("review_rules", "sci_rules"),
-            "02-chinese-rules.md": ("review_rules", "chinese_rules"),
-            "03-sentence-bank.md": ("writing_templates", "sentence_bank"),
-            "04-discussion-library.md": ("writing_templates", "discussion_library"),
-            "05-figure-design.md": ("methods", "figure_design"),
-            "06-data-analysis-logic.md": ("methods", "data_analysis_logic"),
-            "07-reviewer-comments.md": ("writing_templates", "reviewer_comments"),
-            "08-common-mistakes.md": ("review_rules", "common_mistakes"),
-            "09-structure-templates.md": ("writing_templates", "structure_templates"),
-            "10-domain-knowledge.md": ("domain_terms", "domain_knowledge"),
-        }
-
-        for filename, (category, key_prefix) in file_category_map.items():
-            filepath = md_dir / filename
-            if not filepath.exists():
-                continue
-
-            try:
-                content = filepath.read_text(encoding='utf-8')
-                # 按二级标题拆分为子条目
-                sections = re.split(r'^## (.+)$', content, flags=re.MULTILINE)
-
-                if len(sections) <= 1:
-                    # 没有二级标题，整文件作为一个条目
-                    self.set(category, f"{key_prefix}_full",
-                             {"title": filename, "content": content[:5000],
-                              "source_file": filename},
-                             source="academic-writing-md", confidence=0.9)
-                    imported += 1
-                else:
-                    for i in range(1, len(sections), 2):
-                        title = sections[i].strip()
-                        body = sections[i + 1].strip() if i + 1 < len(sections) else ""
-                        entry_key = f"{key_prefix}_{re.sub(r'[^\\w]', '_', title)[:30].strip('_').lower()}"
-                        self.set(category, entry_key,
-                                 {"title": title, "content": body[:3000],
-                                  "source_file": filename},
-                                 source="academic-writing-md", confidence=0.9)
-                        imported += 1
-            except Exception as e:
-                logger.debug(f"Failed to import {filename}: {e}")
-
-        return imported > 0
-
     def import_all(self):
         """从所有现有代码导入知识"""
         results = {}
@@ -367,7 +299,6 @@ class KnowledgeStore:
         results["paper_writer"] = self.import_from_paper_writer()
         results["mechanism_kb"] = self.import_from_mechanism_kb_md()
         results["scorer"] = self.import_scorer_weights()
-        results["academic_writing_md"] = self.import_from_academic_writing_md()
         return results
 
 
@@ -467,6 +398,33 @@ class FeedbackCollector:
         key = f"{source_type}_{hashlib.md5(title.encode()).hexdigest()[:8]}"
         self.store.set("resources", key, entry, source="auto_discovery",
                         confidence=relevance)
+
+    def log_data_availability(self, datasets: list, statement: str,
+                              audit_result: dict, journal: str = 'nature'):
+        """
+        记录数据可用性声明（来自 nature-data skill）。
+
+        Parameters
+        ----------
+        datasets : list of dict - 数据集信息
+        statement : str - 生成的声明文本
+        audit_result : dict - FAIR 审计结果
+        journal : str - 目标期刊
+        """
+        entry = {
+            "type": "data_availability",
+            "journal": journal,
+            "n_datasets": len(datasets),
+            "dataset_names": [d.get('name', '') for d in datasets],
+            "access_routes": [d.get('access_route', '') for d in datasets],
+            "audit_score": audit_result.get('overall_score', 'UNKNOWN'),
+            "blocking_issues": audit_result.get('blocking_issues', []),
+            "statement_length": len(statement),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+        key = f"data_avail_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        self.store.set("data_availability", key, entry, source="nature_data_skill")
 
     def _adjust_review_weights(self, accepted: list, rejected: list):
         """根据审稿反馈调整规则权重"""
@@ -836,57 +794,6 @@ class GitHubMonitor:
             "details": results,
         }
 
-    def extract_methods_from_repos(self) -> list:
-        """
-        从已跟踪的GitHub项目中提取可复用的方法/技术
-
-        扫描项目描述和README，提取分析方法、工具、技术关键词，
-        存入 knowledge_store/methods.json 供论文写作使用。
-        """
-        resources = self.store.get("resources")
-        extracted = []
-
-        # 分析方法关键词
-        method_keywords = [
-            'PCA', 'HCA', 'cluster analysis', 'regression', 'correlation',
-            'ANOVA', 't-test', 'Mann-Whitney', 'Shapiro-Wilk',
-            'Pearson', 'Spearman', 'multivariate', 'statistical',
-            'carbon balance', 'mass balance', 'isotope', 'tracer',
-            'machine learning', 'neural network', 'random forest',
-            'deep learning', 'NLP', 'text mining',
-        ]
-
-        for key, entry in resources.items():
-            val = entry.get("value", entry) if isinstance(entry, dict) else entry
-            if not isinstance(val, dict) or val.get("type") != "github_project":
-                continue
-
-            desc = (val.get("description", "") or "").lower()
-            readme = (val.get("readme_snippet", "") or "").lower()
-            combined = desc + " " + readme
-
-            found_methods = []
-            for kw in method_keywords:
-                if kw.lower() in combined:
-                    found_methods.append(kw)
-
-            if found_methods:
-                repo_name = val.get("full_name", key)
-                method_entry = {
-                    "source": repo_name,
-                    "url": val.get("url", ""),
-                    "methods": found_methods,
-                    "stars": val.get("stars", 0),
-                }
-                extracted.append(method_entry)
-
-                # 存入 methods 知识库
-                method_key = f"github_{repo_name.replace('/', '_')}"
-                self.store.set("methods", method_key, method_entry,
-                              source="github_monitor", confidence=0.7)
-
-        return extracted
-
     def get_tracked_repos(self) -> list:
         """获取所有已跟踪的仓库"""
         resources = self.store.get("resources")
@@ -1001,6 +908,150 @@ class EvolutionEngine:
         results = self.store.import_all()
         self._log_evolution("initialize", "从现有代码导入知识", results)
         return results
+
+    def auto_learn(self, topic: str, max_papers: int = 10,
+                   read_top_n: int = 5) -> dict:
+        """
+        自动学习：搜论文 → 读取 → 提取句式/机制 → 存入知识库。
+
+        Parameters
+        ----------
+        topic : str, 研究主题（如 "sewage methane emission"）
+        max_papers : int, 搜索最大论文数
+        read_top_n : int, 实际读取的论文数
+
+        Returns
+        -------
+        dict: 学习报告
+        """
+        from auto_paper_finder import AutoPaperFinder
+        from pattern_learner import (
+            SentencePatternLearner, DiscussionLearner,
+            MechanismLearner, learn_patterns_from_paper
+        )
+
+        report = {
+            'topic': topic,
+            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'papers_found': 0,
+            'papers_read': 0,
+            'patterns_learned': 0,
+            'mechanisms_learned': 0,
+            'structures_learned': 0,
+            'details': [],
+        }
+
+        # Step 1: 搜索论文
+        print(f"[AutoLearn] 搜索论文: {topic}")
+        finder = AutoPaperFinder(store=self.store)
+        try:
+            papers = finder.find_papers(topic, max_results=max_papers)
+            report['papers_found'] = len(papers)
+        except Exception as e:
+            report['error'] = f"搜索失败: {e}"
+            logger.warning(f"Auto learn search failed: {e}")
+            return report
+
+        if not papers:
+            report['error'] = "未找到相关论文"
+            return report
+
+        # Step 2: 读取 top-N 论文并学习
+        spl = SentencePatternLearner()
+        dl = DiscussionLearner()
+        ml = MechanismLearner()
+
+        # 按引用数排序，优先读高引用论文
+        papers_sorted = sorted(papers,
+                               key=lambda x: x.get('citation_count', 0),
+                               reverse=True)
+
+        for i, paper in enumerate(papers_sorted[:read_top_n]):
+            title = paper.get('title', '')
+            abstract = paper.get('abstract', '')
+            arxiv_id = paper.get('arxiv_id', '')
+
+            print(f"  [{i+1}/{read_top_n}] {title[:60]}...")
+
+            paper_detail = {
+                'title': title,
+                'source': paper.get('source', ''),
+                'citation_count': paper.get('citation_count', 0),
+                'patterns': 0,
+                'mechanisms': 0,
+            }
+
+            # 从摘要学习
+            if abstract:
+                # 句式学习
+                patterns = spl.learn_from_text(abstract, 'abstract')
+                paper_detail['patterns'] += len(patterns)
+
+                # 机制学习
+                mechs = ml.learn_from_text(abstract, source=f'abstract:{title[:30]}')
+                paper_detail['mechanisms'] += len(mechs)
+
+            # 尝试读取全文（如果有 arxiv ID）
+            if arxiv_id:
+                try:
+                    from paper_reader import PaperReader
+                    reader = PaperReader()
+                    content = reader.read(f"https://arxiv.org/abs/{arxiv_id}",
+                                          fetch_metadata=False)
+
+                    # 从全文学习
+                    result = learn_patterns_from_paper(content, store=self.store)
+                    paper_detail['patterns'] += len(result.get('patterns', []))
+                    paper_detail['mechanisms'] += len(result.get('mechanisms', []))
+
+                    if result.get('structure'):
+                        report['structures_learned'] += 1
+
+                    report['papers_read'] += 1
+                except Exception as e:
+                    logger.info(f"Could not read full paper {arxiv_id}: {e}")
+
+            report['details'].append(paper_detail)
+
+        # Step 3: 聚合学习结果并存入知识库
+        # 句式模式
+        all_patterns = spl.get_patterns(top_n=30)
+        for p in all_patterns:
+            key = f"learned_{p['function']}_{hash(p['pattern']) % 10000:04d}"
+            self.store.set("writing_templates", key, {
+                'pattern': p['pattern'],
+                'function': p.get('function', ''),
+                'section_type': p.get('section_type', ''),
+                'count': p.get('count', 1),
+                'source': f'auto_learn:{topic[:30]}',
+            }, source='auto_learn', confidence=0.7)
+        report['patterns_learned'] = len(all_patterns)
+
+        # 机制知识
+        mech_entries = ml.to_knowledge_store_format()
+        for key, entry in mech_entries.items():
+            self.store.set("mechanisms", key, entry,
+                           source='auto_learn', confidence=0.6)
+        report['mechanisms_learned'] = len(mech_entries)
+
+        # 讨论结构
+        if dl.structures:
+            for i, struct in enumerate(dl.structures):
+                self.store.set("writing_templates", f"learned_discussion_structure_{i}",
+                               struct, source='auto_learn', confidence=0.6)
+
+        self._log_evolution("auto_learn",
+                            f"学习主题: {topic}, {report['papers_found']}篇论文, "
+                            f"{report['patterns_learned']}个句式, "
+                            f"{report['mechanisms_learned']}个机制",
+                            report)
+
+        print(f"[AutoLearn] 完成: {report['papers_found']}篇论文, "
+              f"{report['patterns_learned']}个句式, "
+              f"{report['mechanisms_learned']}个机制, "
+              f"{report['structures_learned']}个讨论结构")
+
+        return report
 
     def evolve_cycle(self, include_github_scan=True) -> dict:
         """执行一次完整进化周期"""
@@ -1216,76 +1267,60 @@ class EvolutionEngine:
         return quality
 
     def _audit_revision(self) -> dict:
-        """修订审计 — 按知识分类细粒度追踪版本间变化"""
+        """修订审计 — 追踪知识库版本间变化"""
         if audit_revision is None:
             return {"status": "skipped", "reason": "revision_audit not available"}
 
-        snapshot_path = self.store.store_dir / "revision_history.json"
+        # 收集当前各知识分类的文本摘要
+        current_parts = []
+        for cat in KnowledgeStore.CATEGORIES:
+            entries = self.store.get(cat)
+            if entries:
+                summary = f"[{cat}] {len(entries)} entries"
+                for key, entry in list(entries.items())[:3]:
+                    if isinstance(entry, dict):
+                        val = entry.get("value", entry.get("description", ""))
+                        if isinstance(val, str):
+                            summary += f"\n  {key}: {val[:60]}"
+                current_parts.append(summary)
+        current_text = '\n\n'.join(current_parts)
 
-        # 加载上次快照
-        last_snapshots = {}
+        # 与上次快照比较
+        snapshot_path = self.store.store_dir / "revision_history.json"
         if snapshot_path.exists():
             try:
                 with open(snapshot_path, 'r', encoding='utf-8') as f:
                     history = json.load(f)
-                last_snapshots = history.get("category_snapshots", {})
+                last_snapshot = history.get("last_snapshot", "")
+                if last_snapshot:
+                    result = audit_revision(last_snapshot, current_text)
+                    summary_data = {
+                        "unchanged_ratio": result.unchanged_ratio,
+                        "new_ratio": result.new_ratio,
+                        "shallow_warning": result.shallow_warning,
+                        "paragraphs_original": result.original_paragraphs,
+                        "paragraphs_revised": result.revised_paragraphs,
+                    }
+                    # 保存新快照
+                    history["last_snapshot"] = current_text
+                    history["last_audit"] = summary_data
+                    history["updated"] = datetime.now(timezone.utc).isoformat()
+                    with open(snapshot_path, 'w', encoding='utf-8') as f:
+                        json.dump(history, f, ensure_ascii=False, indent=2)
+                    return summary_data
             except Exception as e:
-                logger.debug(f"Failed to load revision history: {e}")
+                logger.debug(f"Revision audit error: {e}")
 
-        # 按分类收集当前文本
-        current_snapshots = {}
-        for cat in KnowledgeStore.CATEGORIES:
-            entries = self.store.get(cat)
-            if not entries:
-                continue
-            parts = [f"[{cat}] {len(entries)} entries"]
-            for key, entry in entries.items():
-                if isinstance(entry, dict):
-                    val = entry.get("value", entry.get("description", ""))
-                    if isinstance(val, str):
-                        parts.append(f"  {key}: {val[:80]}")
-                    elif isinstance(val, dict):
-                        parts.append(f"  {key}: {json.dumps(val, ensure_ascii=False)[:80]}")
-            current_snapshots[cat] = '\n'.join(parts)
-
-        # 逐分类比较
-        category_results = {}
-        overall_warnings = []
-
-        for cat, current_text in current_snapshots.items():
-            last_text = last_snapshots.get(cat, "")
-            if not last_text:
-                category_results[cat] = {"status": "new", "entries": current_text.count('\n')}
-                continue
-
-            try:
-                result = audit_revision(last_text, current_text)
-                cat_result = {
-                    "unchanged_ratio": result.unchanged_ratio,
-                    "new_ratio": result.new_ratio,
-                    "shallow_warning": result.shallow_warning,
-                }
-                category_results[cat] = cat_result
-                if result.shallow_warning:
-                    overall_warnings.append(f"{cat}: {result.unchanged_ratio:.0%} unchanged")
-            except Exception as e:
-                category_results[cat] = {"status": "error", "error": str(e)}
-
-        # 保存新快照
+        # 首次运行，保存初始快照
         snapshot_data = {
-            "category_snapshots": current_snapshots,
-            "last_audit": category_results,
+            "last_snapshot": current_text,
+            "last_audit": None,
             "updated": datetime.now(timezone.utc).isoformat(),
         }
         snapshot_path.parent.mkdir(parents=True, exist_ok=True)
         with open(snapshot_path, 'w', encoding='utf-8') as f:
             json.dump(snapshot_data, f, ensure_ascii=False, indent=2)
-
-        return {
-            "categories": category_results,
-            "warnings": overall_warnings,
-            "status": "completed",
-        }
+        return {"status": "initialized", "message": "初始快照已保存，下次进化周期将进行修订审计"}
 
     # --- 资源发现（基于Web搜索） ---
 

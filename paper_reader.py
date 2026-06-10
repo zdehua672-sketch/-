@@ -15,6 +15,7 @@ import re
 import json
 import os
 import sys
+import sqlite3
 import logging
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
@@ -39,6 +40,9 @@ class PaperMetadata:
     reference_count: int = 0
     fields_of_study: list = field(default_factory=list)
     source: str = ""                # arxiv / local_pdf / local_text
+    evidence_level: int = 6         # 证据等级 1-7 (P2)
+    evidence_weight: float = 0.5    # 证据权重 0-1 (P2)
+    credibility_score: float = 0.0  # 来源可信度 0-1 (P3)
 
 
 @dataclass
@@ -59,6 +63,314 @@ class PaperContent:
     references: list = field(default_factory=list)  # 引用列表
     read_time: str = ""
     word_count: int = 0
+
+
+# ============================================================
+# 0. SQLite论文数据库 — 持久化存储全部论文数据
+# ============================================================
+
+class PaperDatabase:
+    """
+    SQLite论文数据库
+
+    存储: 元数据 + 全部章节文本 + 关键发现 + 引用列表 + 证据分级 + 可信度
+    重启后可恢复全部数据，无需重新读取。
+
+    Schema:
+      papers      — 论文主表（元数据+质量评分）
+      sections    — 章节（类型+标题+文本+关键发现）
+      references  — 参考文献
+    """
+
+    def __init__(self, db_path: str = None):
+        self.db_path = db_path or os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "knowledge_store", "papers.db"
+        )
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        self._conn = sqlite3.connect(self.db_path)
+        self._conn.row_factory = sqlite3.Row
+        self._init_tables()
+
+    def _init_tables(self):
+        """创建表结构"""
+        self._conn.executescript("""
+            CREATE TABLE IF NOT EXISTS papers (
+                paper_id        TEXT PRIMARY KEY,
+                title           TEXT NOT NULL DEFAULT '',
+                authors         TEXT NOT NULL DEFAULT '[]',
+                year            INTEGER DEFAULT 0,
+                abstract        TEXT DEFAULT '',
+                arxiv_url       TEXT DEFAULT '',
+                doi             TEXT DEFAULT '',
+                venue           TEXT DEFAULT '',
+                citation_count  INTEGER DEFAULT 0,
+                reference_count INTEGER DEFAULT 0,
+                fields_of_study TEXT DEFAULT '[]',
+                source          TEXT DEFAULT '',
+                evidence_level  INTEGER DEFAULT 6,
+                evidence_weight REAL DEFAULT 0.5,
+                credibility_score REAL DEFAULT 0.0,
+                read_time       TEXT DEFAULT '',
+                word_count      INTEGER DEFAULT 0,
+                created_at      TEXT DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS sections (
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                paper_id        TEXT NOT NULL,
+                section_type    TEXT DEFAULT 'other',
+                title           TEXT DEFAULT '',
+                level           INTEGER DEFAULT 2,
+                text            TEXT DEFAULT '',
+                key_findings    TEXT DEFAULT '[]',
+                FOREIGN KEY (paper_id) REFERENCES papers(paper_id) ON DELETE CASCADE
+            );
+
+            CREATE TABLE IF NOT EXISTS paper_refs (
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                paper_id        TEXT NOT NULL,
+                title           TEXT DEFAULT '',
+                authors         TEXT DEFAULT '',
+                year            TEXT DEFAULT '',
+                citation_count  INTEGER DEFAULT 0,
+                FOREIGN KEY (paper_id) REFERENCES papers(paper_id) ON DELETE CASCADE
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_sections_paper ON sections(paper_id);
+            CREATE INDEX IF NOT EXISTS idx_sections_type ON sections(section_type);
+            CREATE INDEX IF NOT EXISTS idx_refs_paper ON paper_refs(paper_id);
+            CREATE INDEX IF NOT EXISTS idx_papers_year ON papers(year);
+            CREATE INDEX IF NOT EXISTS idx_papers_evidence ON papers(evidence_level);
+        """)
+        self._conn.commit()
+
+    def save_paper(self, content: 'PaperContent') -> bool:
+        """
+        保存一篇完整论文到数据库
+
+        存储: 元数据 + 全部章节 + 全部引用
+        支持幂等写入（同paper_id覆盖更新）
+        """
+        m = content.metadata
+        try:
+            # 主表
+            self._conn.execute("""
+                INSERT OR REPLACE INTO papers
+                (paper_id, title, authors, year, abstract, arxiv_url, doi, venue,
+                 citation_count, reference_count, fields_of_study, source,
+                 evidence_level, evidence_weight, credibility_score,
+                 read_time, word_count, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                m.paper_id, m.title, json.dumps(m.authors, ensure_ascii=False),
+                m.year, m.abstract, m.arxiv_url, m.doi, m.venue,
+                m.citation_count, m.reference_count,
+                json.dumps(m.fields_of_study, ensure_ascii=False), m.source,
+                m.evidence_level, m.evidence_weight, m.credibility_score,
+                content.read_time, content.word_count,
+                datetime.now(timezone.utc).isoformat(),
+            ))
+
+            # 删除旧章节和引用（幂等更新）
+            self._conn.execute("DELETE FROM sections WHERE paper_id = ?", (m.paper_id,))
+            self._conn.execute("DELETE FROM paper_refs WHERE paper_id = ?", (m.paper_id,))
+
+            # 章节
+            for sec in content.sections:
+                self._conn.execute("""
+                    INSERT INTO sections (paper_id, section_type, title, level, text, key_findings)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (
+                    m.paper_id, sec.section_type, sec.title, sec.level,
+                    sec.text, json.dumps(sec.key_findings, ensure_ascii=False),
+                ))
+
+            # 引用
+            for ref in content.references:
+                self._conn.execute("""
+                    INSERT INTO paper_refs (paper_id, title, authors, year, citation_count)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (
+                    m.paper_id, ref.get("title", ""), ref.get("authors", ""),
+                    str(ref.get("year", "")), ref.get("citation_count", 0),
+                ))
+
+            self._conn.commit()
+            return True
+        except Exception as e:
+            logger.error(f"Database save error for {m.paper_id}: {e}")
+            self._conn.rollback()
+            return False
+
+    def load_paper(self, paper_id: str) -> Optional['PaperContent']:
+        """从数据库加载一篇完整论文"""
+        row = self._conn.execute(
+            "SELECT * FROM papers WHERE paper_id = ?", (paper_id,)
+        ).fetchone()
+        if not row:
+            return None
+
+        meta = PaperMetadata(
+            paper_id=row["paper_id"],
+            title=row["title"],
+            authors=json.loads(row["authors"]),
+            year=row["year"],
+            abstract=row["abstract"],
+            arxiv_url=row["arxiv_url"],
+            doi=row["doi"],
+            venue=row["venue"],
+            citation_count=row["citation_count"],
+            reference_count=row["reference_count"],
+            fields_of_study=json.loads(row["fields_of_study"]),
+            source=row["source"],
+            evidence_level=row["evidence_level"],
+            evidence_weight=row["evidence_weight"],
+            credibility_score=row["credibility_score"],
+        )
+
+        sections = []
+        for srow in self._conn.execute(
+            "SELECT * FROM sections WHERE paper_id = ? ORDER BY id", (paper_id,)
+        ).fetchall():
+            sections.append(PaperSection(
+                section_type=srow["section_type"],
+                title=srow["title"],
+                level=srow["level"],
+                text=srow["text"],
+                key_findings=json.loads(srow["key_findings"]),
+            ))
+
+        references = []
+        for rrow in self._conn.execute(
+            "SELECT * FROM paper_refs WHERE paper_id = ?", (paper_id,)
+        ).fetchall():
+            references.append({
+                "title": rrow["title"],
+                "authors": rrow["authors"],
+                "year": rrow["year"],
+                "citation_count": rrow["citation_count"],
+            })
+
+        return PaperContent(
+            metadata=meta, sections=sections, references=references,
+            read_time=row["read_time"], word_count=row["word_count"],
+        )
+
+    def load_all(self) -> dict:
+        """加载全部论文，返回 {paper_id: PaperContent}"""
+        papers = {}
+        for row in self._conn.execute("SELECT paper_id FROM papers").fetchall():
+            paper = self.load_paper(row["paper_id"])
+            if paper:
+                papers[paper.metadata.paper_id] = paper
+        return papers
+
+    def list_papers(self) -> list:
+        """列出全部论文摘要（轻量查询，不加载全文）"""
+        rows = self._conn.execute("""
+            SELECT paper_id, title, authors, year, source,
+                   evidence_level, credibility_score, word_count,
+                   (SELECT COUNT(*) FROM sections WHERE sections.paper_id = papers.paper_id) as section_count,
+                   (SELECT COUNT(*) FROM paper_refs WHERE paper_refs.paper_id = papers.paper_id) as ref_count
+            FROM papers ORDER BY created_at DESC
+        """).fetchall()
+        result = []
+        for r in rows:
+            authors = json.loads(r["authors"])
+            result.append({
+                "paper_id": r["paper_id"],
+                "title": r["title"],
+                "authors": ", ".join(authors[:3]),
+                "year": r["year"],
+                "source": r["source"],
+                "evidence_level": r["evidence_level"],
+                "credibility_score": r["credibility_score"],
+                "sections": r["section_count"],
+                "word_count": r["word_count"],
+            })
+        return result
+
+    def search(self, query: str, top_k: int = 10) -> list:
+        """全文搜索论文（标题+摘要+章节文本）"""
+        query_like = f"%{query}%"
+        rows = self._conn.execute("""
+            SELECT DISTINCT p.paper_id, p.title, p.year,
+                   p.evidence_level, p.credibility_score,
+                   CASE
+                       WHEN p.title LIKE ? THEN 10
+                       WHEN p.abstract LIKE ? THEN 5
+                       ELSE 1
+                   END as relevance
+            FROM papers p
+            LEFT JOIN sections s ON s.paper_id = p.paper_id
+            WHERE p.title LIKE ? OR p.abstract LIKE ? OR s.text LIKE ?
+            ORDER BY relevance DESC, p.year DESC
+            LIMIT ?
+        """, (query_like, query_like, query_like, query_like, query_like, top_k)).fetchall()
+
+        return [{
+            "paper_id": r["paper_id"],
+            "title": r["title"],
+            "year": r["year"],
+            "evidence_level": r["evidence_level"],
+            "credibility_score": r["credibility_score"],
+            "relevance": r["relevance"],
+        } for r in rows]
+
+    def count(self) -> int:
+        """论文总数"""
+        return self._conn.execute("SELECT COUNT(*) FROM papers").fetchone()[0]
+
+    def get_stats(self) -> dict:
+        """数据库统计"""
+        total = self.count()
+        if total == 0:
+            return {"total": 0}
+
+        row = self._conn.execute("""
+            SELECT
+                AVG(word_count) as avg_words,
+                AVG(credibility_score) as avg_credibility,
+                MIN(year) as earliest_year,
+                MAX(year) as latest_year
+            FROM papers WHERE year > 0
+        """).fetchone()
+
+        levels = {}
+        for r in self._conn.execute(
+            "SELECT evidence_level, COUNT(*) as cnt FROM papers GROUP BY evidence_level"
+        ).fetchall():
+            levels[f"Level {r[0]}"] = r[1]
+
+        sources = {}
+        for r in self._conn.execute(
+            "SELECT source, COUNT(*) as cnt FROM papers GROUP BY source"
+        ).fetchall():
+            sources[r[0]] = r[1]
+
+        return {
+            "total": total,
+            "avg_words": int(row["avg_words"] or 0),
+            "avg_credibility": round(row["avg_credibility"] or 0, 2),
+            "year_range": f"{row['earliest_year'] or '?'}-{row['latest_year'] or '?'}",
+            "evidence_levels": levels,
+            "sources": sources,
+        }
+
+    def delete_paper(self, paper_id: str) -> bool:
+        """删除一篇论文（级联删除章节和引用）"""
+        try:
+            self._conn.execute("DELETE FROM papers WHERE paper_id = ?", (paper_id,))
+            self._conn.commit()
+            return True
+        except Exception:
+            return False
+
+    def close(self):
+        """关闭数据库连接"""
+        if self._conn:
+            self._conn.close()
 
 
 # ============================================================
@@ -156,7 +468,7 @@ def parse_arxiv_html(html: str) -> PaperContent:
             section_type=section_type,
             title=heading_text,
             level=level,
-            text=section_text[:5000],  # 限制长度
+            text=section_text[:20000],  # 限制长度（从5000提高到20000）
         )
         content.sections.append(section)
 
@@ -341,72 +653,52 @@ def read_local_text(file_path: str) -> PaperContent:
 
 
 def read_local_pdf(file_path: str) -> PaperContent:
-    """
-    从本地PDF文件读取论文（使用增强版解析器）
-
-    优先使用 enhanced_pdf_parser（带清洗+章节识别），
-    失败时回退到基础解析器。
-    """
+    """从本地PDF文件读取论文（强化版：使用高级解析提取元数据+参考文献）"""
     path = Path(file_path)
-    content = PaperContent()
-    content.metadata.paper_id = path.stem
-    content.metadata.source = 'local_pdf'
 
-    # 优先使用增强版解析器
+    # 优先使用高级解析
+    advanced_result = None
     try:
-        from enhanced_pdf_parser import EnhancedPDFParser
-        parser = EnhancedPDFParser()
-        pdf_content = parser.parse(str(path))
-
-        if pdf_content.parse_success:
-            content.word_count = pdf_content.char_count
-            content.read_time = datetime.now(timezone.utc).isoformat()
-
-            # 提取标题
-            if pdf_content.sections.introduction:
-                first_line = pdf_content.sections.introduction.split('\n')[0][:200]
-                content.metadata.title = first_line or path.stem
-            else:
-                content.metadata.title = path.stem
-
-            # 将 PDFSections 转换为 PaperSection 列表
-            for attr, sec_type in [('abstract', 'abstract'), ('introduction', 'introduction'),
-                                   ('methods', 'methods'), ('results', 'results'),
-                                   ('discussion', 'discussion'), ('conclusion', 'conclusion'),
-                                   ('references', 'references')]:
-                text = getattr(pdf_content.sections, attr, '')
-                if text:
-                    content.sections.append(PaperSection(
-                        section_type=sec_type, title=attr.capitalize(), text=text[:5000],
-                    ))
-
-            if pdf_content.sections.other:
-                content.sections.append(PaperSection(
-                    section_type='other', title='Other', text=pdf_content.sections.other[:5000],
-                ))
-
-            logger.info(f"Enhanced PDF parsed: {len(content.sections)} sections from {path.name}")
-            return content
-    except ImportError:
-        logger.debug("enhanced_pdf_parser not available, falling back to basic parser")
+        from rag_system.ingestion.pdf_parser import parse_pdf_advanced
+        advanced_result = parse_pdf_advanced(file_path)
+        text = advanced_result["text"]
     except Exception as e:
-        logger.warning(f"Enhanced PDF parser error: {e}, falling back")
-
-    # 回退到基础解析器
-    try:
-        from rag_system.ingestion.pdf_parser import parse_pdf
-        text = parse_pdf(file_path)
-    except Exception as e:
-        logger.warning(f"PDF parse error: {e}")
-        text = ""
+        logger.warning(f"Advanced PDF parse failed, falling back: {e}")
+        try:
+            from rag_system.ingestion.pdf_parser import parse_pdf
+            text = parse_pdf(file_path)
+        except Exception as e2:
+            logger.warning(f"PDF parse error: {e2}")
+            text = ""
 
     if not text:
         return read_local_text(file_path)
 
-    lines = [l.strip() for l in text.split('\n') if l.strip()]
-    if lines:
-        content.metadata.title = lines[0][:200]
+    content = PaperContent()
+    content.metadata.paper_id = path.stem
+    content.metadata.source = 'local_pdf'
 
+    # 从高级解析结果中提取元数据
+    if advanced_result:
+        content.metadata.title = advanced_result.get("title", "")[:200] or path.stem
+        content.metadata.authors = advanced_result.get("authors", [])
+        content.metadata.doi = advanced_result.get("doi", "")
+        content.metadata.abstract = advanced_result.get("abstract", "")
+
+        # 参考文献
+        refs = advanced_result.get("references", [])
+        content.references = refs
+
+        # 如果有摘要，添加为独立 section
+        if advanced_result.get("abstract"):
+            content.sections.append(PaperSection(
+                section_type="abstract", title="Abstract",
+                text=advanced_result["abstract"],
+            ))
+    else:
+        content.metadata.title = path.stem
+
+    # 尝试用paper_structurer解析IMRaD结构
     try:
         from rag_system.ingestion.paper_structurer import detect_imrad_sections
         imrad = detect_imrad_sections(text)
@@ -440,7 +732,7 @@ class PaperReader:
     """
     论文阅读器 — 统一入口
 
-    读取论文 → 解析结构 → 提取发现 → 存入记忆 → 加入索引
+    读取论文 → 解析结构 → 提取发现 → 评估质量 → 存入记忆 → 加入索引
 
     用法:
         reader = PaperReader()
@@ -450,12 +742,26 @@ class PaperReader:
 
         # 搜索已读论文
         results = reader.search("dissolved oxygen methane")
+
+        # 构建文献矩阵
+        matrix = reader.build_literature_matrix()
+
+        # 验证引用
+        verified = reader.verify_references(refs)
     """
 
     def __init__(self, output_dir: str = None):
         self.output_dir = output_dir or os.path.join(os.getcwd(), 'paper_output')
         os.makedirs(self.output_dir, exist_ok=True)
         self._papers: dict[str, PaperContent] = {}  # 内存缓存
+        self._lit_memory = None  # 延迟初始化
+        self.db = PaperDatabase()  # SQLite持久化
+        import atexit
+        atexit.register(self._close_db)
+        # 从数据库恢复已有论文
+        self._papers = self.db.load_all()
+        if self._papers:
+            logger.info(f"从数据库恢复了 {len(self._papers)} 篇论文")
 
     def read(self, source: str, fetch_metadata: bool = True) -> PaperContent:
         """
@@ -512,243 +818,73 @@ class PaperReader:
         # 存入KnowledgeStore
         self._store_memory(content)
 
+        # 评估论文质量（P2证据分级 + P3来源可信度）
+        self._assess_paper_quality(content)
+
+        # 持久化到SQLite数据库
+        self.db.save_paper(content)
+
         print(f"[PaperReader] 完成: {content.metadata.title[:50]}... "
               f"({len(content.sections)} sections, {content.word_count} chars)")
         return content
 
     def search(self, query: str, top_k: int = 5) -> list:
-        """搜索已读论文"""
+        """搜索已读论文（RAG > SQLite > 内存）"""
         try:
             from rag_system import RAGEngine
             engine = RAGEngine()
             results = engine.retrieve(query, max_results=top_k)
-            return results
+            if results:
+                return results
         except Exception:
-            # 退化为内存搜索
-            results = []
-            query_lower = query.lower()
-            for pid, paper in self._papers.items():
-                score = 0
-                if query_lower in paper.metadata.title.lower():
-                    score += 3
-                if query_lower in paper.metadata.abstract.lower():
-                    score += 2
-                for sec in paper.sections:
-                    if query_lower in sec.text.lower():
-                        score += 1
-                if score > 0:
-                    results.append({'paper_id': pid, 'title': paper.metadata.title, 'score': score})
-            results.sort(key=lambda x: x['score'], reverse=True)
-            return results[:top_k]
+            pass
+
+        # SQLite全文搜索
+        try:
+            db_results = self.db.search(query, top_k=top_k)
+            if db_results:
+                return db_results
+        except Exception:
+            pass
+
+        # 退化为内存搜索
+        results = []
+        query_lower = query.lower()
+        for pid, paper in self._papers.items():
+            score = 0
+            if query_lower in paper.metadata.title.lower():
+                score += 3
+            if query_lower in paper.metadata.abstract.lower():
+                score += 2
+            for sec in paper.sections:
+                if query_lower in sec.text.lower():
+                    score += 1
+            if score > 0:
+                results.append({'paper_id': pid, 'title': paper.metadata.title, 'score': score})
+        results.sort(key=lambda x: x['score'], reverse=True)
+        return results[:top_k]
 
     def list_papers(self) -> list:
-        """列出所有已读论文"""
-        return [
-            {
-                'paper_id': pid,
-                'title': p.metadata.title,
-                'authors': ', '.join(p.metadata.authors[:3]),
-                'year': p.metadata.year,
-                'sections': len(p.sections),
-                'source': p.metadata.source,
-            }
-            for pid, p in self._papers.items()
-        ]
-
-    # --- 文献深度学习 ---
-
-    def learn_from_papers(self, paper_ids=None, max_papers=10) -> dict:
-        """
-        从已读论文中学习写作模式（文献深度学习）
-
-        从论文中提取:
-        - 句间逻辑链（数据→机制→文献）
-        - 段落结构（主题句→支撑句→过渡句）
-        - 学术表达模式库
-
-        Parameters
-        ----------
-        paper_ids : list, 指定论文ID（None则学习所有已读论文）
-        max_papers : int, 最大学习数量
-
-        Returns
-        -------
-        dict, {chains_count, structures_count, patterns_count, exported_path}
-        """
+        """列出所有已读论文（优先从数据库查询）"""
         try:
-            from literature_learner import LiteratureLearner
-        except ImportError:
-            logger.error("literature_learner module not found")
-            return {'error': 'module not found'}
+            return self.db.list_papers()
+        except Exception:
+            # 退化为内存列表
+            return [
+                {
+                    'paper_id': pid,
+                    'title': p.metadata.title,
+                    'authors': ', '.join(p.metadata.authors[:3]),
+                    'year': p.metadata.year,
+                    'sections': len(p.sections),
+                    'source': p.metadata.source,
+                }
+                for pid, p in self._papers.items()
+            ]
 
-        learner = LiteratureLearner()
-        papers_to_learn = []
-
-        if paper_ids:
-            for pid in paper_ids:
-                if pid in self._papers:
-                    papers_to_learn.append((pid, self._papers[pid]))
-        else:
-            papers_to_learn = list(self._papers.items())[:max_papers]
-
-        print(f"[LiteratureLearner] 从 {len(papers_to_learn)} 篇论文中学习写作模式...")
-
-        for pid, paper in papers_to_learn:
-            # 组装全文
-            full_text = '\n\n'.join(sec.text for sec in paper.sections if sec.text)
-            if len(full_text) > 100:
-                learner.learn_from_text(full_text, title=paper.metadata.title)
-
-        # 导出到知识库
-        export_result = learner.export_to_knowledge_store()
-
-        result = {
-            'papers_learned': len(papers_to_learn),
-            'chains_count': len(learner.all_chains),
-            'structures_count': len(learner.all_structures),
-            'patterns_count': len(learner.all_patterns),
-            'exported_path': export_result.get('patterns_path', ''),
-        }
-
-        print(f"[LiteratureLearner] 学习完成: "
-              f"{result['chains_count']}条逻辑链, "
-              f"{result['structures_count']}个段落结构, "
-              f"{result['patterns_count']}个表达模式")
-
-        return result
-
-    # --- Zotero 集成 ---
-
-    def read_zotero_library(self, db_path=None, with_pdf_only=True,
-                            max_papers=None, fetch_metadata=False) -> list:
-        """
-        批量导入 Zotero 文献库
-
-        Parameters
-        ----------
-        db_path : str, Zotero 数据库路径（None则自动发现）
-        with_pdf_only : bool, 只导入有PDF的文献
-        max_papers : int, 最大导入数量（None=全部）
-        fetch_metadata : bool, 是否从Semantic Scholar获取元数据
-
-        Returns
-        -------
-        list of PaperContent, 成功导入的论文列表
-        """
-        try:
-            from zotero_connector import discover_zotero, export_zotero_papers, ZoteroExportReport
-        except ImportError:
-            logger.error("zotero_connector module not found")
-            print("✗ Zotero 连接器模块不可用")
-            return []
-
-        # 发现数据库
-        try:
-            db = discover_zotero(db_path)
-        except FileNotFoundError as e:
-            print(f"✗ {e}")
-            return []
-
-        # 导出元数据
-        print(f"[PaperReader] 连接 Zotero 数据库: {db}")
-        report = ZoteroExportReport()
-        papers = export_zotero_papers(db, report=report)
-        report.print_report()
-
-        # 过滤
-        if with_pdf_only:
-            papers = [p for p in papers if p.pdfPath]
-
-        if max_papers:
-            papers = papers[:max_papers]
-
-        print(f"[PaperReader] 开始导入 {len(papers)} 篇文献...")
-
-        # 批量导入
-        imported = []
-        for i, zp in enumerate(papers, 1):
-            pdf_path = zp.pdfPath
-            if not pdf_path or not os.path.exists(pdf_path):
-                # 尝试在 Zotero storage 目录中查找
-                storage_candidates = self._find_zotero_storage(db.parent, zp.key, pdf_path)
-                if storage_candidates:
-                    pdf_path = storage_candidates
-                else:
-                    logger.debug(f"Skip (no PDF): {zp.title[:50]}")
-                    continue
-
-            try:
-                content = read_local_pdf(pdf_path)
-                # 填充 Zotero 元数据
-                content.metadata.paper_id = zp.key
-                content.metadata.title = zp.title or content.metadata.title
-                content.metadata.authors = [str(a) for a in zp.authors]
-                content.metadata.year = zp.year
-                content.metadata.doi = zp.doi
-                content.metadata.venue = zp.journal
-                content.metadata.abstract = zp.abstract
-                content.metadata.source = 'zotero'
-
-                # 缓存和索引
-                self._papers[zp.key] = content
-                self._index_paper(content)
-                self._store_memory(content)
-                imported.append(content)
-
-                if i % 10 == 0 or i == len(papers):
-                    print(f"  [{i}/{len(papers)}] 已导入 {len(imported)} 篇")
-
-            except Exception as e:
-                logger.warning(f"Failed to import {zp.title[:50]}: {e}")
-
-        print(f"\n[PaperReader] Zotero 导入完成: {len(imported)}/{len(papers)} 篇成功")
-        return imported
-
-    def _find_zotero_storage(self, db_dir, paper_key, raw_path):
-        """在 Zotero storage 目录中查找 PDF 文件"""
-        storage_dir = db_dir / "storage" / paper_key
-        if storage_dir.exists():
-            pdfs = list(storage_dir.glob("*.pdf"))
-            if pdfs:
-                return str(pdfs[0])
-
-        # 尝试解析 raw_path
-        if raw_path:
-            resolved = raw_path
-            if resolved.startswith("storage:"):
-                resolved = resolved[len("storage:"):]
-            full_path = db_dir / "storage" / resolved
-            if full_path.exists():
-                return str(full_path)
-
-        return None
-
-    def get_zotero_stats(self, db_path=None) -> dict:
-        """获取 Zotero 文献库统计信息"""
-        try:
-            from zotero_connector import discover_zotero, export_zotero_papers, ZoteroExportReport
-            db = discover_zotero(db_path)
-            report = ZoteroExportReport()
-            papers = export_zotero_papers(db, report=report)
-
-            stats = {
-                'total': len(papers),
-                'with_pdf': sum(1 for p in papers if p.pdfPath),
-                'with_doi': sum(1 for p in papers if p.doi),
-                'with_abstract': sum(1 for p in papers if p.abstract),
-                'years': {},
-                'journals': {},
-            }
-
-            for p in papers:
-                if p.year:
-                    stats['years'][p.year] = stats['years'].get(p.year, 0) + 1
-                j = p.journal or 'Unknown'
-                stats['journals'][j] = stats['journals'].get(j, 0) + 1
-
-            return stats
-        except Exception as e:
-            return {'error': str(e)}
+    def get_db_stats(self) -> dict:
+        """获取数据库统计"""
+        return self.db.get_stats()
 
     # --- 内部方法 ---
 
@@ -856,25 +992,19 @@ class PaperReader:
             chunks = []
             for i, sec in enumerate(content.sections):
                 if sec.text:
-                    chunk_id = f"{content.metadata.paper_id}_sec_{i}"
                     chunks.append({
-                        'chunk_id': chunk_id,
                         'text': sec.text[:2000],
                         'metadata': {
-                            'chunk_type': sec.section_type,
                             'section_type': sec.section_type,
-                            'section_path': sec.title,
+                            'section_title': sec.title,
                             'paper_id': content.metadata.paper_id,
                             'title': content.metadata.title,
                         }
                     })
             if chunks:
                 engine.add_document(content.metadata.paper_id, chunks)
-                logger.info(f"Indexed {len(chunks)} chunks from {content.metadata.paper_id}")
-        except ImportError:
-            logger.debug("RAG system not available, skipping indexing")
         except Exception as e:
-            logger.warning(f"RAG indexing failed: {e}")
+            logger.debug(f"RAG indexing skipped: {e}")
 
     def _store_memory(self, content: PaperContent):
         """将论文关键信息存入KnowledgeStore"""
@@ -883,7 +1013,6 @@ class PaperReader:
             store = KnowledgeStore()
             entry_key = f"paper_{content.metadata.paper_id}"
             store.set("resources", entry_key, {
-                "type": "paper",
                 "title": content.metadata.title,
                 "authors": content.metadata.authors[:5],
                 "year": content.metadata.year,
@@ -893,11 +1022,128 @@ class PaperReader:
                 "sections_count": len(content.sections),
                 "abstract_snippet": content.metadata.abstract[:200],
                 "read_at": content.read_time,
-            }, source="paper_reader", confidence=0.9)
-        except ImportError:
-            logger.debug("KnowledgeStore not available, skipping memory storage")
+            })
         except Exception as e:
-            logger.warning(f"KnowledgeStore save failed: {e}")
+            logger.debug(f"KnowledgeStore save skipped: {e}")
+
+    def _get_lit_memory(self):
+        """延迟初始化文献记忆系统"""
+        if self._lit_memory is None:
+            try:
+                from literature_memory import LiteratureMemory
+                self._lit_memory = LiteratureMemory()
+            except ImportError:
+                logger.debug("literature_memory module not available")
+                self._lit_memory = None
+        return self._lit_memory
+
+    def _assess_paper_quality(self, content: PaperContent):
+        """
+        P2+P3: 评估论文质量（证据分级 + 来源可信度）
+
+        将结果写入 content.metadata 并存入文献记忆系统
+        """
+        mem = self._get_lit_memory()
+        if mem is None:
+            return
+
+        try:
+            assessment = mem.assess_paper(content)
+            # 回写到 metadata
+            content.metadata.evidence_level = assessment.get("evidence_level", 6)
+            content.metadata.evidence_weight = assessment.get("evidence_weight", 0.5)
+            content.metadata.credibility_score = assessment.get("credibility_score", 0.0)
+        except Exception as e:
+            logger.debug(f"Paper quality assessment skipped: {e}")
+
+    def build_literature_matrix(self) -> str:
+        """
+        P1: 构建文献矩阵（来源×主题交叉表）
+
+        Returns: Markdown 格式的矩阵报告
+        """
+        mem = self._get_lit_memory()
+        if mem is None:
+            return "文献记忆模块不可用"
+
+        if not mem.matrix.papers:
+            return "暂无论文数据，请先读取论文"
+
+        matrix = mem.build_matrix(auto_detect_themes=True)
+
+        # P4: 自动构建关联网络
+        mem.network.build_from_matrix(matrix)
+
+        # 持久化
+        try:
+            mem.save_all()
+        except Exception as e:
+            logger.warning(f"Failed to save literature matrix: {e}")
+
+        return matrix.to_markdown()
+
+    def verify_references(self, references: list, timeout: int = 10) -> str:
+        """
+        P0: 三级引用验证（S2 API + DOI + Levenshtein）
+
+        Parameters
+        ----------
+        references : list of dict, 每个包含 {title, doi?, year?}
+
+        Returns: Markdown 格式的验证报告
+        """
+        mem = self._get_lit_memory()
+        if mem is None:
+            return "文献记忆模块不可用"
+
+        results = mem.verify_citations_batch(references, timeout=timeout)
+
+        lines = [
+            "# 三级引用验证报告", "",
+            f"- 总引用数: {len(results)}",
+            "",
+            "| # | 标题(前50字) | 状态 | 置信度 | 验证方式 | 标记 |",
+            "|---|------------|------|--------|----------|------|",
+        ]
+
+        verified_count = 0
+        for i, r in enumerate(results):
+            title = r["reference"][:50]
+            status = r["final_status"]
+            conf = f"{r['confidence']:.2f}"
+            method = ""
+            if r.get("tier0_s2"):
+                method = r["tier0_s2"].get("verification_method", "")
+            elif r.get("tier1_doi"):
+                method = "doi_crossref"
+            flags = ", ".join(r.get("flags", []))
+            if "VERIFIED" in status:
+                verified_count += 1
+            lines.append(f"| {i+1} | {title} | {status} | {conf} | {method} | {flags} |")
+
+        lines.extend([
+            "",
+            f"**验证通过**: {verified_count}/{len(results)} "
+            f"({verified_count*100//max(1,len(results))}%)",
+        ])
+
+        return "\n".join(lines)
+
+    def _close_db(self):
+        """程序退出时关闭数据库连接"""
+        try:
+            self.db.close()
+        except Exception:
+            pass
+
+    def get_network_report(self) -> str:
+        """P4: 获取论文关联网络报告"""
+        mem = self._get_lit_memory()
+        if mem is None:
+            return "文献记忆模块不可用"
+
+        titles = {pid: p.metadata.title for pid, p in self._papers.items()}
+        return mem.network.to_markdown(titles)
 
 
 # ============================================================
@@ -955,36 +1201,10 @@ methane production in campus sewage networks.
 
         os.remove(tmp_path)
         print("\n测试通过!")
-    elif len(sys.argv) > 1 and sys.argv[1] == 'zotero':
-        # Zotero 文献库导入
-        reader = PaperReader()
-        max_papers = int(sys.argv[2]) if len(sys.argv) > 2 else None
-        imported = reader.read_zotero_library(max_papers=max_papers)
-        print(f"\n导入完成: {len(imported)} 篇")
-        print(f"已缓存: {len(reader._papers)} 篇")
-
-    elif len(sys.argv) > 1 and sys.argv[1] == 'zotero-stats':
-        # Zotero 统计
-        reader = PaperReader()
-        stats = reader.get_zotero_stats()
-        if 'error' in stats:
-            print(f"错误: {stats['error']}")
-        else:
-            print(f"\nZotero 文献库统计:")
-            print(f"  总文献: {stats['total']}")
-            print(f"  有PDF: {stats['with_pdf']}")
-            print(f"  有DOI: {stats['with_doi']}")
-            print(f"  有摘要: {stats['with_abstract']}")
-            if stats.get('years'):
-                print(f"\n  年份分布 (Top 5):")
-                for y, c in sorted(stats['years'].items(), key=lambda x: -x[1])[:5]:
-                    if y > 0:
-                        print(f"    {y}: {c}篇")
-
     else:
         print("用法:")
-        print("  python paper_reader.py --test                    # 运行测试")
-        print("  python paper_reader.py https://arxiv.org/abs/...  # 读取arxiv论文")
-        print("  python paper_reader.py paper.pdf                 # 读取本地PDF")
-        print("  python paper_reader.py zotero [N]                # 从Zotero导入N篇(默认全部)")
-        print("  python paper_reader.py zotero-stats              # 查看Zotero统计")
+        print("  python paper_reader.py --test")
+        print("  python paper_reader.py https://arxiv.org/abs/2301.12345")
+        print("  python paper_reader.py paper.pdf")
+        print("  python paper_reader.py --matrix   # 构建文献矩阵")
+        print("  python paper_reader.py --network  # 查看论文关联网络")

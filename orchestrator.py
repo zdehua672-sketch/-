@@ -535,6 +535,8 @@ class AcademicPipeline:
             return {"final_paper": paper_text, "rounds": 0, "final_score": 0, "issues_fixed": 0}
 
         total_fixed = 0
+        round_num = 0
+        avg_score = 0.0
 
         for round_num in range(1, max_rounds + 1):
             print(f"\n{'='*50}")
@@ -588,7 +590,8 @@ class AcademicPipeline:
                         # 孤儿引用：在参考文献中补充占位
                         orphans = _re.findall(r'\d+', issue.problem.split(':')[-1]) if ':' in issue.problem else []
                         if orphans:
-                            fixed_count += self._fix_orphan_citations(paper_text, orphans)
+                            paper_text, fix_count = self._fix_orphan_citations(paper_text, orphans)
+                            fixed_count += fix_count
                     elif '未在正文' in issue.problem:
                         # 未使用引用：删除多余条目
                         unused = _re.findall(r'\d+', issue.problem.split(':')[-1]) if ':' in issue.problem else []
@@ -609,32 +612,40 @@ class AcademicPipeline:
                 break
 
         self._log("step4_review_loop", f"循环完成: {total_fixed}个问题已修复", {
-            "rounds": round_num if 'round_num' in dir() else 0,
+            "rounds": round_num,
             "fixed": total_fixed,
         })
 
         return {
             "final_paper": paper_text,
-            "rounds": round_num if 'round_num' in dir() else 0,
-            "final_score": avg_score if 'avg_score' in dir() else 0,
+            "rounds": round_num,
+            "final_score": avg_score,
             "issues_fixed": total_fixed,
         }
 
-    def _fix_orphan_citations(self, paper_text: str, orphan_nums: list) -> int:
-        """为孤儿引用在参考文献末尾补充占位条目"""
+    def _fix_orphan_citations(self, paper_text: str, orphan_nums: list) -> tuple:
+        """为孤儿引用在参考文献末尾补充占位条目
+        
+        Returns (modified_text, fixed_count)
+        """
         import re as _re
         fixed = 0
         for num in orphan_nums:
             num = int(num)
-            # 在参考文献区域查找合适位置插入
-            ref_match = _re.search(r'(#[\s]*参考文献\s*\n)', paper_text)
+            # 在参考文献区域查找"# 参考文献"标题
+            ref_match = _re.search(r'(#[\s]*参考文献[\s\S]*?)(?=\n#|\Z)', paper_text)
             if ref_match:
-                # 在最后一个参考文献条目后插入
-                insert_pos = len(paper_text) - 1
+                # 在参考文献区域末尾插入
+                insert_pos = ref_match.end()
                 placeholder = f"\n[{num}] [待补充 - 自动插入的占位条目]"
                 paper_text = paper_text[:insert_pos] + placeholder + paper_text[insert_pos:]
                 fixed += 1
-        return fixed
+            else:
+                # 全文末尾找不到参考文献标题，在末尾追加
+                placeholder = f"\n# 参考文献\n[{num}] [待补充 - 自动插入的占位条目]"
+                paper_text = paper_text.rstrip() + "\n" + placeholder + "\n"
+                fixed += 1
+        return (paper_text, fixed)
 
     def _remove_unused_references(self, paper_text: str, unused_nums: list) -> str:
         """从参考文献列表中删除未使用的条目"""
@@ -1114,9 +1125,10 @@ class AcademicPipeline:
     # ============================================================
 
     def run_full_pipeline(self, source: str = None, text: str = None,
-                          language: str = 'zh', skip_write: bool = False) -> dict:
+                          language: str = 'zh', skip_write: bool = False,
+                          data_file: str = None) -> dict:
         """
-        运行完整学术论文流程
+        运行完整学术论文流程（全部步骤）
 
         Parameters
         ----------
@@ -1124,15 +1136,17 @@ class AcademicPipeline:
         text : str, 已有论文文本（跳过Step 1直接审稿）
         language : str, 'zh'/'en'
         skip_write : bool, 跳过Step 4写作
+        data_file : str, 数据文件路径（用于Step 9文档组装）
 
-        Returns: {paper, matrix_md, review, checklist, pipeline_log}
+        Returns: {paper, matrix_md, motivation, review, checklist, evolution, document, pipeline_log}
         """
         results = {}
-        print("=" * 50)
-        print("学术论文全流程")
-        print("=" * 50)
+        print("=" * 60)
+        print("学术论文全流程（完整版）")
+        print("=" * 60)
 
-        # Step 1: 读论文
+        # ========== Step 1: 读论文 ==========
+        print("\n[Step 1/12] 读取论文...")
         if source:
             paper = self.step1_read(source)
             results["paper"] = paper
@@ -1141,13 +1155,15 @@ class AcademicPipeline:
             print("[Pipeline] 需要 source 或 text 参数")
             return results
 
-        # Step 2: 文献矩阵
+        # ========== Step 2: 文献矩阵 ==========
+        print("\n[Step 2/12] 构建文献矩阵...")
         try:
             results["matrix_md"] = self.step2_matrix()
         except Exception as e:
             print(f"[Pipeline] Step 2 跳过: {e}")
 
-        # Step 3: 引用验证（如果有引用）
+        # ========== Step 3: 引用验证 ==========
+        print("\n[Step 3/12] 引用验证...")
         if source and results.get("paper") and results["paper"].references:
             try:
                 results["citation_report"] = self.step3_verify_citations(
@@ -1156,35 +1172,182 @@ class AcademicPipeline:
             except Exception as e:
                 print(f"[Pipeline] Step 3 跳过: {e}")
 
-        # Step 4: 写论文（可选）
+        # ========== Step 3.5: 动机生成 ==========
+        print("\n[Step 3.5/12] 动机生成...")
+        try:
+            analysis_results = results.get("analysis_results", {})
+            motivation_options = self.step3_5_motivation(
+                analysis_results=analysis_results,
+                language=language
+            )
+            results["motivation_options"] = motivation_options
+
+            # ========== Step 3.6: 动机确认+写作蓝图 ==========
+            print("\n[Step 3.6/12] 动机确认+写作蓝图...")
+            if motivation_options:
+                confirmed = self.step3_6_confirm_motivation(
+                    option_id=motivation_options[0].option_id,
+                    language=language
+                )
+                results["motivation_confirmed"] = confirmed
+        except Exception as e:
+            print(f"[Pipeline] Step 3.5-3.6 跳过: {e}")
+
+        # ========== Step 3.7: 深度模仿 ==========
+        print("\n[Step 3.7/12] 深度模仿分析...")
+        try:
+            # 尝试从知识库获取范文，从已生成论文获取草稿
+            exemplar_text = None
+            draft_text = text
+            paper_title = ""
+
+            # 从论文库中找范文
+            reader = self._get_reader()
+            if reader._papers:
+                for pid, p in reader._papers.items():
+                    if p.sections and len(p.sections) > 2:
+                        exemplar_text = "\n".join(s.text for s in p.sections[:3])
+                        paper_title = p.metadata.title
+                        break
+
+            if exemplar_text and draft_text:
+                results["deep_imitation"] = self.step3_7_deep_imitation(
+                    section_name="Introduction",
+                    exemplar_text=exemplar_text[:5000],
+                    draft_text=draft_text[:5000],
+                    paper_title=paper_title
+                )
+            else:
+                print("[Pipeline] Step 3.7 跳过: 无可用范文")
+        except Exception as e:
+            print(f"[Pipeline] Step 3.7 跳过: {e}")
+
+        # ========== Step 3.8: 完整性审计 ==========
+        print("\n[Step 3.8/12] 完整性审计...")
+        try:
+            results["integrity_audit"] = self.step3_8_integrity_audit()
+        except Exception as e:
+            print(f"[Pipeline] Step 3.8 跳过: {e}")
+
+        # ========== Step 3.9: 引用支持库 ==========
+        print("\n[Step 3.9/12] 构建引用支持库...")
+        try:
+            results["citation_bank"] = self.step3_9_citation_bank(
+                paper_text=text,
+                section="Introduction"
+            )
+        except Exception as e:
+            print(f"[Pipeline] Step 3.9 跳过: {e}")
+
+        # ========== Step 3.95: 产物完整性检查 ==========
+        print("\n[Step 3.95/12] 产物完整性检查...")
+        try:
+            results["artifact_check"] = self.step3_95_artifact_check()
+        except Exception as e:
+            print(f"[Pipeline] Step 3.95 跳过: {e}")
+
+        # ========== Step 4: 写论文 ==========
+        print("\n[Step 4/12] 论文写作...")
         if not skip_write and not text:
             try:
-                results["written_paper"] = self.step4_write(language=language)
+                results["written_paper"] = self.step4_write(
+                    data_file=data_file,
+                    language=language
+                )
                 text = results["written_paper"]
             except Exception as e:
                 print(f"[Pipeline] Step 4 跳过: {e}")
 
-        # Step 5: 审稿
+        # ========== Step 4+: 写→审→改循环 ==========
+        print("\n[Step 4+/12] 写→审→改循环...")
+        try:
+            if not skip_write:
+                loop_result = self.step4_write_review_loop(
+                    data_file=data_file,
+                    language=language,
+                    max_rounds=2,
+                    target_score=7.0
+                )
+                results["review_loop"] = loop_result
+                if loop_result.get("final_paper"):
+                    text = loop_result["final_paper"]
+        except Exception as e:
+            print(f"[Pipeline] Step 4+ 跳过: {e}")
+
+        # ========== Step 5: 审稿 ==========
+        print("\n[Step 5/12] 审稿检查...")
         if text:
             results["review"] = self.step5_review(text, language)
 
-        # Step 6: 投稿前检查
+        # ========== Step 6: 投稿前检查 ==========
+        print("\n[Step 6/12] 投稿前检查...")
         if text:
             results["checklist"] = self.step6_submission_check(text)
 
-        # Step 8: 进化反馈
+        # ========== Step 7: 修订审计 ==========
+        print("\n[Step 7/12] 修订审计...")
+        try:
+            # 如果有多版本，进行修订审计
+            if results.get("written_paper") and text:
+                results["revision_audit"] = self.step7_revision_audit(
+                    results["written_paper"],
+                    text
+                )
+        except Exception as e:
+            print(f"[Pipeline] Step 7 跳过: {e}")
+
+        # ========== Step 8: 进化反馈 ==========
+        print("\n[Step 8/12] 进化反馈...")
         try:
             results["evolution"] = self.step8_evolve()
         except Exception as e:
             print(f"[Pipeline] Step 8 跳过: {e}")
 
+        # ========== Step 9: 文档组装 ==========
+        print("\n[Step 9/12] 文档组装...")
+        try:
+            results["document"] = self.step9_assemble_document(
+                data_file=data_file or source,
+                output_dir=os.path.join(self.base_dir, 'paper_output'),
+                title='学术论文',
+                paper_type='chinese',
+                language=language
+            )
+        except Exception as e:
+            print(f"[Pipeline] Step 9 跳过: {e}")
+
+        # ========== Step 10: 自动学习 ==========
+        print("\n[Step 10/12] 自动学习...")
+        try:
+            # 从数据文件名推断主题
+            topic = "sewage carbon pollutant"
+            if source:
+                topic = source.replace(".xlsx", "").replace(".csv", "")
+            results["auto_learn"] = self.step_auto_learn(
+                topic=topic,
+                max_papers=5,
+                read_top_n=3
+            )
+        except Exception as e:
+            print(f"[Pipeline] Step 10 跳过: {e}")
+
         # 保存pipeline日志
         results["pipeline_log"] = self._pipeline_log
         self._save_pipeline_log()
 
-        print("\n" + "=" * 50)
-        print("全流程完成")
-        print("=" * 50)
+        print("\n" + "=" * 60)
+        print("全流程完成（12个步骤）")
+        print("=" * 60)
+
+        # 显示执行统计
+        executed = len([k for k in results.keys() if k != "pipeline_log"])
+        print(f"执行结果: {executed} 个模块成功")
+        print(f"Pipeline日志: {len(self._pipeline_log)} 条记录")
+
+        # 引导下一步
+        print(self.suggest_next_steps('step10_auto_learn'))
+
+        return results
 
         # 引导下一步
         print(self.suggest_next_steps('step8_evolve'))

@@ -43,15 +43,6 @@ class RAGEngine:
         # 加载已有索引
         self._load_indices()
 
-        # 向量索引可用性提示
-        if not self.vector_index.is_available:
-            logger.warning(
-                "Vector index not available (sentence-transformers not installed). "
-                "RAG retrieval degraded to BM25 keyword search only. "
-                "Install sentence-transformers for better retrieval quality: "
-                "pip install sentence-transformers"
-            )
-
     def _load_indices(self):
         idx_path = self.config.index_dir / "keyword_index.json"
         if idx_path.exists():
@@ -78,46 +69,24 @@ class RAGEngine:
 
     def add_document(self, doc_id: str, chunks: list):
         """
-        添加文档（由DocumentChunk列表或dict列表组成）
+        添加文档（由DocumentChunk列表组成）
 
         Parameters
         ----------
         doc_id : str
-        chunks : list of DocumentChunk or list of dict
-            dict格式: {"text": str, "metadata": dict, "chunk_id": str(optional)}
+        chunks : list of DocumentChunk
         """
-        import hashlib
-
-        for i, chunk in enumerate(chunks):
-            # 兼容 dict 和 DocumentChunk 两种格式
-            if isinstance(chunk, dict):
-                text = chunk.get("text", "")
-                metadata = chunk.get("metadata", {})
-                chunk_id = chunk.get("chunk_id") or f"{doc_id}_chunk_{i}"
-                chunk_type = metadata.get("chunk_type", "text")
-            else:
-                # DocumentChunk 对象
-                text = chunk.text
-                chunk_id = chunk.chunk_id
-                chunk_type = chunk.chunk_type
-                metadata = {
-                    "doc_id": doc_id,
-                    "chunk_type": chunk.chunk_type,
-                    "section_path": getattr(chunk, 'section_path', ''),
-                }
-
-            self.keyword_index.add_chunk(doc_id, chunk_id, text)
-            self.vector_index.add_chunk(chunk_id, text, {
+        for chunk in chunks:
+            self.keyword_index.add_chunk(doc_id, chunk.chunk_id, chunk.text)
+            self.vector_index.add_chunk(chunk.chunk_id, chunk.text, {
                 "doc_id": doc_id,
-                "chunk_type": chunk_type,
+                "chunk_type": chunk.chunk_type,
             })
-            self._chunk_texts[chunk_id] = text
-            self._chunk_metadata[chunk_id] = {
+            self._chunk_texts[chunk.chunk_id] = chunk.text
+            self._chunk_metadata[chunk.chunk_id] = {
                 "doc_id": doc_id,
-                "chunk_type": chunk_type,
-                "section_path": metadata.get("section_path", ""),
-                "title": metadata.get("title", ""),
-                "section_type": metadata.get("section_type", ""),
+                "chunk_type": chunk.chunk_type,
+                "section_path": chunk.section_path,
             }
 
         self._save_indices()

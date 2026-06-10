@@ -7,10 +7,7 @@
 """
 import json
 import re
-from dataclasses import dataclass, field, asdict
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Optional
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -147,27 +144,27 @@ class SevenSentenceTest:
         # 检查2: Intro承诺是否在Discussion闭合
         if self.intro_contribution and self.discussion_closing:
             closure_score = _text_similarity(self.intro_contribution, self.discussion_closing)
-            checks.append(("Intro承诺-Discussion闭合", closure_score > 0.12))
-            if closure_score <= 0.12:
-                issues.append(f"Discussion结尾未回应Introduction的研究承诺 (相似度: {closure_score:.3f})")
+            checks.append(("Intro承诺-Discussion闭合", closure_score > 0.15))
+            if closure_score <= 0.15:
+                issues.append("Discussion结尾未回应Introduction的研究承诺")
         else:
             checks.append(("Intro承诺-Discussion闭合", False))
 
         # 检查3: Abstract结论是否与Discussion一致
         if self.abstract_final and self.discussion_closing:
             consistency = _text_similarity(self.abstract_final, self.discussion_closing)
-            checks.append(("Abstract-Discussion一致性", consistency > 0.08))
-            if consistency <= 0.08:
-                issues.append(f"Abstract结论与Discussion结论不一致 (相似度: {consistency:.3f})")
+            checks.append(("Abstract-Discussion一致性", consistency > 0.1))
+            if consistency <= 0.1:
+                issues.append("Abstract结论与Discussion结论不一致")
         else:
             checks.append(("Abstract-Discussion一致性", False))
 
         # 检查4: Results是否回应了Intro承诺
         if self.intro_contribution and self.results_headline:
             relevance = _text_similarity(self.intro_contribution, self.results_headline)
-            checks.append(("Results回应Intro承诺", relevance > 0.08))
-            if relevance <= 0.08:
-                issues.append(f"Results未明显回应Introduction提出的研究目标 (相似度: {relevance:.3f})")
+            checks.append(("Results回应Intro承诺", relevance > 0.1))
+            if relevance <= 0.1:
+                issues.append("Results未明显回应Introduction提出的研究目标")
         else:
             checks.append(("Results回应Intro承诺", False))
 
@@ -201,64 +198,20 @@ def _split_sentences(text: str) -> list:
 
 
 def _text_similarity(text1: str, text2: str) -> float:
-    """
-    文本相似度（多策略混合）
-
-    使用三种策略加权：
-    1. 词汇重叠（中英文分词后取Jaccard）—— 0.4权重
-    2. 字符级3-gram重叠（适合中文）—— 0.3权重
-    3. 学术语义关键词重叠（领域术语匹配）—— 0.3权重
-    """
-    if not text1 or not text2:
-        return 0.0
-
-    # 策略1: 词汇重叠
+    """简易文本相似度（基于共享词汇）"""
     def _tokens(text):
+        # 提取中英文词汇
         zh = set(re.findall(r'[一-鿿]{2,}', text))
         en = set(re.findall(r'[a-zA-Z]{3,}', text.lower()))
         return zh | en
 
     tokens1 = _tokens(text1)
     tokens2 = _tokens(text2)
-    if tokens1 and tokens2:
-        jaccard_words = len(tokens1 & tokens2) / len(tokens1 | tokens2)
-    else:
-        jaccard_words = 0.0
-
-    # 策略2: 字符级3-gram（适合中文）
-    def _char_ngrams(text, n=3):
-        clean = re.sub(r'\s+', '', text.lower())
-        return set(clean[i:i+n] for i in range(max(0, len(clean) - n + 1)))
-
-    ng1 = _char_ngrams(text1)
-    ng2 = _char_ngrams(text2)
-    if ng1 and ng2:
-        jaccard_ngrams = len(ng1 & ng2) / len(ng1 | ng2)
-    else:
-        jaccard_ngrams = 0.0
-
-    # 策略3: 学术语义关键词
-    semantic_keywords = [
-        '碳污染物', '碳', '甲烷', 'CH4', 'CO2', '二氧化碳', '溶解氧', 'DO',
-        '有机碳', 'TOC', 'COD', '总氮', '铵态氮', '污水管网', '管网',
-        '赋存特征', '多相态', '固液气', '三相', '相态', '转化',
-        '显著', '相关', '负相关', '正相关', '驱动', '机制',
-        '厌氧', '好氧', '微生物', '产甲烷', '碳平衡', '空间分异',
-        '季节', '冬季', '春季', '功能区', '餐饮区', '教学区',
-        'sewage', 'carbon', 'methane', 'dissolved oxygen', 'pollutant',
-        'multiphase', 'correlation', 'significant', 'mechanism',
-    ]
-    text1_lower = text1.lower()
-    text2_lower = text2.lower()
-    kw1 = {kw for kw in semantic_keywords if kw.lower() in text1_lower}
-    kw2 = {kw for kw in semantic_keywords if kw.lower() in text2_lower}
-    if kw1 and kw2:
-        semantic_sim = len(kw1 & kw2) / len(kw1 | kw2)
-    else:
-        semantic_sim = 0.0
-
-    # 加权混合
-    return jaccard_words * 0.4 + jaccard_ngrams * 0.3 + semantic_sim * 0.3
+    if not tokens1 or not tokens2:
+        return 0.0
+    intersection = tokens1 & tokens2
+    union = tokens1 | tokens2
+    return len(intersection) / len(union) if union else 0.0
 
 
 class IntroductionDiscussionMapper:

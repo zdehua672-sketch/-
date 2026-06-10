@@ -11,7 +11,6 @@ import logging
 from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +28,84 @@ except ImportError:
 # ============================================================================
 # 数据结构
 # ============================================================================
+
+
+# AI标志符号和表达检测规则
+AI_MARKER_RULES = {
+    'symbols': ['**', '__', '~~'],  # Markdown格式符号
+    'phrases': [
+        '具有重要意义',
+        '重要组成部分',
+        '综上所述',
+        '深入探讨',
+        '驱动',
+        '赋能',
+        '闭环',
+        '颗粒度',
+        '抓手',
+        '打法',
+        '组合拳',
+        '底层逻辑',
+        '顶层设计',
+        '不仅是...更是',
+        '不仅...而且',
+        '一方面...另一方面',
+        '首先...其次...最后',
+    ],
+    'sentence_patterns': [
+        r'本研究.*具有重要意义',
+        r'综上所述.*',
+        r'基于上述分析.*',
+    ]
+}
+
+def detect_ai_markers(text: str) -> list:
+    """
+    检测文本中的AI标志符号和表达
+    
+    Parameters
+    ----------
+    text : str, 待检测文本
+    
+    Returns
+    -------
+    list of dict: 检测到的AI标志列表
+    """
+    import re
+    
+    issues = []
+    
+    # 检测符号
+    for symbol in AI_MARKER_RULES['symbols']:
+        if symbol in text:
+            issues.append({
+                'type': 'symbol',
+                'content': symbol,
+                'suggestion': f'删除AI标志符号: {symbol}'
+            })
+    
+    # 检测短语
+    for phrase in AI_MARKER_RULES['phrases']:
+        if phrase in text:
+            issues.append({
+                'type': 'phrase',
+                'content': phrase,
+                'suggestion': f'替换AI标志表达: {phrase}'
+            })
+    
+    # 检测句式
+    for pattern in AI_MARKER_RULES['sentence_patterns']:
+        matches = re.findall(pattern, text)
+        for match in matches:
+            issues.append({
+                'type': 'pattern',
+                'content': match[:50],
+                'suggestion': f'改写AI标志句式: {match[:50]}...'
+            })
+    
+    return issues
+
+
 class Severity(Enum):
     CRITICAL = 'CRITICAL'   # 致命问题，拒稿级别
     MAJOR = 'MAJOR'         # 重大问题，需要修改
@@ -167,6 +244,71 @@ class ReviewKB:
         r"有待(?:进[一壹]步|深入)(?:研究|探讨|分析)",
     ]
 
+    # ===== 中文核心期刊专项（借鉴 xiuneng0-collab） =====
+
+    # 中文核心必删空话（来自中文核心期刊通用指令）
+    CN_CORE_FORBIDDEN_PHRASES = {
+        '需要进一步研究': '删除，或写具体后续方向',
+        '具有重要意义': '写具体什么意义',
+        '提供参考借鉴': '写具体参考什么',
+        '状态良好': '给出具体指标',
+        '有待完善': '写具体待完善什么',
+        '一定程度上': '删除或写具体程度',
+        '重要组成部分': '写具体贡献了什么',
+        '起到了关键作用': '写具体什么作用',
+        '取得了显著成效': '列出具体数据',
+        '具有一定的创新性': '写具体创新点',
+        '值得深入探讨': '删除，或直接探讨',
+        '提供了新思路': '写具体思路',
+        '效果明显': '给出具体数据',
+        '综上所述': '删除，直接陈述结论',
+        '填补了研究空白': '写具体填补了什么',
+    }
+
+    # 中文核心推荐用语
+    CN_CORE_RECOMMENDED_PHRASES = {
+        '数据表明': '代替"说明"或"表明"',
+        '实测数据显示': '代替"可以发现"',
+        '归档统计显示': '代替"据统计"',
+        '可追溯至': '代替"来源于"',
+        '据文献报道': '代替"有人研究过"',
+    }
+
+    # 中文核心AI痕迹增强检测
+    CN_CORE_AI_PATTERNS = [
+        r"(?:值得注意|值得关注|需要指出)(?:的?是)",
+        r"(?:不仅|不仅仅).+(?:而且|更)(?:是|为|具有)",
+        r"(?:总而言之|综上所述|总的来说|简而言之).{0,10}(?:本文|本研究|我们)",
+        r"(?:在).+(?:背景下|基础上|条件下).{0,5}(?:开展|进行|实施)",
+        r"(?:本文|本研究).{0,5}(?:旨在|目的在于|致力于)",
+        r"(?:具有|拥有).{0,5}(?:重要的?|深远的?)(?:理论|实践|现实)(?:意义|价值)",
+        r"(?:为).{0,10}(?:奠定了|提供了|创造了).{0,5}(?:基础|条件|可能)",
+        r"(?:从).{0,5}(?:角度|层面|维度).{0,5}(?:出发|来看|分析)",
+        r"(?:深度|广度|高度)(?:融?合|结合|交织)",
+        r"(?:赋能|加持|助力|驱动|引领)",
+        # humanizer-zh 补充模式
+        r"(?:标志着?|见证了?).{0,10}(?:关键|重要)(?:时刻|转折|里程碑)",
+        r"(?:作为|充当).{0,5}(?:一个?)(?:充满活力|丰富|重要)(?:的)",
+        r"(?:象征着?|体现了?).{0,10}(?:深厚|深刻)(?:的?联系|的理解)",
+        r"(?:为).{0,10}(?:奠定(?:了?)基础|做出(?:了?)重要贡献)",
+        r"(?:尽管|虽然).{0,20}(?:面临|挑战).{0,10}(?:尽管|但是|然而).{0,10}(?:继续|仍然)",
+        r"(?:此外|与此同时).{0,10}(?:关键(?:的|性)|至关重要|不可或缺)",
+        r"(?:不断演变|不断变化)(?:的?格局|的?趋势|的?态势)",
+        r"(?:深刻|深入)(?:的?认识|的?理解|的?洞察|探讨)",
+        r"(?:不可磨灭)(?:的?印记|的?贡献|的影响)",
+        r"(?:深深植根于|根植于)",
+        r"(?:令人叹为观止|叹为观止|令人瞩目)(?:的|地)",
+        r"(?:生态|闭环|链路|抓手|打法)",
+    ]
+
+    # 中文核心工程论文标题规范
+    CN_CORE_TITLE_RULES = {
+        'max_length': 25,  # 最长25个汉字
+        'forbidden_prefixes': ['一种', '基于', '关于'],
+        'recommended_format': 'XXX与XXX系统/平台/方法',
+        'forbidden_vague': ['重要', '关键', '新型', '高效', '先进'],
+    }
+
     HOLLOW_PATTERNS_EN = [
         r"(?:provides|offers|serves as) (?:a |an )?(?:valuable|useful|important) (?:reference|insight|foundation)",
         r"(?:further|additional|more) (?:research|study|investigation) (?:is |was )?(?:needed|required|warranted|necessary)",
@@ -202,6 +344,72 @@ class ReviewKB:
                     'novel discovery', 'breakthrough']
     OVERCLAIM_ZH = ['首次发现', '证实', '确证', '重大突破', '开创性',
                     '革命性', '前所未有', '根本性']
+
+    # ===== Nature 级替代表（来自 nature-polishing skill Phrasebank） =====
+
+    # 证据强度动词分级（替代笼统的 "show/prove"）
+    EVIDENCE_VERBS = {
+        'strong': ['show', 'demonstrate', 'establish', 'reveal', 'identify'],
+        'moderate': ['suggest', 'indicate', 'support the view that',
+                     'are consistent with', 'point to'],
+        'speculative': ['may reflect', 'could arise from', 'appears to',
+                        'seems likely', 'might be explained by'],
+    }
+
+    # 差距语言（替代 "no one has ever studied"）
+    GAP_LANGUAGE = {
+        'good': ['remains poorly understood', 'has not been examined in ...',
+                 'has received limited attention', 'few studies have addressed ...',
+                 'evidence remains sparse for ...'],
+        'avoid': ['no one has ever studied', 'completely unknown',
+                  'ignored by all previous work'],
+    }
+
+    # 与前人工作的比较表达
+    COMPARISON_LANGUAGE = {
+        'align': ['These results are consistent with ...',
+                  'This finding accords with ...',
+                  'Our observations broadly support ...'],
+        'diverge': ['In contrast to earlier reports, ...',
+                    'This finding differs from ...',
+                    'One possible reason for this discrepancy is ...'],
+    }
+
+    # 局限性语言（替代空洞的 "有待进一步研究"）
+    LIMITATION_LANGUAGE = [
+        'These findings should be interpreted with caution because ...',
+        'A limitation of this study is that ...',
+        'The generalisability of these results is limited by ...',
+        'We cannot exclude the possibility that ...',
+        'Another source of uncertainty is ...',
+    ]
+
+    # 段落间过渡（替代重复的 "This suggests"）
+    PARAGRAPH_LINKS = {
+        'restatement': 'Such heterogeneity ...',           # 重述名词
+        'definite': 'The resulting gradient ...',          # 定指名词短语
+        'participial': 'Taken together, ...',              # 分词总结
+        'zero': '',                                         # 逻辑明显时不用连接词
+    }
+
+    # ===== 结构性失败模式诊断（来自 nature-polishing skill） =====
+    STRUCTURAL_FAILURE_MODES = {
+        'wrong_paper_type': '论文类型逻辑错误（如综述写成实验论文）',
+        'missing_gap': '缺少研究空白或定位不清',
+        'claim_without_evidence': '有论断无证据支撑',
+        'evidence_without_claim': '有数据无论断统领',
+        'missing_boundary': '缺少局限性或边界说明',
+        'results_discussion_mixed': '结果与讨论混在一起',
+        'weak_title_abstract': '标题或摘要信号弱',
+        'terminology_inconsistent': '术语/缩写/单位/符号不一致',
+        'sentence_clutter_only': '仅有句法层面的杂乱',
+    }
+
+    # 修复优先级顺序
+    FIX_PRIORITY = [
+        'paper_type', 'section_job', 'paragraph_logic',
+        'claim_evidence_boundary', 'sentence_polish'
+    ]
 
 
 # ============================================================================
@@ -497,6 +705,84 @@ class ChineseChecker:
                         suggestion='中文文段应使用全角逗号"，"'
                     ))
                     break
+
+        return issues
+
+    @staticmethod
+    def check_cn_core_rules(sections, language='zh'):
+        """
+        中文核心期刊专项检查（借鉴 xiuneng0-collab）
+
+        检查项:
+          1. 禁用空话
+          2. AI痕迹短语
+          3. 标题规范
+          4. 推荐用语替换
+        """
+        if language != 'zh':
+            return []
+        issues = []
+
+        # 1. 禁用空话检测
+        for sec_name, sec in sections.items():
+            for phrase, suggestion in ReviewKB.CN_CORE_FORBIDDEN_PHRASES.items():
+                if phrase in sec.body:
+                    # 找到出现位置的上下文
+                    idx = sec.body.find(phrase)
+                    context = sec.body[max(0,idx-20):idx+len(phrase)+20]
+                    issues.append(Issue(
+                        category='中文核心-禁用空话', severity=Severity.MAJOR,
+                        section=sec_name, location=f'发现"{phrase}"',
+                        problem=f'中文核心期刊禁用空话: "{phrase}"',
+                        original=context,
+                        suggestion=f'替换为: {suggestion}',
+                        teaching_note='中文核心要求表述具体，禁用套话和空洞表达'
+                    ))
+
+        # 2. AI痕迹短语检测
+        for sec_name, sec in sections.items():
+            for pattern in ReviewKB.CN_CORE_AI_PATTERNS:
+                matches = re.findall(pattern, sec.body)
+                if matches:
+                    issues.append(Issue(
+                        category='中文核心-AI痕迹', severity=Severity.MAJOR,
+                        section=sec_name, location='正文',
+                        problem=f'疑似AI生成短语: "{matches[0][:20]}"',
+                        original=matches[0][:60],
+                        suggestion='改写为更自然的学术表达，避免AI典型句式',
+                        teaching_note='中文核心编辑对AI痕迹非常敏感，需彻底去除'
+                    ))
+
+        # 3. 标题检查
+        if 'title' in sections:
+            title = sections['title'].body.strip()
+            rules = ReviewKB.CN_CORE_TITLE_RULES
+            if len(title) > rules['max_length']:
+                issues.append(Issue(
+                    category='中文核心-标题规范', severity=Severity.MINOR,
+                    section='标题', location='标题',
+                    problem=f'标题过长({len(title)}字)，建议≤{rules["max_length"]}字',
+                    original=title,
+                    suggestion='精简标题，删除冗余修饰词'
+                ))
+            for prefix in rules['forbidden_prefixes']:
+                if title.startswith(prefix):
+                    issues.append(Issue(
+                        category='中文核心-标题规范', severity=Severity.MINOR,
+                        section='标题', location='标题开头',
+                        problem=f'标题以"{prefix}"开头，中文核心建议避免',
+                        original=title,
+                        suggestion=f'去掉"{prefix}"前缀，直接用核心名词开头'
+                    ))
+            for word in rules['forbidden_vague']:
+                if word in title:
+                    issues.append(Issue(
+                        category='中文核心-标题规范', severity=Severity.MINOR,
+                        section='标题', location='标题',
+                        problem=f'标题含模糊修饰词"{word}"',
+                        original=title,
+                        suggestion=f'去掉"{word}"或替换为具体描述'
+                    ))
 
         return issues
 
@@ -997,13 +1283,13 @@ class RationaleChecker:
                     ['表明', '显示', '揭示', '发现', 'suggest', 'indicate', 'reveal', 'demonstrate', 'show that'])
                 has_evidence = any(kw in para.lower() for kw in
                     ['r=', 'p<', 'p=', '显著', 'significant', 'significant', 'correlation', '相关'])
-                has_citation = bool(re.search(r'\([A-Z][a-z]+\s+et\s+al\.|\(\d{4}\)|\[\d+\]', para))
+                has_citation = bool(re.search(r'\([A-Z][a-z]+\s+et\s+al\.|[\d{4}]\)|\[\d+\]', para))
                 has_mechanism = any(kw in para.lower() for kw in
                     ['因为', '由于', '机制', '原因', 'because', 'mechanism', 'due to', 'attribute', '导致', '导致'])
 
                 if has_claim and not has_evidence and not has_citation:
                     issues.append(Issue(
-                        category='推理链', severity=Severity.MAJOR,
+                        category='推理链完整性', severity=Severity.MAJOR,
                         section=sec_name, location=f'第{i+1}段',
                         problem='有主张但缺少数据证据或文献引用',
                         original=para[:80] + '...',
@@ -1017,7 +1303,7 @@ class RationaleChecker:
 
                 if has_claim and has_evidence and not has_mechanism and sec_name == 'discussion':
                     issues.append(Issue(
-                        category='推理链', severity=Severity.MINOR,
+                        category='推理链完整性', severity=Severity.MINOR,
                         section=sec_name, location=f'第{i+1}段',
                         problem='有数据证据但缺少机制解释',
                         original=para[:80] + '...',
@@ -1127,10 +1413,59 @@ class CitationQualityChecker:
         if not ref_lines and not ref_patterns:
             return issues
 
+        # 孤儿引用检测：正文中引用了但参考文献列表中没有的编号
+        if ref_lines and ref_patterns:
+            cited_nums = set()
+            for c in ref_patterns:
+                for part in re.split(r'[,]', c):
+                    if '-' in part:
+                        start, end = part.split('-')
+                        for i in range(int(start), int(end) + 1):
+                            cited_nums.add(i)
+                    else:
+                        cited_nums.add(int(part))
+
+            # 参考文献列表中的编号
+            ref_nums = set()
+            for line in ref_lines:
+                m = re.match(r'\[(\d+)\]', line)
+                if m:
+                    ref_nums.add(int(m.group(1)))
+
+            orphan_cites = cited_nums - ref_nums
+            unused_refs = ref_nums - cited_nums
+
+            if orphan_cites:
+                sorted_orphans = sorted(orphan_cites)[:10]
+                issues.append(Issue(
+                    category='引用质量', severity=Severity.CRITICAL,
+                    section='正文', location='引用编号',
+                    problem=f'正文中引用了{len(orphan_cites)}个参考文献列表中不存在的编号: {sorted_orphans}',
+                    original=f'孤立引用: {sorted_orphans}',
+                    suggestion='检查引用编号是否正确，或补充缺失的参考文献条目',
+                    root_cause='引用编号与参考文献列表不匹配',
+                    fix_action='逐一核对孤立引用编号，补充或修正参考文献列表',
+                    downstream_impact='审稿人会认为论文不严谨，可能直接拒稿',
+                    teaching_note='每一条正文引用都必须在参考文献列表中有对应条目。',
+                ))
+
+            if unused_refs:
+                sorted_unused = sorted(unused_refs)[:10]
+                issues.append(Issue(
+                    category='引用质量', severity=Severity.MINOR,
+                    section='references', location='参考文献',
+                    problem=f'参考文献列表中有{len(unused_refs)}篇未在正文中引用: {sorted_unused}',
+                    original=f'未使用引用: {sorted_unused}',
+                    suggestion='在正文中引用这些文献，或从参考文献列表中删除',
+                    root_cause='参考文献列表包含未使用的条目',
+                    fix_action='删除未使用的参考文献，或在合适位置添加引用',
+                    downstream_impact='冗余参考文献影响论文精炼度',
+                ))
+
         # 如果有完整的参考文献列表，做深度审计
         if ref_lines:
             try:
-                result = audit_citations_batch(ref_lines, verify=False)
+                result = audit_citations_batch(ref_lines[:50], verify=True)
                 overall = result['overall_score']
                 dead = result['dead_count']
                 gap = result.get('gap_analysis', {})
@@ -1183,55 +1518,150 @@ class CitationQualityChecker:
         return issues
 
 
-# ---------- 14. 写作质量增强检查 ----------
-class WritingQualityChecker:
-    """写作质量增强检查（借助 writing_optimizer 模块）"""
+# ============================================================================
+# Nature 结构性诊断（来自 nature-polishing skill failure-modes）
+# ============================================================================
+class StructuralDiagnosisChecker:
+    """
+    基于 nature-polishing skill 的结构性失败模式诊断。
+    优先级：paper_type → section_job → paragraph_logic → claim/evidence/boundary → sentence_polish
+    不在句法层面修补结构问题。
+    """
 
     @staticmethod
     def check(sections, language='en'):
         issues = []
-        try:
-            from writing_optimizer import AcademicPolisher, GrammarChecker as OptGrammarChecker
-        except ImportError:
-            return issues
+        section_names = list(sections.keys())
+        section_bodies = {k: v.body if hasattr(v, 'body') else str(v) for k, v in sections.items()}
 
-        polisher = AcademicPolisher()
-        grammar = OptGrammarChecker()
-
-        for sec_name in ['introduction', 'discussion', 'conclusion', 'abstract']:
-            if sec_name not in sections:
-                continue
-            body = sections[sec_name].body
-            if not body or len(body) < 50:
-                continue
-
-            # 1. 润色检查（口语化、AI痕迹等）
-            result = polisher.polish(body, language)
-            for change in result.changes[:5]:  # 每章节最多报5个
-                severity = Severity.MINOR
-                if change.category in ('AI痕迹', 'AI Pattern'):
-                    severity = Severity.MAJOR
+        # 1. 检查必要章节是否存在
+        required_sections = {
+            'en': ['introduction', 'methods', 'results', 'discussion', 'conclusion'],
+            'zh': ['引言', '方法', '结果', '讨论', '结论'],
+        }
+        req = required_sections.get(language, required_sections['en'])
+        present = [s.lower() for s in section_names]
+        for rs in req:
+            if not any(rs in p for p in present):
                 issues.append(Issue(
-                    category='写作质量',
-                    severity=severity,
-                    section=sec_name,
-                    location=change.category,
-                    problem=f'{change.category}: {change.reason}',
-                    original=change.original,
-                    suggestion=f'修改为: {change.revised}',
+                    category='Nature结构诊断',
+                    severity=Severity.MAJOR,
+                    section='全局',
+                    location='章节结构',
+                    problem=f'缺少必要章节: {rs}',
+                    original='',
+                    suggestion=f'补充{rs}章节',
+                    root_cause='wrong_paper_type',
+                    fix_action='补充缺失章节',
+                    downstream_impact='审稿人可能直接拒稿',
+                    teaching_note='Nature 系列要求完整的 IMRaD 结构',
                 ))
 
-            # 2. 语法检查（长句、重复词等）
-            grammar_issues = grammar.check(body, language)
-            for gi in grammar_issues[:3]:  # 每章节最多报3个
+        # 2. 检查 Introduction 是否包含 gap 语句
+        intro_key = None
+        for k in section_names:
+            if 'intro' in k.lower() or '引言' in k:
+                intro_key = k
+                break
+        if intro_key:
+            intro_text = section_bodies[intro_key].lower()
+            gap_indicators = ['however', 'remains', 'poorly understood', 'few studies',
+                              'limited', 'gap', 'not yet', 'has not been',
+                              '然而', '尚不清楚', '研究不足', '空白', '鲜有', '尚未']
+            has_gap = any(g in intro_text for g in gap_indicators)
+            if not has_gap:
                 issues.append(Issue(
-                    category='写作质量',
+                    category='Nature结构诊断',
+                    severity=Severity.MAJOR,
+                    section=intro_key,
+                    location='Introduction',
+                    problem='Introduction 缺少明确的研究空白（gap）陈述',
+                    original='',
+                    suggestion='在 Introduction 中明确指出 "However, ... remains poorly understood" 或类似 gap 语句',
+                    root_cause='missing_gap',
+                    fix_action='在 Introduction 末段前插入 gap 段落',
+                    downstream_impact='读者无法理解本研究的必要性',
+                    teaching_note='Nature-polishing: Introduction 必须回答 "What is still missing?"',
+                ))
+
+        # 3. 检查 Results 是否混入讨论
+        results_key = None
+        for k in section_names:
+            if 'result' in k.lower() or '结果' in k:
+                results_key = k
+                break
+        if results_key:
+            results_text = section_bodies[results_key].lower()
+            discussion_markers = ['this suggests', 'this indicates', 'one explanation',
+                                  'a possible reason', 'this may be due to',
+                                  'the mechanism', 'we speculate',
+                                  '这表明', '可能原因', '机制可能是', '推测']
+            mixed_count = sum(1 for m in discussion_markers if m in results_text)
+            if mixed_count >= 3:
+                issues.append(Issue(
+                    category='Nature结构诊断',
+                    severity=Severity.MAJOR,
+                    section=results_key,
+                    location='Results',
+                    problem=f'Results 中发现 {mixed_count} 处讨论性表述，结果与讨论混合',
+                    original='',
+                    suggestion='将解释性语句移至 Discussion，Results 只陈述观察到的事实',
+                    root_cause='results_discussion_mixed',
+                    fix_action='分离 Results 和 Discussion',
+                    downstream_impact='混淆事实与推测，降低可信度',
+                    teaching_note='Nature-polishing: Results 回答 "What was observed?"，Discussion 回答 "What does it mean?"',
+                ))
+
+        # 4. 检查 Discussion 是否有边界/局限性
+        disc_key = None
+        for k in section_names:
+            if 'discuss' in k.lower() or '讨论' in k:
+                disc_key = k
+                break
+        if disc_key:
+            disc_text = section_bodies[disc_key].lower()
+            boundary_indicators = ['limitation', 'caveat', 'caution', 'cannot exclude',
+                                   'should be interpreted', 'generalisability',
+                                   '局限', '限制', '谨慎', '不能排除', '推广性']
+            has_boundary = any(b in disc_text for b in boundary_indicators)
+            if not has_boundary:
+                issues.append(Issue(
+                    category='Nature结构诊断',
                     severity=Severity.MINOR,
-                    section=sec_name,
-                    location=gi.category,
-                    problem=f'{gi.category}: {gi.reason}',
-                    original=gi.original,
-                    suggestion=gi.revised,
+                    section=disc_key,
+                    location='Discussion',
+                    problem='Discussion 缺少局限性或边界说明',
+                    original='',
+                    suggestion='添加 "These findings should be interpreted with caution because ..." 或 "A limitation of this study is that ..."',
+                    root_cause='missing_boundary',
+                    fix_action='在 Discussion 末段前插入 Limitations 段落',
+                    downstream_impact='审稿人会质疑作者的学术严谨性',
+                    teaching_note='Nature-polishing: Discussion 必须回答 "What limitations constrain interpretation?"',
+                ))
+
+        # 5. 术语一致性检查（跨章节）
+        all_text = ' '.join(section_bodies.values())
+        # 检测常见不一致模式
+        inconsistencies = [
+            (['CO₂', 'CO2', 'CO_2'], 'CO₂ 写法不一致'),
+            (['CH₄', 'CH4', 'CH_4'], 'CH₄ 写法不一致'),
+            (['N₂O', 'N2O', 'N_2O'], 'N₂O 写法不一致'),
+        ]
+        for variants, msg in inconsistencies:
+            found = [v for v in variants if v in all_text]
+            if len(found) > 1:
+                issues.append(Issue(
+                    category='Nature结构诊断',
+                    severity=Severity.MINOR,
+                    section='全局',
+                    location='术语一致性',
+                    problem=f'{msg}: 使用了 {found}',
+                    original=str(found),
+                    suggestion=f'统一为 {found[0]}',
+                    root_cause='terminology_inconsistent',
+                    fix_action=f'全文替换为 {found[0]}',
+                    downstream_impact='显得不专业',
+                    teaching_note='Nature-polishing: 构建 Terminology Ledger，全文强制一致',
                 ))
 
         return issues
@@ -1244,20 +1674,20 @@ class Scorer:
     """论文质量评分"""
 
     DIMENSIONS = {
-        'SCI格式': {'weight': 0.10, 'description': '格式规范性'},
-        '中文格式': {'weight': 0.07, 'description': '中文格式规范'},
-        '错别字': {'weight': 0.07, 'description': '拼写正确性'},
-        '学术语法': {'weight': 0.07, 'description': '语言学术性'},
-        '引文规范': {'weight': 0.07, 'description': '引用规范性'},
-        '图表规范': {'weight': 0.07, 'description': '图表规范性'},
-        '数据逻辑': {'weight': 0.10, 'description': '数据一致性'},
-        'Discussion逻辑': {'weight': 0.08, 'description': '讨论深度'},
+        'SCI格式': {'weight': 0.08, 'description': '格式规范性'},
+        '中文格式': {'weight': 0.06, 'description': '中文格式规范'},
+        '错别字': {'weight': 0.05, 'description': '拼写正确性'},
+        '学术语法': {'weight': 0.05, 'description': '语言学术性'},
+        '引文规范': {'weight': 0.06, 'description': '引用规范性'},
+        '图表规范': {'weight': 0.06, 'description': '图表规范性'},
+        '数据逻辑': {'weight': 0.08, 'description': '数据一致性'},
+        'Discussion逻辑': {'weight': 0.07, 'description': '讨论深度'},
         'AI痕迹': {'weight': 0.04, 'description': '自然度'},
         '学术重复': {'weight': 0.04, 'description': '原创性'},
-        '推理链完整性': {'weight': 0.08, 'description': '推理链完整性'},
+        '推理链完整性': {'weight': 0.07, 'description': '推理链完整性'},
         '逻辑跳跃': {'weight': 0.05, 'description': '逻辑严谨性'},
-        '引用质量': {'weight': 0.08, 'description': 'DOI有效性+引用类型多样性'},
-        '写作质量': {'weight': 0.06, 'description': '语言润色+可读性'},
+        '引用质量': {'weight': 0.07, 'description': 'DOI有效性+引用类型多样性'},
+        'Nature结构诊断': {'weight': 0.10, 'description': '结构完整性（Nature标准）'},
     }
 
     @classmethod
@@ -1300,6 +1730,7 @@ class AcademicReviewAgent:
     CHECKERS = [
         ('SCI格式', SCIChecker),
         ('中文格式', ChineseChecker),
+        ('中文核心专项', ChineseChecker),  # check_cn_core_rules
         ('错别字', TypoChecker),
         ('学术语法', GrammarChecker),
         ('引文规范', CitationChecker),
@@ -1311,7 +1742,7 @@ class AcademicReviewAgent:
         ('推理链完整性', RationaleChecker),
         ('逻辑跳跃', LogicalLeapChecker),
         ('引用质量', CitationQualityChecker),
-        ('写作质量', WritingQualityChecker),
+        ('Nature结构诊断', StructuralDiagnosisChecker),  # nature-polishing skill
     ]
 
     def __init__(self, paper_type='sci', language='auto'):
@@ -1355,7 +1786,10 @@ class AcademicReviewAgent:
         all_issues = []
         for name, checker in self.CHECKERS:
             try:
-                issues = checker.check(sections, self.language)
+                if name == '中文核心专项':
+                    issues = checker.check_cn_core_rules(sections, self.language)
+                else:
+                    issues = checker.check(sections, self.language)
                 all_issues.extend(issues)
                 if issues:
                     print(f"  [{name}] 发现{len(issues)}个问题")
@@ -1486,43 +1920,25 @@ class AcademicReviewAgent:
         accepted = []
         rejected = []
         for i, issue in enumerate(report.issues, 1):
-            entry = {
-                "category": issue.category,
-                "severity": issue.severity.value,
-                "section": issue.section,
-                "problem": issue.problem,
-            }
+            entry = {"category": issue.category, "severity": issue.severity.value}
             if accepted_indices and i in accepted_indices:
                 accepted.append(entry)
             elif rejected_indices and i in rejected_indices:
                 rejected.append(entry)
 
-        # 构建报告摘要（代替空字符串）
-        report_summary = [
-            f"总分: {report.scores.get('总分', 'N/A')}",
-            f"问题数: {len(report.issues)}",
-            f"类型: {report.paper_type}",
-        ]
-
         # 写入knowledge_store
         if FeedbackCollector is None:
-            logger.warning("FeedbackCollector not available, feedback not saved")
             return False
         try:
             store = KnowledgeStore()
             fb = FeedbackCollector(store)
             fb.log_review_feedback(
-                paper_text='\n'.join(report_summary),
-                report_issues=[
-                    {"category": i.category, "severity": i.severity.value, "section": i.section}
-                    for i in report.issues
-                ],
+                paper_text="", report_issues=[],
                 accepted=accepted, rejected=rejected, comment=comment
             )
-            print(f"✓ 反馈已保存: 接受{len(accepted)}条, 拒绝{len(rejected)}条")
             return True
         except Exception as e:
-            logger.warning(f"Failed to submit feedback: {e}")
+            logger.debug(f"Failed to submit feedback: {e}")
             return False
 
 
@@ -1554,7 +1970,7 @@ def review_paper(text_or_path, paper_type='sci', language='auto', output_path=No
 # 知识库桥接：从knowledge_store加载进化后的知识
 # ============================================================================
 def _load_evolved_knowledge():
-    """从knowledge_store加载进化后的知识，与硬编码默认值合并。失败时静默跳过。"""
+    """从knowledge_store加载进化后的知识，覆盖硬编码默认值。失败时静默跳过。"""
     import json
     from pathlib import Path
 
@@ -1562,7 +1978,7 @@ def _load_evolved_knowledge():
     if not store_dir.exists():
         return
 
-    # 1. 加载审稿规则（合并而非覆盖）
+    # 1. 加载审稿规则
     rules_path = store_dir / "review_rules.json"
     if rules_path.exists():
         try:
@@ -1598,23 +2014,22 @@ def _load_evolved_knowledge():
                 elif key.startswith("overclaim_zh_") and isinstance(val, str):
                     evolved_overclaim_zh.append(val)
 
-            # 合并：进化后的知识追加到硬编码默认值之上，不覆盖
             if evolved_forbidden_en:
-                ReviewKB.EN_FORBIDDEN.update(evolved_forbidden_en)
+                ReviewKB.EN_FORBIDDEN = evolved_forbidden_en
             if evolved_forbidden_zh:
-                ReviewKB.ZH_FORBIDDEN.update(evolved_forbidden_zh)
+                ReviewKB.ZH_FORBIDDEN = evolved_forbidden_zh
             if evolved_ai_en:
-                ReviewKB.AI_PATTERNS_EN = list(set(ReviewKB.AI_PATTERNS_EN + evolved_ai_en))
+                ReviewKB.AI_PATTERNS_EN = evolved_ai_en
             if evolved_ai_zh:
-                ReviewKB.AI_PATTERNS_ZH = list(set(ReviewKB.AI_PATTERNS_ZH + evolved_ai_zh))
+                ReviewKB.AI_PATTERNS_ZH = evolved_ai_zh
             if evolved_hollow_en:
-                ReviewKB.HOLLOW_PATTERNS_EN = list(set(ReviewKB.HOLLOW_PATTERNS_EN + evolved_hollow_en))
+                ReviewKB.HOLLOW_PATTERNS_EN = evolved_hollow_en
             if evolved_hollow_zh:
-                ReviewKB.HOLLOW_PATTERNS_ZH = list(set(ReviewKB.HOLLOW_PATTERNS_ZH + evolved_hollow_zh))
+                ReviewKB.HOLLOW_PATTERNS_ZH = evolved_hollow_zh
             if evolved_overclaim_en:
-                ReviewKB.OVERCLAIM_EN = list(set(ReviewKB.OVERCLAIM_EN + evolved_overclaim_en))
+                ReviewKB.OVERCLAIM_EN = evolved_overclaim_en
             if evolved_overclaim_zh:
-                ReviewKB.OVERCLAIM_ZH = list(set(ReviewKB.OVERCLAIM_ZH + evolved_overclaim_zh))
+                ReviewKB.OVERCLAIM_ZH = evolved_overclaim_zh
         except Exception as e:
             logger.debug(f"Failed to load evolved review rules: {e}")
 
@@ -1635,6 +2050,12 @@ def _load_evolved_knowledge():
                     new_weight = val.get("weight", val.get("value"))
                     if new_weight is not None and isinstance(new_weight, (int, float)):
                         Scorer.DIMENSIONS[dim]["weight"] = float(new_weight)
+
+            # 归一化权重确保总和为1.0
+            total_weight = sum(c['weight'] for c in Scorer.DIMENSIONS.values())
+            if total_weight > 0 and abs(total_weight - 1.0) > 1e-6:
+                for config in Scorer.DIMENSIONS.values():
+                    config['weight'] = round(config['weight'] / total_weight, 4)
         except Exception as e:
             logger.debug(f"Failed to load evolved parameters: {e}")
 
