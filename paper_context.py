@@ -11,6 +11,19 @@ PaperContext 中央上下文 + 模块编排器
 import os
 import logging
 import numpy as np
+
+# Claude 写作引擎（通过 CLI 调用）
+_claude_writer = None
+
+def _get_claude_writer():
+    global _claude_writer
+    if _claude_writer is None:
+        try:
+            from claude_writer import ClaudeWriter
+            _claude_writer = ClaudeWriter(timeout=180)
+        except Exception as e:
+            logger.warning(f"ClaudeWriter init failed: {e}")
+    return _claude_writer
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -186,62 +199,77 @@ def _run_writer_results(ctx: PaperContext):
 
 
 def _run_writer_discussion(ctx: PaperContext):
-    """写 Discussion 章节（带知识库支撑 + 高级分析 + 引用支撑库）"""
+    """写 Discussion 章节（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('findings'):
+        # 收集机制知识
+        mechanisms = {}
+        if ctx.has('memory'):
+            for f in ctx.findings:
+                if f.get('type') == 'correlation':
+                    v1, v2 = f.get('variables', ('', ''))
+                    query = f'{v1} {v2}'
+                    mechs = ctx.memory.recall(query, category='mechanisms', top_k=1)
+                    if mechs:
+                        mechanisms[f'{v1}_vs_{v2}'] = mechs[0].get('value', {}).get('mechanism', '')
+
+        result = writer.write_discussion(
+            findings=ctx.findings,
+            mechanisms=mechanisms,
+            language=ctx.language,
+            recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
+        )
+        if result:
+            ctx.sections['discussion'] = result
+            return result
+
+    # 回退：使用模板
     from data_driven_pipeline import DataDrivenWriter
-    writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
-    ctx.sections['discussion'] = writer.write_discussion()
-    ctx.rationale_rows.extend(writer.rationale_rows)
-
-    # 注入高级分析发现（数据故事线、阈值效应、异常洞察）
-    if ctx.data_stories or ctx.threshold_effects or ctx.anomaly_insights:
-        injection = _build_advanced_injection(ctx)
-        if injection:
-            ctx.sections['discussion'] = ctx.sections['discussion'].replace(
-                '## 4.4 研究局限性',
-                f'{injection}\n## 4.4 研究局限性'
-            )
-
-    # 注入引用支撑库（如果有绑定好的引用）
-    if ctx.citation_bank and hasattr(ctx.citation_bank, 'bindings'):
-        citation_text = _build_citation_injection(ctx)
-        if citation_text:
-            ctx.sections['discussion'] += f'\n\n{citation_text}'
-
+    tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
+    ctx.sections['discussion'] = tpl_writer.write_discussion()
+    ctx.rationale_rows.extend(tpl_writer.rationale_rows)
     return ctx.sections['discussion']
 
 
 def _run_writer_intro(ctx: PaperContext):
-    """写 Introduction 章节（带知识库支撑）"""
+    """写 Introduction 章节（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('findings'):
+        # 用 Claude 生成数据驱动的引言
+        result = writer.write_introduction(
+            findings=ctx.findings,
+            language=ctx.language,
+            recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
+        )
+        if result:
+            ctx.sections['introduction'] = result
+            return result
+
+    # 回退：使用模板
     from paper_writing_agent import IntroductionGenerator
     gen = IntroductionGenerator()
     base_text = gen.generate(language=ctx.language)
-
-    # 如果有知识库，在文献综述部分注入召回的引用
-    if ctx.has('memory') and ctx.has('recalled_references'):
-        # 在 "## 1.2 国内外研究现状" 之后追加文献引用
-        injection = '\n\n### 1.2.3 相关研究文献\n\n'
-        seen_titles = set()
-        for ref in ctx.recalled_references[:5]:
-            title = ref.get('title', '')
-            if title and title not in seen_titles:
-                seen_titles.add(title)
-                year = ref.get('year', '')
-                authors = ref.get('authors', '')
-                if isinstance(authors, list):
-                    authors = ', '.join(authors[:3])
-                injection += f'{authors}（{year}）研究了{title[:50]}。\n\n'
-        if seen_titles:
-            base_text = base_text.replace(
-                '## 1.3 现有研究不足',
-                f'{injection}\n## 1.3 现有研究不足'
-            )
-
     ctx.sections['introduction'] = base_text
     return ctx.sections['introduction']
 
 
 def _run_writer_methods(ctx: PaperContext):
-    """写 Methods 章节"""
+    """写 Methods 章节（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('df'):
+        # 构建数据信息
+        data_info = {
+            'n_samples': len(ctx.df),
+            'n_variables': len(ctx.df.columns),
+            'variables': list(ctx.df.columns),
+            'groups': list(ctx.df.select_dtypes(include=['object', 'category']).columns),
+        }
+        result = writer.write_methods(data_info=data_info, language=ctx.language)
+        if result:
+            ctx.sections['methods'] = result
+            return result
+
+    # 回退：使用模板
     from paper_writing_agent import MethodsGenerator
     gen = MethodsGenerator()
     ctx.sections['methods'] = gen.generate(language=ctx.language)
@@ -249,7 +277,18 @@ def _run_writer_methods(ctx: PaperContext):
 
 
 def _run_writer_abstract(ctx: PaperContext):
-    """写 Abstract（基于所有已有章节）"""
+    """写 Abstract（优先 Claude 基于实际章节生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.sections:
+        result = writer.write_abstract(
+            sections=ctx.sections,
+            language=ctx.language,
+        )
+        if result:
+            ctx.sections['abstract'] = result
+            return result
+
+    # 回退：使用模板
     from paper_writing_agent import AbstractGenerator
     gen = AbstractGenerator(
         ctx.sections.get('introduction', ''),
@@ -262,7 +301,18 @@ def _run_writer_abstract(ctx: PaperContext):
 
 
 def _run_writer_conclusion(ctx: PaperContext):
-    """写 Conclusion — 提炼贡献，不是重复结果"""
+    """写 Conclusion（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('findings'):
+        result = writer.write_conclusion(
+            findings=ctx.findings,
+            language=ctx.language,
+        )
+        if result:
+            ctx.sections['conclusion'] = result
+            return result
+
+    # 回退：使用模板
     critical = [f for f in ctx.findings if f['importance'] in ['critical', 'high']]
     group_findings = [f for f in critical if f['type'] == 'group_difference']
     corr_findings = [f for f in critical if f['type'] == 'correlation']
