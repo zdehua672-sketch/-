@@ -11,6 +11,19 @@ PaperContext 中央上下文 + 模块编排器
 import os
 import logging
 import numpy as np
+
+# Claude 写作引擎（通过 CLI 调用）
+_claude_writer = None
+
+def _get_claude_writer():
+    global _claude_writer
+    if _claude_writer is None:
+        try:
+            from claude_writer import ClaudeWriter
+            _claude_writer = ClaudeWriter(timeout=180)
+        except Exception as e:
+            logger.warning(f"ClaudeWriter init failed: {e}")
+    return _claude_writer
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -45,6 +58,12 @@ class PaperContext:
     memory: Any = None                # KnowledgeMemory 实例
     literature_matrix: Any = None     # LiteratureMatrix
     recalled_mechanisms: list = field(default_factory=list)
+
+    # === 文献学习层 ===
+    papers_dir: str = None            # 论文目录路径
+    papers_read: list = field(default_factory=list)    # 已读论文列表
+    learned_patterns: dict = field(default_factory=dict)  # 学到的写作模式
+    learned_mechanisms: list = field(default_factory=list)  # 学到的机制知识
     recalled_references: list = field(default_factory=list)
 
     # === 写作层 ===
@@ -59,6 +78,23 @@ class PaperContext:
     review_report: Any = None         # ReviewReport
     review_summary: dict = field(default_factory=dict)
     revision_report: str = ''
+
+    # === 高级分析层 ===
+    advanced_findings: list = field(default_factory=list)  # AdvancedAnalyzer 输出
+    cross_analyses: list = field(default_factory=list)
+    anomaly_insights: list = field(default_factory=list)
+    data_stories: list = field(default_factory=list)
+    threshold_effects: list = field(default_factory=list)
+
+    # === 深度模仿层 ===
+    imitation_report: str = ''
+
+    # === 完整性审计层 ===
+    integrity_report: str = ''
+    artifact_report: str = ''
+
+    # === 引用支撑层 ===
+    citation_bank: Any = None         # CitationSupportBank 实例
 
     # === 输出层 ===
     docx_path: str = None
@@ -153,63 +189,133 @@ def _run_motivation(ctx: PaperContext):
 
 
 def _run_writer_results(ctx: PaperContext):
-    """写 Results 章节"""
+    """写 Results 章节（带深度模仿指导）"""
     from data_driven_pipeline import DataDrivenWriter
     writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
-    ctx.sections['results'] = writer.write_results()
-    ctx.rationale_rows.extend(writer.rationale_rows)
+    # 优先用 Claude 生成 Results
+    claude = _get_claude_writer()
+    if claude and ctx.has('findings'):
+        result = claude.write_results(
+            findings=ctx.findings,
+            figures=ctx.figures if ctx.figures else None,
+            learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
+        )
+        if result:
+            ctx.sections['results'] = result
+            return result
+
+    # 回退：模板
+    tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
+    ctx.sections['results'] = tpl_writer.write_results()
+    ctx.rationale_rows.extend(tpl_writer.rationale_rows)
+    _check_section_quality(ctx, 'results', ctx.sections.get('results', ''))
     return ctx.sections['results']
 
 
 def _run_writer_discussion(ctx: PaperContext):
-    """写 Discussion 章节（带知识库支撑）"""
+    """写 Discussion 章节（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('findings'):
+        # 收集机制知识
+        mechanisms = {}
+        if ctx.has('memory'):
+            for f in ctx.findings:
+                if f.get('type') == 'correlation':
+                    v1, v2 = f.get('variables', ('', ''))
+                    query = f'{v1} {v2}'
+                    mechs = ctx.memory.recall(query, category='mechanisms', top_k=1)
+                    if mechs:
+                        mechanisms[f'{v1}_vs_{v2}'] = mechs[0].get('value', {}).get('mechanism', '')
+
+        # 合并学到的机制（从 pattern_learning 模块）
+        if ctx.learned_mechanisms:
+            for m in ctx.learned_mechanisms[:10]:
+                var1 = m.get('var1', '')
+                var2 = m.get('var2', '')
+                evidence = m.get('evidence', '') or m.get('mechanism', '')
+                if var1 and var2 and evidence:
+                    mechanisms[f'{var1}_vs_{var2}'] = evidence
+
+        result = writer.write_discussion(
+            findings=ctx.findings,
+            mechanisms=mechanisms,
+            language=ctx.language,
+            recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
+            learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
+        )
+        if result:
+            ctx.sections['discussion'] = result
+            return result
+
+    # 回退：使用模板
     from data_driven_pipeline import DataDrivenWriter
-    writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
-    ctx.sections['discussion'] = writer.write_discussion()
-    ctx.rationale_rows.extend(writer.rationale_rows)
+    tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
+    ctx.sections['discussion'] = tpl_writer.write_discussion()
+    ctx.rationale_rows.extend(tpl_writer.rationale_rows)
+    _check_section_quality(ctx, 'discussion', ctx.sections.get('discussion', ''))
     return ctx.sections['discussion']
 
 
 def _run_writer_intro(ctx: PaperContext):
-    """写 Introduction 章节（带知识库支撑）"""
+    """写 Introduction 章节（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('findings'):
+        result = writer.write_introduction(
+            findings=ctx.findings,
+            language=ctx.language,
+            recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
+            learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
+        )
+        if result:
+            ctx.sections['introduction'] = result
+            return result
+
+    # 回退：使用模板
     from paper_writing_agent import IntroductionGenerator
     gen = IntroductionGenerator()
     base_text = gen.generate(language=ctx.language)
-
-    # 如果有知识库，在文献综述部分注入召回的引用
-    if ctx.has('memory') and ctx.has('recalled_references'):
-        # 在 "## 1.2 国内外研究现状" 之后追加文献引用
-        injection = '\n\n### 1.2.3 相关研究文献\n\n'
-        seen_titles = set()
-        for ref in ctx.recalled_references[:5]:
-            title = ref.get('title', '')
-            if title and title not in seen_titles:
-                seen_titles.add(title)
-                year = ref.get('year', '')
-                authors = ref.get('authors', '')
-                if isinstance(authors, list):
-                    authors = ', '.join(authors[:3])
-                injection += f'{authors}（{year}）研究了{title[:50]}。\n\n'
-        if seen_titles:
-            base_text = base_text.replace(
-                '## 1.3 现有研究不足',
-                f'{injection}\n## 1.3 现有研究不足'
-            )
-
     ctx.sections['introduction'] = base_text
+    _check_section_quality(ctx, 'introduction', ctx.sections.get('introduction', ''))
     return ctx.sections['introduction']
 
 
 def _run_writer_methods(ctx: PaperContext):
-    """写 Methods 章节"""
+    """写 Methods 章节（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('df'):
+        # 构建数据信息
+        data_info = {
+            'n_samples': len(ctx.df),
+            'n_variables': len(ctx.df.columns),
+            'variables': list(ctx.df.columns),
+            'groups': list(ctx.df.select_dtypes(include=['object', 'category']).columns),
+        }
+        result = writer.write_methods(data_info=data_info, language=ctx.language)
+        if result:
+            ctx.sections['methods'] = result
+            return result
+
+    # 回退：使用模板
     from paper_writing_agent import MethodsGenerator
     gen = MethodsGenerator()
     ctx.sections['methods'] = gen.generate(language=ctx.language)
+    _check_section_quality(ctx, 'methods', ctx.sections.get('methods', ''))
     return ctx.sections['methods']
 
 
 def _run_writer_abstract(ctx: PaperContext):
-    """写 Abstract（基于所有已有章节）"""
+    """写 Abstract（优先 Claude 基于实际章节生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.sections:
+        result = writer.write_abstract(
+            sections=ctx.sections,
+            language=ctx.language,
+        )
+        if result:
+            ctx.sections['abstract'] = result
+            return result
+
+    # 回退：使用模板
     from paper_writing_agent import AbstractGenerator
     gen = AbstractGenerator(
         ctx.sections.get('introduction', ''),
@@ -222,7 +328,18 @@ def _run_writer_abstract(ctx: PaperContext):
 
 
 def _run_writer_conclusion(ctx: PaperContext):
-    """写 Conclusion — 提炼贡献，不是重复结果"""
+    """写 Conclusion（优先 Claude 生成，回退模板）"""
+    writer = _get_claude_writer()
+    if writer and ctx.has('findings'):
+        result = writer.write_conclusion(
+            findings=ctx.findings,
+            language=ctx.language,
+        )
+        if result:
+            ctx.sections['conclusion'] = result
+            return result
+
+    # 回退：使用模板
     critical = [f for f in ctx.findings if f['importance'] in ['critical', 'high']]
     group_findings = [f for f in critical if f['type'] == 'group_difference']
     corr_findings = [f for f in critical if f['type'] == 'correlation']
@@ -254,8 +371,39 @@ def _run_writer_conclusion(ctx: PaperContext):
     return ctx.sections['conclusion']
 
 
+def _run_polish(ctx: PaperContext):
+    """用文献学到的模式润色各章节文本"""
+    if not ctx.has('sections') or not ctx.learned_patterns:
+        return None
+
+    writer = _get_claude_writer()
+    if not writer:
+        return None
+
+    polished_count = 0
+    for section_name in ['results', 'discussion', 'introduction']:
+        text = ctx.sections.get(section_name, '')
+        if not text or len(text) < 200:
+            continue
+        try:
+            polished = writer.polish_text(
+                text[:3000],  # 限制长度避免超时
+                learned_patterns=ctx.learned_patterns,
+            )
+            if polished and len(polished) > len(text) * 0.5:  # 防止返回垃圾
+                ctx.sections[section_name] = polished
+                polished_count += 1
+                logger.info(f"润色 {section_name}: {len(text)} -> {len(polished)} 字")
+        except Exception as e:
+            logger.debug(f"润色 {section_name} 跳过: {e}")
+
+    if polished_count:
+        logger.info(f"润色完成: {polished_count} 个章节")
+    return polished_count
+
+
 def _run_review(ctx: PaperContext):
-    """审稿检查"""
+    """审稿检查（整合完整性审计 + 制品检查结果）"""
     from academic_review_agent import AcademicReviewAgent
     # 组装全文
     full_paper = '\n\n---\n\n'.join(
@@ -267,6 +415,72 @@ def _run_review(ctx: PaperContext):
         return None
     reviewer = AcademicReviewAgent(paper_type='chinese_journal', language=ctx.language)
     ctx.review_report = reviewer.review(full_paper)
+
+    # 将完整性审计和制品检查结果附加到审稿报告
+    extra_issues = []
+    if ctx.integrity_report:
+        extra_issues.append(f'[完整性审计] {ctx.integrity_report[:500]}')
+    if ctx.artifact_report:
+        extra_issues.append(f'[制品检查] {ctx.artifact_report[:500]}')
+
+    # 中文核心期刊投稿检查
+    if ctx.language == 'zh':
+        try:
+            from cn_core_rules import SubmissionChecklist
+            checklist = SubmissionChecklist()
+            checklist_result = checklist.run_check(full_paper)
+            report_text = checklist.generate_report(checklist_result)
+            extra_issues.append(f'[投稿检查] {report_text[:500]}')
+        except Exception as e:
+            logger.debug(f"cn_core_rules check skipped: {e}")
+
+    # 引用安全检查（防幻觉）
+    try:
+        from citation_guard import CitationGuard
+        guard = CitationGuard()
+        # 检查文中引用是否有幻觉风险
+        import re
+        citation_patterns = re.findall(r'\[(\d+(?:[-,]\d+)*)\]', full_paper)
+        if citation_patterns:
+            extra_issues.append(f'[引用安全] 检测到 {len(citation_patterns)} 处引用，建议核实DOI')
+    except Exception as e:
+        logger.debug(f"citation_guard check skipped: {e}")
+
+    # 文本质量检查（使用 text_utils）
+    try:
+        from text_utils import split_sentences
+        all_sentences = split_sentences(full_paper)
+        long_sentences = [s for s in all_sentences if len(s) > 100]
+        if long_sentences:
+            extra_issues.append(f'[文本质量] 发现 {len(long_sentences)} 个超长句子(>100字)，建议拆分')
+    except Exception as e:
+        logger.debug(f"text_utils check skipped: {e}")
+
+    # 文献质量验证（使用 literature_memory 的引用验证功能）
+    if ctx.has('memory'):
+        try:
+            from literature_memory import LiteratureMemory
+            lit_mem = LiteratureMemory()
+            # 从 recalled_references 中验证引用质量
+            if ctx.has('recalled_references'):
+                verified = 0
+                questionable = 0
+                for ref in ctx.recalled_references[:10]:
+                    title = ref.get('title', '')
+                    if title:
+                        assessment = lit_mem.assess_paper(title)
+                        if assessment and assessment.get('credibility', 0) < 0.5:
+                            questionable += 1
+                        else:
+                            verified += 1
+                if questionable:
+                    extra_issues.append(f'[文献质量] {questionable}/{verified+questionable} 篇引用可信度较低，建议核实')
+        except Exception as e:
+            logger.debug(f"literature_memory check skipped: {e}")
+
+    if extra_issues:
+        ctx.review_report.extra_notes = extra_issues
+
     ctx.review_summary = ctx.review_report.summary()
     logger.info(f"审稿: {ctx.review_summary['total']}个问题")
     return ctx.review_report
@@ -298,6 +512,42 @@ def _run_auto_revision(ctx: PaperContext):
 
     logger.info(f"自动修订: {len(reviser.changes)}类修改")
     return revised
+
+
+def _run_final_check(ctx: PaperContext):
+    """修订后二次审稿：检查修订是否引入新问题"""
+    if not ctx.has('sections'):
+        return None
+
+    from academic_review_agent import AcademicReviewAgent
+    full_paper = '\n\n---\n\n'.join(
+        ctx.sections.get(k, '') for k in
+        ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+        if ctx.has_section(k)
+    )
+    if not full_paper:
+        return None
+
+    reviewer = AcademicReviewAgent(paper_type='chinese_journal', language=ctx.language)
+    final_report = reviewer.review(full_paper)
+    final_summary = final_report.summary()
+
+    # 对比修订前后
+    prev_count = ctx.review_summary.get('total', 0)
+    new_count = final_summary.get('total', 0)
+    improvement = prev_count - new_count
+
+    ctx.review_summary['final_total'] = new_count
+    ctx.review_summary['improvement'] = improvement
+
+    if improvement > 0:
+        logger.info(f"二次审稿: {prev_count} -> {new_count} 个问题 (减少 {improvement} 个)")
+    elif improvement < 0:
+        logger.warning(f"二次审稿: 问题增加 {abs(improvement)} 个，建议人工检查")
+    else:
+        logger.info(f"二次审稿: 问题数不变 ({new_count} 个)")
+
+    return final_report
 
 
 def _run_assemble(ctx: PaperContext):
@@ -343,6 +593,34 @@ def _run_assemble(ctx: PaperContext):
 # 3. 辅助函数
 # ============================================================
 
+def _check_section_quality(ctx: PaperContext, section_name: str, text: str):
+    """检查章节写作质量，输出警告"""
+    if not text:
+        return
+    warnings = []
+    min_lengths = {'results': 800, 'discussion': 1200, 'introduction': 600,
+                   'methods': 400, 'abstract': 200, 'conclusion': 200}
+    min_len = min_lengths.get(section_name, 200)
+    if len(text) < min_len:
+        warnings.append(f'字数不足({len(text)}/{min_len})')
+
+    if section_name in ('results',):
+        has_fig = any(kw in text for kw in ['图', '表', 'Fig', 'Table', 'Figure'])
+        if not has_fig:
+            warnings.append('缺少图表引用')
+        has_stat = any(kw in text for kw in ['r=', 'p<', 'p=', 't=', 'F=', 'χ²', '±'])
+        if not has_stat:
+            warnings.append('缺少统计数值')
+
+    if section_name in ('discussion', 'introduction'):
+        has_cite = any(kw in text for kw in ['[', ']', '等,', 'et al'])
+        if not has_cite:
+            warnings.append('缺少文献引用')
+
+    if warnings:
+        logger.warning(f'[{section_name} 质量检查] {"; ".join(warnings)}')
+
+
 def _split_revised_into_sections(ctx: PaperContext, revised_text: str):
     """将修订后的全文拆分回各章节"""
     import re
@@ -378,7 +656,286 @@ def _match_figures_for_section(ctx: PaperContext, section_key: str) -> list:
 
 
 # ============================================================
-# 4. 模块注册表
+# 4. 注入辅助函数
+# ============================================================
+
+def _build_advanced_injection(ctx: PaperContext) -> str:
+    """将高级分析结果组装为可注入 Discussion 的文本"""
+    parts = []
+    if ctx.data_stories:
+        parts.append('### 4.3.1 数据故事线\n')
+        for story in ctx.data_stories[:3]:
+            if isinstance(story, dict):
+                finding = story.get('finding', '')
+                explanation = story.get('explanation', '')
+                if finding:
+                    parts.append(f'- {finding}')
+                    if explanation:
+                        parts.append(f'  解释: {explanation}\n')
+    if ctx.threshold_effects:
+        parts.append('\n### 4.3.2 阈值效应\n')
+        for eff in ctx.threshold_effects[:3]:
+            if isinstance(eff, dict):
+                var = eff.get('variable', '')
+                threshold = eff.get('threshold', '')
+                effect = eff.get('effect', '')
+                if var:
+                    parts.append(f'- {var} 在 {threshold} 处出现临界效应: {effect}')
+    if ctx.anomaly_insights:
+        parts.append('\n### 4.3.3 异常值洞察\n')
+        for insight in ctx.anomaly_insights[:3]:
+            if isinstance(insight, dict):
+                desc = insight.get('description', '') or insight.get('insight', '')
+                if desc:
+                    parts.append(f'- {desc}')
+    return '\n'.join(parts) if parts else ''
+
+
+def _build_citation_injection(ctx: PaperContext) -> str:
+    """将引用支撑库结果组装为可注入的文本"""
+    if not ctx.citation_bank or not hasattr(ctx.citation_bank, 'bindings'):
+        return ''
+    lines = ['### 引用支撑索引\n']
+    for binding in ctx.citation_bank.bindings[:10]:
+        claim = binding.get('claim', '')
+        refs = binding.get('references', [])
+        if claim and refs:
+            ref_str = ', '.join(str(r) for r in refs[:3])
+            lines.append(f'- 论点: {claim[:80]}  支撑文献: {ref_str}')
+    return '\n'.join(lines) if len(lines) > 1 else ''
+
+
+# ============================================================
+# 5. 文献深度学习模块
+# ============================================================
+
+def _run_paper_reading(ctx: PaperContext):
+    """读论文：优先本地目录，无文献时自动在线搜索"""
+    from paper_reader import PaperReader
+    reader = PaperReader()
+
+    papers_found = []
+
+    # 1. 尝试从本地目录读取
+    if ctx.papers_dir and os.path.isdir(ctx.papers_dir):
+        import glob
+        for ext in ['*.pdf', '*.txt', '*.md']:
+            papers_found.extend(glob.glob(os.path.join(ctx.papers_dir, ext)))
+
+    # 2. 本地无文献时，自动在线搜索
+    if not papers_found:
+        logger.info("本地无文献，尝试自动在线搜索...")
+        try:
+            from auto_paper_finder import AutoPaperFinder
+            finder = AutoPaperFinder()
+            # 从 findings 中提取关键词搜索
+            keywords = []
+            for f in ctx.findings[:5]:
+                vars_ = f.get('variables', ('', ''))
+                if isinstance(vars_, (list, tuple)):
+                    keywords.extend([v for v in vars_ if v])
+            if not keywords:
+                keywords = ['sewage', 'greenhouse gas', 'methane', 'carbon']
+            search_query = ' '.join(keywords[:5])
+            found_papers = finder.search(search_query, max_results=10)
+            if found_papers:
+                logger.info(f"在线搜索到 {len(found_papers)} 篇论文")
+                for p in found_papers[:10]:
+                    ctx.papers_read.append({
+                        'title': p.get('title', ''),
+                        'authors': p.get('authors', []),
+                        'abstract': p.get('abstract', ''),
+                        'source': 'online_search',
+                    })
+                return ctx.papers_read
+        except Exception as e:
+            logger.warning(f"在线搜索失败: {e}")
+        logger.info("未找到任何文献")
+        return None
+
+    logger.info(f"发现 {len(papers_found)} 篇文献，开始阅读...")
+    for paper_path in papers_found[:20]:  # 最多读20篇
+        try:
+            content = reader.read(paper_path, fetch_metadata=False)
+            if content and content.metadata:
+                ctx.papers_read.append({
+                    'path': paper_path,
+                    'title': content.metadata.title,
+                    'authors': content.metadata.authors,
+                    'abstract': content.metadata.abstract,
+                    'sections': len(content.sections),
+                    'references': len(content.references),
+                })
+        except Exception as e:
+            logger.warning(f"读取失败 {paper_path}: {e}")
+
+    logger.info(f"成功读取 {len(ctx.papers_read)} 篇文献")
+    return ctx.papers_read
+
+
+def _run_pattern_learning(ctx: PaperContext):
+    """从已读论文中学习写作模式，持久化到知识库"""
+    if not ctx.papers_read:
+        logger.info("无已读论文，跳过模式学习")
+        return None
+
+    from pattern_learner import SentencePatternLearner, DiscussionLearner, MechanismLearner
+    from paper_reader import PaperReader
+
+    reader = PaperReader()
+    sentence_learner = SentencePatternLearner()
+    discussion_learner = DiscussionLearner()
+    mechanism_learner = MechanismLearner()
+
+    all_patterns = []
+    all_structures = []
+
+    for paper_info in ctx.papers_read[:10]:
+        path = paper_info.get('path', '')
+        if not path or not os.path.exists(path):
+            continue
+        try:
+            content = reader.read(path, fetch_metadata=False)
+            if not content:
+                continue
+
+            for sec in content.sections:
+                if not sec.text:
+                    continue
+                # 学习句式模式
+                patterns = sentence_learner.learn_from_text(sec.text, sec.section_type or 'unknown')
+                all_patterns.extend(patterns)
+
+                # 学习讨论结构
+                if sec.section_type == 'discussion':
+                    structure = discussion_learner.learn_structure(sec.text)
+                    all_structures.append(structure)
+
+            # 学习机制知识
+            full_text = '\n\n'.join(sec.text for sec in content.sections if sec.text)
+            mechanisms = mechanism_learner.learn_from_text(full_text, source=paper_info.get('title', ''))
+
+        except Exception as e:
+            logger.warning(f"学习失败 {path}: {e}")
+
+    # 持久化：将学到的机制存入 KnowledgeStore
+    if ctx.has('memory') and mechanism_learner.mechanisms:
+        ks_format = mechanism_learner.to_knowledge_store_format()
+        for key, entry in ks_format.items():
+            ctx.memory.remember(key, entry, category='mechanisms')
+        logger.info(f"已将 {len(ks_format)} 个学到的机制存入知识库")
+
+    # 存储到 ctx（完整数据，不只是计数）
+    ctx.learned_patterns = {
+        'sentence_patterns': sentence_learner.get_patterns() if hasattr(sentence_learner, 'get_patterns') else {},
+        'discussion_structures': all_structures,
+        'mechanisms': mechanism_learner.get_mechanisms() if hasattr(mechanism_learner, 'get_mechanisms') else [],
+        'patterns_count': len(all_patterns),
+        'mechanisms_count': len(mechanism_learner.mechanisms) if hasattr(mechanism_learner, 'mechanisms') else 0,
+        'papers_learned': len(ctx.papers_read),
+    }
+
+    # 同时存储到 learned_mechanisms 供写作模块使用
+    ctx.learned_mechanisms = mechanism_learner.get_mechanisms() if hasattr(mechanism_learner, 'get_mechanisms') else []
+
+    # 触发 auto_learn：用学到的变量对自动搜索更多文献和机制
+    try:
+        from self_evolving_engine import EvolutionEngine
+        engine = EvolutionEngine(base_dir=ctx.output_dir)
+        engine.initialize()
+        # 从 findings 中提取变量对，自动学习
+        var_pairs = []
+        for f in ctx.findings:
+            if f.get('type') == 'correlation' and f.get('importance') in ['critical', 'high']:
+                v1, v2 = f.get('variables', ('', ''))
+                if v1 and v2:
+                    var_pairs.append((v1, v2))
+        if var_pairs:
+            learn_report = engine.auto_learn(var_pairs[:5], ctx.findings)
+            logger.info(f"自动学习: {learn_report.get('total_learned', 0)} 条新知识")
+    except Exception as e:
+        logger.debug(f"auto_learn skipped: {e}")
+
+    logger.info(f"模式学习: {ctx.learned_patterns['patterns_count']} 个句式, "
+               f"{ctx.learned_patterns['mechanisms_count']} 个机制")
+    return ctx.learned_patterns
+
+
+# ============================================================
+# 6. 新增模块函数 — 接入原孤立模块
+# ============================================================
+
+def _run_advanced_analysis(ctx: PaperContext):
+    """高级多维分析（交叉分析、异常深挖、数据故事线、阈值检测）"""
+    if not ctx.has('df'):
+        return None
+    from advanced_analysis import AdvancedAnalyzer
+    analyzer = AdvancedAnalyzer(ctx.df)
+    results = analyzer.analyze_all()
+    ctx.advanced_findings = results.get('cross_analyses', [])
+    ctx.cross_analyses = results.get('cross_analyses', [])
+    ctx.anomaly_insights = results.get('anomaly_insights', [])
+    ctx.data_stories = results.get('data_stories', [])
+    ctx.threshold_effects = results.get('threshold_effects', [])
+    total = sum(len(v) for v in results.values() if isinstance(v, list))
+    logger.info(f"高级分析: {total}项发现")
+    return results
+
+
+def _run_deep_imitation(ctx: PaperContext):
+    """深度模仿分析（3表法：范例动作/草稿动作/目标蓝图）"""
+    if not ctx.has('sections'):
+        return None
+    from deep_imitation import DeepImitationProtocol
+    protocol = DeepImitationProtocol(output_dir=ctx.output_dir)
+    # 用已有章节作为草稿
+    draft_text = '\n\n'.join(ctx.sections.values())
+    if not draft_text.strip():
+        return None
+    result = protocol.run(draft_text)
+    ctx.imitation_report = protocol.format_report(result)
+    logger.info("深度模仿分析完成")
+    return result
+
+
+def _run_integrity_audit(ctx: PaperContext):
+    """完整性审计（4维度：制品链、推理深度、证据链、模式扫描）"""
+    from integrity_audit import IntegrityAuditor
+    auditor = IntegrityAuditor(output_dir=ctx.output_dir)
+    findings = auditor.run_audit(ctx.sections)
+    ctx.integrity_report = auditor.format_report(findings)
+    logger.info(f"完整性审计: {len(findings)}项发现")
+    return findings
+
+
+def _run_artifact_check(ctx: PaperContext):
+    """制品完整性检查（文件存在性、内容质量、交叉引用）"""
+    from artifact_check import ArtifactChecker
+    checker = ArtifactChecker(output_dir=ctx.output_dir)
+    report = checker.check_all()
+    ctx.artifact_report = checker.format_report(report)
+    logger.info(f"制品检查: {report.get('total_issues', 0)}个问题")
+    return report
+
+
+def _run_citation_bank(ctx: PaperContext):
+    """构建引用支撑库（将论点绑定到引用）"""
+    if not ctx.has('sections'):
+        return None
+    from citation_support_bank import CitationSupportBank
+    bank = CitationSupportBank(output_dir=ctx.output_dir)
+    full_text = '\n\n'.join(ctx.sections.values())
+    claims = bank.extract_claims_from_text(full_text)
+    if claims:
+        bank.bind_citations(claims)
+        bank.save()
+        ctx.citation_bank = bank
+        logger.info(f"引用支撑库: {len(claims)}个论点")
+    return bank
+
+
+# ============================================================
+# 5. 模块注册表
 # ============================================================
 
 MODULE_REGISTRY = {
@@ -387,6 +944,18 @@ MODULE_REGISTRY = {
         'provides': ['memory'],
         'run': _run_memory_init,
         'description': '初始化知识记忆',
+    },
+    'paper_reading': {
+        'needs': [],
+        'provides': ['papers_read'],
+        'run': _run_paper_reading,
+        'description': '文献深度阅读（读论文→存入知识库）',
+    },
+    'pattern_learning': {
+        'needs': ['papers_read'],
+        'provides': ['learned_patterns', 'learned_mechanisms'],
+        'run': _run_pattern_learning,
+        'description': '写作模式学习（从论文中提取句式/讨论结构/机制）',
     },
     'load_data': {
         'needs': ['data_path'],
@@ -448,6 +1017,12 @@ MODULE_REGISTRY = {
         'run': _run_writer_conclusion,
         'description': '写 Conclusion',
     },
+    'polish': {
+        'needs': ['sections', 'learned_patterns'],
+        'provides': ['sections(polished)'],
+        'run': _run_polish,
+        'description': '用文献学到的模式润色各章节',
+    },
     'review': {
         'needs': ['sections'],
         'provides': ['review_report'],
@@ -459,6 +1034,42 @@ MODULE_REGISTRY = {
         'provides': ['sections(revised)'],
         'run': _run_auto_revision,
         'description': '自动修订',
+    },
+    'final_check': {
+        'needs': ['sections(revised)'],
+        'provides': ['review_summary'],
+        'run': _run_final_check,
+        'description': '修订后二次审稿（检查修订是否引入新问题）',
+    },
+    'advanced_analysis': {
+        'needs': ['df'],
+        'provides': ['advanced_findings', 'cross_analyses', 'anomaly_insights', 'data_stories', 'threshold_effects'],
+        'run': _run_advanced_analysis,
+        'description': '高级多维分析（交叉分析/异常深挖/数据故事线/阈值检测）',
+    },
+    'deep_imitation': {
+        'needs': ['sections'],
+        'provides': ['imitation_report'],
+        'run': _run_deep_imitation,
+        'description': '深度模仿分析（3表法）',
+    },
+    'integrity_audit': {
+        'needs': ['sections'],
+        'provides': ['integrity_report'],
+        'run': _run_integrity_audit,
+        'description': '完整性审计（4维度）',
+    },
+    'artifact_check': {
+        'needs': ['sections'],
+        'provides': ['artifact_report'],
+        'run': _run_artifact_check,
+        'description': '制品完整性检查',
+    },
+    'citation_bank': {
+        'needs': ['sections'],
+        'provides': ['citation_bank'],
+        'run': _run_citation_bank,
+        'description': '构建引用支撑库',
     },
     'assemble': {
         'needs': ['sections'],
@@ -545,7 +1156,18 @@ class PaperOrchestrator:
                     'step': step_name, 'status': 'done'
                 })
                 if result is not None:
-                    print(f"  完成")
+                    # 显示产出摘要
+                    if isinstance(result, str) and len(result) > 50:
+                        print(f"  完成 ({len(result)} 字)")
+                    elif isinstance(result, list):
+                        print(f"  完成 ({len(result)} 项)")
+                    elif isinstance(result, dict):
+                        print(f"  完成 ({len(result)} 个条目)")
+                    else:
+                        print(f"  完成")
+
+                # 每步保存中间结果
+                self._save_checkpoint(ctx, step_name)
             except Exception as e:
                 logger.error(f"模块 {step_name} 失败: {e}")
                 self.execution_log.append({
@@ -564,21 +1186,22 @@ class PaperOrchestrator:
         """根据上下文状态自动推断执行步骤"""
         steps = []
 
-        # 基础步骤
+        # 第1阶段：知识初始化 + 文献学习
         steps.append('memory_init')
+        steps.append('paper_reading')
+        steps.append('pattern_learning')
 
+        # 第2阶段：数据处理
         if ctx.has('data_path'):
             steps.append('load_data')
-
         steps.append('explorer')
+        steps.append('advanced_analysis')
 
-        # 知识召回（有 memory + findings 后）
+        # 第3阶段：知识支撑
         steps.append('literature_recall')
-
-        # 动机（可选）
         steps.append('motivation')
 
-        # 写作步骤
+        # 第4阶段：AI写作
         steps.append('writer_results')
         steps.append('writer_discussion')
         steps.append('writer_intro')
@@ -586,14 +1209,41 @@ class PaperOrchestrator:
         steps.append('writer_conclusion')
         steps.append('writer_abstract')
 
-        # 审稿 → 修订 → 复审
+        # 第5阶段：润色 + 审稿 + 修订
+        steps.append('polish')
         steps.append('review')
         steps.append('auto_revision')
+        steps.append('final_check')
 
-        # 排版
+        # 第6阶段：补充检查
+        steps.append('deep_imitation')
+        steps.append('integrity_audit')
+        steps.append('artifact_check')
+        steps.append('citation_bank')
+
+        # 第7阶段：排版
         steps.append('assemble')
 
         return steps
+
+    def _save_checkpoint(self, ctx: PaperContext, step_name: str):
+        """保存中间结果检查点"""
+        import json
+        checkpoint_dir = os.path.join(ctx.output_dir, 'checkpoints')
+        os.makedirs(checkpoint_dir, exist_ok=True)
+        checkpoint_file = os.path.join(checkpoint_dir, f'{step_name}.json')
+        try:
+            data = {
+                'step': step_name,
+                'sections': {k: v[:200] + '...' if isinstance(v, str) and len(v) > 200 else v
+                            for k, v in ctx.sections.items()},
+                'findings_count': len(ctx.findings),
+                'papers_read_count': len(ctx.papers_read),
+            }
+            with open(checkpoint_file, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            logger.debug(f"Checkpoint save failed: {e}")
 
     def _check_needs(self, ctx: PaperContext, needs: list) -> list:
         """检查前置条件"""

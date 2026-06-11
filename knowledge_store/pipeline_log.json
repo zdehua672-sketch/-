@@ -1,59 +1,82 @@
 {
   "meta": {
-    "count": 5,
-    "updated": "2026-05-30T02:28:59.175969+00:00"
+    "count": 8,
+    "updated": "2026-06-10T09:51:47.032168+00:00"
   },
   "log": [
     {
-      "timestamp": "2026-05-30T02:28:57.510188+00:00",
+      "timestamp": "2026-06-10T09:51:35.897121+00:00",
       "step": "step1_read",
-      "detail": "读取: pipeline_test",
+      "detail": "读取: 冬春数据",
       "data": {
-        "paper_id": "pipeline_test",
-        "sections": 6,
-        "words": 1129,
+        "paper_id": "冬春数据",
+        "sections": 0,
+        "words": 18807,
         "evidence_level": 6,
         "credibility": 0.32
       }
     },
     {
-      "timestamp": "2026-05-30T02:28:57.513180+00:00",
+      "timestamp": "2026-06-10T09:51:35.897121+00:00",
       "step": "step2_matrix",
       "detail": "矩阵构建完成",
       "data": {
-        "papers": 1,
+        "papers": 24,
         "themes": 0
       }
     },
     {
-      "timestamp": "2026-05-30T02:28:57.520160+00:00",
-      "step": "step5_review",
-      "detail": "发现2个问题",
+      "timestamp": "2026-06-10T09:51:35.912743+00:00",
+      "step": "step3_5_motivation",
+      "detail": "生成3个动机选项",
       "data": {
-        "total": 2,
-        "by_severity": {
-          "MAJOR": 2
-        },
-        "by_category": {
-          "SCI格式": 1,
-          "引文规范": 1
-        }
+        "count": 3,
+        "language": "zh"
       }
     },
     {
-      "timestamp": "2026-05-30T02:28:57.520160+00:00",
-      "step": "step6_checklist",
-      "detail": "1不通过, 6警告",
+      "timestamp": "2026-06-10T09:51:35.912743+00:00",
+      "step": "step3_6_confirm",
+      "detail": "动机确认+写作蓝图生成",
       "data": {
-        "total": 37,
-        "fail": 1,
-        "warn": 6
+        "source": "selected_option",
+        "motivation": "系统表征校园污水管网固-液-气多相态碳污染物的赋存特征",
+        "sections": 5
       }
     },
     {
-      "timestamp": "2026-05-30T02:28:59.175969+00:00",
-      "step": "step8_evolve",
-      "detail": "进化周期完成",
+      "timestamp": "2026-06-10T09:51:35.928334+00:00",
+      "step": "step3_8_audit",
+      "detail": "完整性审计: 4发现, 通过",
+      "data": {
+        "total_findings": 4,
+        "blocked": false
+      }
+    },
+    {
+      "timestamp": "2026-06-10T09:51:35.943956+00:00",
+      "step": "step3_9_citation_bank",
+      "detail": "引用支持库: 0候选",
+      "data": {
+        "candidates": 0,
+        "claims": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-10T09:51:35.943956+00:00",
+      "step": "step3_95_check",
+      "detail": "产物检查: 7/12通过",
+      "data": {
+        "total": 12,
+        "ok": 7,
+        "missing": 1,
+        "thin": 4
+      }
+    },
+    {
+      "timestamp": "2026-06-10T09:51:46.886680+00:00",
+      "step": "step9_auto_assemble",
+      "detail": "自动组装完成: C:\\Users\\Administrator\\python-sdk\\paper_output\\analysis_report.docx",
       "data": {}
     }
   ]

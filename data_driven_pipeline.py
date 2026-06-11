@@ -51,6 +51,8 @@ class DataExplorer:
         self._explore_group_differences()
         self._explore_anomalies()
         self._explore_extremes()
+        self._explore_effect_size()
+        self._explore_normality()
 
         # 按重要性排序
         self.findings.sort(key=lambda x: {'critical': 0, 'high': 1, 'medium': 2, 'low': 3}.get(x['importance'], 4))
@@ -299,6 +301,60 @@ class DataExplorer:
                     'detail': f'{col}最大值{data.max():.2f}出现在{max_point}({max_season})，是中位数{median:.2f}的{data.max()/median:.1f}倍',
                     'data': {'max': data.max(), 'median': median, 'point': max_point, 'season': max_season},
                 })
+
+    def _explore_effect_size(self):
+        """计算效应量（Cohen's d）— 两组间差异的实际意义"""
+        print("\n[探索7] 效应量分析...")
+        cat_cols = [c for c in self.category_cols if c in self.df.columns]
+        for cat in cat_cols:
+            groups = [g for _, g in self.df.groupby(cat) if len(g) >= 3]
+            if len(groups) != 2:
+                continue
+            g1, g2 = groups[0], groups[1]
+            for col in self.numeric_cols:
+                d1 = g1[col].dropna()
+                d2 = g2[col].dropna()
+                if len(d1) < 3 or len(d2) < 3:
+                    continue
+                n1, n2 = len(d1), len(d2)
+                pooled_std = np.sqrt(((n1-1)*d1.std()**2 + (n2-1)*d2.std()**2) / (n1+n2-2))
+                if pooled_std == 0:
+                    continue
+                cohens_d = (d1.mean() - d2.mean()) / pooled_std
+                if abs(cohens_d) >= 0.5:
+                    magnitude = 'large' if abs(cohens_d) >= 0.8 else 'medium'
+                    self.findings.append({
+                        'type': 'effect_size',
+                        'variable': col,
+                        'group_var': cat,
+                        'importance': 'high' if abs(cohens_d) >= 0.8 else 'medium',
+                        'detail': f'{col}在{cat}两组间效应量Cohen\'s d={cohens_d:.3f}({magnitude})，'
+                                  f'均值差{abs(d1.mean()-d2.mean()):.2f}',
+                        'data': {'cohens_d': round(cohens_d, 3), 'magnitude': magnitude,
+                                 'g1_mean': round(d1.mean(), 3), 'g2_mean': round(d2.mean(), 3),
+                                 'g1_name': g1[cat].iloc[0], 'g2_name': g2[cat].iloc[0]},
+                    })
+
+    def _explore_normality(self):
+        """正态性检验（Shapiro-Wilk）— 判断数据是否符合正态分布"""
+        print("\n[探索8] 正态性检验...")
+        for col in self.numeric_cols:
+            data = self.df[col].dropna()
+            if len(data) < 3 or len(data) > 5000:
+                continue
+            try:
+                stat, p = stats.shapiro(data)
+                if p < 0.05:
+                    self.findings.append({
+                        'type': 'normality',
+                        'variable': col,
+                        'importance': 'low',
+                        'detail': f'{col}不服从正态分布(Shapiro-Wilk W={stat:.4f}, p={p:.4f})，'
+                                  f'建议使用非参数检验',
+                        'data': {'w_stat': round(stat, 4), 'p_value': round(p, 4), 'is_normal': False},
+                    })
+            except Exception:
+                pass
 
 
 # ============================================================

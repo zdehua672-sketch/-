@@ -1,8 +1,8 @@
 {
   "meta": {
     "count": 17,
-    "updated": "2026-06-04T09:23:51.804512+00:00",
-    "version": 18
+    "updated": "2026-06-10T08:22:19.879014+00:00",
+    "version": 48
   },
   "entries": {
     "intro_opening_zh": {
@@ -365,6 +365,396 @@
       "source": "auto_learn",
       "updated": "2026-06-04T09:23:51.804512+00:00",
       "version": 1
+    },
+    "learned_abstract_8265": {
+      "value": {
+        "pattern": "Constantly increased sewage sludge (SS) and fruit and vegetable wastes (FVW) are becoming the major organ[VAR]solid wastes in human society.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.849556+00:00",
+      "version": 1
+    },
+    "learned_abstract_0698": {
+      "value": {
+        "pattern": "Thus, anaerob[VAR]digestion is employed as a low carbon energy strategy to reduce their environmental pollution risk.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.850554+00:00",
+      "version": 1
+    },
+    "learned_abstract_9092": {
+      "value": {
+        "pattern": "Anaerob[VAR]co-digestion system was developed based on the carbon to nitrogen ratio strategy.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.851552+00:00",
+      "version": 1
+    },
+    "learned_result_9996": {
+      "value": {
+        "pattern": "Results showed that the daily biogas production was higher in co-digester, and the volumetr[VAR]biogas production rate (VBPR) signif[VAR]antly enhanced for [NUM]∼[NUM] folds, and the highest VBPR was [NUM] L/L • day with optimal OLR of [NUM] Kg L-[NUM] d-[NUM]",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.852549+00:00",
+      "version": 1
+    },
+    "learned_discussion_4786": {
+      "value": {
+        "pattern": "Analyt[VAR]results ind[VAR]ated that co-digestion could improve the biodegradable of feeds[VAR]ks, wh[VAR]h transforming to more VFAs and biogas.",
+        "function": "discussion",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.854329+00:00",
+      "version": 1
+    },
+    "learned_abstract_5232": {
+      "value": {
+        "pattern": "Compared with mono SS digester, mixed substrates relieved ammonia nitrogen inhibition and enhanced the hydrolyt[VAR]acidif[VAR]ation and methanogenesis.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.855354+00:00",
+      "version": 1
+    },
+    "learned_abstract_2630": {
+      "value": {
+        "pattern": "Meanwhile, the excessive humif[VAR]ation of organ[VAR]s was suppressed.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.856352+00:00",
+      "version": 1
+    },
+    "learned_abstract_9825": {
+      "value": {
+        "pattern": "This study supported the concepts of improving carbon recovery from SS and FVW.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.857349+00:00",
+      "version": 1
+    },
+    "learned_abstract_2477": {
+      "value": {
+        "pattern": "Climate change and cadmium (Cd) contamination pose severe threats to r[VAR]e production and food security.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.858346+00:00",
+      "version": 1
+    },
+    "learned_abstract_8075": {
+      "value": {
+        "pattern": "Biochar (BC) has emerged as a promising soil amendment for mitigating these challenges.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.859346+00:00",
+      "version": 1
+    },
+    "learned_abstract_0691": {
+      "value": {
+        "pattern": "To investigate the BC effects on paddy soil upon GHG emissions, Cd bioavailability, and its accumulation, a meta-analysis of published data from [NUM] to [NUM] was performed.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.860341+00:00",
+      "version": 1
+    },
+    "learned_abstract_3132": {
+      "value": {
+        "pattern": "Data Manager [NUM] and GetData plot Digitizer software were used to obtain and process the data for selected parameters.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.862307+00:00",
+      "version": 1
+    },
+    "learned_method_7107": {
+      "value": {
+        "pattern": "Our results showed a signif[VAR]ant increase of [VALUE_UNIT] in soil [VAR]with sewage sludge BC appl[VAR]ation, while [VALUE_UNIT] increase in soil organ[VAR]carbon (SOC) using bamboo chips BC.",
+        "function": "method",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_abstract_7386": {
+      "value": {
+        "pattern": "There was a signif[VAR]ant reduction in soil bulk density ([VALUE_UNIT]), but no signif[VAR]ant effects were observed for soil porosity, except for wheat straw BC wh[VAR]h reduced the soil porosity by [VALUE_UNIT].",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_result_8832": {
+      "value": {
+        "pattern": "Sewage sludge and bamboo chips BC signif[VAR]antly reduced carbon dioxide (CO[NUM]) by [NUM]-[VALUE_UNIT] while mun[VAR]ipal biowaste reduced methane (CH[NUM]) emissions by [VALUE_UNIT].",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_result_4786": {
+      "value": {
+        "pattern": "In the case of heavy metals, sunflower seedshells-derived materials and r[VAR]e husk BC signif[VAR]antly reduced the bioavailable Cd in paddy soils by [VALUE_UNIT] and [VALUE_UNIT], respectively.",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_result_3250": {
+      "value": {
+        "pattern": "Cd uptake by r[VAR]e roots was lowered considerably by the addition of ki[VAR]hen waste ([VALUE_UNIT]), peanut hulls ([VALUE_UNIT]), and corn cob ([VALUE_UNIT]) based BC.",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_abstract_8385": {
+      "value": {
+        "pattern": "Similarly, cotton st[VAR]ks, ki[VAR]hen waste, peanut hulls, and r[VAR]e husk BC restr[VAR]ted Cd translocation from r[VAR]e roots to shoots by [VALUE_UNIT], [VALUE_UNIT], [VALUE_UNIT], and [VALUE_UNIT], respectively, while sawdust and r[VAR]e husk-based BC were effective for reducing Cd accumulation in r[VAR]e grains by [VALUE_UNIT] and [VALUE_UNIT].",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_result_2120": {
+      "value": {
+        "pattern": "Regarding r[VAR]e yield, cotton st[VAR]ks-based BC signif[VAR]antly increased the yield by [VALUE_UNIT] in Cd-contaminated paddy soil.",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_result_7683": {
+      "value": {
+        "pattern": "The meta-analysis demonstrated that BC is an effective and multi-pronged strategy for sustainable and resilient r[VAR]e cultivation by lowering greenhouse gas emissions and Cd accumulation while improving yields under the increasing threat of climate change.",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_abstract_3130": {
+      "value": {
+        "pattern": "Direct catalyt[VAR]decomposition of methane (CDM) has been studied as a possible emission-free hydrogen production route for over [NUM] years.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_background_7137": {
+      "value": {
+        "pattern": "However, the high cost of catalyst regeneration limits its pract[VAR]al appl[VAR]ations.",
+        "function": "background",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_method_3076": {
+      "value": {
+        "pattern": "Here, we demonstrate that the solid by-product from CDM using Fe ore catalysts comprising carbon nano onions encapsulated with magnet[VAR]Fe cores (Fe@C) can serve as eff[VAR]ient and recyclable Fenton catalysts for pollutant degradation.",
+        "function": "method",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.863366+00:00",
+      "version": 1
+    },
+    "learned_abstract_2950": {
+      "value": {
+        "pattern": "Fe@C/H[NUM]O[NUM] has better performance than FeSO[NUM]/H[NUM]O[NUM] at similar Fe concentrations and can be used to decompose various pollutants.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.879014+00:00",
+      "version": 1
+    },
+    "learned_abstract_5670": {
+      "value": {
+        "pattern": "Mechanist[VAR]studies reveal that gra[VAR]it[VAR]carbon layers and encapsulated Fe[NUM] contribute to their high catalyt[VAR]activity.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.879014+00:00",
+      "version": 1
+    },
+    "learned_abstract_8760": {
+      "value": {
+        "pattern": "Further, Fe@C can be easily recovered from an aqueous solution and reused due to the encapsulated magnet[VAR]Fe part[VAR]les.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.879014+00:00",
+      "version": 1
+    },
+    "learned_result_2706": {
+      "value": {
+        "pattern": "Over three reused cycles, Fe@C/H[NUM]O[NUM] only yields [NUM]/[NUM] of Fe sludges compared to FeSO[NUM]/H[NUM]O[NUM], signif[VAR]antly reducing Fe sludge treatment costs.",
+        "function": "result",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.879014+00:00",
+      "version": 1
+    },
+    "learned_abstract_5948": {
+      "value": {
+        "pattern": "Overall, Fe@C demonstrates excellent appl[VAR]ation potentials in water and wastewater treatment, making H[NUM] production via CDM econom[VAR]ally more viable.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.879014+00:00",
+      "version": 1
+    },
+    "learned_abstract_2702": {
+      "value": {
+        "pattern": "The art[VAR]le considers the issues of non-repeatability of exhaust emission and fuel consumption test results for road veh[VAR]les tested on a chassis dynamometer.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.879014+00:00",
+      "version": 1
+    },
+    "learned_abstract_9838": {
+      "value": {
+        "pattern": "Empir[VAR]al results of passenger car tests on a chassis dynamometer in the WL[VAR] test were used.",
+        "function": "abstract",
+        "section_type": "abstract",
+        "count": 1,
+        "source": "auto_learn:sewage methane emission carbon"
+      },
+      "confidence": 0.7,
+      "source": "auto_learn",
+      "updated": "2026-06-10T08:22:19.879014+00:00",
+      "version": 1
     }
   },
   "changelog": [
@@ -511,6 +901,246 @@
       "new": "{'pattern': 'The study reveals that the novel W[NUM] strain can eff[VAR]iently remove total nitrogen from high-salinity wastewater and has signif[VAR]ant potential for biolog[VAR]al treatment of such ",
       "source": "auto_learn",
       "timestamp": "2026-06-04T09:23:51.804512+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8265",
+      "old": null,
+      "new": "{'pattern': 'Constantly increased sewage sludge (SS) and fruit and vegetable wastes (FVW) are becoming the major organ[VAR]solid wastes in human society.', 'function': 'abstract', 'section_type': 'abs",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.849556+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_0698",
+      "old": null,
+      "new": "{'pattern': 'Thus, anaerob[VAR]digestion is employed as a low carbon energy strategy to reduce their environmental pollution risk.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'so",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.850554+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_9092",
+      "old": null,
+      "new": "{'pattern': 'Anaerob[VAR]co-digestion system was developed based on the carbon to nitrogen ratio strategy.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'auto_learn:sewag",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.851552+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_9996",
+      "old": null,
+      "new": "{'pattern': 'Results showed that the daily biogas production was higher in co-digester, and the volumetr[VAR]biogas production rate (VBPR) signif[VAR]antly enhanced for [NUM]∼[NUM] folds, and the high",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.852549+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_discussion_4786",
+      "old": null,
+      "new": "{'pattern': 'Analyt[VAR]results ind[VAR]ated that co-digestion could improve the biodegradable of feeds[VAR]ks, wh[VAR]h transforming to more VFAs and biogas.', 'function': 'discussion', 'section_type",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.854329+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_5232",
+      "old": null,
+      "new": "{'pattern': 'Compared with mono SS digester, mixed substrates relieved ammonia nitrogen inhibition and enhanced the hydrolyt[VAR]acidif[VAR]ation and methanogenesis.', 'function': 'abstract', 'section",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.855354+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_2630",
+      "old": null,
+      "new": "{'pattern': 'Meanwhile, the excessive humif[VAR]ation of organ[VAR]s was suppressed.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'auto_learn:sewage methane emission car",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.856352+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_9825",
+      "old": null,
+      "new": "{'pattern': 'This study supported the concepts of improving carbon recovery from SS and FVW.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'auto_learn:sewage methane emis",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.857349+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_2477",
+      "old": null,
+      "new": "{'pattern': 'Climate change and cadmium (Cd) contamination pose severe threats to r[VAR]e production and food security.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'aut",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.858346+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8075",
+      "old": null,
+      "new": "{'pattern': 'Biochar (BC) has emerged as a promising soil amendment for mitigating these challenges.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'auto_learn:sewage meth",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.859346+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_0691",
+      "old": null,
+      "new": "{'pattern': 'To investigate the BC effects on paddy soil upon GHG emissions, Cd bioavailability, and its accumulation, a meta-analysis of published data from [NUM] to [NUM] was performed.', 'function'",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.860341+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_3132",
+      "old": null,
+      "new": "{'pattern': 'Data Manager [NUM] and GetData plot Digitizer software were used to obtain and process the data for selected parameters.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, ",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.862307+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_method_7107",
+      "old": null,
+      "new": "{'pattern': 'Our results showed a signif[VAR]ant increase of [VALUE_UNIT] in soil [VAR]with sewage sludge BC appl[VAR]ation, while [VALUE_UNIT] increase in soil organ[VAR]carbon (SOC) using bamboo chi",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_7386",
+      "old": null,
+      "new": "{'pattern': 'There was a signif[VAR]ant reduction in soil bulk density ([VALUE_UNIT]), but no signif[VAR]ant effects were observed for soil porosity, except for wheat straw BC wh[VAR]h reduced the soi",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_8832",
+      "old": null,
+      "new": "{'pattern': 'Sewage sludge and bamboo chips BC signif[VAR]antly reduced carbon dioxide (CO[NUM]) by [NUM]-[VALUE_UNIT] while mun[VAR]ipal biowaste reduced methane (CH[NUM]) emissions by [VALUE_UNIT].'",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_4786",
+      "old": null,
+      "new": "{'pattern': 'In the case of heavy metals, sunflower seedshells-derived materials and r[VAR]e husk BC signif[VAR]antly reduced the bioavailable Cd in paddy soils by [VALUE_UNIT] and [VALUE_UNIT], respe",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_3250",
+      "old": null,
+      "new": "{'pattern': 'Cd uptake by r[VAR]e roots was lowered considerably by the addition of ki[VAR]hen waste ([VALUE_UNIT]), peanut hulls ([VALUE_UNIT]), and corn cob ([VALUE_UNIT]) based BC.', 'function': 'r",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8385",
+      "old": null,
+      "new": "{'pattern': 'Similarly, cotton st[VAR]ks, ki[VAR]hen waste, peanut hulls, and r[VAR]e husk BC restr[VAR]ted Cd translocation from r[VAR]e roots to shoots by [VALUE_UNIT], [VALUE_UNIT], [VALUE_UNIT], a",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_2120",
+      "old": null,
+      "new": "{'pattern': 'Regarding r[VAR]e yield, cotton st[VAR]ks-based BC signif[VAR]antly increased the yield by [VALUE_UNIT] in Cd-contaminated paddy soil.', 'function': 'result', 'section_type': 'abstract', ",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_7683",
+      "old": null,
+      "new": "{'pattern': 'The meta-analysis demonstrated that BC is an effective and multi-pronged strategy for sustainable and resilient r[VAR]e cultivation by lowering greenhouse gas emissions and Cd accumulatio",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_3130",
+      "old": null,
+      "new": "{'pattern': 'Direct catalyt[VAR]decomposition of methane (CDM) has been studied as a possible emission-free hydrogen production route for over [NUM] years.', 'function': 'abstract', 'section_type': 'a",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_background_7137",
+      "old": null,
+      "new": "{'pattern': 'However, the high cost of catalyst regeneration limits its pract[VAR]al appl[VAR]ations.', 'function': 'background', 'section_type': 'abstract', 'count': 1, 'source': 'auto_learn:sewage m",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_method_3076",
+      "old": null,
+      "new": "{'pattern': 'Here, we demonstrate that the solid by-product from CDM using Fe ore catalysts comprising carbon nano onions encapsulated with magnet[VAR]Fe cores (Fe@C) can serve as eff[VAR]ient and rec",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.863366+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_2950",
+      "old": null,
+      "new": "{'pattern': 'Fe@C/H[NUM]O[NUM] has better performance than FeSO[NUM]/H[NUM]O[NUM] at similar Fe concentrations and can be used to decompose various pollutants.', 'function': 'abstract', 'section_type'",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.879014+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_5670",
+      "old": null,
+      "new": "{'pattern': 'Mechanist[VAR]studies reveal that gra[VAR]it[VAR]carbon layers and encapsulated Fe[NUM] contribute to their high catalyt[VAR]activity.', 'function': 'abstract', 'section_type': 'abstract'",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.879014+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_8760",
+      "old": null,
+      "new": "{'pattern': 'Further, Fe@C can be easily recovered from an aqueous solution and reused due to the encapsulated magnet[VAR]Fe part[VAR]les.', 'function': 'abstract', 'section_type': 'abstract', 'count'",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.879014+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_result_2706",
+      "old": null,
+      "new": "{'pattern': 'Over three reused cycles, Fe@C/H[NUM]O[NUM] only yields [NUM]/[NUM] of Fe sludges compared to FeSO[NUM]/H[NUM]O[NUM], signif[VAR]antly reducing Fe sludge treatment costs.', 'function': 'r",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.879014+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_5948",
+      "old": null,
+      "new": "{'pattern': 'Overall, Fe@C demonstrates excellent appl[VAR]ation potentials in water and wastewater treatment, making H[NUM] production via CDM econom[VAR]ally more viable.', 'function': 'abstract', '",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.879014+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_2702",
+      "old": null,
+      "new": "{'pattern': 'The art[VAR]le considers the issues of non-repeatability of exhaust emission and fuel consumption test results for road veh[VAR]les tested on a chassis dynamometer.', 'function': 'abstrac",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.879014+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_abstract_9838",
+      "old": null,
+      "new": "{'pattern': 'Empir[VAR]al results of passenger car tests on a chassis dynamometer in the WL[VAR] test were used.', 'function': 'abstract', 'section_type': 'abstract', 'count': 1, 'source': 'auto_learn",
+      "source": "auto_learn",
+      "timestamp": "2026-06-10T08:22:19.879014+00:00"
     }
   ]
 }

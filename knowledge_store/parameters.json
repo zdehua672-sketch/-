@@ -2,111 +2,111 @@
   "meta": {
     "category": "parameters",
     "description": "系统参数（阈值/权重）",
-    "version": 44,
+    "version": 58,
     "created": "2026-05-23T10:00:06.170206+00:00",
-    "updated": "2026-06-04T09:17:26.708663+00:00",
+    "updated": "2026-06-10T08:23:56.631249+00:00",
     "source": "initial"
   },
   "entries": {
     "score_weight_SCI格式": {
       "value": {
-        "weight": 0.121,
+        "weight": 0.11,
         "description": "格式规范性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.693042+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.614297+00:00",
+      "version": 28
     },
     "score_weight_中文格式": {
       "value": {
-        "weight": 0.0806,
+        "weight": 0.0733,
         "description": "中文格式规范"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.693042+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.616289+00:00",
+      "version": 28
     },
     "score_weight_错别字": {
       "value": {
-        "weight": 0.0806,
+        "weight": 0.0733,
         "description": "拼写正确性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.693042+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.617258+00:00",
+      "version": 28
     },
     "score_weight_学术语法": {
       "value": {
-        "weight": 0.0806,
+        "weight": 0.0733,
         "description": "语言学术性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.693042+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.618283+00:00",
+      "version": 28
     },
     "score_weight_引文规范": {
       "value": {
-        "weight": 0.0806,
+        "weight": 0.0733,
         "description": "引用规范性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.693042+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.620278+00:00",
+      "version": 28
     },
     "score_weight_图表规范": {
       "value": {
-        "weight": 0.0806,
+        "weight": 0.0733,
         "description": "图表规范性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.693042+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.621276+00:00",
+      "version": 28
     },
     "score_weight_数据逻辑": {
       "value": {
-        "weight": 0.121,
+        "weight": 0.11,
         "description": "数据一致性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.693042+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.622275+00:00",
+      "version": 28
     },
     "score_weight_Discussion逻辑": {
       "value": {
-        "weight": 0.0806,
+        "weight": 0.0733,
         "description": "讨论深度"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.708663+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.623270+00:00",
+      "version": 28
     },
     "score_weight_AI痕迹": {
       "value": {
-        "weight": 0.0403,
+        "weight": 0.0366,
         "description": "自然度"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.708663+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.624240+00:00",
+      "version": 28
     },
     "score_weight_学术重复": {
       "value": {
-        "weight": 0.0403,
+        "weight": 0.0366,
         "description": "原创性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.708663+00:00",
-      "version": 23
+      "updated": "2026-06-10T08:23:56.626262+00:00",
+      "version": 28
     },
     "checker_weight_AI痕迹_MINOR": {
       "value": {
@@ -125,8 +125,8 @@
       },
       "confidence": 0.7,
       "source": "auto_tuning",
-      "updated": "2026-06-02T09:01:36.765877+00:00",
-      "version": 16
+      "updated": "2026-06-10T08:09:29.047968+00:00",
+      "version": 17
     },
     "checker_weight_中文格式_MAJOR": {
       "value": {
@@ -145,38 +145,48 @@
       },
       "confidence": 0.7,
       "source": "auto_tuning",
-      "updated": "2026-06-02T09:01:36.767896+00:00",
-      "version": 15
+      "updated": "2026-06-10T08:09:29.047968+00:00",
+      "version": 16
     },
     "score_weight_推理链完整性": {
       "value": {
-        "weight": 0.0806,
+        "weight": 0.0733,
         "description": "推理链完整性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.708663+00:00",
-      "version": 20
+      "updated": "2026-06-10T08:23:56.627260+00:00",
+      "version": 25
     },
     "score_weight_逻辑跳跃": {
       "value": {
-        "weight": 0.0484,
+        "weight": 0.044,
         "description": "逻辑严谨性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.708663+00:00",
-      "version": 20
+      "updated": "2026-06-10T08:23:56.628257+00:00",
+      "version": 25
     },
     "score_weight_引用质量": {
       "value": {
-        "weight": 0.0645,
+        "weight": 0.0587,
         "description": "DOI有效性+引用类型多样性"
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-04T09:17:26.708663+00:00",
-      "version": 20
+      "updated": "2026-06-10T08:23:56.629227+00:00",
+      "version": 25
+    },
+    "score_weight_Nature结构诊断": {
+      "value": {
+        "weight": 0.0909,
+        "description": "结构完整性（Nature标准）"
+      },
+      "confidence": 0.8,
+      "source": "Scorer",
+      "updated": "2026-06-10T08:23:56.631249+00:00",
+      "version": 5
     }
   },
   "changelog": [
@@ -599,6 +609,157 @@
       "new": "{'value': 0.5, 'reason': '该类别的审稿规则被用户拒绝2次，可能过于严格'}",
       "source": "auto_tuning",
       "timestamp": "2026-05-30T09:25:43.783026+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_SCI格式",
+      "old": {
+        "weight": 0.121,
+        "description": "格式规范性"
+      },
+      "new": "{'weight': 0.11, 'description': '格式规范性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_中文格式",
+      "old": {
+        "weight": 0.0806,
+        "description": "中文格式规范"
+      },
+      "new": "{'weight': 0.0733, 'description': '中文格式规范'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_错别字",
+      "old": {
+        "weight": 0.0806,
+        "description": "拼写正确性"
+      },
+      "new": "{'weight': 0.0733, 'description': '拼写正确性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_学术语法",
+      "old": {
+        "weight": 0.0806,
+        "description": "语言学术性"
+      },
+      "new": "{'weight': 0.0733, 'description': '语言学术性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_引文规范",
+      "old": {
+        "weight": 0.0806,
+        "description": "引用规范性"
+      },
+      "new": "{'weight': 0.0733, 'description': '引用规范性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_图表规范",
+      "old": {
+        "weight": 0.0806,
+        "description": "图表规范性"
+      },
+      "new": "{'weight': 0.0733, 'description': '图表规范性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_数据逻辑",
+      "old": {
+        "weight": 0.121,
+        "description": "数据一致性"
+      },
+      "new": "{'weight': 0.11, 'description': '数据一致性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_Discussion逻辑",
+      "old": {
+        "weight": 0.0806,
+        "description": "讨论深度"
+      },
+      "new": "{'weight': 0.0733, 'description': '讨论深度'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_AI痕迹",
+      "old": {
+        "weight": 0.0403,
+        "description": "自然度"
+      },
+      "new": "{'weight': 0.0366, 'description': '自然度'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_学术重复",
+      "old": {
+        "weight": 0.0403,
+        "description": "原创性"
+      },
+      "new": "{'weight': 0.0366, 'description': '原创性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_推理链完整性",
+      "old": {
+        "weight": 0.0806,
+        "description": "推理链完整性"
+      },
+      "new": "{'weight': 0.0733, 'description': '推理链完整性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_逻辑跳跃",
+      "old": {
+        "weight": 0.0484,
+        "description": "逻辑严谨性"
+      },
+      "new": "{'weight': 0.044, 'description': '逻辑严谨性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.445580+00:00"
+    },
+    {
+      "action": "update",
+      "key": "score_weight_引用质量",
+      "old": {
+        "weight": 0.0645,
+        "description": "DOI有效性+引用类型多样性"
+      },
+      "new": "{'weight': 0.0587, 'description': 'DOI有效性+引用类型多样性'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.461201+00:00"
+    },
+    {
+      "action": "create",
+      "key": "score_weight_Nature结构诊断",
+      "old": null,
+      "new": "{'weight': 0.0909, 'description': '结构完整性（Nature标准）'}",
+      "source": "Scorer",
+      "timestamp": "2026-06-10T08:06:36.461201+00:00"
     }
   ]
 }

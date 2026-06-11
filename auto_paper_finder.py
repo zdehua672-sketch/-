@@ -373,6 +373,211 @@ class SemanticScholarSearcher(RateLimitedClient):
 
 
 # ============================================================================
+# 3b. GoogleScholarSearcher - Google Scholar 镜像搜索
+# ============================================================================
+
+class GoogleScholarSearcher(RateLimitedClient):
+    """
+    Google Scholar 镜像搜索。
+    使用 scholarly 库或直接请求镜像站。
+    """
+
+    MIRRORS = [
+        'https://scholar.google.com',
+        'https://xs.xasa.top',
+    ]
+
+    def __init__(self, min_interval=5.0, max_retries=2):
+        super().__init__(min_interval=min_interval, max_retries=max_retries)
+        self._working_mirror = None
+        self._scholarly_available = False
+        try:
+            from scholarly import scholarly
+            self._scholarly_available = True
+            logger.info("scholarly 库可用，使用 scholarly 搜索 Google Scholar")
+        except ImportError:
+            logger.info("scholarly 库不可用，将尝试直接请求镜像站")
+
+    def search(self, query: str, max_results: int = 10) -> List[Dict]:
+        """搜索 Google Scholar"""
+        # 方法1：使用 scholarly 库
+        if self._scholarly_available:
+            return self._search_scholarly(query, max_results)
+
+        # 方法2：直接请求镜像站（简单爬取）
+        return self._search_mirror(query, max_results)
+
+    def _search_scholarly(self, query: str, max_results: int) -> List[Dict]:
+        """使用 scholarly 库搜索"""
+        try:
+            from scholarly import scholarly
+            results = []
+            search_query = scholarly.search_pubs(query)
+            for i, paper in enumerate(search_query):
+                if i >= max_results:
+                    break
+                bib = paper.get('bib', {})
+                results.append({
+                    'title': bib.get('title', ''),
+                    'authors': bib.get('author', []),
+                    'year': int(bib.get('pub_year', 0)) if bib.get('pub_year') else 0,
+                    'abstract': bib.get('abstract', ''),
+                    'venue': bib.get('venue', ''),
+                    'citation_count': paper.get('num_citations', 0),
+                    'url': paper.get('pub_url', ''),
+                    'doi': '',
+                    'arxiv_id': '',
+                    'source': 'google_scholar',
+                })
+            return results
+        except Exception as e:
+            logger.warning(f"scholarly 搜索失败: {e}")
+            return []
+
+    def _search_mirror(self, query: str, max_results: int) -> List[Dict]:
+        """直接请求镜像站搜索（降级方案）"""
+        for mirror in self.MIRRORS:
+            try:
+                encoded_q = urllib.parse.quote(query)
+                url = f"{mirror}/scholar?q={encoded_q}&hl=zh-CN&num={max_results}"
+                html = self._fetch(url, headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }, timeout=15)
+                if html:
+                    return self._parse_scholar_html(html, max_results)
+            except Exception as e:
+                logger.warning(f"镜像 {mirror} 搜索失败: {e}")
+                continue
+        return []
+
+    def _parse_scholar_html(self, html: str, max_results: int) -> List[Dict]:
+        """解析 Google Scholar HTML 结果"""
+        papers = []
+        # 简单正则解析（Scholar 页面结构相对稳定）
+        # 匹配标题：class="gs_rt"
+        title_pattern = re.compile(r'<h3[^>]*class="gs_rt"[^>]*>(.*?)</h3>', re.DOTALL)
+        # 匹配摘要：class="gs_rs"
+        abstract_pattern = re.compile(r'<div[^>]*class="gs_rs"[^>]*>(.*?)</div>', re.DOTALL)
+        # 匹配引用数：class="gs_fl"
+        cite_pattern = re.compile(r'Cited by (\d+)')
+
+        titles = title_pattern.findall(html)
+        abstracts = abstract_pattern.findall(html)
+        cite_matches = cite_pattern.findall(html)
+
+        for i, title_html in enumerate(titles[:max_results]):
+            # 清理 HTML 标签
+            title = re.sub(r'<[^>]+>', '', title_html).strip()
+            if not title:
+                continue
+            abstract = re.sub(r'<[^>]+>', '', abstracts[i]).strip() if i < len(abstracts) else ''
+            citations = int(cite_matches[i]) if i < len(cite_matches) else 0
+            papers.append({
+                'title': title,
+                'authors': [],
+                'year': 0,
+                'abstract': abstract,
+                'venue': '',
+                'citation_count': citations,
+                'url': '',
+                'doi': '',
+                'arxiv_id': '',
+                'source': 'google_scholar',
+            })
+        return papers
+
+
+# ============================================================================
+# 3c. ConnectedPapersSearcher - Connected Papers 相关论文图谱
+# ============================================================================
+
+class ConnectedPapersSearcher(RateLimitedClient):
+    """
+    Connected Papers 相关论文图谱搜索。
+    给定一篇种子论文，找到相关论文群。
+    """
+
+    BASE_URL = 'https://www.connectedpapers.com'
+
+    def __init__(self, min_interval=3.0):
+        super().__init__(min_interval=min_interval)
+
+    def get_related_papers(self, paper_title: str, max_results: int = 15) -> List[Dict]:
+        """
+        获取与指定论文相关的论文图谱。
+
+        Parameters
+        ----------
+        paper_title : str, 种子论文标题
+        max_results : int, 最大结果数
+
+        Returns
+        -------
+        list of dict: 相关论文列表
+        """
+        try:
+            # Connected Papers 使用 Semantic Scholar API 获取 paper ID
+            # 然后获取相关论文
+            from semantic_scholar import SemanticScholarSearcher
+            s2 = SemanticScholarSearcher()
+            # 先搜索种子论文
+            seed_papers = s2.search(paper_title, limit=1)
+            if not seed_papers:
+                return []
+
+            seed_id = seed_papers[0].get('paper_id', '')
+            if not seed_id:
+                return []
+
+            # 用 S2 的 recommendations API 获取相关论文
+            related = s2.get_recommendations([seed_id], limit=max_results)
+            for p in related:
+                p['source'] = 'connected_papers'
+            return related
+
+        except Exception as e:
+            logger.warning(f"Connected Papers 搜索失败: {e}")
+            return []
+
+    def expand_citation_network(self, papers: List[Dict], max_results: int = 20) -> List[Dict]:
+        """
+        从一组论文出发，扩展引用网络。
+        找到这些论文共同引用的高频论文。
+
+        Parameters
+        ----------
+        papers : list of dict, 种子论文列表
+        max_results : int, 最大结果数
+
+        Returns
+        -------
+        list of dict: 扩展后的论文列表
+        """
+        try:
+            s2 = SemanticScholarSearcher()
+            all_related = []
+            for p in papers[:3]:  # 只从前3篇扩展，避免请求过多
+                paper_id = p.get('paper_id', '')
+                if paper_id:
+                    refs = s2.get_references(paper_id, limit=5)
+                    all_related.extend(refs)
+
+            # 去重
+            seen = set()
+            unique = []
+            for p in all_related:
+                key = p.get('paper_id', p.get('title', ''))
+                if key and key not in seen:
+                    seen.add(key)
+                    unique.append(p)
+
+            return unique[:max_results]
+        except Exception as e:
+            logger.warning(f"引用网络扩展失败: {e}")
+            return []
+
+
+# ============================================================================
 # 4. AutoPaperFinder - 协调器
 # ============================================================================
 
@@ -391,6 +596,8 @@ class AutoPaperFinder:
         """
         self.arxiv = ArxivSearcher()
         self.s2 = SemanticScholarSearcher()
+        self.google = GoogleScholarSearcher()
+        self.connected = ConnectedPapersSearcher()
         self.store = store
 
     def find_papers(self, topic: str, max_results: int = 20,
@@ -435,7 +642,18 @@ class AutoPaperFinder:
         except Exception as e:
             logger.warning(f"S2 search failed: {e}")
 
-        # 3. 排序（引用数降序）
+        # 3. Google Scholar 搜索（补充覆盖面）
+        logger.info(f"Searching Google Scholar: {topic}")
+        try:
+            gs_results = self.google.search(topic, max_results=max_results // 2)
+            for p in gs_results:
+                key = self._dedup_key(p)
+                if key not in all_papers:
+                    all_papers[key] = p
+        except Exception as e:
+            logger.warning(f"Google Scholar search failed: {e}")
+
+        # 4. 排序（引用数降序）
         papers = sorted(all_papers.values(),
                         key=lambda x: x.get('citation_count', 0),
                         reverse=True)

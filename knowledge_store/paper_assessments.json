@@ -1,12 +1,12 @@
 {
   "meta": {
     "count": 1,
-    "updated": "2026-05-30T02:28:57.512193+00:00"
+    "updated": "2026-06-10T09:51:35.897121+00:00"
   },
   "assessments": {
-    "pipeline_test": {
-      "paper_id": "pipeline_test",
-      "title": "pipeline_test",
+    "冬春数据": {
+      "paper_id": "冬春数据",
+      "title": "冬春数据",
       "evidence_level": 6,
       "evidence_level_name": "单一定性研究",
       "evidence_weight": 0.5,
@@ -18,15 +18,7 @@
       ],
       "predatory_flag": false,
       "recommendation": "[警告] 来源可信度低，建议补充更高质量的引用",
-      "key_findings": [
-        "This study investigates the relationship between dissolved oxygen (DO)\nand methane (CH4) production in campus sewage networks.",
-        "Our results\nindicate a significant negative correlation between DO and CH4 concentrations.",
-        "Urban sewer systems are significant sources of greenhouse gas emissions.",
-        "We found that DO and CH4 showed a significant negative correlation\n(r=-0.72, p<0.001).",
-        "The results indicate that dissolved oxygen is the\nprimary factor controlling methanogenic activity.",
-        "Our findings demonstrate that maintaining DO above 2 mg/L can effectively\nsuppress CH4 production in sewer systems.",
-        "This study reveals the key role of dissolved oxygen in controlling\nmethane production in campus sewage networks."
-      ]
+      "key_findings": []
     }
   }
 }

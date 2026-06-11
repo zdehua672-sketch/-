@@ -271,6 +271,45 @@ def add_significance_bars(ax, x1, x2, y, h=0.02, p_value=0.05, text_offset=0.01)
             fontsize=12, fontweight='bold', color='#333333')
 
 # ============================================================================
+# 5b. 中文字体注入工具
+# ============================================================================
+def ensure_chinese_text(ax, title=None, xlabel=None, ylabel=None, legend=True):
+    """确保 Axes 上所有文本使用中文字体，防止乱码"""
+    if title:
+        ax.set_title(title, fontproperties=CN_FONT_PROP)
+    if xlabel:
+        ax.set_xlabel(xlabel, fontproperties=CN_FONT_PROP)
+    if ylabel:
+        ax.set_ylabel(ylabel, fontproperties=CN_FONT_PROP)
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontproperties(CN_FONT_PROP)
+    if legend:
+        leg = ax.get_legend()
+        if leg:
+            for text in leg.get_texts():
+                text.set_fontproperties(CN_FONT_PROP)
+
+
+def validate_font_render(output_dir='./figures'):
+    """生成测试图验证中文字体是否正常显示"""
+    import os
+    os.makedirs(output_dir, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(4, 3))
+    ax.set_title('中文标题测试 ABCDEFG', fontproperties=CN_FONT_PROP)
+    ax.set_xlabel('横轴：变量X (单位)', fontproperties=CN_FONT_PROP)
+    ax.set_ylabel('纵轴：变量Y (单位)', fontproperties=CN_FONT_PROP)
+    ax.text(0.5, 0.5, '宋体中文 OK\nSimSun Chinese OK',
+            ha='center', va='center', fontsize=16, fontproperties=CN_FONT_PROP)
+    ax.plot([0, 1], [0, 1], label='冬季')
+    ax.legend(prop=CN_FONT_PROP)
+    test_path = os.path.join(output_dir, '_font_test.png')
+    fig.savefig(test_path, dpi=150, bbox_inches='tight')
+    plt.close(fig)
+    print(f"[字体测试] 已生成: {test_path} — 请检查中文是否显示正常")
+    return test_path
+
+
+# ============================================================================
 # 6. 保存函数
 # ============================================================================
 def save_figure(fig, filename, output_dir, formats=None):

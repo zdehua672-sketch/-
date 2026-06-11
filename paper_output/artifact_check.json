@@ -1,12 +1,12 @@
 {
   "output_dir": "C:\\Users\\Administrator\\python-sdk\\paper_output",
   "workflow": "full",
-  "timestamp": "2026-06-02T09:01:23.189877+00:00",
+  "timestamp": "2026-06-10T09:51:35.943956+00:00",
   "total": 12,
-  "ok": 5,
-  "missing": 7,
-  "thin": 0,
-  "pass_rate": 0.4166666666666667,
+  "ok": 7,
+  "missing": 1,
+  "thin": 4,
+  "pass_rate": 0.5833333333333334,
   "results": [
     {
       "filename": "motivation_options.md",
@@ -19,7 +19,7 @@
     {
       "filename": "confirmed_motivation.md",
       "exists": true,
-      "size_bytes": 1363,
+      "size_bytes": 1414,
       "line_count": 24,
       "content_quality": "good",
       "issues": []
@@ -27,7 +27,7 @@
     {
       "filename": "writing_blueprint.md",
       "exists": true,
-      "size_bytes": 6368,
+      "size_bytes": 6455,
       "line_count": 114,
       "content_quality": "good",
       "issues": []
@@ -35,7 +35,7 @@
     {
       "filename": "writing_execution_table.md",
       "exists": true,
-      "size_bytes": 8112,
+      "size_bytes": 8393,
       "line_count": 32,
       "content_quality": "good",
       "issues": []
@@ -52,70 +52,66 @@
     },
     {
       "filename": "citation_support_bank.md",
-      "exists": false,
-      "size_bytes": 0,
-      "line_count": 0,
-      "content_quality": "unknown",
-      "issues": [
-        "文件不存在: citation_support_bank.md"
-      ]
+      "exists": true,
+      "size_bytes": 369,
+      "line_count": 15,
+      "content_quality": "good",
+      "issues": []
     },
     {
       "filename": "integrity_audit.md",
       "exists": true,
-      "size_bytes": 1289,
-      "line_count": 51,
+      "size_bytes": 2017,
+      "line_count": 67,
       "content_quality": "good",
       "issues": []
     },
     {
       "filename": "seven_sentence_test.md",
-      "exists": false,
-      "size_bytes": 0,
-      "line_count": 0,
-      "content_quality": "unknown",
-      "issues": [
-        "文件不存在: seven_sentence_test.md"
-      ]
+      "exists": true,
+      "size_bytes": 1279,
+      "line_count": 35,
+      "content_quality": "good",
+      "issues": []
     },
     {
       "filename": "section_introduction.md",
-      "exists": false,
-      "size_bytes": 0,
-      "line_count": 0,
-      "content_quality": "unknown",
+      "exists": true,
+      "size_bytes": 4222,
+      "line_count": 43,
+      "content_quality": "thin",
       "issues": [
-        "文件不存在: section_introduction.md"
+        "缺少关键词: Introduction"
       ]
     },
     {
       "filename": "section_methods.md",
-      "exists": false,
-      "size_bytes": 0,
-      "line_count": 0,
-      "content_quality": "unknown",
+      "exists": true,
+      "size_bytes": 2207,
+      "line_count": 29,
+      "content_quality": "thin",
       "issues": [
-        "文件不存在: section_methods.md"
+        "缺少关键词: Methods"
       ]
     },
     {
       "filename": "section_results.md",
-      "exists": false,
-      "size_bytes": 0,
-      "line_count": 0,
-      "content_quality": "unknown",
+      "exists": true,
+      "size_bytes": 8160,
+      "line_count": 118,
+      "content_quality": "thin",
       "issues": [
-        "文件不存在: section_results.md"
+        "缺少关键词: Results"
       ]
     },
     {
       "filename": "section_discussion.md",
-      "exists": false,
-      "size_bytes": 0,
-      "line_count": 0,
-      "content_quality": "unknown",
+      "exists": true,
+      "size_bytes": 7920,
+      "line_count": 71,
+      "content_quality": "thin",
       "issues": [
-        "文件不存在: section_discussion.md"
+        "缺少关键词: Discussion"
       ]
     }
   ]

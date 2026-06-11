@@ -403,14 +403,21 @@ class DiscussionGenerator:
         return context
 
     def _generate_zh(self):
-        """中文Discussion"""
+        """中文Discussion — 带段落衔接和文献对比"""
         sections = []
 
         # 段落1：核心发现概述
         sections.append(self._overview_zh())
 
-        # 段落2-N：逐个发现讨论
-        sections.extend(self._discuss_findings_zh())
+        # 段落2-N：逐个发现讨论（带衔接句）
+        findings_paragraphs = self._discuss_findings_zh()
+        for i, p in enumerate(findings_paragraphs):
+            # 在每个发现段落前加衔接句（第1段后开始）
+            if i > 0 and p.strip():
+                transition = self._get_transition(i, len(findings_paragraphs))
+                sections.append(transition + '\n\n' + p)
+            else:
+                sections.append(p)
 
         # 碳平衡讨论
         sections.append(self._discuss_carbon_balance_zh())
@@ -422,6 +429,17 @@ class DiscussionGenerator:
         sections.append(self._future_zh())
 
         return '\n\n'.join(s for s in sections if s)
+
+    def _get_transition(self, idx, total):
+        """生成段落间学术衔接句"""
+        transitions = [
+            '进一步分析表明，',
+            '除上述发现外，本研究还观察到，',
+            '从多相耦合的角度看，',
+            '与此相关的是，',
+            '值得注意的是，数据还揭示了以下规律：',
+        ]
+        return transitions[(idx - 1) % len(transitions)]
 
     def _overview_zh(self):
         """核心发现概述"""
@@ -1482,10 +1500,7 @@ def remove_ai_markers(text: str) -> str:
             text = text.replace(marker, replacements.get(marker, ''))
     
     # 删除多余空行
-    text = re.sub(r'
-{3,}', '
-
-', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
     
     return text
 
