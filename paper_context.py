@@ -192,15 +192,22 @@ def _run_writer_results(ctx: PaperContext):
     """写 Results 章节（带深度模仿指导）"""
     from data_driven_pipeline import DataDrivenWriter
     writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
-    ctx.sections['results'] = writer.write_results()
-    ctx.rationale_rows.extend(writer.rationale_rows)
+    # 优先用 Claude 生成 Results
+    claude = _get_claude_writer()
+    if claude and ctx.has('findings'):
+        result = claude.write_results(
+            findings=ctx.findings,
+            figures=ctx.figures if ctx.figures else None,
+            learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
+        )
+        if result:
+            ctx.sections['results'] = result
+            return result
 
-    # 如果有深度模仿报告，在结果末尾注入写作改进建议
-    if ctx.imitation_report:
-        # 提取模仿报告中的关键改进点（取前300字）
-        summary = ctx.imitation_report[:300]
-        logger.info(f"深度模仿建议已记录: {summary[:60]}...")
-
+    # 回退：模板
+    tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
+    ctx.sections['results'] = tpl_writer.write_results()
+    ctx.rationale_rows.extend(tpl_writer.rationale_rows)
     return ctx.sections['results']
 
 
@@ -251,11 +258,11 @@ def _run_writer_intro(ctx: PaperContext):
     """写 Introduction 章节（优先 Claude 生成，回退模板）"""
     writer = _get_claude_writer()
     if writer and ctx.has('findings'):
-        # 用 Claude 生成数据驱动的引言
         result = writer.write_introduction(
             findings=ctx.findings,
             language=ctx.language,
             recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
+            learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
             ctx.sections['introduction'] = result
@@ -358,6 +365,37 @@ def _run_writer_conclusion(ctx: PaperContext):
 
     ctx.sections['conclusion'] = '\n'.join(lines)
     return ctx.sections['conclusion']
+
+
+def _run_polish(ctx: PaperContext):
+    """用文献学到的模式润色各章节文本"""
+    if not ctx.has('sections') or not ctx.learned_patterns:
+        return None
+
+    writer = _get_claude_writer()
+    if not writer:
+        return None
+
+    polished_count = 0
+    for section_name in ['results', 'discussion', 'introduction']:
+        text = ctx.sections.get(section_name, '')
+        if not text or len(text) < 200:
+            continue
+        try:
+            polished = writer.polish_text(
+                text[:3000],  # 限制长度避免超时
+                learned_patterns=ctx.learned_patterns,
+            )
+            if polished and len(polished) > len(text) * 0.5:  # 防止返回垃圾
+                ctx.sections[section_name] = polished
+                polished_count += 1
+                logger.info(f"润色 {section_name}: {len(text)} -> {len(polished)} 字")
+        except Exception as e:
+            logger.debug(f"润色 {section_name} 跳过: {e}")
+
+    if polished_count:
+        logger.info(f"润色完成: {polished_count} 个章节")
+    return polished_count
 
 
 def _run_review(ctx: PaperContext):
@@ -470,6 +508,42 @@ def _run_auto_revision(ctx: PaperContext):
 
     logger.info(f"自动修订: {len(reviser.changes)}类修改")
     return revised
+
+
+def _run_final_check(ctx: PaperContext):
+    """修订后二次审稿：检查修订是否引入新问题"""
+    if not ctx.has('sections'):
+        return None
+
+    from academic_review_agent import AcademicReviewAgent
+    full_paper = '\n\n---\n\n'.join(
+        ctx.sections.get(k, '') for k in
+        ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+        if ctx.has_section(k)
+    )
+    if not full_paper:
+        return None
+
+    reviewer = AcademicReviewAgent(paper_type='chinese_journal', language=ctx.language)
+    final_report = reviewer.review(full_paper)
+    final_summary = final_report.summary()
+
+    # 对比修订前后
+    prev_count = ctx.review_summary.get('total', 0)
+    new_count = final_summary.get('total', 0)
+    improvement = prev_count - new_count
+
+    ctx.review_summary['final_total'] = new_count
+    ctx.review_summary['improvement'] = improvement
+
+    if improvement > 0:
+        logger.info(f"二次审稿: {prev_count} -> {new_count} 个问题 (减少 {improvement} 个)")
+    elif improvement < 0:
+        logger.warning(f"二次审稿: 问题增加 {abs(improvement)} 个，建议人工检查")
+    else:
+        logger.info(f"二次审稿: 问题数不变 ({new_count} 个)")
+
+    return final_report
 
 
 def _run_assemble(ctx: PaperContext):
@@ -911,6 +985,12 @@ MODULE_REGISTRY = {
         'run': _run_writer_conclusion,
         'description': '写 Conclusion',
     },
+    'polish': {
+        'needs': ['sections', 'learned_patterns'],
+        'provides': ['sections(polished)'],
+        'run': _run_polish,
+        'description': '用文献学到的模式润色各章节',
+    },
     'review': {
         'needs': ['sections'],
         'provides': ['review_report'],
@@ -922,6 +1002,12 @@ MODULE_REGISTRY = {
         'provides': ['sections(revised)'],
         'run': _run_auto_revision,
         'description': '自动修订',
+    },
+    'final_check': {
+        'needs': ['sections(revised)'],
+        'provides': ['review_summary'],
+        'run': _run_final_check,
+        'description': '修订后二次审稿（检查修订是否引入新问题）',
     },
     'advanced_analysis': {
         'needs': ['df'],
@@ -1038,7 +1124,18 @@ class PaperOrchestrator:
                     'step': step_name, 'status': 'done'
                 })
                 if result is not None:
-                    print(f"  完成")
+                    # 显示产出摘要
+                    if isinstance(result, str) and len(result) > 50:
+                        print(f"  完成 ({len(result)} 字)")
+                    elif isinstance(result, list):
+                        print(f"  完成 ({len(result)} 项)")
+                    elif isinstance(result, dict):
+                        print(f"  完成 ({len(result)} 个条目)")
+                    else:
+                        print(f"  完成")
+
+                # 每步保存中间结果
+                self._save_checkpoint(ctx, step_name)
             except Exception as e:
                 logger.error(f"模块 {step_name} 失败: {e}")
                 self.execution_log.append({
@@ -1057,21 +1154,22 @@ class PaperOrchestrator:
         """根据上下文状态自动推断执行步骤"""
         steps = []
 
-        # 基础步骤
+        # 第1阶段：知识初始化 + 文献学习
         steps.append('memory_init')
+        steps.append('paper_reading')
+        steps.append('pattern_learning')
 
+        # 第2阶段：数据处理
         if ctx.has('data_path'):
             steps.append('load_data')
-
         steps.append('explorer')
+        steps.append('advanced_analysis')
 
-        # 知识召回（有 memory + findings 后）
+        # 第3阶段：知识支撑
         steps.append('literature_recall')
-
-        # 动机（可选）
         steps.append('motivation')
 
-        # 写作步骤
+        # 第4阶段：AI写作
         steps.append('writer_results')
         steps.append('writer_discussion')
         steps.append('writer_intro')
@@ -1079,14 +1177,41 @@ class PaperOrchestrator:
         steps.append('writer_conclusion')
         steps.append('writer_abstract')
 
-        # 审稿 → 修订 → 复审
+        # 第5阶段：润色 + 审稿 + 修订
+        steps.append('polish')
         steps.append('review')
         steps.append('auto_revision')
+        steps.append('final_check')
 
-        # 排版
+        # 第6阶段：补充检查
+        steps.append('deep_imitation')
+        steps.append('integrity_audit')
+        steps.append('artifact_check')
+        steps.append('citation_bank')
+
+        # 第7阶段：排版
         steps.append('assemble')
 
         return steps
+
+    def _save_checkpoint(self, ctx: PaperContext, step_name: str):
+        """保存中间结果检查点"""
+        import json
+        checkpoint_dir = os.path.join(ctx.output_dir, 'checkpoints')
+        os.makedirs(checkpoint_dir, exist_ok=True)
+        checkpoint_file = os.path.join(checkpoint_dir, f'{step_name}.json')
+        try:
+            data = {
+                'step': step_name,
+                'sections': {k: v[:200] + '...' if isinstance(v, str) and len(v) > 200 else v
+                            for k, v in ctx.sections.items()},
+                'findings_count': len(ctx.findings),
+                'papers_read_count': len(ctx.papers_read),
+            }
+            with open(checkpoint_file, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            logger.debug(f"Checkpoint save failed: {e}")
 
     def _check_needs(self, ctx: PaperContext, needs: list) -> list:
         """检查前置条件"""
