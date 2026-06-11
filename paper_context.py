@@ -414,6 +414,28 @@ def _run_review(ctx: PaperContext):
     except Exception as e:
         logger.debug(f"text_utils check skipped: {e}")
 
+    # 文献质量验证（使用 literature_memory 的引用验证功能）
+    if ctx.has('memory'):
+        try:
+            from literature_memory import LiteratureMemory
+            lit_mem = LiteratureMemory()
+            # 从 recalled_references 中验证引用质量
+            if ctx.has('recalled_references'):
+                verified = 0
+                questionable = 0
+                for ref in ctx.recalled_references[:10]:
+                    title = ref.get('title', '')
+                    if title:
+                        assessment = lit_mem.assess_paper(title)
+                        if assessment and assessment.get('credibility', 0) < 0.5:
+                            questionable += 1
+                        else:
+                            verified += 1
+                if questionable:
+                    extra_issues.append(f'[文献质量] {questionable}/{verified+questionable} 篇引用可信度较低，建议核实')
+        except Exception as e:
+            logger.debug(f"literature_memory check skipped: {e}")
+
     if extra_issues:
         ctx.review_report.extra_notes = extra_issues
 
@@ -582,22 +604,47 @@ def _build_citation_injection(ctx: PaperContext) -> str:
 # ============================================================
 
 def _run_paper_reading(ctx: PaperContext):
-    """读取论文目录中的文献，存入知识库"""
-    if not ctx.papers_dir or not os.path.isdir(ctx.papers_dir):
-        logger.info("未指定论文目录(papers_dir)，跳过文献阅读")
-        return None
-
+    """读论文：优先本地目录，无文献时自动在线搜索"""
     from paper_reader import PaperReader
     reader = PaperReader()
 
-    # 扫描目录中的 PDF/TXT/MD 文件
     papers_found = []
-    for ext in ['*.pdf', '*.txt', '*.md']:
-        import glob
-        papers_found.extend(glob.glob(os.path.join(ctx.papers_dir, ext)))
 
+    # 1. 尝试从本地目录读取
+    if ctx.papers_dir and os.path.isdir(ctx.papers_dir):
+        import glob
+        for ext in ['*.pdf', '*.txt', '*.md']:
+            papers_found.extend(glob.glob(os.path.join(ctx.papers_dir, ext)))
+
+    # 2. 本地无文献时，自动在线搜索
     if not papers_found:
-        logger.info(f"论文目录 {ctx.papers_dir} 中未找到文献")
+        logger.info("本地无文献，尝试自动在线搜索...")
+        try:
+            from auto_paper_finder import AutoPaperFinder
+            finder = AutoPaperFinder()
+            # 从 findings 中提取关键词搜索
+            keywords = []
+            for f in ctx.findings[:5]:
+                vars_ = f.get('variables', ('', ''))
+                if isinstance(vars_, (list, tuple)):
+                    keywords.extend([v for v in vars_ if v])
+            if not keywords:
+                keywords = ['sewage', 'greenhouse gas', 'methane', 'carbon']
+            search_query = ' '.join(keywords[:5])
+            found_papers = finder.search(search_query, max_results=10)
+            if found_papers:
+                logger.info(f"在线搜索到 {len(found_papers)} 篇论文")
+                for p in found_papers[:10]:
+                    ctx.papers_read.append({
+                        'title': p.get('title', ''),
+                        'authors': p.get('authors', []),
+                        'abstract': p.get('abstract', ''),
+                        'source': 'online_search',
+                    })
+                return ctx.papers_read
+        except Exception as e:
+            logger.warning(f"在线搜索失败: {e}")
+        logger.info("未找到任何文献")
         return None
 
     logger.info(f"发现 {len(papers_found)} 篇文献，开始阅读...")
@@ -684,6 +731,24 @@ def _run_pattern_learning(ctx: PaperContext):
 
     # 同时存储到 learned_mechanisms 供写作模块使用
     ctx.learned_mechanisms = mechanism_learner.get_mechanisms() if hasattr(mechanism_learner, 'get_mechanisms') else []
+
+    # 触发 auto_learn：用学到的变量对自动搜索更多文献和机制
+    try:
+        from self_evolving_engine import EvolutionEngine
+        engine = EvolutionEngine(base_dir=ctx.output_dir)
+        engine.initialize()
+        # 从 findings 中提取变量对，自动学习
+        var_pairs = []
+        for f in ctx.findings:
+            if f.get('type') == 'correlation' and f.get('importance') in ['critical', 'high']:
+                v1, v2 = f.get('variables', ('', ''))
+                if v1 and v2:
+                    var_pairs.append((v1, v2))
+        if var_pairs:
+            learn_report = engine.auto_learn(var_pairs[:5], ctx.findings)
+            logger.info(f"自动学习: {learn_report.get('total_learned', 0)} 条新知识")
+    except Exception as e:
+        logger.debug(f"auto_learn skipped: {e}")
 
     logger.info(f"模式学习: {ctx.learned_patterns['patterns_count']} 个句式, "
                f"{ctx.learned_patterns['mechanisms_count']} 个机制")
