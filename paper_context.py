@@ -58,6 +58,12 @@ class PaperContext:
     memory: Any = None                # KnowledgeMemory 实例
     literature_matrix: Any = None     # LiteratureMatrix
     recalled_mechanisms: list = field(default_factory=list)
+
+    # === 文献学习层 ===
+    papers_dir: str = None            # 论文目录路径
+    papers_read: list = field(default_factory=list)    # 已读论文列表
+    learned_patterns: dict = field(default_factory=dict)  # 学到的写作模式
+    learned_mechanisms: list = field(default_factory=list)  # 学到的机制知识
     recalled_references: list = field(default_factory=list)
 
     # === 写作层 ===
@@ -562,7 +568,109 @@ def _build_citation_injection(ctx: PaperContext) -> str:
 
 
 # ============================================================
-# 5. 新增模块函数 — 接入原孤立模块
+# 5. 文献深度学习模块
+# ============================================================
+
+def _run_paper_reading(ctx: PaperContext):
+    """读取论文目录中的文献，存入知识库"""
+    if not ctx.papers_dir or not os.path.isdir(ctx.papers_dir):
+        logger.info("未指定论文目录(papers_dir)，跳过文献阅读")
+        return None
+
+    from paper_reader import PaperReader
+    reader = PaperReader()
+
+    # 扫描目录中的 PDF/TXT/MD 文件
+    papers_found = []
+    for ext in ['*.pdf', '*.txt', '*.md']:
+        import glob
+        papers_found.extend(glob.glob(os.path.join(ctx.papers_dir, ext)))
+
+    if not papers_found:
+        logger.info(f"论文目录 {ctx.papers_dir} 中未找到文献")
+        return None
+
+    logger.info(f"发现 {len(papers_found)} 篇文献，开始阅读...")
+    for paper_path in papers_found[:20]:  # 最多读20篇
+        try:
+            content = reader.read(paper_path, fetch_metadata=False)
+            if content and content.metadata:
+                ctx.papers_read.append({
+                    'path': paper_path,
+                    'title': content.metadata.title,
+                    'authors': content.metadata.authors,
+                    'abstract': content.metadata.abstract,
+                    'sections': len(content.sections),
+                    'references': len(content.references),
+                })
+        except Exception as e:
+            logger.warning(f"读取失败 {paper_path}: {e}")
+
+    logger.info(f"成功读取 {len(ctx.papers_read)} 篇文献")
+    return ctx.papers_read
+
+
+def _run_pattern_learning(ctx: PaperContext):
+    """从已读论文中学习写作模式"""
+    if not ctx.papers_read:
+        logger.info("无已读论文，跳过模式学习")
+        return None
+
+    from pattern_learner import SentencePatternLearner, DiscussionLearner, MechanismLearner
+    from paper_reader import PaperReader
+
+    reader = PaperReader()
+    sentence_learner = SentencePatternLearner()
+    discussion_learner = DiscussionLearner()
+    mechanism_learner = MechanismLearner()
+
+    patterns_count = 0
+    mechanisms_count = 0
+
+    for paper_info in ctx.papers_read[:10]:  # 最多学习10篇
+        path = paper_info.get('path', '')
+        if not path or not os.path.exists(path):
+            continue
+        try:
+            content = reader.read(path, fetch_metadata=False)
+            if not content:
+                continue
+
+            # 合并所有章节文本
+            full_text = '\n\n'.join(
+                sec.text for sec in content.sections if sec.text
+            )
+            if not full_text:
+                continue
+
+            # 学习句式模式
+            patterns = sentence_learner.extract_patterns(full_text)
+            patterns_count += len(patterns)
+
+            # 学习讨论结构
+            for sec in content.sections:
+                if sec.section_type == 'discussion':
+                    structures = discussion_learner.analyze_structure(sec.text)
+                    patterns_count += len(structures)
+
+            # 学习机制知识
+            mechanisms = mechanism_learner.extract_mechanisms(full_text)
+            mechanisms_count += len(mechanisms)
+
+        except Exception as e:
+            logger.warning(f"学习失败 {path}: {e}")
+
+    ctx.learned_patterns = {
+        'patterns_count': patterns_count,
+        'mechanisms_count': mechanisms_count,
+        'papers_learned': len(ctx.papers_read),
+    }
+    logger.info(f"模式学习: {patterns_count} 个句式, {mechanisms_count} 个机制")
+    return ctx.learned_patterns
+
+
+# ============================================================
+# 6. 新增模块函数 — 接入原孤立模块
 # ============================================================
 
 def _run_advanced_analysis(ctx: PaperContext):
@@ -644,6 +752,18 @@ MODULE_REGISTRY = {
         'provides': ['memory'],
         'run': _run_memory_init,
         'description': '初始化知识记忆',
+    },
+    'paper_reading': {
+        'needs': [],
+        'provides': ['papers_read'],
+        'run': _run_paper_reading,
+        'description': '文献深度阅读（读论文→存入知识库）',
+    },
+    'pattern_learning': {
+        'needs': ['papers_read'],
+        'provides': ['learned_patterns', 'learned_mechanisms'],
+        'run': _run_pattern_learning,
+        'description': '写作模式学习（从论文中提取句式/讨论结构/机制）',
     },
     'load_data': {
         'needs': ['data_path'],
