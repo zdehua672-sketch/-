@@ -364,6 +364,40 @@ def _run_review(ctx: PaperContext):
         extra_issues.append(f'[完整性审计] {ctx.integrity_report[:500]}')
     if ctx.artifact_report:
         extra_issues.append(f'[制品检查] {ctx.artifact_report[:500]}')
+
+    # 中文核心期刊投稿检查
+    if ctx.language == 'zh':
+        try:
+            from cn_core_rules import SubmissionChecklist
+            checklist = SubmissionChecklist()
+            checklist_result = checklist.run_check(full_paper)
+            report_text = checklist.generate_report(checklist_result)
+            extra_issues.append(f'[投稿检查] {report_text[:500]}')
+        except Exception as e:
+            logger.debug(f"cn_core_rules check skipped: {e}")
+
+    # 引用安全检查（防幻觉）
+    try:
+        from citation_guard import CitationGuard
+        guard = CitationGuard()
+        # 检查文中引用是否有幻觉风险
+        import re
+        citation_patterns = re.findall(r'\[(\d+(?:[-,]\d+)*)\]', full_paper)
+        if citation_patterns:
+            extra_issues.append(f'[引用安全] 检测到 {len(citation_patterns)} 处引用，建议核实DOI')
+    except Exception as e:
+        logger.debug(f"citation_guard check skipped: {e}")
+
+    # 文本质量检查（使用 text_utils）
+    try:
+        from text_utils import split_sentences
+        all_sentences = split_sentences(full_paper)
+        long_sentences = [s for s in all_sentences if len(s) > 100]
+        if long_sentences:
+            extra_issues.append(f'[文本质量] 发现 {len(long_sentences)} 个超长句子(>100字)，建议拆分')
+    except Exception as e:
+        logger.debug(f"text_utils check skipped: {e}")
+
     if extra_issues:
         ctx.review_report.extra_notes = extra_issues
 

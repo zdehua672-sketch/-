@@ -1482,10 +1482,7 @@ def remove_ai_markers(text: str) -> str:
             text = text.replace(marker, replacements.get(marker, ''))
     
     # 删除多余空行
-    text = re.sub(r'
-{3,}', '
-
-', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
     
     return text
 
