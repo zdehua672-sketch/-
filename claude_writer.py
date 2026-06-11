@@ -225,7 +225,8 @@ Write the abstract directly."""
 
     def write_discussion(self, findings: list, mechanisms: dict = None,
                          domain: str = "污水管网碳排放", language: str = "zh",
-                         recalled_refs: list = None) -> str:
+                         recalled_refs: list = None,
+                         learned_patterns: dict = None) -> str:
         """
         生成 Discussion 章节。
 
@@ -255,6 +256,19 @@ Write the abstract directly."""
                     authors = ', '.join(authors[:3])
                 refs_text += f"- {authors} ({year}). {title}\n"
 
+        # 从文献中学到的写作模式
+        patterns_text = ""
+        if learned_patterns:
+            structures = learned_patterns.get('discussion_structures', [])
+            if structures:
+                patterns_text = "\n\n从文献中学到的讨论结构模式:\n"
+                for s in structures[:3]:
+                    if isinstance(s, dict):
+                        pattern_name = s.get('pattern_name', '')
+                        moves = s.get('moves', [])
+                        if pattern_name:
+                            patterns_text += f"- {pattern_name}: {' → '.join(moves[:5])}\n"
+
         if language == "zh":
             prompt = f"""你是一位环境科学领域的资深学者，正在撰写一篇关于{domain}的中文学术论文。
 
@@ -272,6 +286,7 @@ Write the abstract directly."""
 {findings_text}
 {mech_text}
 {refs_text}
+{patterns_text}
 
 请直接输出讨论正文，用 ## 标记子章节。"""
         else:

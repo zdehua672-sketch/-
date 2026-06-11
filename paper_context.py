@@ -219,11 +219,21 @@ def _run_writer_discussion(ctx: PaperContext):
                     if mechs:
                         mechanisms[f'{v1}_vs_{v2}'] = mechs[0].get('value', {}).get('mechanism', '')
 
+        # 合并学到的机制（从 pattern_learning 模块）
+        if ctx.learned_mechanisms:
+            for m in ctx.learned_mechanisms[:10]:
+                var1 = m.get('var1', '')
+                var2 = m.get('var2', '')
+                evidence = m.get('evidence', '') or m.get('mechanism', '')
+                if var1 and var2 and evidence:
+                    mechanisms[f'{var1}_vs_{var2}'] = evidence
+
         result = writer.write_discussion(
             findings=ctx.findings,
             mechanisms=mechanisms,
             language=ctx.language,
             recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
+            learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
             ctx.sections['discussion'] = result
@@ -611,7 +621,7 @@ def _run_paper_reading(ctx: PaperContext):
 
 
 def _run_pattern_learning(ctx: PaperContext):
-    """从已读论文中学习写作模式"""
+    """从已读论文中学习写作模式，持久化到知识库"""
     if not ctx.papers_read:
         logger.info("无已读论文，跳过模式学习")
         return None
@@ -624,10 +634,10 @@ def _run_pattern_learning(ctx: PaperContext):
     discussion_learner = DiscussionLearner()
     mechanism_learner = MechanismLearner()
 
-    patterns_count = 0
-    mechanisms_count = 0
+    all_patterns = []
+    all_structures = []
 
-    for paper_info in ctx.papers_read[:10]:  # 最多学习10篇
+    for paper_info in ctx.papers_read[:10]:
         path = paper_info.get('path', '')
         if not path or not os.path.exists(path):
             continue
@@ -636,36 +646,47 @@ def _run_pattern_learning(ctx: PaperContext):
             if not content:
                 continue
 
-            # 合并所有章节文本
-            full_text = '\n\n'.join(
-                sec.text for sec in content.sections if sec.text
-            )
-            if not full_text:
-                continue
-
-            # 学习句式模式
-            patterns = sentence_learner.extract_patterns(full_text)
-            patterns_count += len(patterns)
-
-            # 学习讨论结构
             for sec in content.sections:
+                if not sec.text:
+                    continue
+                # 学习句式模式
+                patterns = sentence_learner.learn_from_text(sec.text, sec.section_type or 'unknown')
+                all_patterns.extend(patterns)
+
+                # 学习讨论结构
                 if sec.section_type == 'discussion':
-                    structures = discussion_learner.analyze_structure(sec.text)
-                    patterns_count += len(structures)
+                    structure = discussion_learner.learn_structure(sec.text)
+                    all_structures.append(structure)
 
             # 学习机制知识
-            mechanisms = mechanism_learner.extract_mechanisms(full_text)
-            mechanisms_count += len(mechanisms)
+            full_text = '\n\n'.join(sec.text for sec in content.sections if sec.text)
+            mechanisms = mechanism_learner.learn_from_text(full_text, source=paper_info.get('title', ''))
 
         except Exception as e:
             logger.warning(f"学习失败 {path}: {e}")
 
+    # 持久化：将学到的机制存入 KnowledgeStore
+    if ctx.has('memory') and mechanism_learner.mechanisms:
+        ks_format = mechanism_learner.to_knowledge_store_format()
+        for key, entry in ks_format.items():
+            ctx.memory.remember(key, entry, category='mechanisms')
+        logger.info(f"已将 {len(ks_format)} 个学到的机制存入知识库")
+
+    # 存储到 ctx（完整数据，不只是计数）
     ctx.learned_patterns = {
-        'patterns_count': patterns_count,
-        'mechanisms_count': mechanisms_count,
+        'sentence_patterns': sentence_learner.get_patterns() if hasattr(sentence_learner, 'get_patterns') else {},
+        'discussion_structures': all_structures,
+        'mechanisms': mechanism_learner.get_mechanisms() if hasattr(mechanism_learner, 'get_mechanisms') else [],
+        'patterns_count': len(all_patterns),
+        'mechanisms_count': len(mechanism_learner.mechanisms) if hasattr(mechanism_learner, 'mechanisms') else 0,
         'papers_learned': len(ctx.papers_read),
     }
-    logger.info(f"模式学习: {patterns_count} 个句式, {mechanisms_count} 个机制")
+
+    # 同时存储到 learned_mechanisms 供写作模块使用
+    ctx.learned_mechanisms = mechanism_learner.get_mechanisms() if hasattr(mechanism_learner, 'get_mechanisms') else []
+
+    logger.info(f"模式学习: {ctx.learned_patterns['patterns_count']} 个句式, "
+               f"{ctx.learned_patterns['mechanisms_count']} 个机制")
     return ctx.learned_patterns
 
 
