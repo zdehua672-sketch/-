@@ -25,11 +25,15 @@ env/
 Thumbs.db
 Desktop.ini
 
-# Data files (large/敏感)
-*.xlsx
+# Data files (large/敏感) — 但保留示例数据和知识库
 *.xls
 *.csv
 *.dat
+# 示例数据需要提交（供其他人测试）
+!data/sample_data.xlsx
+# 个人数据文件不提交
+*.xlsx
+!data/*.xlsx
 
 # Output
 *.png
