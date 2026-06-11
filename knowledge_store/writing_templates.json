@@ -1,8 +1,8 @@
 {
   "meta": {
     "count": 17,
-    "updated": "2026-06-04T09:23:51.804512+00:00",
-    "version": 18
+    "updated": "2026-06-11T16:04:52.390540+00:00",
+    "version": 22
   },
   "entries": {
     "intro_opening_zh": {
@@ -365,6 +365,46 @@
       "source": "auto_learn",
       "updated": "2026-06-04T09:23:51.804512+00:00",
       "version": 1
+    },
+    "mem_20260612_000452_3092": {
+      "value": {
+        "zh": "本研究系统分析了{domain}中{variables}的时空分布特征及其驱动机制。结果表明{main_finding}。",
+        "en": "This study systematically analyzed the spatiotemporal distribution of {variables} in {domain}. Results showed that {main_finding}."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.386552+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_9629": {
+      "value": {
+        "zh": "{var1}与{var2}呈{direction}相关(r={r:.3f}, p={p:.4f})，这一结果与{reference}的研究一致。{mechanism}",
+        "en": "{var1} showed a {direction} correlation with {var2} (r={r:.3f}, p={p:.4f}), consistent with {reference}. {mechanism}"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.387541+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_4364": {
+      "value": {
+        "zh": "{variable}在{season_high}显著高于{season_low}({test}: p={p:.4f})，这可能与{mechanism}有关。温度效应是驱动季节差异的主要因素。",
+        "en": "{variable} was significantly higher in {season_high} than {season_low} ({test}: p={p:.4f}), likely due to {mechanism}."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.388553+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_8083": {
+      "value": {
+        "zh": "本研究存在以下局限性：(1){limit1}；(2){limit2}；(3){limit3}。未来研究应{future}。",
+        "en": "This study has the following limitations: (1){limit1}; (2){limit2}; (3){limit3}. Future work should {future}."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.390540+00:00",
+      "version": 1
     }
   },
   "changelog": [
@@ -511,6 +551,38 @@
       "new": "{'pattern': 'The study reveals that the novel W[NUM] strain can eff[VAR]iently remove total nitrogen from high-salinity wastewater and has signif[VAR]ant potential for biolog[VAR]al treatment of such ",
       "source": "auto_learn",
       "timestamp": "2026-06-04T09:23:51.804512+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3092",
+      "old": null,
+      "new": "{'zh': '本研究系统分析了{domain}中{variables}的时空分布特征及其驱动机制。结果表明{main_finding}。', 'en': 'This study systematically analyzed the spatiotemporal distribution of {variables} in {domain}. Results showed that {main_",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.386552+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_9629",
+      "old": null,
+      "new": "{'zh': '{var1}与{var2}呈{direction}相关(r={r:.3f}, p={p:.4f})，这一结果与{reference}的研究一致。{mechanism}', 'en': '{var1} showed a {direction} correlation with {var2} (r={r:.3f}, p={p:.4f}), consistent with {refere",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.387541+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_4364",
+      "old": null,
+      "new": "{'zh': '{variable}在{season_high}显著高于{season_low}({test}: p={p:.4f})，这可能与{mechanism}有关。温度效应是驱动季节差异的主要因素。', 'en': '{variable} was significantly higher in {season_high} than {season_low} ({test}: p={p:.4",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.388553+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8083",
+      "old": null,
+      "new": "{'zh': '本研究存在以下局限性：(1){limit1}；(2){limit2}；(3){limit3}。未来研究应{future}。', 'en': 'This study has the following limitations: (1){limit1}; (2){limit2}; (3){limit3}. Future work should {future}.'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.390540+00:00"
     }
   ]
 }

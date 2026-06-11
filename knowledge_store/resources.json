@@ -2,9 +2,9 @@
   "meta": {
     "category": "resources",
     "description": "外部资源（论文/项目/工具）",
-    "version": 190,
+    "version": 195,
     "created": "2026-05-23T09:59:33.120836+00:00",
-    "updated": "2026-06-05T09:23:51.976724+00:00",
+    "updated": "2026-06-11T16:04:52.378536+00:00",
     "source": "initial"
   },
   "entries": {
@@ -2806,6 +2806,105 @@
       "source": "domain_knowledge",
       "updated": "2026-06-05T09:23:51.976724+00:00",
       "version": 1
+    },
+    "mem_20260612_000452_9664": {
+      "value": {
+        "key": "ref_guisasola2008",
+        "type": "academic_paper",
+        "title": "Methane production in sewer systems",
+        "authors": [
+          "Guisasola, A.",
+          "de Haas, D.",
+          "Keller, J.",
+          "Yuan, Z."
+        ],
+        "year": 2008,
+        "journal": "Water Research",
+        "doi": "10.1016/j.watres.2008.03.016",
+        "abstract": "Review of methane formation mechanisms in sewer networks, covering biofilm processes, sediment contributions, and gas-liquid mass transfer."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.351537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_2662": {
+      "value": {
+        "key": "ref_sharma2021",
+        "type": "academic_paper",
+        "title": "Greenhouse gas emissions from sewers: A review",
+        "authors": [
+          "Sharma, K.",
+          "Aryal, R.",
+          "Murthy, S.",
+          "Yuan, Z."
+        ],
+        "year": 2021,
+        "journal": "Water Research",
+        "abstract": "Comprehensive review of GHG emissions from sewer systems including CH4, CO2, N2O, and H2S. Covers spatial-temporal patterns, influencing factors, and mitigation strategies."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.358536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_7992": {
+      "value": {
+        "key": "ref_liu2015",
+        "type": "academic_paper",
+        "title": "Methane and nitrous oxide emissions from urban sewage systems",
+        "authors": [
+          "Liu, Y.",
+          "Ni, B.J.",
+          "Sharma, K.R.",
+          "Yuan, Z."
+        ],
+        "year": 2015,
+        "journal": "Environmental Science & Technology",
+        "abstract": "Quantification of CH4 and N2O emissions from urban sewage systems with seasonal and spatial analysis."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.365537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_2319": {
+      "value": {
+        "key": "ref_foley2009",
+        "type": "academic_paper",
+        "title": "GHG production and emission from a full-scale anaerobic sewer system",
+        "authors": [
+          "Foley, J.",
+          "Yuan, Z.",
+          "Lant, P."
+        ],
+        "year": 2009,
+        "journal": "Water Research",
+        "abstract": "Full-scale measurement of greenhouse gas production in anaerobic sewer systems."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.372536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_0988": {
+      "value": {
+        "key": "ref_rahman2021",
+        "type": "academic_paper",
+        "title": "Carbon transformation and greenhouse gas emissions in sewer systems",
+        "authors": [
+          "Rahman, A.",
+          "Yuan, Z.",
+          "Sharma, K."
+        ],
+        "year": 2021,
+        "journal": "Science of the Total Environment",
+        "abstract": "Carbon transformation processes and GHG emissions in sewer systems with focus on carbon mass balance."
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.378536+00:00",
+      "version": 1
     }
   },
   "changelog": [
@@ -4980,6 +5079,46 @@
       "new": "{'type': 'academic_paper', 'title': 'Carbon transformation and greenhouse gas emissions in sewer systems', 'authors': ['K. Tang', 'Z. Yuan', 'J. Keller'], 'year': 2021, 'venue': 'Journal of Environmen",
       "source": "domain_knowledge",
       "timestamp": "2026-06-05T09:23:51.976724+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_9664",
+      "old": null,
+      "new": "{'key': 'ref_guisasola2008', 'type': 'academic_paper', 'title': 'Methane production in sewer systems', 'authors': ['Guisasola, A.', 'de Haas, D.', 'Keller, J.', 'Yuan, Z.'], 'year': 2008, 'journal': '",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.351537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_2662",
+      "old": null,
+      "new": "{'key': 'ref_sharma2021', 'type': 'academic_paper', 'title': 'Greenhouse gas emissions from sewers: A review', 'authors': ['Sharma, K.', 'Aryal, R.', 'Murthy, S.', 'Yuan, Z.'], 'year': 2021, 'journal'",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.358536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7992",
+      "old": null,
+      "new": "{'key': 'ref_liu2015', 'type': 'academic_paper', 'title': 'Methane and nitrous oxide emissions from urban sewage systems', 'authors': ['Liu, Y.', 'Ni, B.J.', 'Sharma, K.R.', 'Yuan, Z.'], 'year': 2015,",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.365537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_2319",
+      "old": null,
+      "new": "{'key': 'ref_foley2009', 'type': 'academic_paper', 'title': 'GHG production and emission from a full-scale anaerobic sewer system', 'authors': ['Foley, J.', 'Yuan, Z.', 'Lant, P.'], 'year': 2009, 'jou",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.372536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_0988",
+      "old": null,
+      "new": "{'key': 'ref_rahman2021', 'type': 'academic_paper', 'title': 'Carbon transformation and greenhouse gas emissions in sewer systems', 'authors': ['Rahman, A.', 'Yuan, Z.', 'Sharma, K.'], 'year': 2021, '",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.378536+00:00"
     }
   ]
 }

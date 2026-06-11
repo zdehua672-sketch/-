@@ -1,8 +1,8 @@
 {
   "meta": {
     "count": 36,
-    "updated": "2026-06-04T09:29:05.435195+00:00",
-    "version": 28
+    "updated": "2026-06-11T16:04:52.320536+00:00",
+    "version": 37
   },
   "entries": {
     "c_n_coupling_pattern": {
@@ -575,6 +575,177 @@
       "source": "domain_knowledge",
       "updated": "2026-06-04T09:29:05.435195+00:00",
       "version": 1
+    },
+    "mem_20260612_000452_3875": {
+      "value": {
+        "key": "toc_ch4_mechanism",
+        "pattern": "TOC -> CH4",
+        "mechanism": "有机碳(TOC)是产甲烷菌的主要底物。在厌氧条件下，产甲烷菌通过乙酸发酵或CO2还原途径将有机碳转化为甲烷。TOC浓度越高，底物越充足，甲烷产生量越大。污水管网中沉积物的有机碳含量是决定甲烷排放的关键因素。",
+        "mechanism_en": "Organic carbon (TOC) serves as the primary substrate for methanogenic archaea. Under anaerobic conditions, methanogens convert organic carbon to methane through acetoclastic or hydrogenotrophic pathways.",
+        "references": [
+          "Guisasola et al., 2008, Water Research",
+          "Liu et al., 2015, Environmental Science & Technology"
+        ],
+        "var1": "TOC",
+        "var2": "CH4",
+        "relation": "positive"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.303542+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_7102": {
+      "value": {
+        "key": "do_ch4_mechanism",
+        "pattern": "DO -| CH4",
+        "mechanism": "溶解氧(DO)对甲烷产生有显著抑制作用。甲烷菌是严格厌氧菌，DO>0.2mg/L即可抑制其活性。好氧条件下，甲烷氧化菌(MOB)可在有氧层氧化甲烷为CO2，减少甲烷排放。管网中DO的空间分布决定了甲烷产生的热区。",
+        "mechanism_en": "Dissolved oxygen (DO) significantly inhibits methanogenesis. Methanogens are strict anaerobes; DO > 0.2 mg/L suppresses their activity. Methanotrophic bacteria (MOB) oxidize CH4 to CO2 in aerobic zones.",
+        "references": [
+          "Guisasola et al., 2008",
+          "Czepiel et al., 1993"
+        ],
+        "var1": "DO",
+        "var2": "CH4",
+        "relation": "negative"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.305542+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_6324": {
+      "value": {
+        "key": "toc_co2_mechanism",
+        "pattern": "TOC -> CO2",
+        "mechanism": "有机碳的好氧分解和厌氧发酵都会产生CO2。好氧条件下，异养菌通过有氧呼吸将有机碳氧化为CO2和H2O。厌氧条件下，发酵菌将有机碳分解为挥发性脂肪酸(VFA)和CO2。管网中CO2的产生是碳循环的重要环节。",
+        "mechanism_en": "CO2 is produced through both aerobic decomposition and anaerobic fermentation of organic carbon. Heterotrophic bacteria oxidize organic carbon to CO2 under aerobic conditions.",
+        "references": [
+          "Jiang et al., 2011",
+          "Sharma et al., 2021"
+        ],
+        "var1": "TOC",
+        "var2": "CO2",
+        "relation": "positive"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.307537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_3595": {
+      "value": {
+        "key": "cod_ch4_mechanism",
+        "pattern": "COD -> CH4",
+        "mechanism": "化学需氧量(COD)反映水体中可被氧化的有机物总量。COD越高，可被产甲烷菌利用的有机底物越丰富。在管网厌氧环境中，COD的降解与甲烷产生呈正相关。COD/TOC比值可反映有机物的可生物降解性。",
+        "mechanism_en": "Chemical Oxygen Demand (COD) reflects the total oxidizable organic matter. Higher COD provides more substrate for methanogenic archaea in anaerobic sewer environments.",
+        "references": [
+          "Cakir & Stoeckel, 2000",
+          "Ahn et al., 2011"
+        ],
+        "var1": "COD",
+        "var2": "CH4",
+        "relation": "positive"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.309536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_1867": {
+      "value": {
+        "key": "nh4_ch4_mechanism",
+        "pattern": "NH4+ -> CH4",
+        "mechanism": "铵态氮(NH4+)与甲烷产生的关联机制包括：(1)氨化作用产生NH4+的同时释放有机碳底物；(2)高浓度NH4+可抑制产甲烷菌(IC50约3000mg/L)；(3)NH4+与CH4在氮碳耦合中存在协同效应。在低碳氮比条件下，NH4+对CH4的促进作用更明显。",
+        "mechanism_en": "Ammonium (NH4+) relates to CH4 production through: ammonification releasing organic carbon substrates; high NH4+ inhibiting methanogens (IC50 ~3000 mg/L); synergistic effects in C-N coupling.",
+        "references": [
+          "Rajagopal et al., 2013",
+          "Yenigün & Demirel, 2013"
+        ],
+        "var1": "NH4+",
+        "var2": "CH4",
+        "relation": "complex"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.311536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_8575": {
+      "value": {
+        "key": "tn_tp_mechanism",
+        "pattern": "TN ~ TP",
+        "mechanism": "总氮(TN)与总磷(TP)的共变关系反映了污水中营养盐的同源性。生活污水中N和P主要来自人类排泄物和洗涤剂，因此通常呈正相关。TN/TP比值可指示污水的营养盐特征和生物可利用性。",
+        "mechanism_en": "The co-variation of TN and TP reflects their common sources in sewage (human excreta and detergents). The N/P ratio indicates nutrient characteristics and bioavailability.",
+        "references": [
+          "Metcalf & Eddy, 2003",
+          "Henze et al., 2008"
+        ],
+        "var1": "TN",
+        "var2": "TP",
+        "relation": "positive"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.313536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_7346": {
+      "value": {
+        "key": "temperature_seasonal",
+        "pattern": "Temperature -> CH4/CO2",
+        "mechanism": "温度是驱动碳排放季节差异的核心因素。Q10效应：温度每升高10°C，微生物代谢速率增加2-3倍。冬季(5-10°C)微生物活性低，碳排放量小；夏季(20-30°C)微生物活跃，碳排放量大。产甲烷菌的最适温度为35-40°C(中温)或50-60°C(高温)。",
+        "mechanism_en": "Temperature is the core driver of seasonal carbon emission differences. Q10 effect: metabolic rate increases 2-3x per 10°C rise. Optimal temperature for methanogens: 35-40°C (mesophilic) or 50-60°C (thermophilic).",
+        "references": [
+          "Liu et al., 2015",
+          "Nielsen et al., 2019"
+        ],
+        "var1": "Temperature",
+        "var2": "CH4/CO2",
+        "relation": "positive"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.315536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_1796": {
+      "value": {
+        "key": "spatial_distribution",
+        "pattern": "Distance -> CH4/CO2/H2S",
+        "mechanism": "沿管网距离增加，碳排放呈空间梯度变化。管口(DO高)以CO2为主；中段(DO降低)开始产生CH4；末端(完全厌氧)CH4和H2S排放最大。沉积物积累、水力停留时间、管径大小都是影响空间分布的因素。",
+        "mechanism_en": "Along sewer networks, carbon emissions show spatial gradients. Inlet (high DO): mainly CO2. Middle (decreasing DO): CH4 begins. Outlet (fully anaerobic): maximum CH4 and H2S.",
+        "references": [
+          "Sharma et al., 2021",
+          "Foley et al., 2009"
+        ],
+        "var1": "Distance",
+        "var2": "CH4/CO2/H2S",
+        "relation": "gradient"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.317536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_5483": {
+      "value": {
+        "key": "sediment_effect",
+        "pattern": "Sediment -> CH4/CO2",
+        "mechanism": "管网沉积物是碳排放的重要来源。沉积物中有机物浓度高、DO极低，是产甲烷的热区。沉积物厚度增加→厌氧体积增大→甲烷产量增加。泥水界面是生物地球化学反应的活跃区域，碳氮硫的转化在此集中发生。",
+        "mechanism_en": "Sewer sediments are major sources of carbon emissions. High organic matter and near-zero DO in sediments create hotspots for methanogenesis. Sediment depth correlates with anaerobic volume and CH4 production.",
+        "references": [
+          "Sharma et al., 2021",
+          "Hvitved-Jacobsen et al., 2013"
+        ],
+        "var1": "Sediment",
+        "var2": "CH4/CO2",
+        "relation": "positive"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.320536+00:00",
+      "version": 1
     }
   },
   "changelog": [
@@ -1049,6 +1220,78 @@
       "new": "{'pattern': 'VOCs冬高春低', 'mechanism': 'VOCs冬季高于春季可能原因：(1)冬季大气扩散条件差，管道内VOCs不易逸散；(2)冬季低温下VOCs挥发性降低，在液相中浓度升高；(3)春季微生物活性增强，部分VOCs被生物降解。', 'references': []}",
       "source": "domain_knowledge",
       "timestamp": "2026-06-04T09:29:05.435195+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875",
+      "old": null,
+      "new": "{'key': 'toc_ch4_mechanism', 'pattern': 'TOC -> CH4', 'mechanism': '有机碳(TOC)是产甲烷菌的主要底物。在厌氧条件下，产甲烷菌通过乙酸发酵或CO2还原途径将有机碳转化为甲烷。TOC浓度越高，底物越充足，甲烷产生量越大。污水管网中沉积物的有机碳含量是决定甲烷排放的关键因素。', 'mechanism_en': 'Organic c",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.303542+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102",
+      "old": null,
+      "new": "{'key': 'do_ch4_mechanism', 'pattern': 'DO -| CH4', 'mechanism': '溶解氧(DO)对甲烷产生有显著抑制作用。甲烷菌是严格厌氧菌，DO>0.2mg/L即可抑制其活性。好氧条件下，甲烷氧化菌(MOB)可在有氧层氧化甲烷为CO2，减少甲烷排放。管网中DO的空间分布决定了甲烷产生的热区。', 'mechanism_en': 'Dissolve",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.305542+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324",
+      "old": null,
+      "new": "{'key': 'toc_co2_mechanism', 'pattern': 'TOC -> CO2', 'mechanism': '有机碳的好氧分解和厌氧发酵都会产生CO2。好氧条件下，异养菌通过有氧呼吸将有机碳氧化为CO2和H2O。厌氧条件下，发酵菌将有机碳分解为挥发性脂肪酸(VFA)和CO2。管网中CO2的产生是碳循环的重要环节。', 'mechanism_en': 'CO2 is pro",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.307537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595",
+      "old": null,
+      "new": "{'key': 'cod_ch4_mechanism', 'pattern': 'COD -> CH4', 'mechanism': '化学需氧量(COD)反映水体中可被氧化的有机物总量。COD越高，可被产甲烷菌利用的有机底物越丰富。在管网厌氧环境中，COD的降解与甲烷产生呈正相关。COD/TOC比值可反映有机物的可生物降解性。', 'mechanism_en': 'Chemical Oxygen",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.309536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867",
+      "old": null,
+      "new": "{'key': 'nh4_ch4_mechanism', 'pattern': 'NH4+ -> CH4', 'mechanism': '铵态氮(NH4+)与甲烷产生的关联机制包括：(1)氨化作用产生NH4+的同时释放有机碳底物；(2)高浓度NH4+可抑制产甲烷菌(IC50约3000mg/L)；(3)NH4+与CH4在氮碳耦合中存在协同效应。在低碳氮比条件下，NH4+对CH4的促进作用更明显。',",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.311536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575",
+      "old": null,
+      "new": "{'key': 'tn_tp_mechanism', 'pattern': 'TN ~ TP', 'mechanism': '总氮(TN)与总磷(TP)的共变关系反映了污水中营养盐的同源性。生活污水中N和P主要来自人类排泄物和洗涤剂，因此通常呈正相关。TN/TP比值可指示污水的营养盐特征和生物可利用性。', 'mechanism_en': 'The co-variation of TN and T",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.313536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346",
+      "old": null,
+      "new": "{'key': 'temperature_seasonal', 'pattern': 'Temperature -> CH4/CO2', 'mechanism': '温度是驱动碳排放季节差异的核心因素。Q10效应：温度每升高10°C，微生物代谢速率增加2-3倍。冬季(5-10°C)微生物活性低，碳排放量小；夏季(20-30°C)微生物活跃，碳排放量大。产甲烷菌的最适温度为35-40°C(中温)或5",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.315536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796",
+      "old": null,
+      "new": "{'key': 'spatial_distribution', 'pattern': 'Distance -> CH4/CO2/H2S', 'mechanism': '沿管网距离增加，碳排放呈空间梯度变化。管口(DO高)以CO2为主；中段(DO降低)开始产生CH4；末端(完全厌氧)CH4和H2S排放最大。沉积物积累、水力停留时间、管径大小都是影响空间分布的因素。', 'mechanism_en':",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.317536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483",
+      "old": null,
+      "new": "{'key': 'sediment_effect', 'pattern': 'Sediment -> CH4/CO2', 'mechanism': '管网沉积物是碳排放的重要来源。沉积物中有机物浓度高、DO极低，是产甲烷的热区。沉积物厚度增加→厌氧体积增大→甲烷产量增加。泥水界面是生物地球化学反应的活跃区域，碳氮硫的转化在此集中发生。', 'mechanism_en': 'Sewer sedime",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.320536+00:00"
     }
   ]
 }

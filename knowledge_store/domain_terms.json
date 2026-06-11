@@ -1,7 +1,8 @@
 {
   "meta": {
     "count": 21,
-    "updated": "2026-06-02T09:20:59.002167+00:00"
+    "updated": "2026-06-11T16:04:52.350537+00:00",
+    "version": 27
   },
   "entries": {
     "DO": {
@@ -241,6 +242,524 @@
       },
       "version": 1,
       "created": "2026-06-02T09:20:59.002167+00:00"
+    },
+    "mem_20260612_000452_7656": {
+      "value": {
+        "zh": "甲烷",
+        "en": "Methane",
+        "category": "greenhouse_gas",
+        "gwp": 28
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.322537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_6462": {
+      "value": {
+        "zh": "二氧化碳",
+        "en": "Carbon dioxide",
+        "category": "greenhouse_gas",
+        "gwp": 1
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.323536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_8490": {
+      "value": {
+        "zh": "氧化亚氮",
+        "en": "Nitrous oxide",
+        "category": "greenhouse_gas",
+        "gwp": 265
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.323536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_1784": {
+      "value": {
+        "zh": "挥发性有机物",
+        "en": "Volatile organic compounds",
+        "category": "air_pollutant"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.324537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_1266": {
+      "value": {
+        "zh": "硫化氢",
+        "en": "Hydrogen sulfide",
+        "category": "air_pollutant"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.325536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_5484": {
+      "value": {
+        "zh": "温室气体",
+        "en": "Greenhouse gas",
+        "category": "concept"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.326537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_2354": {
+      "value": {
+        "zh": "全球变暖潜势",
+        "en": "Global warming potential",
+        "category": "concept"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.326537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_3096": {
+      "value": {
+        "zh": "总有机碳",
+        "en": "Total organic carbon",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.327536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_5412": {
+      "value": {
+        "zh": "化学需氧量",
+        "en": "Chemical oxygen demand",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.328536+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_8361": {
+      "value": {
+        "zh": "生化需氧量",
+        "en": "Biochemical oxygen demand",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.329537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_7229": {
+      "value": {
+        "zh": "溶解氧",
+        "en": "Dissolved oxygen",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.330538+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_3013": {
+      "value": {
+        "zh": "总氮",
+        "en": "Total nitrogen",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.331537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_2068": {
+      "value": {
+        "zh": "总磷",
+        "en": "Total phosphorus",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.332539+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_5300": {
+      "value": {
+        "zh": "无机碳",
+        "en": "Inorganic carbon",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.333537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_8327": {
+      "value": {
+        "zh": "总碳",
+        "en": "Total carbon",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.334537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_8174": {
+      "value": {
+        "zh": "铵态氮",
+        "en": "Ammonium nitrogen",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.335537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_0084": {
+      "value": {
+        "zh": "硝态氮",
+        "en": "Nitrate nitrogen",
+        "category": "water_quality"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.336551+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_6220": {
+      "value": {
+        "zh": "产甲烷菌",
+        "en": "Methanogenic archaea",
+        "category": "microorganism"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.338550+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_3836": {
+      "value": {
+        "zh": "甲烷氧化菌",
+        "en": "Methanotrophic bacteria",
+        "category": "microorganism"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.339584+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_9315": {
+      "value": {
+        "zh": "硫酸盐还原菌",
+        "en": "Sulfate-reducing bacteria",
+        "category": "microorganism"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.341537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_6924": {
+      "value": {
+        "zh": "污水管网",
+        "en": "Sewer network",
+        "category": "infrastructure"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.342537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_2747": {
+      "value": {
+        "zh": "沉积物",
+        "en": "Sediment",
+        "category": "infrastructure"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.343537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_9847": {
+      "value": {
+        "zh": "生物膜",
+        "en": "Biofilm",
+        "category": "infrastructure"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.344538+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_5346": {
+      "value": {
+        "zh": "皮尔逊相关",
+        "en": "Pearson correlation",
+        "category": "statistics"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.346537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_6570": {
+      "value": {
+        "zh": "主成分分析",
+        "en": "Principal component analysis",
+        "category": "statistics"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.347591+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_6027": {
+      "value": {
+        "zh": "层次聚类分析",
+        "en": "Hierarchical cluster analysis",
+        "category": "statistics"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.348537+00:00",
+      "version": 1
+    },
+    "mem_20260612_000452_9577": {
+      "value": {
+        "zh": "方差分析",
+        "en": "Analysis of variance",
+        "category": "statistics"
+      },
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.350537+00:00",
+      "version": 1
     }
-  }
+  },
+  "changelog": [
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7656",
+      "old": null,
+      "new": "{'zh': '甲烷', 'en': 'Methane', 'category': 'greenhouse_gas', 'gwp': 28}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.322537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6462",
+      "old": null,
+      "new": "{'zh': '二氧化碳', 'en': 'Carbon dioxide', 'category': 'greenhouse_gas', 'gwp': 1}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.323536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8490",
+      "old": null,
+      "new": "{'zh': '氧化亚氮', 'en': 'Nitrous oxide', 'category': 'greenhouse_gas', 'gwp': 265}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.323536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1784",
+      "old": null,
+      "new": "{'zh': '挥发性有机物', 'en': 'Volatile organic compounds', 'category': 'air_pollutant'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.324537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1266",
+      "old": null,
+      "new": "{'zh': '硫化氢', 'en': 'Hydrogen sulfide', 'category': 'air_pollutant'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.325536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5484",
+      "old": null,
+      "new": "{'zh': '温室气体', 'en': 'Greenhouse gas', 'category': 'concept'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.326537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_2354",
+      "old": null,
+      "new": "{'zh': '全球变暖潜势', 'en': 'Global warming potential', 'category': 'concept'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.326537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3096",
+      "old": null,
+      "new": "{'zh': '总有机碳', 'en': 'Total organic carbon', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.327536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5412",
+      "old": null,
+      "new": "{'zh': '化学需氧量', 'en': 'Chemical oxygen demand', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.328536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8361",
+      "old": null,
+      "new": "{'zh': '生化需氧量', 'en': 'Biochemical oxygen demand', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.329537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7229",
+      "old": null,
+      "new": "{'zh': '溶解氧', 'en': 'Dissolved oxygen', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.330538+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3013",
+      "old": null,
+      "new": "{'zh': '总氮', 'en': 'Total nitrogen', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.331537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_2068",
+      "old": null,
+      "new": "{'zh': '总磷', 'en': 'Total phosphorus', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.332539+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5300",
+      "old": null,
+      "new": "{'zh': '无机碳', 'en': 'Inorganic carbon', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.333537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8327",
+      "old": null,
+      "new": "{'zh': '总碳', 'en': 'Total carbon', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.334537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8174",
+      "old": null,
+      "new": "{'zh': '铵态氮', 'en': 'Ammonium nitrogen', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.335537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_0084",
+      "old": null,
+      "new": "{'zh': '硝态氮', 'en': 'Nitrate nitrogen', 'category': 'water_quality'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.336551+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6220",
+      "old": null,
+      "new": "{'zh': '产甲烷菌', 'en': 'Methanogenic archaea', 'category': 'microorganism'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.338550+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3836",
+      "old": null,
+      "new": "{'zh': '甲烷氧化菌', 'en': 'Methanotrophic bacteria', 'category': 'microorganism'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.339584+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_9315",
+      "old": null,
+      "new": "{'zh': '硫酸盐还原菌', 'en': 'Sulfate-reducing bacteria', 'category': 'microorganism'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.341537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6924",
+      "old": null,
+      "new": "{'zh': '污水管网', 'en': 'Sewer network', 'category': 'infrastructure'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.342537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_2747",
+      "old": null,
+      "new": "{'zh': '沉积物', 'en': 'Sediment', 'category': 'infrastructure'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.343537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_9847",
+      "old": null,
+      "new": "{'zh': '生物膜', 'en': 'Biofilm', 'category': 'infrastructure'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.344538+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5346",
+      "old": null,
+      "new": "{'zh': '皮尔逊相关', 'en': 'Pearson correlation', 'category': 'statistics'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.346537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6570",
+      "old": null,
+      "new": "{'zh': '主成分分析', 'en': 'Principal component analysis', 'category': 'statistics'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.347591+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6027",
+      "old": null,
+      "new": "{'zh': '层次聚类分析', 'en': 'Hierarchical cluster analysis', 'category': 'statistics'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.348537+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_9577",
+      "old": null,
+      "new": "{'zh': '方差分析', 'en': 'Analysis of variance', 'category': 'statistics'}",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.350537+00:00"
+    }
+  ]
 }

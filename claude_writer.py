@@ -28,11 +28,26 @@ class ClaudeWriter:
     """
     通过 Claude Code CLI 生成学术文本。
     深度整合文献学习成果，实现"学了就用"。
+    支持多领域配置，不再硬编码域名。
     """
 
-    def __init__(self, model: str = None, timeout: int = DEFAULT_TIMEOUT):
+    def __init__(self, model: str = None, timeout: int = DEFAULT_TIMEOUT, domain_config=None):
         self.timeout = timeout
         self.model = model
+        self.domain_config = domain_config
+
+    def _get_domain_context(self) -> str:
+        """从领域配置生成上下文文本"""
+        if not self.domain_config:
+            return ""
+        dc = self.domain_config
+        lines = []
+        if dc.standards:
+            std_text = ', '.join(f'{k}({v})' for k, v in list(dc.standards.items())[:8])
+            lines.append(f"分析标准: {std_text}")
+        if dc.typical_limitations:
+            lines.append(f"典型局限性参考: {'; '.join(dc.typical_limitations[:3])}")
+        return '\n'.join(lines)
 
     def _call_claude(self, prompt: str) -> str:
         """调用 Claude CLI 生成文本"""
