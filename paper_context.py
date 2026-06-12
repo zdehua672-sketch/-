@@ -569,16 +569,19 @@ def _run_latex_export(ctx: PaperContext):
     try:
         from latex_exporter import LatexExporter
         exporter = LatexExporter()
-        # 组装全文 Markdown
-        full_md = '\n\n'.join(
-            f"# {k}\n\n{ctx.sections[k]}" for k in
-            ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
-            if ctx.has_section(k)
+        # 构造 sections dict
+        sections = {}
+        for key in ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']:
+            if ctx.has_section(key):
+                sections[key] = ctx.sections[key]
+        result = exporter.export(
+            sections=sections,
+            output_dir=ctx.output_dir,
+            title=ctx.title or '',
+            abstract_text=ctx.sections.get('abstract', ''),
         )
-        latex_path = os.path.join(ctx.output_dir, 'paper.tex')
-        exporter.export(full_latex=exporter.md_to_latex(full_md), output_path=latex_path)
-        logger.info(f"LaTeX: {latex_path}")
-        return latex_path
+        logger.info(f"LaTeX: {ctx.output_dir}")
+        return result
     except Exception as e:
         logger.warning(f"LaTeX export failed: {e}")
         return None
@@ -743,7 +746,7 @@ def _run_paper_reading(ctx: PaperContext):
             if not keywords:
                 keywords = ['sewage', 'greenhouse gas', 'methane', 'carbon']
             search_query = ' '.join(keywords[:5])
-            found_papers = finder.search(search_query, max_results=10)
+            found_papers = finder.find_papers(search_query)
             if found_papers:
                 logger.info(f"在线搜索到 {len(found_papers)} 篇论文")
                 for p in found_papers[:10]:
@@ -875,43 +878,79 @@ def _run_advanced_analysis(ctx: PaperContext):
     """高级多维分析（交叉分析、异常深挖、数据故事线、阈值检测）"""
     if not ctx.has('df'):
         return None
-    from advanced_analysis import AdvancedAnalyzer
-    analyzer = AdvancedAnalyzer(ctx.df)
-    results = analyzer.analyze_all()
-    ctx.advanced_findings = results.get('cross_analyses', [])
-    ctx.cross_analyses = results.get('cross_analyses', [])
-    ctx.anomaly_insights = results.get('anomaly_insights', [])
-    ctx.data_stories = results.get('data_stories', [])
-    ctx.threshold_effects = results.get('threshold_effects', [])
-    total = sum(len(v) for v in results.values() if isinstance(v, list))
-    logger.info(f"高级分析: {total}项发现")
-    return results
+    try:
+        from advanced_analysis import CrossAnalyzer, AnomalyDeepDiver, DataStoryExtractor, ThresholdDetector
+        all_results = {}
+
+        # 交叉分析
+        cross = CrossAnalyzer(ctx.df)
+        cross_results = cross.analyze_all()
+        all_results['cross_analyses'] = cross_results if isinstance(cross_results, list) else []
+
+        # 异常深挖
+        try:
+            diver = AnomalyDeepDiver(ctx.df)
+            anomaly_results = diver.analyze_all() if hasattr(diver, 'analyze_all') else []
+            all_results['anomaly_insights'] = anomaly_results if isinstance(anomaly_results, list) else []
+        except Exception:
+            all_results['anomaly_insights'] = []
+
+        # 数据故事线
+        try:
+            extractor = DataStoryExtractor(ctx.df)
+            story_results = extractor.extract_all() if hasattr(extractor, 'extract_all') else []
+            all_results['data_stories'] = story_results if isinstance(story_results, list) else []
+        except Exception:
+            all_results['data_stories'] = []
+
+        # 阈值检测
+        try:
+            detector = ThresholdDetector(ctx.df)
+            threshold_results = detector.detect_all() if hasattr(detector, 'detect_all') else []
+            all_results['threshold_effects'] = threshold_results if isinstance(threshold_results, list) else []
+        except Exception:
+            all_results['threshold_effects'] = []
+
+        ctx.advanced_findings = all_results.get('cross_analyses', [])
+        ctx.cross_analyses = all_results.get('cross_analyses', [])
+        ctx.anomaly_insights = all_results.get('anomaly_insights', [])
+        ctx.data_stories = all_results.get('data_stories', [])
+        ctx.threshold_effects = all_results.get('threshold_effects', [])
+        total = sum(len(v) for v in all_results.values() if isinstance(v, list))
+        logger.info(f"高级分析: {total}项发现")
+        return all_results
+    except Exception as e:
+        logger.warning(f"高级分析失败: {e}")
+        return None
 
 
 def _run_deep_imitation(ctx: PaperContext):
     """深度模仿分析（3表法：范例动作/草稿动作/目标蓝图）"""
     if not ctx.has('sections'):
         return None
-    from deep_imitation import DeepImitationProtocol
-    protocol = DeepImitationProtocol(output_dir=ctx.output_dir)
+    from deep_imitation import DeepImitationManager
+    manager = DeepImitationManager(output_dir=ctx.output_dir)
     # 用已有章节作为草稿
     draft_text = '\n\n'.join(ctx.sections.values())
     if not draft_text.strip():
         return None
-    result = protocol.run(draft_text)
-    ctx.imitation_report = protocol.format_report(result)
+    manager.analyze_draft(draft_text)
+    manager.generate_blueprint()
+    report = manager.generate_report()
+    ctx.imitation_report = report if isinstance(report, str) else str(report)
     logger.info("深度模仿分析完成")
-    return result
+    return report
 
 
 def _run_integrity_audit(ctx: PaperContext):
     """完整性审计（4维度：制品链、推理深度、证据链、模式扫描）"""
-    from integrity_audit import IntegrityAuditor
-    auditor = IntegrityAuditor(output_dir=ctx.output_dir)
-    findings = auditor.run_audit(ctx.sections)
-    ctx.integrity_report = auditor.format_report(findings)
-    logger.info(f"完整性审计: {len(findings)}项发现")
-    return findings
+    from integrity_audit import IntegrityAuditManager
+    auditor = IntegrityAuditManager(output_dir=ctx.output_dir)
+    report = auditor.run_audit()
+    ctx.integrity_report = auditor.format_report(report)
+    issue_count = len(report.findings) if hasattr(report, 'findings') else 0
+    logger.info(f"完整性审计: {issue_count}项发现")
+    return report
 
 
 def _run_artifact_check(ctx: PaperContext):
@@ -920,7 +959,8 @@ def _run_artifact_check(ctx: PaperContext):
     checker = ArtifactChecker(output_dir=ctx.output_dir)
     report = checker.check_all()
     ctx.artifact_report = checker.format_report(report)
-    logger.info(f"制品检查: {report.get('total_issues', 0)}个问题")
+    issue_count = len(report.findings) if hasattr(report, 'findings') else 0
+    logger.info(f"制品检查: {issue_count}个问题")
     return report
 
 
@@ -933,7 +973,7 @@ def _run_citation_bank(ctx: PaperContext):
     full_text = '\n\n'.join(ctx.sections.values())
     claims = bank.extract_claims_from_text(full_text)
     if claims:
-        bank.bind_citations(claims)
+        bank.bind_citations()
         bank.save()
         ctx.citation_bank = bank
         logger.info(f"引用支撑库: {len(claims)}个论点")
@@ -1230,13 +1270,14 @@ class PaperOrchestrator:
         """
         将步骤分组，同组内可并行执行。
         规则：
-        - Introduction + Methods 可并行（互不依赖）
-        - Results + Discussion 可并行（共享 findings，不互相依赖）
+        - Introduction + Methods 可并行（互不依赖，且不依赖数据）
+        - Results + Discussion 可并行（共享 findings）
         - 其他步骤串行
         """
+        # 只有 writer_intro 和 writer_methods 可以并行（都不依赖 df/findings）
+        # writer_results 和 writer_discussion 都依赖 df/findings，需要串行保证
         parallel_sets = [
             {'writer_intro', 'writer_methods'},           # 批次1: 互不依赖
-            {'writer_results', 'writer_discussion'},      # 批次2: 共享 findings
         ]
 
         groups = []

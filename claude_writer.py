@@ -21,7 +21,7 @@ from typing import Optional, Dict, List
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TIMEOUT = 180
+DEFAULT_TIMEOUT = 300
 
 
 class ClaudeWriter:
@@ -51,13 +51,29 @@ class ClaudeWriter:
 
     def _call_claude(self, prompt: str) -> str:
         """调用 Claude CLI 生成文本"""
-        cmd = ["claude", "-p", prompt, "--output-format", "text"]
+        # 自动查找 claude CLI 路径
+        claude_cmd = "claude"
+        for path_dir in os.environ.get('PATH', '').split(os.pathsep):
+            candidate = os.path.join(path_dir, 'claude')
+            if os.path.exists(candidate) or os.path.exists(candidate + '.cmd'):
+                claude_cmd = candidate
+                break
+        # Windows npm 全局安装路径
+        npm_global = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'npm', 'claude.cmd')
+        if os.path.exists(npm_global):
+            claude_cmd = npm_global
+
+        cmd = [claude_cmd, "-p", prompt, "--output-format", "text"]
         if self.model:
             cmd.extend(["--model", self.model])
         try:
+            # 修复 SSL 证书问题
+            env = os.environ.copy()
+            env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
             result = subprocess.run(
                 cmd, capture_output=True, text=True,
                 timeout=self.timeout, encoding='utf-8', errors='replace',
+                env=env,
             )
             if result.returncode != 0:
                 logger.error(f"Claude CLI error: {result.stderr[:300]}")
@@ -97,24 +113,19 @@ class ClaudeWriter:
         patterns_hint = self._format_patterns_hint(learned_patterns, 'result')
 
         if language == "zh":
-            prompt = f"""你是一位环境科学领域的资深学者，正在撰写一篇关于{domain}的中文学术论文。
-
-请根据以下数据分析发现，撰写"结果"章节（约1500-2500字）。
+            prompt = f"""你是环境科学学者，撰写{domain}论文的"结果"章节(1000-1500字)。
 
 要求：
-1. 结构：描述性统计 → 季节差异 → 相关性分析 → 异常值/特殊发现
-2. 每个发现必须包含具体数据（均值、标准差、p值、r值）
-3. 图表引用格式：如图1所示、如表2所示
-4. 先描述数据特征，再报告统计检验结果
-5. 使用客观陈述，不要解释原因（留给讨论部分）
-6. 结果之间要有逻辑过渡，不要简单罗列
-{patterns_hint}
+1. 结构：描述统计 → 季节差异 → 相关性
+2. 每个发现必须有具体数据(均值、p值、r值)
+3. 客观陈述，不解释原因
+4. 引用图表(如图1所示)
 
-数据分析发现:
+发现:
 {findings_text}
 {figures_text}
 
-请直接输出结果正文，用 ## 标记子章节。"""
+直接输出结果正文，用 ## 标记子章节。"""
         else:
             prompt = f"""You are a senior environmental scientist writing Results for a paper about {domain}.
 
@@ -154,29 +165,21 @@ Write the Results directly, use ## for subsections."""
         domain_terms = self._format_domain_terms(learned_patterns)
 
         if language == "zh":
-            prompt = f"""你是一位环境科学领域的资深学者，正在撰写一篇关于{domain}的中文学术论文。
-
-请根据以下信息，撰写"讨论"章节（约2000-3000字）。
+            prompt = f"""你是环境科学学者，撰写{domain}论文的"讨论"章节(1500-2500字)。
 
 要求：
-1. 结构：主要发现概述 → 逐项讨论（与文献对比+机制解释） → 研究意义 → 局限性
-2. 每个重要发现都要：(a) 陈述发现 (b) 与已有文献对比 (c) 给出机制解释
-3. 引用提供的参考文献来支撑论点
-4. 使用适当的学术限定语（可能、初步表明、这暗示、归因于）
-5. 解释"为什么"，不只是重复结果
-6. 局限性要诚实、具体
-{patterns_hint}
-{structures_text}
-{domain_terms}
+1. 结构：概述 → 逐项讨论(发现+机制+文献对比) → 意义 → 局限性
+2. 每个发现要解释"为什么"
+3. 用学术限定语(可能、归因于、表明)
 
-数据分析发现:
+发现:
 {findings_text}
 
 {mech_text}
 
 {refs_text}
 
-请直接输出讨论正文，用 ## 标记子章节。"""
+直接输出讨论正文，用 ## 标记子章节。"""
         else:
             prompt = f"""You are a senior environmental scientist writing a Discussion about {domain}.
 
@@ -210,24 +213,20 @@ Write the Discussion directly, use ## for subsections."""
         patterns_hint = self._format_patterns_hint(learned_patterns, 'background')
 
         if language == "zh":
-            prompt = f"""你是一位环境科学领域的资深学者，正在撰写一篇关于{domain}的中文学术论文。
-
-请根据以下数据分析发现，撰写论文的"引言"章节（约1500-2000字）。
+            prompt = f"""你是环境科学学者，撰写{domain}论文的"引言"(1000-1500字)。
 
 要求：
-1. 遵循"倒三角"结构：领域重要性 → 现有研究 → 研究不足 → 本文目标
-2. 引用3-5篇相关文献（使用提供的参考文献）
-3. 语言要符合中文学术论文规范（SCI期刊水平）
-4. 最后明确列出本文的研究目标（2-3个）
-5. 不要使用"本文"开头，用"本研究"
-6. 适当使用学术连接词（然而、此外、值得注意的是）
-{patterns_hint}
+1. 倒三角：领域重要性 → 现有研究 → 不足 → 本文目标
+2. 引用3-5篇文献
+3. 用"本研究"不用"本文"
+4. 列出2-3个研究目标
 
-数据分析发现:
+发现摘要:
 {findings_text}
+
 {refs_text}
 
-请直接输出引言正文，用 ## 标记子章节。"""
+直接输出引言正文，用 ## 标记子章节。"""
         else:
             prompt = f"""You are a senior environmental scientist writing an Introduction about {domain}.
 
@@ -428,11 +427,15 @@ Write the Methods directly."""
     # ================================================================
 
     def _summarize_findings(self, findings: list) -> str:
-        """将 findings 列表转为可读文本摘要"""
+        """将 findings 列表转为可读文本摘要（精简版，避免超时）"""
         if not findings:
             return "暂无数据分析发现。"
+        # 只取最重要的发现，严格限制数量
+        critical = [f for f in findings if f.get('importance') == 'critical']
+        high = [f for f in findings if f.get('importance') == 'high']
+        selected = (critical + high)[:8] if (critical + high) else findings[:6]
         lines = []
-        for f in findings[:20]:
+        for f in selected:
             ftype = f.get('type', 'unknown')
             importance = f.get('importance', 'medium')
             var = f.get('variable', '')
@@ -466,20 +469,22 @@ Write the Methods directly."""
         return '\n'.join(lines)
 
     def _format_mechanisms(self, mechanisms: dict) -> str:
-        """格式化机制知识"""
+        """格式化机制知识（精简版）"""
         if not mechanisms:
             return ""
-        lines = ["已知机制解释:"]
-        for pair, mech in mechanisms.items():
-            lines.append(f"- {pair}: {mech}")
+        lines = ["已知机制:"]
+        for pair, mech in list(mechanisms.items())[:5]:
+            # 截断过长的机制描述
+            mech_short = mech[:200] + '...' if len(mech) > 200 else mech
+            lines.append(f"- {pair}: {mech_short}")
         return '\n'.join(lines)
 
     def _format_references(self, refs: list) -> str:
-        """格式化参考文献"""
+        """格式化参考文献（精简版）"""
         if not refs:
             return ""
-        lines = ["可用的参考文献:"]
-        for ref in refs[:10]:
+        lines = ["参考文献:"]
+        for ref in refs[:5]:
             title = ref.get('title', '')
             year = ref.get('year', '')
             authors = ref.get('authors', '')
