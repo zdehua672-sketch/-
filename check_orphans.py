@@ -61,7 +61,7 @@ def find_orphans(root_dir='.'):
             connected.append((f, importers))
         else:
             # paper_context.py 是编排器入口，被 test_full_pipeline 导入，不算孤立
-            if module_name == 'paper_context':
+            if module_name in ('paper_context', 'web_app'):
                 connected.append((f, ['[entry point]']))
             else:
                 orphaned.append(f)

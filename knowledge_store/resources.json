@@ -2,9 +2,9 @@
   "meta": {
     "category": "resources",
     "description": "外部资源（论文/项目/工具）",
-    "version": 205,
+    "version": 195,
     "created": "2026-05-23T09:59:33.120836+00:00",
-    "updated": "2026-06-10T09:51:35.881469+00:00",
+    "updated": "2026-06-11T16:04:52.378536+00:00",
     "source": "initial"
   },
   "entries": {
@@ -954,12 +954,12 @@
         "citation_count": 0,
         "sections_count": 6,
         "abstract_snippet": "",
-        "read_at": "2026-06-10T09:30:14.902856+00:00"
+        "read_at": "2026-05-30T01:56:35.643717+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-10T09:30:14.920791+00:00",
-      "version": 3
+      "updated": "2026-05-30T01:56:35.680031+00:00",
+      "version": 1
     },
     "paper__test_db_paper": {
       "value": {
@@ -2807,290 +2807,103 @@
       "updated": "2026-06-05T09:23:51.976724+00:00",
       "version": 1
     },
-    "paper_冬春数据": {
+    "mem_20260612_000452_9664": {
       "value": {
-        "title": "冬春数据",
-        "authors": [],
-        "year": 0,
-        "source": "local_text",
-        "arxiv_id": "",
-        "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-06-10T09:51:35.865847+00:00"
-      },
-      "confidence": 1.0,
-      "source": "manual",
-      "updated": "2026-06-10T09:51:35.881469+00:00",
-      "version": 3
-    },
-    "paper_doi_10.1016_j.biortech.2022.126748": {
-      "value": {
+        "key": "ref_guisasola2008",
         "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Study on anaerobic co-digestion of municipal sewage sludge and fruit and vegetable wastes: methane production, microbial community and three-dimension fluorescence excitation-emission matrix analysis.",
+        "title": "Methane production in sewer systems",
         "authors": [
-          "X. Jiang",
-          "Yandong Xie",
-          "Ming-gang Liu",
-          "Shiyu Bin",
-          "Yang Liu"
+          "Guisasola, A.",
+          "de Haas, D.",
+          "Keller, J.",
+          "Yuan, Z."
         ],
-        "year": 2022,
-        "abstract": "Constantly increased sewage sludge (SS) and fruit and vegetable wastes (FVW) are becoming the major organic solid wastes in human society. Thus, anaerobic digestion is employed as a low carbon energy strategy to reduce their environmental pollution risk. Anaerobic co-digestion system was developed based on the carbon to nitrogen ratio strategy. Results showed that the daily biogas production was higher in co-digester, and the volumetric biogas production rate (VBPR) significantly enhanced for 1.",
-        "citation_count": 50,
-        "url": "https://www.semanticscholar.org/paper/3bdebef22ef0fa492485b11c135c146263384bf9",
-        "arxiv_id": "",
-        "doi": "10.1016/j.biortech.2022.126748",
-        "venue": "Bioresource Technology",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.726570+00:00"
+        "year": 2008,
+        "journal": "Water Research",
+        "doi": "10.1016/j.watres.2008.03.016",
+        "abstract": "Review of methane formation mechanisms in sewer networks, covering biofilm processes, sediment contributions, and gas-liquid mass transfer."
       },
-      "confidence": 0.5,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.726570+00:00",
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.351537+00:00",
       "version": 1
     },
-    "paper_doi_10.1016_j.ecoenv.2024.116204": {
+    "mem_20260612_000452_2662": {
       "value": {
+        "key": "ref_sharma2021",
         "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Biochar impacts on carbon dioxide, methane emission, and cadmium accumulation in rice from Cd-contaminated soils; A meta-analysis.",
+        "title": "Greenhouse gas emissions from sewers: A review",
         "authors": [
-          "Muhammad Athar Khaliq",
-          "I. Alsudays",
-          "H. Alhaithloul",
-          "Muhammad Rizwan",
-          "Jean Wan Hong Yong"
+          "Sharma, K.",
+          "Aryal, R.",
+          "Murthy, S.",
+          "Yuan, Z."
         ],
-        "year": 2024,
-        "abstract": "Climate change and cadmium (Cd) contamination pose severe threats to rice production and food security. Biochar (BC) has emerged as a promising soil amendment for mitigating these challenges. To investigate the BC effects on paddy soil upon GHG emissions, Cd bioavailability, and its accumulation, a meta-analysis of published data from 2000 to 2023 was performed. Data Manager 5.3 and GetData plot Digitizer software were used to obtain and process the data for selected parameters. Our results show",
-        "citation_count": 26,
-        "url": "https://www.semanticscholar.org/paper/70c3b94aa41627cad5c44cd8c9cae5b3cf1a1496",
-        "arxiv_id": "",
-        "doi": "10.1016/j.ecoenv.2024.116204",
-        "venue": "Ecotoxicology and Environmental Safety",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.733042+00:00"
+        "year": 2021,
+        "journal": "Water Research",
+        "abstract": "Comprehensive review of GHG emissions from sewer systems including CH4, CO2, N2O, and H2S. Covers spatial-temporal patterns, influencing factors, and mitigation strategies."
       },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.733042+00:00",
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.358536+00:00",
       "version": 1
     },
-    "paper_doi_10.1016_j.jhazmat.2022.129328": {
+    "mem_20260612_000452_7992": {
       "value": {
+        "key": "ref_liu2015",
         "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Carbon/iron by-product from catalytic methane decomposition as recyclable Fenton catalyst for pollutant degradation.",
+        "title": "Methane and nitrous oxide emissions from urban sewage systems",
         "authors": [
-          "Yuanyuan Yao",
-          "L. Lai",
-          "Zixun Yu",
-          "Yuqi Pan",
-          "Yanxi Yu"
+          "Liu, Y.",
+          "Ni, B.J.",
+          "Sharma, K.R.",
+          "Yuan, Z."
         ],
-        "year": 2022,
-        "abstract": "Direct catalytic decomposition of methane (CDM) has been studied as a possible emission-free hydrogen production route for over 100 years. However, the high cost of catalyst regeneration limits its practical applications. Here, we demonstrate that the solid by-product from CDM using Fe ore catalysts comprising carbon nano onions encapsulated with magnetic Fe cores (Fe@C) can serve as efficient and recyclable Fenton catalysts for pollutant degradation. Fe@C/H2O2 has better performance than FeSO4/",
-        "citation_count": 21,
-        "url": "https://www.semanticscholar.org/paper/5d5ecb7d79b9415f3a19ce98fa277aa12a4772b3",
-        "arxiv_id": "",
-        "doi": "10.1016/j.jhazmat.2022.129328",
-        "venue": "Journal of Hazardous Materials",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.740023+00:00"
+        "year": 2015,
+        "journal": "Environmental Science & Technology",
+        "abstract": "Quantification of CH4 and N2O emissions from urban sewage systems with seasonal and spatial analysis."
       },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.740023+00:00",
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.365537+00:00",
       "version": 1
     },
-    "paper_doi_10.17531_ein_195747": {
+    "mem_20260612_000452_2319": {
       "value": {
+        "key": "ref_foley2009",
         "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "The uniqueness of pollutant emission and fuel consumption test results for road vehicles tested on a chassis dynamometer",
+        "title": "GHG production and emission from a full-scale anaerobic sewer system",
         "authors": [
-          "B. Adamiak",
-          "M. Andrych-Zalewska",
-          "Jerzy Merkisz",
-          "Z. Chłopek"
+          "Foley, J.",
+          "Yuan, Z.",
+          "Lant, P."
         ],
-        "year": 2024,
-        "abstract": "The article considers the issues of non-repeatability of exhaust emission and fuel consumption test results for road vehicles tested on a chassis dynamometer. Empirical results of passenger car tests on a chassis dynamometer in the WLTC (Worldwide Harmonized Light Vehicles Test Cycle) test were used. Tests were conducted in four repeated sets to assess the repeatability of the test results. \nThe road emission of hydrocarbons, non-methane hydrocarbons, carbon monoxide, nitrogen oxides, particulat",
-        "citation_count": 16,
-        "url": "https://www.semanticscholar.org/paper/b068de946ba059811ba244464a7f7a4cbc0012bd",
-        "arxiv_id": "",
-        "doi": "10.17531/ein/195747",
-        "venue": "Eksploatacja i Niezawodność – Maintenance and Reliability",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.746000+00:00"
+        "year": 2009,
+        "journal": "Water Research",
+        "abstract": "Full-scale measurement of greenhouse gas production in anaerobic sewer systems."
       },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.746000+00:00",
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.372536+00:00",
       "version": 1
     },
-    "paper_doi_10.54536_ajsts.v4i1.4021": {
+    "mem_20260612_000452_0988": {
       "value": {
+        "key": "ref_rahman2021",
         "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Clean Coal Technology: The Solution to Global Warming by Reducing the Emission of Carbon Dioxide and Methane",
+        "title": "Carbon transformation and greenhouse gas emissions in sewer systems",
         "authors": [
-          "F. A. Samiul Islam"
+          "Rahman, A.",
+          "Yuan, Z.",
+          "Sharma, K."
         ],
-        "year": 2025,
-        "abstract": "One of the primary causes of energy and global warming is coal. Acid rain, smog, and health issues are associated with the sulfur dioxide, nitrogen dioxide, heavy metals, and acid gasses that coal generates. Carbon dioxide emissions from coal are the primary source of greenhouse gases. In 2010, “The Environmental Protection Agency” discovered that almost one-third of carbon dioxide emissions were from coal-based power plants. Coal will no longer be a source of greenhouse gas emissions if energy ",
-        "citation_count": 14,
-        "url": "https://www.semanticscholar.org/paper/cdc2daddfe00afa56bddc75f8541d343d6e397ca",
-        "arxiv_id": "",
-        "doi": "10.54536/ajsts.v4i1.4021",
-        "venue": "American Journal of Smart Technology and Solutions",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.747027+00:00"
+        "year": 2021,
+        "journal": "Science of the Total Environment",
+        "abstract": "Carbon transformation processes and GHG emissions in sewer systems with focus on carbon mass balance."
       },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.747027+00:00",
-      "version": 1
-    },
-    "paper_doi_10.1016_j.wasman.2009.08.014": {
-      "value": {
-        "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Fate and effect of linuron and metribuzin on the co-composting of green waste and sewage sludge.",
-        "authors": [
-          "M. Fountoulakis",
-          "L. Makridis",
-          "E. K. Pirounaki",
-          "C. Chroni",
-          "A. Kyriacou"
-        ],
-        "year": 2010,
-        "abstract": "",
-        "citation_count": 12,
-        "url": "https://www.semanticscholar.org/paper/77a55b1ebc21e1ef50e72714626737e4392ce824",
-        "arxiv_id": "",
-        "doi": "10.1016/j.wasman.2009.08.014",
-        "venue": "Waste Management",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.747027+00:00"
-      },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.747027+00:00",
-      "version": 1
-    },
-    "paper_doi_10.1016_j.cej.2024.155840": {
-      "value": {
-        "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "A low-carbon-emission photoelectrochemical system using Ov-Fe2O3@BiVO4 photoanode for integrated multiple pollutant removal and energy harvesting from real saline sewage",
-        "authors": [
-          "Taoran Dong",
-          "Zexiao Zheng",
-          "Justin H. K. Man",
-          "Irene M C Lo"
-        ],
-        "year": 2024,
-        "abstract": "",
-        "citation_count": 7,
-        "url": "https://www.semanticscholar.org/paper/3c827905cac1f6f274b452b95c968e7d8fa6192a",
-        "arxiv_id": "",
-        "doi": "10.1016/j.cej.2024.155840",
-        "venue": "Chemical Engineering Journal",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.762669+00:00"
-      },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.762669+00:00",
-      "version": 1
-    },
-    "paper_doi_10.1109_ACCESS.2025.3585283": {
-      "value": {
-        "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Automated System to Optimize the Process and Energy Consumption for Sewage Treatment Plant Based on Gas Emission by Using Sensors and IoT",
-        "authors": [
-          "S. Ullas",
-          "Uma Maheswari Balasubramanian",
-          "Seshaiah Ponnekanti",
-          "T. M. M. Kumar"
-        ],
-        "year": 2025,
-        "abstract": "Sewage Treatment Plants (STPs) play a crucial role in environmental sustainability and public health by removing pollutants from wastewater. Traditional STPs suffer from high energy consumption, operational inefficiencies, and a lack of real-time monitoring, leading to increased energy consumption, unassured water quality, and potential environmental pollution. This study presents a custom-designed Internet of Things (IoT)- enabled automated system to optimize energy usage and treatment efficien",
-        "citation_count": 5,
-        "url": "https://www.semanticscholar.org/paper/bcf0088da1dacc21496df014c6e3cd3060186e6f",
-        "arxiv_id": "",
-        "doi": "10.1109/ACCESS.2025.3585283",
-        "venue": "IEEE Access",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.762669+00:00"
-      },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.762669+00:00",
-      "version": 1
-    },
-    "paper_doi_10.1080_10402381.2025.2484688": {
-      "value": {
-        "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Methane and carbon dioxide emission from an urban lake in India",
-        "authors": [
-          "R.S. Khoiyangbam"
-        ],
-        "year": 2025,
-        "abstract": "Abstract Khoiyangbam RS. 2025. Methane and carbon dioxide emission from an urban lake in India. Lake Reserv Manage. 41:93–103. Lake Lakshmi, a shallow freshwater lake at the heart of Jhansi City in Uttar Pradesh (India), receives domestic sewage from the residential areas in the urban catchment. The inflowed ex situ organic wastes and the in situ produced photosynthetic substrate in the lake contribute to anaerobic conditions, generating methane (CH4) and carbon dioxide (CO2), the 2 most importa",
-        "citation_count": 0,
-        "url": "https://www.semanticscholar.org/paper/9c976c286c219db2138c709834e3b6be848e417e",
-        "arxiv_id": "",
-        "doi": "10.1080/10402381.2025.2484688",
-        "venue": "Lake and reservoir management",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.778292+00:00"
-      },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.778292+00:00",
-      "version": 1
-    },
-    "paper_doi_10.1115_1.4069065": {
-      "value": {
-        "type": "academic_paper",
-        "search_topic": "sewage methane emission carbon pollutant",
-        "title": "Integrated Sewage Sludge-to-Energy and CO2 Sequestration: Energy Intensity and Emission Characteristics",
-        "authors": [
-          "Sylwia Kruk-Gotzman",
-          "T. Mączka",
-          "Michał Ostrycharczyk",
-          "H. Pawlak-Kruczek",
-          "T. Ochrymiuk"
-        ],
-        "year": 2025,
-        "abstract": "\n This study presents a comprehensive analysis of the Integrated Sewage Sludge to Energy with CO2 Sequestration (ISSECS) process—a novel approach for converting sewage sludge into electricity, heat, and compressed CO2 for geological storage. The process integrates drying and pelletizing, plasma gasification, syngas cleaning, wet combustion, and CO2 capture and compression, forming a closed-loop energy and carbon management system. Using a functional unit of 1 Mg of dry sewage sludge, material an",
-        "citation_count": 0,
-        "url": "https://www.semanticscholar.org/paper/6aed2f0148f368a4b0a5a0ea1ae87ed74cd6cba9",
-        "arxiv_id": "",
-        "doi": "10.1115/1.4069065",
-        "venue": "Journal of Energy Resources Technology, Part A: Sustainable and Renewable Energy",
-        "source": "semantic_scholar",
-        "status": "discovered",
-        "discovered_at": "2026-06-10T08:22:19.778292+00:00"
-      },
-      "confidence": 0.3,
-      "source": "auto_paper_finder",
-      "updated": "2026-06-10T08:22:19.778292+00:00",
+      "confidence": 0.8,
+      "source": "inject",
+      "updated": "2026-06-11T16:04:52.378536+00:00",
       "version": 1
     }
   },
@@ -5269,163 +5082,43 @@
     },
     {
       "action": "create",
-      "key": "paper_冬春数据",
+      "key": "mem_20260612_000452_9664",
       "old": null,
-      "new": "{'title': '冬春数据', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-10T08:09:17.360593+00:00'}",
-      "source": "manual",
-      "timestamp": "2026-06-10T08:09:17.383378+00:00"
+      "new": "{'key': 'ref_guisasola2008', 'type': 'academic_paper', 'title': 'Methane production in sewer systems', 'authors': ['Guisasola, A.', 'de Haas, D.', 'Keller, J.', 'Yuan, Z.'], 'year': 2008, 'journal': '",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.351537+00:00"
     },
     {
       "action": "create",
-      "key": "paper_doi_10.1016_j.biortech.2022.126748",
+      "key": "mem_20260612_000452_2662",
       "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Study on anaerobic co-digestion of municipal sewage sludge and fruit and vegetable wastes: methane prod",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.726570+00:00"
+      "new": "{'key': 'ref_sharma2021', 'type': 'academic_paper', 'title': 'Greenhouse gas emissions from sewers: A review', 'authors': ['Sharma, K.', 'Aryal, R.', 'Murthy, S.', 'Yuan, Z.'], 'year': 2021, 'journal'",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.358536+00:00"
     },
     {
       "action": "create",
-      "key": "paper_doi_10.1016_j.ecoenv.2024.116204",
+      "key": "mem_20260612_000452_7992",
       "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Biochar impacts on carbon dioxide, methane emission, and cadmium accumulation in rice from Cd-contamina",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.733042+00:00"
+      "new": "{'key': 'ref_liu2015', 'type': 'academic_paper', 'title': 'Methane and nitrous oxide emissions from urban sewage systems', 'authors': ['Liu, Y.', 'Ni, B.J.', 'Sharma, K.R.', 'Yuan, Z.'], 'year': 2015,",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.365537+00:00"
     },
     {
       "action": "create",
-      "key": "paper_doi_10.1016_j.jhazmat.2022.129328",
+      "key": "mem_20260612_000452_2319",
       "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Carbon/iron by-product from catalytic methane decomposition as recyclable Fenton catalyst for pollutant",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.740023+00:00"
+      "new": "{'key': 'ref_foley2009', 'type': 'academic_paper', 'title': 'GHG production and emission from a full-scale anaerobic sewer system', 'authors': ['Foley, J.', 'Yuan, Z.', 'Lant, P.'], 'year': 2009, 'jou",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.372536+00:00"
     },
     {
       "action": "create",
-      "key": "paper_doi_10.17531_ein_195747",
+      "key": "mem_20260612_000452_0988",
       "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'The uniqueness of pollutant emission and fuel consumption test results for road vehicles tested on a ch",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.746000+00:00"
-    },
-    {
-      "action": "create",
-      "key": "paper_doi_10.54536_ajsts.v4i1.4021",
-      "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Clean Coal Technology: The Solution to Global Warming by Reducing the Emission of Carbon Dioxide and Me",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.747027+00:00"
-    },
-    {
-      "action": "create",
-      "key": "paper_doi_10.1016_j.wasman.2009.08.014",
-      "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Fate and effect of linuron and metribuzin on the co-composting of green waste and sewage sludge.', 'aut",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.747027+00:00"
-    },
-    {
-      "action": "create",
-      "key": "paper_doi_10.1016_j.cej.2024.155840",
-      "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'A low-carbon-emission photoelectrochemical system using Ov-Fe2O3@BiVO4 photoanode for integrated multip",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.762669+00:00"
-    },
-    {
-      "action": "create",
-      "key": "paper_doi_10.1109_ACCESS.2025.3585283",
-      "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Automated System to Optimize the Process and Energy Consumption for Sewage Treatment Plant Based on Gas",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.762669+00:00"
-    },
-    {
-      "action": "create",
-      "key": "paper_doi_10.1080_10402381.2025.2484688",
-      "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Methane and carbon dioxide emission from an urban lake in India', 'authors': ['R.S. Khoiyangbam'], 'yea",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.778292+00:00"
-    },
-    {
-      "action": "create",
-      "key": "paper_doi_10.1115_1.4069065",
-      "old": null,
-      "new": "{'type': 'academic_paper', 'search_topic': 'sewage methane emission carbon pollutant', 'title': 'Integrated Sewage Sludge-to-Energy and CO2 Sequestration: Energy Intensity and Emission Characteristics",
-      "source": "auto_paper_finder",
-      "timestamp": "2026-06-10T08:22:19.778292+00:00"
-    },
-    {
-      "action": "update",
-      "key": "paper__test_paper",
-      "old": {
-        "title": "_test_paper",
-        "authors": [],
-        "year": 0,
-        "source": "local_text",
-        "arxiv_id": "",
-        "citation_count": 0,
-        "sections_count": 6,
-        "abstract_snippet": "",
-        "read_at": "2026-05-30T01:56:35.643717+00:00"
-      },
-      "new": "{'title': '_test_paper', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-10T09:29:19.972532+00:0",
-      "source": "manual",
-      "timestamp": "2026-06-10T09:29:20.015639+00:00"
-    },
-    {
-      "action": "update",
-      "key": "paper__test_paper",
-      "old": {
-        "title": "_test_paper",
-        "authors": [],
-        "year": 0,
-        "source": "local_text",
-        "arxiv_id": "",
-        "citation_count": 0,
-        "sections_count": 6,
-        "abstract_snippet": "",
-        "read_at": "2026-06-10T09:29:19.972532+00:00"
-      },
-      "new": "{'title': '_test_paper', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-10T09:30:14.902856+00:0",
-      "source": "manual",
-      "timestamp": "2026-06-10T09:30:14.920791+00:00"
-    },
-    {
-      "action": "update",
-      "key": "paper_冬春数据",
-      "old": {
-        "title": "冬春数据",
-        "authors": [],
-        "year": 0,
-        "source": "local_text",
-        "arxiv_id": "",
-        "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-06-10T08:09:17.360593+00:00"
-      },
-      "new": "{'title': '冬春数据', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-10T09:51:02.724061+00:00'}",
-      "source": "manual",
-      "timestamp": "2026-06-10T09:51:02.741605+00:00"
-    },
-    {
-      "action": "update",
-      "key": "paper_冬春数据",
-      "old": {
-        "title": "冬春数据",
-        "authors": [],
-        "year": 0,
-        "source": "local_text",
-        "arxiv_id": "",
-        "citation_count": 0,
-        "sections_count": 0,
-        "abstract_snippet": "",
-        "read_at": "2026-06-10T09:51:02.724061+00:00"
-      },
-      "new": "{'title': '冬春数据', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-10T09:51:35.865847+00:00'}",
-      "source": "manual",
-      "timestamp": "2026-06-10T09:51:35.881469+00:00"
+      "new": "{'key': 'ref_rahman2021', 'type': 'academic_paper', 'title': 'Carbon transformation and greenhouse gas emissions in sewer systems', 'authors': ['Rahman, A.', 'Yuan, Z.', 'Sharma, K.'], 'year': 2021, '",
+      "source": "inject",
+      "timestamp": "2026-06-11T16:04:52.378536+00:00"
     }
   ]
 }

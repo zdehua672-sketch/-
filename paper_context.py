@@ -24,6 +24,17 @@ def _get_claude_writer():
         except Exception as e:
             logger.warning(f"ClaudeWriter init failed: {e}")
     return _claude_writer
+
+
+def _get_domain_config(ctx):
+    """从 ctx 获取领域配置，延迟初始化"""
+    if ctx.domain_config:
+        return ctx.domain_config
+    if ctx.domain:
+        from domain_config import get_config
+        ctx.domain_config = get_config(ctx.domain)
+        return ctx.domain_config
+    return None
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -49,6 +60,8 @@ class PaperContext:
     language: str = 'zh'
     paper_type: str = 'chinese'
     title: str = None
+    domain: str = None           # 领域名称，如 'sewer_carbon', 'water_quality'
+    domain_config: Any = None    # DomainConfig 实例
 
     # === 数据层 ===
     df: Any = None                    # pd.DataFrame
@@ -208,7 +221,6 @@ def _run_writer_results(ctx: PaperContext):
     tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
     ctx.sections['results'] = tpl_writer.write_results()
     ctx.rationale_rows.extend(tpl_writer.rationale_rows)
-    _check_section_quality(ctx, 'results', ctx.sections.get('results', ''))
     return ctx.sections['results']
 
 
@@ -252,7 +264,6 @@ def _run_writer_discussion(ctx: PaperContext):
     tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
     ctx.sections['discussion'] = tpl_writer.write_discussion()
     ctx.rationale_rows.extend(tpl_writer.rationale_rows)
-    _check_section_quality(ctx, 'discussion', ctx.sections.get('discussion', ''))
     return ctx.sections['discussion']
 
 
@@ -275,7 +286,6 @@ def _run_writer_intro(ctx: PaperContext):
     gen = IntroductionGenerator()
     base_text = gen.generate(language=ctx.language)
     ctx.sections['introduction'] = base_text
-    _check_section_quality(ctx, 'introduction', ctx.sections.get('introduction', ''))
     return ctx.sections['introduction']
 
 
@@ -283,13 +293,16 @@ def _run_writer_methods(ctx: PaperContext):
     """写 Methods 章节（优先 Claude 生成，回退模板）"""
     writer = _get_claude_writer()
     if writer and ctx.has('df'):
-        # 构建数据信息
         data_info = {
             'n_samples': len(ctx.df),
             'n_variables': len(ctx.df.columns),
             'variables': list(ctx.df.columns),
             'groups': list(ctx.df.select_dtypes(include=['object', 'category']).columns),
         }
+        # 注入领域标准
+        dc = _get_domain_config(ctx)
+        if dc and dc.standards:
+            data_info['standards'] = dc.standards
         result = writer.write_methods(data_info=data_info, language=ctx.language)
         if result:
             ctx.sections['methods'] = result
@@ -299,7 +312,6 @@ def _run_writer_methods(ctx: PaperContext):
     from paper_writing_agent import MethodsGenerator
     gen = MethodsGenerator()
     ctx.sections['methods'] = gen.generate(language=ctx.language)
-    _check_section_quality(ctx, 'methods', ctx.sections.get('methods', ''))
     return ctx.sections['methods']
 
 
@@ -550,6 +562,28 @@ def _run_final_check(ctx: PaperContext):
     return final_report
 
 
+def _run_latex_export(ctx: PaperContext):
+    """导出 LaTeX 格式论文"""
+    if not ctx.has('sections'):
+        return None
+    try:
+        from latex_exporter import LatexExporter
+        exporter = LatexExporter()
+        # 组装全文 Markdown
+        full_md = '\n\n'.join(
+            f"# {k}\n\n{ctx.sections[k]}" for k in
+            ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+            if ctx.has_section(k)
+        )
+        latex_path = os.path.join(ctx.output_dir, 'paper.tex')
+        exporter.export(full_latex=exporter.md_to_latex(full_md), output_path=latex_path)
+        logger.info(f"LaTeX: {latex_path}")
+        return latex_path
+    except Exception as e:
+        logger.warning(f"LaTeX export failed: {e}")
+        return None
+
+
 def _run_assemble(ctx: PaperContext):
     """排版 DOCX（图文对应）"""
     from data_driven_pipeline import InlineDocumentAssembler
@@ -592,34 +626,6 @@ def _run_assemble(ctx: PaperContext):
 # ============================================================
 # 3. 辅助函数
 # ============================================================
-
-def _check_section_quality(ctx: PaperContext, section_name: str, text: str):
-    """检查章节写作质量，输出警告"""
-    if not text:
-        return
-    warnings = []
-    min_lengths = {'results': 800, 'discussion': 1200, 'introduction': 600,
-                   'methods': 400, 'abstract': 200, 'conclusion': 200}
-    min_len = min_lengths.get(section_name, 200)
-    if len(text) < min_len:
-        warnings.append(f'字数不足({len(text)}/{min_len})')
-
-    if section_name in ('results',):
-        has_fig = any(kw in text for kw in ['图', '表', 'Fig', 'Table', 'Figure'])
-        if not has_fig:
-            warnings.append('缺少图表引用')
-        has_stat = any(kw in text for kw in ['r=', 'p<', 'p=', 't=', 'F=', 'χ²', '±'])
-        if not has_stat:
-            warnings.append('缺少统计数值')
-
-    if section_name in ('discussion', 'introduction'):
-        has_cite = any(kw in text for kw in ['[', ']', '等,', 'et al'])
-        if not has_cite:
-            warnings.append('缺少文献引用')
-
-    if warnings:
-        logger.warning(f'[{section_name} 质量检查] {"; ".join(warnings)}')
-
 
 def _split_revised_into_sections(ctx: PaperContext, revised_text: str):
     """将修订后的全文拆分回各章节"""
@@ -1077,6 +1083,12 @@ MODULE_REGISTRY = {
         'run': _run_assemble,
         'description': '排版 DOCX',
     },
+    'latex_export': {
+        'needs': ['sections'],
+        'provides': ['latex_path'],
+        'run': _run_latex_export,
+        'description': '导出 LaTeX 格式论文',
+    },
 }
 
 
@@ -1131,49 +1143,20 @@ class PaperOrchestrator:
         print(f"  步骤: {len(steps)}个")
         print("=" * 60)
 
-        for i, step_name in enumerate(steps, 1):
-            if step_name not in MODULE_REGISTRY:
-                logger.warning(f"未知模块: {step_name}")
-                continue
+        # 检测可并行的写作步骤
+        parallel_groups = self._find_parallel_groups(steps)
 
-            module = MODULE_REGISTRY[step_name]
-
-            # 检查前置条件
-            missing = self._check_needs(ctx, module['needs'])
-            if missing:
-                print(f"\n[{i}/{len(steps)}] {module['description']} — 跳过 (缺少: {missing})")
-                self.execution_log.append({
-                    'step': step_name, 'status': 'skipped', 'missing': missing
-                })
-                continue
-
-            # 执行
-            print(f"\n[{i}/{len(steps)}] {module['description']}...")
-            try:
-                result = module['run'](ctx)
-                ctx.mark_done(step_name)
-                self.execution_log.append({
-                    'step': step_name, 'status': 'done'
-                })
-                if result is not None:
-                    # 显示产出摘要
-                    if isinstance(result, str) and len(result) > 50:
-                        print(f"  完成 ({len(result)} 字)")
-                    elif isinstance(result, list):
-                        print(f"  完成 ({len(result)} 项)")
-                    elif isinstance(result, dict):
-                        print(f"  完成 ({len(result)} 个条目)")
-                    else:
-                        print(f"  完成")
-
-                # 每步保存中间结果
-                self._save_checkpoint(ctx, step_name)
-            except Exception as e:
-                logger.error(f"模块 {step_name} 失败: {e}")
-                self.execution_log.append({
-                    'step': step_name, 'status': 'error', 'error': str(e)
-                })
-                print(f"  失败: {e}")
+        step_idx = 0
+        for group in parallel_groups:
+            if len(group) == 1:
+                # 单步执行
+                step_name = group[0]
+                step_idx += 1
+                self._execute_step(ctx, step_name, step_idx, len(steps))
+            else:
+                # 并行执行
+                self._execute_parallel(ctx, group, step_idx + 1, len(steps))
+                step_idx += len(group)
 
         # 保存全文 MD
         self._save_paper_md(ctx)
@@ -1181,6 +1164,96 @@ class PaperOrchestrator:
         print(f"\n{'=' * 60}")
         print(f"  编排完成!")
         print(f"{'=' * 60}")
+
+    def _execute_step(self, ctx, step_name, idx, total):
+        """执行单个步骤"""
+        if step_name not in MODULE_REGISTRY:
+            logger.warning(f"未知模块: {step_name}")
+            return
+
+        module = MODULE_REGISTRY[step_name]
+        missing = self._check_needs(ctx, module['needs'])
+        if missing:
+            print(f"\n[{idx}/{total}] {module['description']} — 跳过 (缺少: {missing})")
+            self.execution_log.append({'step': step_name, 'status': 'skipped', 'missing': missing})
+            return
+
+        print(f"\n[{idx}/{total}] {module['description']}...")
+        try:
+            result = module['run'](ctx)
+            ctx.mark_done(step_name)
+            self.execution_log.append({'step': step_name, 'status': 'done'})
+            if result is not None:
+                if isinstance(result, str) and len(result) > 50:
+                    print(f"  完成 ({len(result)} 字)")
+                elif isinstance(result, list):
+                    print(f"  完成 ({len(result)} 项)")
+                elif isinstance(result, dict):
+                    print(f"  完成 ({len(result)} 个条目)")
+                else:
+                    print(f"  完成")
+            self._save_checkpoint(ctx, step_name)
+        except Exception as e:
+            logger.error(f"模块 {step_name} 失败: {e}")
+            self.execution_log.append({'step': step_name, 'status': 'failed', 'error': str(e)})
+
+    def _execute_parallel(self, ctx, steps, idx_start, total):
+        """并行执行多个步骤（使用线程池）"""
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        print(f"\n[{idx_start}/{total}] 并行执行 {len(steps)} 个步骤: {steps}")
+        with ThreadPoolExecutor(max_workers=len(steps)) as executor:
+            futures = {}
+            for step_name in steps:
+                if step_name in MODULE_REGISTRY:
+                    module = MODULE_REGISTRY[step_name]
+                    missing = self._check_needs(ctx, module['needs'])
+                    if not missing:
+                        futures[executor.submit(module['run'], ctx)] = step_name
+                    else:
+                        print(f"  {step_name} — 跳过 (缺少: {missing})")
+
+            for future in as_completed(futures):
+                step_name = futures[future]
+                try:
+                    result = future.result()
+                    ctx.mark_done(step_name)
+                    self.execution_log.append({'step': step_name, 'status': 'done'})
+                    if isinstance(result, str) and result:
+                        print(f"  {step_name} 完成 ({len(result)} 字)")
+                    else:
+                        print(f"  {step_name} 完成")
+                except Exception as e:
+                    logger.error(f"模块 {step_name} 失败: {e}")
+                    self.execution_log.append({'step': step_name, 'status': 'failed', 'error': str(e)})
+
+    def _find_parallel_groups(self, steps):
+        """
+        将步骤分组，同组内可并行执行。
+        规则：
+        - Introduction + Methods 可并行（互不依赖）
+        - Results + Discussion 可并行（共享 findings，不互相依赖）
+        - 其他步骤串行
+        """
+        parallel_sets = [
+            {'writer_intro', 'writer_methods'},           # 批次1: 互不依赖
+            {'writer_results', 'writer_discussion'},      # 批次2: 共享 findings
+        ]
+
+        groups = []
+        remaining = list(steps)
+
+        for pset in parallel_sets:
+            batch = [s for s in remaining if s in pset]
+            if len(batch) > 1:
+                groups.append(batch)
+                for s in batch:
+                    remaining.remove(s)
+
+        # 剩余步骤全部串行
+        for s in remaining:
+            groups.append([s])
+
+        return groups
 
     def _auto_plan(self, ctx: PaperContext) -> list:
         """根据上下文状态自动推断执行步骤"""
@@ -1209,10 +1282,12 @@ class PaperOrchestrator:
         steps.append('writer_conclusion')
         steps.append('writer_abstract')
 
-        # 第5阶段：润色 + 审稿 + 修订
+        # 第5阶段：润色 + 迭代审改
         steps.append('polish')
-        steps.append('review')
-        steps.append('auto_revision')
+        # 迭代审改循环（写→审→改→审，最多2轮）
+        for _iteration in range(2):
+            steps.append('review')
+            steps.append('auto_revision')
         steps.append('final_check')
 
         # 第6阶段：补充检查
@@ -1221,8 +1296,9 @@ class PaperOrchestrator:
         steps.append('artifact_check')
         steps.append('citation_bank')
 
-        # 第7阶段：排版
+        # 第7阶段：排版 + LaTeX
         steps.append('assemble')
+        steps.append('latex_export')
 
         return steps
 
