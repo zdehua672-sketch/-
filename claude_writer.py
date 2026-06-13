@@ -155,53 +155,115 @@ Write the Results directly, use ## for subsections."""
                          recalled_refs: list = None,
                          learned_patterns: dict = None) -> str:
         """
-        生成 Discussion 章节，深度整合文献学习成果。
+        生成 Discussion 章节（分段生成避免超时）。
+        拆成3个小prompt：概述+季节讨论、相关性+机制、局限性+意义。
         """
         findings_text = self._summarize_findings(findings)
         mech_text = self._format_mechanisms(mechanisms)
         refs_text = self._format_references(recalled_refs)
-        patterns_hint = self._format_patterns_hint(learned_patterns, 'discussion')
-        structures_text = self._format_discussion_structures(learned_patterns)
-        domain_terms = self._format_domain_terms(learned_patterns)
 
+        # 分离不同类型的发现
+        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:4]
+        corr = [f for f in findings if f.get('type') == 'correlation'][:4]
+        seasonal_text = self._summarize_findings(seasonal)
+        corr_text = self._summarize_findings(corr)
+
+        parts = []
+
+        # 第1段：概述 + 季节差异讨论
         if language == "zh":
-            prompt = f"""你是环境科学学者，撰写{domain}论文的"讨论"章节(1500-2500字)。
+            prompt1 = f"""写{domain}论文讨论的前半部分(800-1200字)。
 
-要求：
-1. 结构：概述 → 逐项讨论(发现+机制+文献对比) → 意义 → 局限性
-2. 每个发现要解释"为什么"
-3. 用学术限定语(可能、归因于、表明)
+## 4.1 主要发现概述
+用1-2段话总结研究的核心发现。
 
-发现:
-{findings_text}
+## 4.2 季节差异分析
+对每个季节差异给出机制解释。
 
-{mech_text}
+季节差异发现:
+{seasonal_text}
 
 {refs_text}
 
-直接输出讨论正文，用 ## 标记子章节。"""
+直接输出正文，用 ## 标记。"""
         else:
-            prompt = f"""You are a senior environmental scientist writing a Discussion about {domain}.
+            prompt1 = f"""Write Discussion part 1 (600-1000 words) for {domain}.
 
-Write the Discussion (2000-3000 words).
+## 4.1 Overview of main findings
+## 4.2 Seasonal difference analysis
 
-Requirements:
-1. Structure: Overview -> Point-by-point (literature comparison + mechanism) -> Significance -> Limitations
-2. For each key finding: (a) state it (b) compare with literature (c) explain mechanism
-3. Use hedging language (may, suggest, indicate, attribute to)
-{patterns_hint}
+Seasonal findings:
+{seasonal_text}
 
-Findings: {findings_text}
-{mech_text}
 {refs_text}
 
-Write the Discussion directly, use ## for subsections."""
+Write directly."""
 
-        result = self._call_claude(prompt)
-        if not result:
-            logger.warning("Claude 生成 Discussion 失败")
+        part1 = self._call_claude(prompt1)
+        if part1:
+            parts.append(part1)
+            logger.info(f"Discussion Part1: {len(part1)} 字")
+
+        # 第2段：相关性 + 机制讨论
+        if language == "zh":
+            prompt2 = f"""写{domain}论文讨论的后半部分(600-1000字)。
+
+## 4.3 相关性与机制分析
+对重要相关关系给出机制解释。
+
+相关性发现:
+{corr_text}
+
+{mech_text}
+
+直接输出正文，用 ## 标记。"""
+        else:
+            prompt2 = f"""Write Discussion part 2 (500-800 words) for {domain}.
+
+## 4.3 Correlation and mechanism analysis
+
+Correlation findings:
+{corr_text}
+
+{mech_text}
+
+Write directly."""
+
+        part2 = self._call_claude(prompt2)
+        if part2:
+            parts.append(part2)
+            logger.info(f"Discussion Part2: {len(part2)} 字")
+
+        # 第3段：局限性 + 意义
+        if language == "zh":
+            prompt3 = f"""写{domain}论文讨论的结尾部分(300-500字)。
+
+## 4.4 研究意义
+本研究的科学价值和实际应用价值。
+
+## 4.5 研究局限性
+列出2-3条具体的局限性。
+
+直接输出正文，用 ## 标记。"""
+        else:
+            prompt3 = f"""Write Discussion ending (200-400 words) for {domain}.
+
+## 4.4 Significance
+## 4.5 Limitations
+
+Write directly."""
+
+        part3 = self._call_claude(prompt3)
+        if part3:
+            parts.append(part3)
+            logger.info(f"Discussion Part3: {len(part3)} 字")
+
+        if not parts:
+            logger.warning("Claude 生成 Discussion 全部失败")
             return ""
-        logger.info(f"Discussion: Claude 生成 {len(result)} 字")
+
+        result = '\n\n'.join(parts)
+        logger.info(f"Discussion 总计: {len(result)} 字 ({len(parts)} 段)")
         return result
 
     def write_introduction(self, findings: list, domain: str = "污水管网碳排放",
@@ -252,52 +314,32 @@ Write the Introduction directly, use ## for subsections."""
 
     def write_abstract(self, sections: dict, domain: str = "污水管网碳排放",
                        language: str = "zh") -> str:
-        """基于实际章节内容生成 Abstract"""
-        intro = sections.get('introduction', '')[:600]
-        methods = sections.get('methods', '')[:600]
-        results = sections.get('results', '')[:800]
-        discussion = sections.get('discussion', '')[:600]
+        """基于实际章节内容生成 Abstract（精简prompt避免超时）"""
+        # 只取关键数据点，不取全文
+        results_summary = self._extract_key_stats(sections.get('results', ''))
 
         if language == "zh":
-            prompt = f"""你是一位环境科学领域的资深学者，正在撰写一篇关于{domain}的中文学术论文。
+            prompt = f"""写{domain}论文摘要(250-350字)。
 
-请根据以下各章节内容，撰写论文的"摘要"（300-400字）。
+结构：目的→方法→结果→结论
+结果必须包含关键数据。最后列5-8个关键词。
 
-要求：
-1. 结构：目的 → 方法 → 结果 → 结论（四段式）
-2. 结果部分必须包含关键数据（相关系数、显著性水平、主要差异）
-3. 结论要指出研究的科学意义和应用价值
-4. 语言精炼，每句话都有信息量
-5. 不要引用参考文献
-6. 最后列出5-8个关键词
+关键数据:
+{results_summary}
 
-引言要点:
-{intro}
-
-方法要点:
-{methods}
-
-结果要点:
-{results}
-
-讨论要点:
-{discussion}
-
-请直接输出摘要正文，格式：
-【摘要】（正文）
-【关键词】（关键词列表）"""
+直接输出：
+【摘要】(正文)
+【关键词】(列表)"""
         else:
-            prompt = f"""Write an abstract (250-300 words) for a paper about {domain}.
+            prompt = f"""Write abstract (200-250 words) for {domain} paper.
 
-Structure: Objective -> Methods -> Results -> Conclusions
-Include key statistics. End with 5-8 keywords.
+Structure: Objective->Methods->Results->Conclusions
+Include key stats. End with 5-8 keywords.
 
-Introduction: {intro}
-Methods: {methods}
-Results: {results}
-Discussion: {discussion}
+Key data:
+{results_summary}
 
-Write the abstract directly."""
+Write directly."""
 
         result = self._call_claude(prompt)
         if not result:
@@ -305,6 +347,22 @@ Write the abstract directly."""
             return ""
         logger.info(f"Abstract: Claude 生成 {len(result)} 字")
         return result
+
+    def _extract_key_stats(self, text: str) -> str:
+        """从结果文本中提取关键统计值（用于精简prompt）"""
+        import re
+        lines = []
+        # 提取包含数字的关键行
+        for line in text.split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+            # 包含 r=, p=, CV=, 均值, 显著 等关键信息的行
+            if any(k in line for k in ['r=', 'p=', 'CV=', '均值', '显著', '相关', '冬季', '春季', '***', '**']):
+                lines.append(line[:100])
+            if len(lines) >= 15:
+                break
+        return '\n'.join(lines) if lines else text[:500]
 
     def write_conclusion(self, findings: list, domain: str = "污水管网碳排放",
                          language: str = "zh") -> str:
