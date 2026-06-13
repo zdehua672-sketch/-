@@ -35,6 +35,8 @@ class ClaudeWriter:
         self.timeout = timeout
         self.model = model
         self.domain_config = domain_config
+        # 全局禁用 SSL 验证（Claude CLI 使用自定义 API 端点）
+        os.environ['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
     def _get_domain_context(self) -> str:
         """从领域配置生成上下文文本"""
@@ -53,27 +55,34 @@ class ClaudeWriter:
         """调用 Claude CLI 生成文本"""
         # 自动查找 claude CLI 路径
         claude_cmd = "claude"
-        for path_dir in os.environ.get('PATH', '').split(os.pathsep):
-            candidate = os.path.join(path_dir, 'claude')
-            if os.path.exists(candidate) or os.path.exists(candidate + '.cmd'):
-                claude_cmd = candidate
-                break
-        # Windows npm 全局安装路径
-        npm_global = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'npm', 'claude.cmd')
-        if os.path.exists(npm_global):
-            claude_cmd = npm_global
+        # Windows: 优先使用批处理包装器（解决 SSL 环境变量传递问题）
+        wrapper_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'claude_wrapper.bat')
+        if os.name == 'nt' and os.path.exists(wrapper_path):
+            claude_cmd = wrapper_path
+        else:
+            for path_dir in os.environ.get('PATH', '').split(os.pathsep):
+                candidate = os.path.join(path_dir, 'claude')
+                if os.path.exists(candidate) or os.path.exists(candidate + '.cmd'):
+                    claude_cmd = candidate
+                    break
+            # Windows npm 全局安装路径
+            npm_global = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'npm', 'claude.cmd')
+            if os.path.exists(npm_global):
+                claude_cmd = npm_global
 
         cmd = [claude_cmd, "-p", prompt, "--output-format", "text"]
         if self.model:
             cmd.extend(["--model", self.model])
         try:
-            # 修复 SSL 证书问题
+            # 修复 SSL 证书问题：Windows 需要 shell=True 才能正确传递环境变量
             env = os.environ.copy()
             env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+            is_windows = os.name == 'nt'
             result = subprocess.run(
                 cmd, capture_output=True, text=True,
                 timeout=self.timeout, encoding='utf-8', errors='replace',
                 env=env,
+                shell=is_windows,
             )
             if result.returncode != 0:
                 logger.error(f"Claude CLI error: {result.stderr[:300]}")

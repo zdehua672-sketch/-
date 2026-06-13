@@ -226,6 +226,16 @@ def _run_writer_results(ctx: PaperContext):
 
 def _run_writer_discussion(ctx: PaperContext):
     """写 Discussion 章节（优先 Claude 生成，回退模板）"""
+    # 检查是否有预生成的 Discussion 文件
+    prebuilt_path = os.path.join(ctx.output_dir, 'discussion_claude.md')
+    if os.path.exists(prebuilt_path):
+        with open(prebuilt_path, encoding='utf-8') as f:
+            prebuilt = f.read()
+        if len(prebuilt) > 500:
+            ctx.sections['discussion'] = prebuilt
+            logger.info(f"Discussion: 使用预生成文件 ({len(prebuilt)} 字)")
+            return prebuilt
+
     writer = _get_claude_writer()
     if writer and ctx.has('findings'):
         # 收集机制知识
