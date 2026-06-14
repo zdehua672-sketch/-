@@ -214,8 +214,8 @@ def _run_writer_results(ctx: PaperContext):
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
-            ctx.sections['results'] = result
-            return result
+            ctx.sections['results'] = _clean_claude_output(result)
+            return ctx.sections['results']
 
     # 回退：模板
     tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
@@ -234,10 +234,10 @@ def _run_writer_discussion(ctx: PaperContext):
             prebuilt = f.read()
         print(f"  [DEBUG] Pre-built length: {len(prebuilt)} chars")
         if len(prebuilt) > 500:
-            ctx.sections['discussion'] = prebuilt
-            logger.info(f"Discussion: 使用预生成文件 ({len(prebuilt)} 字)")
+            ctx.sections['discussion'] = _clean_claude_output(prebuilt)
+            logger.info(f"Discussion: 使用预生成文件 ({len(ctx.sections['discussion'])} 字)")
             print(f"  [DEBUG] USING PRE-GENERATED FILE")
-            return prebuilt
+            return ctx.sections['discussion']
 
     writer = _get_claude_writer()
     if writer and ctx.has('findings'):
@@ -269,8 +269,8 @@ def _run_writer_discussion(ctx: PaperContext):
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
-            ctx.sections['discussion'] = result
-            return result
+            ctx.sections['discussion'] = _clean_claude_output(result)
+            return ctx.sections['discussion']
 
     # 回退：使用模板
     from data_driven_pipeline import DataDrivenWriter
@@ -291,8 +291,8 @@ def _run_writer_intro(ctx: PaperContext):
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
-            ctx.sections['introduction'] = result
-            return result
+            ctx.sections['introduction'] = _clean_claude_output(result)
+            return ctx.sections['introduction']
 
     # 回退：使用模板
     from paper_writing_agent import IntroductionGenerator
@@ -318,8 +318,8 @@ def _run_writer_methods(ctx: PaperContext):
             data_info['standards'] = dc.standards
         result = writer.write_methods(data_info=data_info, language=ctx.language)
         if result:
-            ctx.sections['methods'] = result
-            return result
+            ctx.sections['methods'] = _clean_claude_output(result)
+            return ctx.sections['methods']
 
     # 回退：使用模板
     from paper_writing_agent import MethodsGenerator
@@ -337,8 +337,8 @@ def _run_writer_abstract(ctx: PaperContext):
             language=ctx.language,
         )
         if result:
-            ctx.sections['abstract'] = result
-            return result
+            ctx.sections['abstract'] = _clean_claude_output(result)
+            return ctx.sections['abstract']
 
     # 回退：使用模板
     from paper_writing_agent import AbstractGenerator
@@ -361,8 +361,8 @@ def _run_writer_conclusion(ctx: PaperContext):
             language=ctx.language,
         )
         if result:
-            ctx.sections['conclusion'] = result
-            return result
+            ctx.sections['conclusion'] = _clean_claude_output(result)
+            return ctx.sections['conclusion']
 
     # 回退：使用模板
     critical = [f for f in ctx.findings if f['importance'] in ['critical', 'high']]
@@ -1018,7 +1018,137 @@ def _run_citation_bank(ctx: PaperContext):
 
 
 # ============================================================
-# 5. 模块注册表
+# 5. 画图模块 + 文本清理
+# ============================================================
+
+def _run_generate_figures(ctx: PaperContext):
+    """生成论文图表"""
+    if not ctx.has('df'):
+        return None
+    try:
+        from scientific_visualization_agent import VisualizationAgent
+        import os
+
+        analysis_dir = os.path.join(ctx.output_dir, 'figures')
+        os.makedirs(analysis_dir, exist_ok=True)
+
+        agent = VisualizationAgent(ctx.df, analysis_dir, style='chinese')
+
+        # 生成核心图表
+        figures_generated = []
+
+        # 1. 相态分布图
+        try:
+            agent.plot_phase_composition()
+            figures_generated.append('phase_composition')
+        except Exception as e:
+            logger.debug(f"plot_phase_composition failed: {e}")
+
+        # 2. 箱线图（气相+液相变量）
+        try:
+            from variable_registry import get_phase_cols
+            gas_cols = get_phase_cols(ctx.df, 'gas')[:6]
+            if gas_cols:
+                agent.plot_multivariate(variables=gas_cols, kind='box')
+                figures_generated.append('gas_boxplot')
+        except Exception as e:
+            logger.debug(f"gas_boxplot failed: {e}")
+
+        # 3. 相关性热图
+        try:
+            agent.plot_heatmap()
+            figures_generated.append('heatmap')
+        except Exception as e:
+            logger.debug(f"heatmap failed: {e}")
+
+        # 4. PCA 双标图
+        try:
+            agent.plot_pca_hca()
+            figures_generated.append('pca_hca')
+        except Exception as e:
+            logger.debug(f"pca_hca failed: {e}")
+
+        # 5. 批量回归图
+        try:
+            agent.plot_batch_regressions()
+            figures_generated.append('batch_regressions')
+        except Exception as e:
+            logger.debug(f"batch_regressions failed: {e}")
+
+        # 注册图表到上下文
+        if os.path.exists(analysis_dir):
+            for f in os.listdir(analysis_dir):
+                if f.endswith('.png'):
+                    fig_path = os.path.join(analysis_dir, f)
+                    fig_name = f.replace('.png', '')
+                    ctx.figures[fig_name] = {
+                        'path': fig_path,
+                        'caption': f'图{len(ctx.figures)+1} {fig_name}',
+                        'type': 'analysis',
+                        'section': 'results',
+                    }
+
+        logger.info(f"生成 {len(figures_generated)} 类图表, {len(ctx.figures)} 个文件")
+        return figures_generated
+    except Exception as e:
+        logger.warning(f"图表生成失败: {e}")
+        return None
+
+
+def _clean_claude_output(text: str) -> str:
+    """清理 Claude 输出中的非正文内容（元评论、markdown格式、说明文字）"""
+    if not text:
+        return text
+
+    import re
+
+    # 删除 Claude 的元评论（开头的说明文字）
+    meta_patterns = [
+        r'^.*?以下是.*?摘要.*?[:：]\s*',
+        r'^.*?以下是.*?正文.*?[:：]\s*',
+        r'^.*?直接输出.*?如下.*?[:：]\s*',
+        r'^.*?用户未授权.*?如下.*?[:：]\s*',
+        r'^---\s*\n',
+        r'\n---\s*$',
+    ]
+    for pattern in meta_patterns:
+        text = re.sub(pattern, '', text, flags=re.MULTILINE)
+
+    # 删除 Claude 的尾部说明和元评论（更全面）
+    tail_patterns = [
+        r'\n+说明[：:].*$',
+        r'\n+如需.*$',
+        r'\n+字数[：:].*$',
+        r'\n+结构[：:].*$',
+        r'\n+数据支撑[：:].*$',
+        r'\n+创新点[：:].*$',
+        r'\n+相比.*改进[：:].*$',
+        r'\n+参考文献\s*\n.*$',
+        r'\n+如需将此内容.*$',
+        r'\n+请授予.*$',
+        r'\n+---\s*$',
+        r'\n+全文约.*字.*$',
+        r'\n+涵盖了.*结构完整.*$',
+        r'\n+如需调整.*可以告诉我.*$',
+    ]
+    for pattern in tail_patterns:
+        text = re.sub(pattern, '', text, flags=re.DOTALL)
+
+    # 清理 markdown 格式
+    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)  # **bold** -> bold
+    text = re.sub(r'\*(.+?)\*', r'\1', text)        # *italic* -> italic
+    text = re.sub(r'`(.+?)`', r'\1', text)          # `code` -> code
+    text = re.sub(r'\$_\{?(\d+)\}?\$', r'\1', text)  # $_4$ -> 4
+    text = re.sub(r'\$([^$]+)\$', r'\1', text)      # $formula$ -> formula
+
+    # 清理多余空行
+    text = re.sub(r'\n{3,}', '\n\n', text)
+
+    return text.strip()
+
+
+# ============================================================
+# 6. 模块注册表
 # ============================================================
 
 MODULE_REGISTRY = {
@@ -1051,6 +1181,12 @@ MODULE_REGISTRY = {
         'provides': ['findings'],
         'run': _run_explorer,
         'description': '数据探索',
+    },
+    'generate_figures': {
+        'needs': ['df'],
+        'provides': ['figures'],
+        'run': _run_generate_figures,
+        'description': '生成论文图表',
     },
     'literature_recall': {
         'needs': ['memory', 'findings'],
@@ -1342,10 +1478,11 @@ class PaperOrchestrator:
         steps.append('paper_reading')
         steps.append('pattern_learning')
 
-        # 第2阶段：数据处理
+        # 第2阶段：数据处理 + 画图
         if ctx.has('data_path'):
             steps.append('load_data')
         steps.append('explorer')
+        steps.append('generate_figures')
         steps.append('advanced_analysis')
 
         # 第3阶段：知识支撑
