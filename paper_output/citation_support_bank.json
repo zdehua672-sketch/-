@@ -1,6 +1,6 @@
 {
   "target_count": 20,
-  "updated": "2026-06-13T17:19:07.637896+00:00",
+  "updated": "2026-06-14T02:11:44.092664+00:00",
   "candidates": [],
   "claims": [
     {
@@ -64,145 +64,205 @@
       "needs": "综述文献"
     },
     {
-      "text": "38 ppm）的74倍（p=0",
+      "text": "51 mg/L（$n$=18），变异系数247",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "02），远超文献报道的5-10倍季节波动范围（Guisasola et al",
+      "text": "95 mg/L，TC均值114",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "第一重为直接效应：产甲烷古菌（Methanogenic archaea）的代谢速率遵循Arrhenius方程，温度每升高10°C，反应速率约提升2-3倍",
+      "text": "69 mg/L；TOC/TC比值为0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "春季管网水温（15-22°C）相较冬季（5-8°C）的10-15°C温升，理论上可使产甲烷速率提升4-9倍",
+      "text": "5倍（Mann-Whitney $U$检验，$p$=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "这种代谢路径间的差异化温度响应，可能是74倍极端差异的核心机制",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "DO与CH₄的显著负相关（r=-0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "2 CO₂底值差异与碳代谢路径切换\n\nCO₂底值在冬季（638 ppm）显著高于春季（550 ppm）（p<0",
+      "text": "71 ppm）显著高于春季（550",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "001），表面看似矛盾于\"温度升高促进呼吸\"的一般认知，实则反映了管网碳代谢路径的季节性切换",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "冬季COD高达2426 mg/L，为春季93 mg/L的26倍，表明管水中存在大量可降解有机碳",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "TOC与TC的强正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "3 氮碳耦合的代谢网络解析\n\nTN与NH₄⁺近乎完美的正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "其二，硝化过程在管网中受到强烈抑制——若硝化活跃，NH₄⁺应被氧化为NO₂⁻/NO₃⁻，TN与NH₄⁺的相关性将显著削弱",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "冬季高COD（2426 mg/L）意味着大量含氮有机物同时存在，矿化过程产生的CO₂贡献了冬季CO₂底值的基线水平",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "4 COD极端差异的多因素归因\n\n冬季COD（2426 mg/L）与春季（93 mg/L）之间26倍的差异是本研究中季节效应最显著的指标",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "生物降解方面，低温抑制了水解酸化酶活性，使复杂有机物的分解速率下降",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "化学动力学估算表明，当水温从20°C降至5°C时，一级降解速率常数约降低60-70%，有机物在管网中的有效停留时间相应延长2-3倍",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "COD的26倍差异通过多级代谢放大，可能产生远超26倍的CH₄排放差异——这与本研究观测到的CH₄ 74倍差异在数量级上吻合",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "38 ppm）的74倍（p=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "019），呈现极端季节分异；CO₂底值冬季（638 ppm）显著高于春季（550 ppm）（p<0",
+      "text": "20 ppb）显著高于春季（426",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "001），两者形成\"碳排放跷跷板\"效应；(2) COD冬季（2426 mg/L）为春季（93",
+      "text": "13 mg/L）显著高于春季（0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "51 mg/L）的26倍（p<0",
+      "text": "13 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "66\\textdegree C）显著高于冬季（13",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "3倍），温度对甲烷排放存在非线性放大",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "9%；(3) TN与NH₄⁺呈近乎完美的正相关（r=0",
+      "text": "9倍，与CH\\textsubscript{4}的季节差异（74",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "985），表明管网有机氮矿化高度完全；CO₂与NO₂强正相关（r=0",
+      "text": "NH\\textsubscript{4}\\textsuperscript{+}-N的持续积累可能通过硝化耗氧扩大厌氧微区，间接促进CH\\textsubscript{4}产生，构成氮促进碳排放的正反馈",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "5倍，该点位管道内存在强烈的厌氧产甲烷活动",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "922），TOC与TC强正相关（r=0",
+      "text": "18 mg/L）为总体均值的10",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "7倍，可能与餐饮区高油脂废水排放或管道沉积物再悬浮有关",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "9倍差异、TN–NH₄⁺ r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "985、CO₂–NO₂ r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "Guisasola等（2008）在污水处理系统中同样观察到温度对甲烷产生的显著驱动效应，其研究表明温度每升高10°C，产甲烷速率可提高2–3倍",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "本研究同步监测的化学需氧量（COD）数据显示，冬季COD均值高达2426 mg/L，而春季仅为93 mg/L（p<0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "高COD意味着冬季水体中存在大量可降解有机碳，尽管低温抑制了微生物活性，但好氧分解过程仍在持续进行，CO₂作为好氧矿化的终产物不断释放",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "Sharma等（2021）在热带城市河流研究中发现，有机碳负荷是控制CO₂排放的核心变量，高碳输入可显著提升水-气界面CO₂通量",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "冬季河道缺乏外源稀释、水动力条件较弱，有机碳在水体中累积，从而维持了较高的CO₂排放基线",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "3 氮碳耦合关系\n本研究中总氮（TN）与铵态氮（NH₄⁺）之间呈极显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "4 COD差异来源\n冬季COD均值为2426 mg/L，约为春季（93 mg/L）的26倍，这一悬殊差异反映了城市河道碳排放的\"底物驱动型\"特征",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "冬季COD异常升高的原因可从多方面分析：其一，枯水期河道流量锐减，水体对污染物的稀释能力显著下降，点源排放的有机物在河道中累积；其二，冬季温度较低，微生物降解速率减缓，有机物在水体中的滞留时间延长，导致COD持续维持高位；其三，冬季城市面源污染（如落叶腐解、地表径流携带的有机碎屑）虽总量较少，但在低流量条件下其浓度贡献显著增大",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "这一发现表明，在城市河道碳排放管理中，控制有机污染输入是减少温室气体排放的关键切入点",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "首先，受研究条件限制，采样采用点位布设方式，未能实现河道全断面的空间连续监测，采样点的代表性可能受到局部水文条件（如回流区、排污口近域）的影响，导致通量估算存在一定的空间不确定性",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "N₂O是重要的温室气体之一，其增温潜势约为CO₂的265倍，且在城市河道氮转化过程中可大量产生",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "以下是一份基于论文实际数据的清洁摘要（约320字），可直接用于投稿：\n\n---\n\n**摘要：**\n\n校园污水管网碳污染物的多相态赋存特征缺乏系统研究",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "019），COD冬季（2426 mg/L）为春季（93",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "001），季节差异极显著；（2）CO₂本底值冬季（638 ppm）显著高于春季（550 ppm），管网碳排放形式呈季节性切换，形成\"碳排放跷跷板\"效应；（3）TN与NH₄⁺-N近乎完全正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "001），季节差异极显著；（2）CO₂本底值冬季（638 ppm）显著高于春季（550 ppm），管网碳排放形式呈季节性切换，形成\"碳排放跷跷板\"效应；（3）TN与NH₄⁺-N近乎完全正相关（r=0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "985），CO₂与NO₂强正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "9倍、\"碳排放跷跷板\"、r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
@@ -270,145 +330,205 @@
       "confidence": 0.0
     },
     {
-      "claim_text": "38 ppm）的74倍（p=0",
+      "claim_text": "51 mg/L（$n$=18），变异系数247",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "02），远超文献报道的5-10倍季节波动范围（Guisasola et al",
+      "claim_text": "95 mg/L，TC均值114",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "第一重为直接效应：产甲烷古菌（Methanogenic archaea）的代谢速率遵循Arrhenius方程，温度每升高10°C，反应速率约提升2-3倍",
+      "claim_text": "69 mg/L；TOC/TC比值为0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "春季管网水温（15-22°C）相较冬季（5-8°C）的10-15°C温升，理论上可使产甲烷速率提升4-9倍",
+      "claim_text": "5倍（Mann-Whitney $U$检验，$p$=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "这种代谢路径间的差异化温度响应，可能是74倍极端差异的核心机制",
+      "claim_text": "71 ppm）显著高于春季（550",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "DO与CH₄的显著负相关（r=-0",
+      "claim_text": "20 ppb）显著高于春季（426",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "2 CO₂底值差异与碳代谢路径切换\n\nCO₂底值在冬季（638 ppm）显著高于春季（550 ppm）（p<0",
+      "claim_text": "13 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "001），表面看似矛盾于\"温度升高促进呼吸\"的一般认知，实则反映了管网碳代谢路径的季节性切换",
+      "claim_text": "13 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "冬季COD高达2426 mg/L，为春季93 mg/L的26倍，表明管水中存在大量可降解有机碳",
+      "claim_text": "66\\textdegree C）显著高于冬季（13",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TOC与TC的强正相关（r=0",
+      "claim_text": "3倍），温度对甲烷排放存在非线性放大",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "3 氮碳耦合的代谢网络解析\n\nTN与NH₄⁺近乎完美的正相关（r=0",
+      "claim_text": "9倍，与CH\\textsubscript{4}的季节差异（74",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "其二，硝化过程在管网中受到强烈抑制——若硝化活跃，NH₄⁺应被氧化为NO₂⁻/NO₃⁻，TN与NH₄⁺的相关性将显著削弱",
+      "claim_text": "NH\\textsubscript{4}\\textsuperscript{+}-N的持续积累可能通过硝化耗氧扩大厌氧微区，间接促进CH\\textsubscript{4}产生，构成氮促进碳排放的正反馈",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "冬季高COD（2426 mg/L）意味着大量含氮有机物同时存在，矿化过程产生的CO₂贡献了冬季CO₂底值的基线水平",
+      "claim_text": "5倍，该点位管道内存在强烈的厌氧产甲烷活动",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4 COD极端差异的多因素归因\n\n冬季COD（2426 mg/L）与春季（93 mg/L）之间26倍的差异是本研究中季节效应最显著的指标",
+      "claim_text": "18 mg/L）为总体均值的10",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "生物降解方面，低温抑制了水解酸化酶活性，使复杂有机物的分解速率下降",
+      "claim_text": "7倍，可能与餐饮区高油脂废水排放或管道沉积物再悬浮有关",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "化学动力学估算表明，当水温从20°C降至5°C时，一级降解速率常数约降低60-70%，有机物在管网中的有效停留时间相应延长2-3倍",
+      "claim_text": "9倍差异、TN–NH₄⁺ r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "COD的26倍差异通过多级代谢放大，可能产生远超26倍的CH₄排放差异——这与本研究观测到的CH₄ 74倍差异在数量级上吻合",
+      "claim_text": "985、CO₂–NO₂ r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "38 ppm）的74倍（p=0",
+      "claim_text": "Guisasola等（2008）在污水处理系统中同样观察到温度对甲烷产生的显著驱动效应，其研究表明温度每升高10°C，产甲烷速率可提高2–3倍",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "019），呈现极端季节分异；CO₂底值冬季（638 ppm）显著高于春季（550 ppm）（p<0",
+      "claim_text": "本研究同步监测的化学需氧量（COD）数据显示，冬季COD均值高达2426 mg/L，而春季仅为93 mg/L（p<0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "001），两者形成\"碳排放跷跷板\"效应；(2) COD冬季（2426 mg/L）为春季（93",
+      "claim_text": "高COD意味着冬季水体中存在大量可降解有机碳，尽管低温抑制了微生物活性，但好氧分解过程仍在持续进行，CO₂作为好氧矿化的终产物不断释放",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "51 mg/L）的26倍（p<0",
+      "claim_text": "Sharma等（2021）在热带城市河流研究中发现，有机碳负荷是控制CO₂排放的核心变量，高碳输入可显著提升水-气界面CO₂通量",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "9%；(3) TN与NH₄⁺呈近乎完美的正相关（r=0",
+      "claim_text": "冬季河道缺乏外源稀释、水动力条件较弱，有机碳在水体中累积，从而维持了较高的CO₂排放基线",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "985），表明管网有机氮矿化高度完全；CO₂与NO₂强正相关（r=0",
+      "claim_text": "3 氮碳耦合关系\n本研究中总氮（TN）与铵态氮（NH₄⁺）之间呈极显著正相关（r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "922），TOC与TC强正相关（r=0",
+      "claim_text": "4 COD差异来源\n冬季COD均值为2426 mg/L，约为春季（93 mg/L）的26倍，这一悬殊差异反映了城市河道碳排放的\"底物驱动型\"特征",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "冬季COD异常升高的原因可从多方面分析：其一，枯水期河道流量锐减，水体对污染物的稀释能力显著下降，点源排放的有机物在河道中累积；其二，冬季温度较低，微生物降解速率减缓，有机物在水体中的滞留时间延长，导致COD持续维持高位；其三，冬季城市面源污染（如落叶腐解、地表径流携带的有机碎屑）虽总量较少，但在低流量条件下其浓度贡献显著增大",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "这一发现表明，在城市河道碳排放管理中，控制有机污染输入是减少温室气体排放的关键切入点",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "首先，受研究条件限制，采样采用点位布设方式，未能实现河道全断面的空间连续监测，采样点的代表性可能受到局部水文条件（如回流区、排污口近域）的影响，导致通量估算存在一定的空间不确定性",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "N₂O是重要的温室气体之一，其增温潜势约为CO₂的265倍，且在城市河道氮转化过程中可大量产生",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "以下是一份基于论文实际数据的清洁摘要（约320字），可直接用于投稿：\n\n---\n\n**摘要：**\n\n校园污水管网碳污染物的多相态赋存特征缺乏系统研究",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "019），COD冬季（2426 mg/L）为春季（93",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001），季节差异极显著；（2）CO₂本底值冬季（638 ppm）显著高于春季（550 ppm），管网碳排放形式呈季节性切换，形成\"碳排放跷跷板\"效应；（3）TN与NH₄⁺-N近乎完全正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001），季节差异极显著；（2）CO₂本底值冬季（638 ppm）显著高于春季（550 ppm），管网碳排放形式呈季节性切换，形成\"碳排放跷跷板\"效应；（3）TN与NH₄⁺-N近乎完全正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "985），CO₂与NO₂强正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "9倍、\"碳排放跷跷板\"、r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0

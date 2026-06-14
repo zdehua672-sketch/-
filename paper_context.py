@@ -228,12 +228,15 @@ def _run_writer_discussion(ctx: PaperContext):
     """写 Discussion 章节（优先 Claude 生成，回退模板）"""
     # 检查是否有预生成的 Discussion 文件
     prebuilt_path = os.path.join(ctx.output_dir, 'discussion_claude.md')
+    print(f"  [DEBUG] Checking pre-built: {prebuilt_path} exists={os.path.exists(prebuilt_path)}")
     if os.path.exists(prebuilt_path):
         with open(prebuilt_path, encoding='utf-8') as f:
             prebuilt = f.read()
+        print(f"  [DEBUG] Pre-built length: {len(prebuilt)} chars")
         if len(prebuilt) > 500:
             ctx.sections['discussion'] = prebuilt
             logger.info(f"Discussion: 使用预生成文件 ({len(prebuilt)} 字)")
+            print(f"  [DEBUG] USING PRE-GENERATED FILE")
             return prebuilt
 
     writer = _get_claude_writer()
@@ -509,16 +512,27 @@ def _run_review(ctx: PaperContext):
 
 
 def _run_auto_revision(ctx: PaperContext):
-    """自动修订"""
+    """自动修订（跳过Claude生成的高质量章节）"""
     if ctx.review_report is None:
         return None
     from auto_revision import AutoReviser
-    # 组装全文
+
+    # 保存Claude生成的章节（不被修订覆盖）
+    claude_sections = {}
+    for section in ['results', 'discussion', 'abstract', 'conclusion']:
+        text = ctx.sections.get(section, '')
+        if text and not _is_template(text):
+            claude_sections[section] = text
+
+    # 组装全文（只包含需要修订的章节）
+    sections_to_revise = ['introduction', 'methods']
     full_paper = '\n\n---\n\n'.join(
-        ctx.sections.get(k, '') for k in
-        ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+        ctx.sections.get(k, '') for k in sections_to_revise
         if ctx.has_section(k)
     )
+    if not full_paper:
+        return None
+
     # 生成审稿报告文本
     review_md = f"# 审稿报告\n\n共{ctx.review_summary.get('total', 0)}个问题\n"
     for issue in ctx.review_report.issues:
@@ -529,11 +543,24 @@ def _run_auto_revision(ctx: PaperContext):
     revised = reviser.revise()
     ctx.revision_report = reviser.get_revision_report()
 
-    # 将修订后的文本拆分回各章节
+    # 将修订后的文本拆分回章节
     _split_revised_into_sections(ctx, revised)
+
+    # 恢复Claude生成的章节
+    for section, text in claude_sections.items():
+        ctx.sections[section] = text
+        logger.info(f"保留Claude生成的 {section} ({len(text)} 字)")
 
     logger.info(f"自动修订: {len(reviser.changes)}类修改")
     return revised
+
+
+def _is_template(text: str) -> bool:
+    """判断文本是否是模板（重复内容）"""
+    if not text:
+        return True
+    repeated = text.count('温度是影响微生物代谢活性的主要因素')
+    return repeated > 3
 
 
 def _run_final_check(ctx: PaperContext):
