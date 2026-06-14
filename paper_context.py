@@ -1148,7 +1148,202 @@ def _clean_claude_output(text: str) -> str:
 
 
 # ============================================================
-# 6. 模块注册表
+# 6. 新增模块函数 — 科学分析/引用审计/动机线索/推理矩阵/修订审计/领域配置
+# ============================================================
+
+def _run_scientific_analysis(ctx: PaperContext):
+    """智能分析编排器（自动判断该做什么分析）"""
+    if not ctx.has('df'):
+        return None
+    try:
+        from scientific_analysis_agent import ScientificAnalysisAgent
+        agent = ScientificAnalysisAgent(data_path=ctx.data_path, output_dir=ctx.output_dir)
+        agent.load_data()
+        results = agent.run()
+        # 将分析结果合并到 findings
+        if results and isinstance(results, dict):
+            for key, value in results.items():
+                if isinstance(value, list):
+                    for item in value:
+                        if isinstance(item, dict) and 'type' not in item:
+                            item['type'] = key
+                        ctx.findings.append(item) if isinstance(item, dict) else None
+        logger.info(f"科学分析完成: {len(results) if results else 0} 类结果")
+        return results
+    except Exception as e:
+        logger.warning(f"科学分析失败: {e}")
+        return None
+
+
+def _run_citation_audit(ctx: PaperContext):
+    """引用质量审计（DOI验证、年份评分、类型分类）"""
+    if not ctx.has('sections'):
+        return None
+    try:
+        from citation_audit import audit_citations_batch
+        import re
+        # 从全文中提取引用
+        full_text = '\n\n'.join(ctx.sections.values())
+        # 提取 [1] [2] 格式的引用
+        citation_refs = re.findall(r'\[(\d+(?:[,\s]*\d+)*)\]', full_text)
+        # 提取 (Author, Year) 格式的引用
+        author_refs = re.findall(r'\(([A-Z][a-z]+(?:\s+(?:et\s+al\.?|&\s+[A-Z][a-z]+))?),?\s+(\d{4})\)', full_text)
+
+        all_refs = []
+        for ref in citation_refs[:20]:
+            all_refs.append({'reference': ref, 'type': 'numbered'})
+        for author, year in author_refs[:20]:
+            all_refs.append({'reference': f'{author} ({year})', 'type': 'author_year'})
+
+        if all_refs:
+            audit_result = audit_citations_batch(all_refs, verify=False)
+            total = audit_result.get('total', 0)
+            issues = audit_result.get('issues', [])
+            logger.info(f"引用审计: {total} 个引用, {len(issues)} 个问题")
+            return audit_result
+        return None
+    except Exception as e:
+        logger.warning(f"引用审计失败: {e}")
+        return None
+
+
+def _run_motivation_thread(ctx: PaperContext):
+    """构建动机线索（论文的"红线"贯穿）"""
+    if not ctx.has('motivation') or not ctx.has('findings'):
+        return None
+    try:
+        from motivation_thread import MotivationThread, SevenSentenceTest
+
+        # 从 motivation 和 findings 构建线索
+        motivation = ctx.motivation
+        field_problem = getattr(motivation, 'field_problem', '') or ''
+        specific_gap = getattr(motivation, 'specific_gap', '') or ''
+        design_response = getattr(motivation, 'core_innovation', '') or ''
+        evidence = getattr(motivation, 'evidence_support', '') or ''
+
+        # 从 findings 中提取关键发现作为 evidence
+        critical = [f for f in ctx.findings if f.get('importance') in ['critical', 'high']]
+        if critical and not evidence:
+            evidence_parts = []
+            for f in critical[:3]:
+                if f.get('type') == 'correlation':
+                    v1, v2 = f.get('variables', ('', ''))
+                    r = f.get('data', {}).get('r', 0)
+                    evidence_parts.append(f'{v1}与{v2}相关(r={r:.3f})')
+                elif f.get('type') == 'group_difference':
+                    var = f.get('variable', '')
+                    p = f.get('data', {}).get('p_value', 0)
+                    evidence_parts.append(f'{var}季节差异显著(p={p:.4f})')
+            evidence = '；'.join(evidence_parts)
+
+        thread = MotivationThread(
+            field_problem=field_problem,
+            specific_gap=specific_gap,
+            design_response=design_response,
+            evidence=evidence,
+        )
+
+        # 运行七句话测试
+        seven_test = SevenSentenceTest(thread)
+        test_result = seven_test.run()
+
+        logger.info(f"动机线索: 完整度={thread.completeness():.0%}, 七句话测试={'通过' if test_result.get('passed') else '未通过'}")
+        return {'thread': thread, 'test': test_result}
+    except Exception as e:
+        logger.warning(f"动机线索失败: {e}")
+        return None
+
+
+def _run_writing_rationale(ctx: PaperContext):
+    """构建写作推理矩阵（追踪每个写作决策的推理链）"""
+    if not ctx.has('sections') or not ctx.has('findings'):
+        return None
+    try:
+        from writing_rationale import RationaleMatrix
+
+        matrix = RationaleMatrix(store_path=os.path.join(ctx.output_dir, 'rationale_matrix.json'))
+
+        # 为每个关键 finding 添加推理行
+        critical = [f for f in ctx.findings if f.get('importance') in ['critical', 'high']]
+        for f in critical[:10]:
+            finding_text = ''
+            if f.get('type') == 'correlation':
+                v1, v2 = f.get('variables', ('', ''))
+                r = f.get('data', {}).get('r', 0)
+                finding_text = f'{v1}与{v2}相关(r={r:.3f})'
+            elif f.get('type') == 'group_difference':
+                var = f.get('variable', '')
+                p = f.get('data', {}).get('p_value', 0)
+                finding_text = f'{var}季节差异(p={p:.4f})'
+            elif f.get('type') == 'distribution':
+                var = f.get('variable', '')
+                finding_text = f'{var}分布特征'
+
+            if finding_text:
+                matrix.add(
+                    finding=finding_text,
+                    mechanism='',
+                    evidence='',
+                    citation='',
+                    section='results',
+                )
+
+        # 验证并保存
+        issues = matrix.validate()
+        matrix.save()
+        ctx.rationale_rows = matrix.to_markdown()
+
+        logger.info(f"推理矩阵: {len(matrix.rows)} 行, {len(issues)} 个问题")
+        return matrix
+    except Exception as e:
+        logger.warning(f"推理矩阵失败: {e}")
+        return None
+
+
+def _run_revision_audit(ctx: PaperContext):
+    """修订审计（检测版本间的变化是否实质性）"""
+    if not ctx.revision_report:
+        return None
+    try:
+        from revision_audit import audit_revision
+
+        # 对比修订前后的全文
+        original_sections = []
+        for key in ['introduction', 'methods', 'results', 'discussion', 'conclusion']:
+            text = ctx.sections.get(key, '')
+            if text:
+                original_sections.append(text)
+        original_text = '\n\n'.join(original_sections)
+
+        if not original_text or not ctx.revision_report:
+            return None
+
+        audit_result = audit_revision(original_text, ctx.revision_report)
+        substantive = audit_result.substantive_changes if hasattr(audit_result, 'substantive_changes') else 0
+        logger.info(f"修订审计: {substantive} 个实质性变更")
+        return audit_result
+    except Exception as e:
+        logger.warning(f"修订审计失败: {e}")
+        return None
+
+
+def _run_domain_config(ctx: PaperContext):
+    """加载领域配置"""
+    if not ctx.domain:
+        return None
+    try:
+        from domain_config import get_config
+        config = get_config(ctx.domain)
+        ctx.domain_config = config
+        logger.info(f"领域配置: {config.domain_name} ({len(config.standards)} 个标准)")
+        return config
+    except Exception as e:
+        logger.warning(f"领域配置失败: {e}")
+        return None
+
+
+# ============================================================
+# 7. 模块注册表
 # ============================================================
 
 MODULE_REGISTRY = {
@@ -1157,6 +1352,12 @@ MODULE_REGISTRY = {
         'provides': ['memory'],
         'run': _run_memory_init,
         'description': '初始化知识记忆',
+    },
+    'domain_config': {
+        'needs': [],
+        'provides': ['domain_config'],
+        'run': _run_domain_config,
+        'description': '加载领域配置（多领域支持）',
     },
     'paper_reading': {
         'needs': [],
@@ -1188,6 +1389,12 @@ MODULE_REGISTRY = {
         'run': _run_generate_figures,
         'description': '生成论文图表',
     },
+    'scientific_analysis': {
+        'needs': ['df'],
+        'provides': ['analysis_results'],
+        'run': _run_scientific_analysis,
+        'description': '智能分析编排（自动判断该做什么分析）',
+    },
     'literature_recall': {
         'needs': ['memory', 'findings'],
         'provides': ['recalled_references'],
@@ -1199,6 +1406,12 @@ MODULE_REGISTRY = {
         'provides': ['motivation'],
         'run': _run_motivation,
         'description': '生成并确认写作动机',
+    },
+    'motivation_thread': {
+        'needs': ['motivation', 'findings'],
+        'provides': ['motivation_thread'],
+        'run': _run_motivation_thread,
+        'description': '构建动机线索（论文"红线"贯穿）',
     },
     'writer_results': {
         'needs': ['df', 'findings'],
@@ -1236,6 +1449,12 @@ MODULE_REGISTRY = {
         'run': _run_writer_conclusion,
         'description': '写 Conclusion',
     },
+    'writing_rationale': {
+        'needs': ['sections', 'findings'],
+        'provides': ['rationale_rows'],
+        'run': _run_writing_rationale,
+        'description': '构建写作推理矩阵（追踪每个写作决策）',
+    },
     'polish': {
         'needs': ['sections', 'learned_patterns'],
         'provides': ['sections(polished)'],
@@ -1259,6 +1478,18 @@ MODULE_REGISTRY = {
         'provides': ['review_summary'],
         'run': _run_final_check,
         'description': '修订后二次审稿（检查修订是否引入新问题）',
+    },
+    'citation_audit': {
+        'needs': ['sections'],
+        'provides': ['citation_audit_result'],
+        'run': _run_citation_audit,
+        'description': '引用质量审计（DOI验证、年份评分、类型分类）',
+    },
+    'revision_audit': {
+        'needs': ['sections(revised)'],
+        'provides': ['revision_audit_result'],
+        'run': _run_revision_audit,
+        'description': '修订审计（检测变更是否实质性）',
     },
     'advanced_analysis': {
         'needs': ['df'],
@@ -1478,31 +1709,37 @@ class PaperOrchestrator:
         steps.append('paper_reading')
         steps.append('pattern_learning')
 
-        # 第2阶段：数据处理 + 画图
+        # 第2阶段：领域配置 + 数据处理 + 画图 + 智能分析
+        if ctx.domain:
+            steps.append('domain_config')
         if ctx.has('data_path'):
             steps.append('load_data')
         steps.append('explorer')
         steps.append('generate_figures')
+        steps.append('scientific_analysis')
         steps.append('advanced_analysis')
 
-        # 第3阶段：知识支撑
+        # 第3阶段：知识支撑 + 动机线索
         steps.append('literature_recall')
         steps.append('motivation')
+        steps.append('motivation_thread')
 
-        # 第4阶段：AI写作
+        # 第4阶段：AI写作 + 推理矩阵
         steps.append('writer_results')
         steps.append('writer_discussion')
         steps.append('writer_intro')
         steps.append('writer_methods')
         steps.append('writer_conclusion')
         steps.append('writer_abstract')
+        steps.append('writing_rationale')
 
-        # 第5阶段：润色 + 迭代审改
+        # 第5阶段：润色 + 迭代审改 + 引用审计 + 修订审计
         steps.append('polish')
-        # 迭代审改循环（写→审→改→审，最多2轮）
         for _iteration in range(2):
             steps.append('review')
             steps.append('auto_revision')
+        steps.append('citation_audit')
+        steps.append('revision_audit')
         steps.append('final_check')
 
         # 第6阶段：补充检查
