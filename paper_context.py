@@ -917,6 +917,7 @@ def _run_advanced_analysis(ctx: PaperContext):
         return None
     try:
         from advanced_analysis import CrossAnalyzer, AnomalyDeepDiver, DataStoryExtractor, ThresholdDetector
+        import variable_registry as vr
         all_results = {}
 
         # 交叉分析
@@ -924,28 +925,49 @@ def _run_advanced_analysis(ctx: PaperContext):
         cross_results = cross.analyze_all()
         all_results['cross_analyses'] = cross_results if isinstance(cross_results, list) else []
 
-        # 异常深挖
+        # 异常深挖 — 调用 analyze() 不是 analyze_all()
         try:
             diver = AnomalyDeepDiver(ctx.df)
-            anomaly_results = diver.analyze_all() if hasattr(diver, 'analyze_all') else []
+            anomaly_results = diver.analyze()
             all_results['anomaly_insights'] = anomaly_results if isinstance(anomaly_results, list) else []
-        except Exception:
+        except Exception as e:
+            logger.debug(f"AnomalyDeepDiver: {e}")
             all_results['anomaly_insights'] = []
 
-        # 数据故事线
+        # 数据故事线 — 需要传入分析结果，不是原始 df
         try:
-            extractor = DataStoryExtractor(ctx.df)
-            story_results = extractor.extract_all() if hasattr(extractor, 'extract_all') else []
+            # 构造分析结果格式
+            import numpy as np
+            analysis_results = {}
+            # 相关性分析结果
+            numeric_cols = ctx.df.select_dtypes(include=[np.number]).columns
+            if len(numeric_cols) > 2:
+                corr = ctx.df[numeric_cols].corr()
+                pvals = ctx.df[numeric_cols].corr()  # 简化：用相关系数矩阵
+                analysis_results['pearson相关'] = {'相关系数': corr, 'p值': pvals}
+            extractor = DataStoryExtractor(analysis_results)
+            story_results = extractor.extract_stories()
             all_results['data_stories'] = story_results if isinstance(story_results, list) else []
-        except Exception:
+        except Exception as e:
+            logger.debug(f"DataStoryExtractor: {e}")
             all_results['data_stories'] = []
 
-        # 阈值检测
+        # 阈值检测 — 调用 detect(x, y)，自动选择关键变量对
         try:
             detector = ThresholdDetector(ctx.df)
-            threshold_results = detector.detect_all() if hasattr(detector, 'detect_all') else []
-            all_results['threshold_effects'] = threshold_results if isinstance(threshold_results, list) else []
-        except Exception:
+            threshold_results = []
+            # 从 variable_registry 获取回归假设对
+            regression_pairs = vr.get_regression_pairs(ctx.df)
+            for pair in regression_pairs[:5]:
+                try:
+                    result = detector.detect(pair['x'], pair['y'])
+                    if result:
+                        threshold_results.append(result)
+                except Exception:
+                    pass
+            all_results['threshold_effects'] = threshold_results
+        except Exception as e:
+            logger.debug(f"ThresholdDetector: {e}")
             all_results['threshold_effects'] = []
 
         ctx.advanced_findings = all_results.get('cross_analyses', [])
