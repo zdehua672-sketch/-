@@ -1,6 +1,6 @@
 {
   "target_count": 20,
-  "updated": "2026-06-14T15:25:48.499564+00:00",
+  "updated": "2026-06-14T16:52:22.290925+00:00",
   "candidates": [],
   "claims": [
     {
@@ -64,28 +64,136 @@
       "needs": "综述文献"
     },
     {
-      "text": "总氮（mg/L)与铵态氮（mg/L)呈强正相关(r=0",
+      "text": "9%，表明不同采样点间CH₄排放强度差异极为悬殊",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "NaCl(mg/L)与电导率(uS/cm)呈强正相关(r=0",
+      "text": "93%（vol），变异系数仅为4",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "CO2与NO2（ppm）呈强正相关(r=0",
+      "text": "这些极端值集中出现在春季的特定管段，暗示局部厌氧条件可能促进了碳的气相释放",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "18 mg/L，表明管网不同位置的有机碳负荷差异悬殊",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "此外，TOC（mg/L)与TC(mg/L)(r=0",
+      "text": "2%，表明液相碳以无机碳为主要赋存形态",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
+    },
+    {
+      "text": "93 mg/kg，变异幅度较大，反映了沉积物有机质组成的高度异质性",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "43 ppm，两者相差约74倍，差异具有统计学显著性（Mann-Whitney U检验，p=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "71 ppm）显著高于春季（550",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "51 mg/L，两者相差约26倍",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "50 ppb）显著高于春季（426",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "36 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "36 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "在气相指标中，CO₂与NO₂呈极显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "N₂O与NaCl呈显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "05），与TP亦呈显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "液相指标中，TN与NH₄⁺呈极显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "TOC与TC呈较强正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "001），而气温与采样时间呈显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "93 mg/kg，变异系数为135",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "79 mg/kg（CV=140",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "3%），表明管道沉积物中营养盐分布极不均匀，不同管段的沉积环境存在本质差异",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "气相碳排放以CH₄和CO₂为主，两者均呈高变异特征；液相碳以无机碳为主要赋存形态，有机碳负荷受排放源类型影响显著；固相碳分布高度异质，受局部沉积条件控制",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
     },
     {
       "text": "Guisasola等（2008）在污水处理系统中同样观察到温度对甲烷产生的显著驱动效应，其研究表明温度每升高10°C，产甲烷速率可提高2–3倍",
@@ -154,34 +262,52 @@
       "needs": "数据来源文献"
     },
     {
-      "text": "8%（566~19235 ppm）；CH₄排放呈显著季节差异，春季均值（177 ppm）约为冬季（2",
+      "text": "以下是当前论文的情况概要：\n\n当前论文状态\n\n论文题目：校园污水管网固-液-气三相碳污染物分布特征研究\n\n已生成内容：\n- ✅ 摘要 — 目的/方法/结果/结论四段式\n- ✅ 绪论 — 研究背景、国内外现状、研究不足、研究目标\n- ✅ 材料与方法 — 采样方案、分析方法、碳平衡计算\n- ✅ 结果 — 描述性统计、正态性检验、组间差异、相关性、PCA/HCA\n- ✅ 讨论 — 分三部分生成\n- ✅ 结论\n- ✅ 参考文献\n\n数据基础：40个样本 × 36个变量，涵盖冬春两季、4个功能区（教学区/生活区/餐饮区/管口出口），气相（CH₄/CO₂/O₂/VOCs）、液相（TOC/COD/TN/TP/NH₄⁺等）、固相（TC/TOC/IC等）",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "【目的】 污水管网是城市碳排放的重要来源，但现有研究多关注单一相态碳污染物，缺乏对固-液-气三相碳污染物的系统联合分析，尤其在校园尺度上的碳赋存特征与驱动机制尚不明确",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "【结果】 结果表明：(1)碳污染物在固-液-气三相中呈现不同的赋存特征和变异程度，CH₄和CO₂呈高变异(CV>100%)；(2)不同功能区碳浓度差异显著，餐饮区有机碳负荷最高；(3)CH₄浓度春季(177",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "38 ppm）的74倍（p=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "02），主要受温度驱动的产甲烷菌活性调控；CO₂与NO₂呈极显著正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "001），表明硝化过程与碳矿化存在耦合关系；COD在冬季（2426 mg/L）显著高于春季（94 mg/L）（p<0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "001），表明硝化过程与碳矿化存在耦合关系；COD在冬季（2426 mg/L）显著高于春季（94 mg/L）（p<0",
+      "text": "33 ppm)显著高于冬季(2",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
+    },
+    {
+      "text": "05)；(4)DO与CH₄呈显著负相关(r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "01)，TOC与CH₄呈显著正相关；(5)PCA前两个主成分累计解释70%以上方差，液相碳是管网碳的主要赋存形式",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "【结论】 校园污水管网碳污染物具有显著的相态分异和空间分异特征，溶解氧和有机负荷是控制碳相态转化的关键因素，厌氧条件和高有机负荷共同促进了管道产甲烷过程",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "摘要结构说明：\n- 目的段：点明研究背景（管网碳排放重要性）→指出现有不足→本研究目标\n- 方法段：研究对象+采样设计+测定指标+分析方法\n- 结果段：5条核心发现，均附具体数据支撑\n- 结论段：提炼机制认识+应用价值",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
     }
   ],
   "bindings": [
@@ -246,25 +372,133 @@
       "confidence": 0.0
     },
     {
-      "claim_text": "总氮（mg/L)与铵态氮（mg/L)呈强正相关(r=0",
+      "claim_text": "9%，表明不同采样点间CH₄排放强度差异极为悬殊",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "NaCl(mg/L)与电导率(uS/cm)呈强正相关(r=0",
+      "claim_text": "93%（vol），变异系数仅为4",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "CO2与NO2（ppm）呈强正相关(r=0",
+      "claim_text": "这些极端值集中出现在春季的特定管段，暗示局部厌氧条件可能促进了碳的气相释放",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "此外，TOC（mg/L)与TC(mg/L)(r=0",
+      "claim_text": "18 mg/L，表明管网不同位置的有机碳负荷差异悬殊",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "2%，表明液相碳以无机碳为主要赋存形态",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "93 mg/kg，变异幅度较大，反映了沉积物有机质组成的高度异质性",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "43 ppm，两者相差约74倍，差异具有统计学显著性（Mann-Whitney U检验，p=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "71 ppm）显著高于春季（550",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "51 mg/L，两者相差约26倍",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "50 ppb）显著高于春季（426",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "36 mg/L）显著高于春季（0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "36 mg/L）显著高于春季（0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "在气相指标中，CO₂与NO₂呈极显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "N₂O与NaCl呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "05），与TP亦呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "液相指标中，TN与NH₄⁺呈极显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "TOC与TC呈较强正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001），而气温与采样时间呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "93 mg/kg，变异系数为135",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "79 mg/kg（CV=140",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "3%），表明管道沉积物中营养盐分布极不均匀，不同管段的沉积环境存在本质差异",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "气相碳排放以CH₄和CO₂为主，两者均呈高变异特征；液相碳以无机碳为主要赋存形态，有机碳负荷受排放源类型影响显著；固相碳分布高度异质，受局部沉积条件控制",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
@@ -336,31 +570,49 @@
       "confidence": 0.0
     },
     {
-      "claim_text": "8%（566~19235 ppm）；CH₄排放呈显著季节差异，春季均值（177 ppm）约为冬季（2",
+      "claim_text": "以下是当前论文的情况概要：\n\n当前论文状态\n\n论文题目：校园污水管网固-液-气三相碳污染物分布特征研究\n\n已生成内容：\n- ✅ 摘要 — 目的/方法/结果/结论四段式\n- ✅ 绪论 — 研究背景、国内外现状、研究不足、研究目标\n- ✅ 材料与方法 — 采样方案、分析方法、碳平衡计算\n- ✅ 结果 — 描述性统计、正态性检验、组间差异、相关性、PCA/HCA\n- ✅ 讨论 — 分三部分生成\n- ✅ 结论\n- ✅ 参考文献\n\n数据基础：40个样本 × 36个变量，涵盖冬春两季、4个功能区（教学区/生活区/餐饮区/管口出口），气相（CH₄/CO₂/O₂/VOCs）、液相（TOC/COD/TN/TP/NH₄⁺等）、固相（TC/TOC/IC等）",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "38 ppm）的74倍（p=0",
+      "claim_text": "【目的】 污水管网是城市碳排放的重要来源，但现有研究多关注单一相态碳污染物，缺乏对固-液-气三相碳污染物的系统联合分析，尤其在校园尺度上的碳赋存特征与驱动机制尚不明确",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "02），主要受温度驱动的产甲烷菌活性调控；CO₂与NO₂呈极显著正相关（r=0",
+      "claim_text": "【结果】 结果表明：(1)碳污染物在固-液-气三相中呈现不同的赋存特征和变异程度，CH₄和CO₂呈高变异(CV>100%)；(2)不同功能区碳浓度差异显著，餐饮区有机碳负荷最高；(3)CH₄浓度春季(177",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "001），表明硝化过程与碳矿化存在耦合关系；COD在冬季（2426 mg/L）显著高于春季（94 mg/L）（p<0",
+      "claim_text": "33 ppm)显著高于冬季(2",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "001），表明硝化过程与碳矿化存在耦合关系；COD在冬季（2426 mg/L）显著高于春季（94 mg/L）（p<0",
+      "claim_text": "05)；(4)DO与CH₄呈显著负相关(r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "01)，TOC与CH₄呈显著正相关；(5)PCA前两个主成分累计解释70%以上方差，液相碳是管网碳的主要赋存形式",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "【结论】 校园污水管网碳污染物具有显著的相态分异和空间分异特征，溶解氧和有机负荷是控制碳相态转化的关键因素，厌氧条件和高有机负荷共同促进了管道产甲烷过程",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "摘要结构说明：\n- 目的段：点明研究背景（管网碳排放重要性）→指出现有不足→本研究目标\n- 方法段：研究对象+采样设计+测定指标+分析方法\n- 结果段：5条核心发现，均附具体数据支撑\n- 结论段：提炼机制认识+应用价值",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0

@@ -1047,58 +1047,129 @@ def _run_citation_bank(ctx: PaperContext):
 # ============================================================
 
 def _run_generate_figures(ctx: PaperContext):
-    """生成论文图表"""
+    """数据驱动的图表生成 — 根据数据发现生成对应图表"""
     if not ctx.has('df'):
         return None
     try:
         from scientific_visualization_agent import VisualizationAgent
+        import variable_registry as vr
         import os
+        import matplotlib.pyplot as plt
+        import numpy as np
 
         analysis_dir = os.path.join(ctx.output_dir, 'figures')
         os.makedirs(analysis_dir, exist_ok=True)
 
         agent = VisualizationAgent(ctx.df, analysis_dir, style='chinese')
-
-        # 生成核心图表
         figures_generated = []
 
-        # 1. 相态分布图
-        try:
-            agent.plot_phase_composition()
-            figures_generated.append('phase_composition')
-        except Exception as e:
-            logger.debug(f"plot_phase_composition failed: {e}")
+        # === 基础图表 ===
 
-        # 2. 箱线图（气相+液相变量）
+        # 1. 季节对比箱线图（关键变量）
         try:
-            from variable_registry import get_phase_cols
-            gas_cols = get_phase_cols(ctx.df, 'gas')[:6]
-            if gas_cols:
-                agent.plot_multivariate(variables=gas_cols, kind='box')
-                figures_generated.append('gas_boxplot')
+            key_vars = ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'TOC（mg/L)', 'pH']
+            available = [v for v in key_vars if v in ctx.df.columns]
+            if available:
+                agent.plot_multivariate(variables=available[:6], kind='box')
+                figures_generated.append('seasonal_boxplot')
         except Exception as e:
-            logger.debug(f"gas_boxplot failed: {e}")
+            logger.debug(f"seasonal_boxplot: {e}")
 
-        # 3. 相关性热图
+        # 2. 相关性热图
         try:
             agent.plot_heatmap()
             figures_generated.append('heatmap')
         except Exception as e:
-            logger.debug(f"heatmap failed: {e}")
+            logger.debug(f"heatmap: {e}")
 
-        # 4. PCA 双标图
-        try:
-            agent.plot_pca_hca()
-            figures_generated.append('pca_hca')
-        except Exception as e:
-            logger.debug(f"pca_hca failed: {e}")
+        # === 数据驱动图表（基于 findings） ===
 
-        # 5. 批量回归图
+        # 3. 空间热点图：CH4在各采样点的分布
         try:
-            agent.plot_batch_regressions()
-            figures_generated.append('batch_regressions')
+            if '甲烷(ppm)' in ctx.df.columns and '采样点' in ctx.df.columns:
+                fig, ax = plt.subplots(figsize=(10, 5))
+                point_ch4 = ctx.df.groupby('采样点')['甲烷(ppm)'].mean().sort_values(ascending=False)
+                colors = ['#E15759' if v > 100 else '#4E79A7' for v in point_ch4.values]
+                point_ch4.plot(kind='bar', ax=ax, color=colors)
+                ax.set_ylabel('CH₄ (ppm)')
+                ax.set_xlabel('采样点')
+                ax.set_title('各采样点CH₄排放量（红色>100ppm为热点）')
+                plt.tight_layout()
+                fig.savefig(os.path.join(analysis_dir, 'spatial_ch4_hotspot.png'), dpi=300)
+                plt.close(fig)
+                figures_generated.append('spatial_ch4_hotspot')
         except Exception as e:
-            logger.debug(f"batch_regressions failed: {e}")
+            logger.debug(f"spatial_ch4_hotspot: {e}")
+
+        # 4. DO阈值效应图
+        try:
+            if all(c in ctx.df.columns for c in ['DO(mg/L)', '甲烷(ppm)']):
+                valid = ctx.df[['DO(mg/L)', '甲烷(ppm)', '季节']].dropna()
+                if len(valid) > 5:
+                    fig, ax = plt.subplots(figsize=(8, 5))
+                    for season in valid['季节'].unique():
+                        sub = valid[valid['季节'] == season]
+                        ax.scatter(sub['DO(mg/L)'], sub['甲烷(ppm)'],
+                                  label=season, s=60, alpha=0.7)
+                    ax.set_xlabel('DO (mg/L)')
+                    ax.set_ylabel('CH₄ (ppm)')
+                    ax.set_title('DO与CH₄的关系（阈值效应）')
+                    ax.legend()
+                    # 添加阈值线
+                    ax.axvline(x=2, color='red', linestyle='--', alpha=0.5, label='DO=2ppm阈值')
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'do_threshold_effect.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('do_threshold_effect')
+        except Exception as e:
+            logger.debug(f"do_threshold_effect: {e}")
+
+        # 5. 泥水状况×季节 交互效应图
+        try:
+            if all(c in ctx.df.columns for c in ['季节', '泥水状况', '甲烷(ppm)']):
+                fig, ax = plt.subplots(figsize=(8, 5))
+                data = ctx.df[['季节', '泥水状况', '甲烷(ppm)']].dropna()
+                if len(data) > 5:
+                    pivot = data.groupby(['季节', '泥水状况'])['甲烷(ppm)'].mean().unstack(fill_value=0)
+                    pivot.plot(kind='bar', ax=ax)
+                    ax.set_ylabel('CH₄ 均值 (ppm)')
+                    ax.set_title('季节×泥水状况 交互效应对CH₄的影响')
+                    ax.legend(title='泥水状况')
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'season_sediment_interaction.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('season_sediment_interaction')
+        except Exception as e:
+            logger.debug(f"season_sediment_interaction: {e}")
+
+        # 6. 相态耦合图：CH4 vs TOC vs CO2
+        try:
+            if all(c in ctx.df.columns for c in ['甲烷(ppm)', 'TOC（mg/L)', 'CO2']):
+                valid = ctx.df[['甲烷(ppm)', 'TOC（mg/L)', 'CO2', '季节']].dropna()
+                if len(valid) > 5:
+                    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+                    # CH4 vs TOC
+                    for season in valid['季节'].unique():
+                        sub = valid[valid['季节'] == season]
+                        axes[0].scatter(sub['TOC（mg/L)'], sub['甲烷(ppm)'], label=season, s=50)
+                    axes[0].set_xlabel('TOC (mg/L)')
+                    axes[0].set_ylabel('CH₄ (ppm)')
+                    axes[0].set_title('CH₄ vs TOC（碳源关系）')
+                    axes[0].legend()
+                    # CH4 vs CO2
+                    for season in valid['季节'].unique():
+                        sub = valid[valid['季节'] == season]
+                        axes[1].scatter(sub['CO2'], sub['甲烷(ppm)'], label=season, s=50)
+                    axes[1].set_xlabel('CO₂ (ppm)')
+                    axes[1].set_ylabel('CH₄ (ppm)')
+                    axes[1].set_title('CH₄ vs CO₂（气相关系）')
+                    axes[1].legend()
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'phase_coupling.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('phase_coupling')
+        except Exception as e:
+            logger.debug(f"phase_coupling: {e}")
 
         # 注册图表到上下文
         if os.path.exists(analysis_dir):
@@ -1739,17 +1810,19 @@ class PaperOrchestrator:
         steps.append('paper_reading')
         steps.append('pattern_learning')
 
-        # 第2阶段：领域配置 + 数据处理 + 画图 + 智能分析
+        # 第2阶段：领域配置 + 数据处理 + 智能分析
         if ctx.domain:
             steps.append('domain_config')
         if ctx.has('data_path'):
             steps.append('load_data')
         steps.append('explorer')
-        steps.append('generate_figures')
         steps.append('scientific_analysis')
         steps.append('advanced_analysis')
 
-        # 第3阶段：知识支撑 + 动机线索
+        # 第3阶段：数据驱动图表生成（在分析之后，基于发现生成图表）
+        steps.append('generate_figures')
+
+        # 第4阶段：知识支撑 + 动机线索
         steps.append('literature_recall')
         steps.append('motivation')
         steps.append('motivation_thread')
