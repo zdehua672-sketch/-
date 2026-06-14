@@ -967,12 +967,15 @@ def _run_deep_imitation(ctx: PaperContext):
         return None
     from deep_imitation import DeepImitationManager
     manager = DeepImitationManager(output_dir=ctx.output_dir)
-    # 用已有章节作为草稿
-    draft_text = '\n\n'.join(ctx.sections.values())
-    if not draft_text.strip():
-        return None
-    manager.analyze_draft(draft_text)
-    manager.generate_blueprint()
+    # 逐章节分析
+    for section_name in ['results', 'discussion', 'introduction']:
+        text = ctx.sections.get(section_name, '')
+        if text and len(text) > 100:
+            try:
+                manager.analyze_draft(section_name, text[:2000])
+                manager.generate_blueprint(section_name)
+            except Exception as e:
+                logger.debug(f"deep_imitation {section_name}: {e}")
     report = manager.generate_report()
     ctx.imitation_report = report if isinstance(report, str) else str(report)
     logger.info("深度模仿分析完成")
@@ -1130,6 +1133,8 @@ def _clean_claude_output(text: str) -> str:
         r'\n+全文约.*字.*$',
         r'\n+涵盖了.*结构完整.*$',
         r'\n+如需调整.*可以告诉我.*$',
+        r'\n+共约\d+字.*$',
+        r'\n+符合.*学术.*规范.*$',
     ]
     for pattern in tail_patterns:
         text = re.sub(pattern, '', text, flags=re.DOTALL)
@@ -1140,6 +1145,7 @@ def _clean_claude_output(text: str) -> str:
     text = re.sub(r'`(.+?)`', r'\1', text)          # `code` -> code
     text = re.sub(r'\$_\{?(\d+)\}?\$', r'\1', text)  # $_4$ -> 4
     text = re.sub(r'\$([^$]+)\$', r'\1', text)      # $formula$ -> formula
+    text = re.sub(r'^#+\s*', '', text, flags=re.MULTILINE)  # ### heading -> heading
 
     # 清理多余空行
     text = re.sub(r'\n{3,}', '\n\n', text)
@@ -1160,15 +1166,17 @@ def _run_scientific_analysis(ctx: PaperContext):
         agent = ScientificAnalysisAgent(data_path=ctx.data_path, output_dir=ctx.output_dir)
         agent.load_data()
         results = agent.run()
-        # 将分析结果合并到 findings
+        # results 可能是 dict 或其他类型
         if results and isinstance(results, dict):
             for key, value in results.items():
                 if isinstance(value, list):
                     for item in value:
                         if isinstance(item, dict) and 'type' not in item:
                             item['type'] = key
-                        ctx.findings.append(item) if isinstance(item, dict) else None
-        logger.info(f"科学分析完成: {len(results) if results else 0} 类结果")
+                        if isinstance(item, dict):
+                            ctx.findings.append(item)
+        result_count = len(results) if isinstance(results, dict) else 0
+        logger.info(f"科学分析完成: {result_count} 类结果")
         return results
     except Exception as e:
         logger.warning(f"科学分析失败: {e}")
@@ -1245,7 +1253,7 @@ def _run_motivation_thread(ctx: PaperContext):
 
         # 运行七句话测试
         seven_test = SevenSentenceTest(thread)
-        test_result = seven_test.run()
+        test_result = seven_test.validate()
 
         logger.info(f"动机线索: 完整度={thread.completeness():.0%}, 七句话测试={'通过' if test_result.get('passed') else '未通过'}")
         return {'thread': thread, 'test': test_result}
@@ -1783,6 +1791,10 @@ class PaperOrchestrator:
                     missing.append(need)
             elif need == 'sections':
                 if not ctx.sections:
+                    missing.append(need)
+            elif need == 'sections(revised)':
+                # sections(revised) 表示修订后的章节已存在
+                if not ctx.revision_report:
                     missing.append(need)
             elif not ctx.has(need):
                 missing.append(need)
