@@ -80,11 +80,11 @@ plotter.plot_heatmap()
 plotter.plot_batch_regressions()
 
 # 新增图
-plotter.plot_pca_biplot()
+plotter.plot_pca_hca()
 plotter.plot_hca_dendrogram()
-plotter.plot_spatial_distribution()
-plotter.plot_gas_liquid_ratio()
-plotter.plot_carbon_balance()
+plotter.plot_spatiotemporal()
+plotter.plot_phase_composition()
+plotter.plot_carbon_flow()
 
 # 注册图表到上下文（按章节分组）
 ctx.figures = {

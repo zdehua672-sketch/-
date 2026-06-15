@@ -1,0 +1,724 @@
+{
+  "meta": {
+    "category": "domain_terms",
+    "description": "领域术语",
+    "version": 28,
+    "created": "2026-06-12T08:29:49.967966+00:00",
+    "updated": "2026-06-12T08:40:16.292757+00:00",
+    "source": "initial"
+  },
+  "entries": {
+    "sulfate_reduction": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "硫酸盐还原",
+          "en": "Sulfate reduction",
+          "definition": "SO4^2- 在厌氧条件下被还原为H2S的过程，与产甲烷竞争电子供体"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.272742+00:00",
+      "version": 1
+    },
+    "denitrification": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "反硝化",
+          "en": "Denitrification",
+          "definition": "NO3- 在缺氧条件下被还原为N2/N2O的过程"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.272742+00:00",
+      "version": 1
+    },
+    "nitrification": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "硝化",
+          "en": "Nitrification",
+          "definition": "NH4+ 在好氧条件下被氧化为NO2-/NO3-的过程"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.272742+00:00",
+      "version": 1
+    },
+    "anaerobic_digestion": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "厌氧消化",
+          "en": "Anaerobic digestion",
+          "definition": "有机物在厌氧条件下被微生物分解为CH4和CO2的过程"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.272742+00:00",
+      "version": 1
+    },
+    "fermentation": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "发酵",
+          "en": "Fermentation",
+          "definition": "有机物在无外源电子受体条件下的不完全氧化分解"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.272742+00:00",
+      "version": 1
+    },
+    "syntrophic_degradation": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "互养降解",
+          "en": "Syntrophic degradation",
+          "definition": "多种微生物协同降解有机物，中间产物在菌种间传递"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.272742+00:00",
+      "version": 1
+    },
+    "redox_potential": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "氧化还原电位",
+          "en": "Redox potential (ORP/Eh)",
+          "definition": "反映系统氧化还原状态，决定微生物代谢途径",
+          "unit": "mV"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.277742+00:00",
+      "version": 1
+    },
+    "hydraulic_retention_time": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "水力停留时间",
+          "en": "Hydraulic retention time (HRT)",
+          "definition": "污水在管道中的平均停留时间，影响碳转化程度",
+          "unit": "h"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.277742+00:00",
+      "version": 1
+    },
+    "sewage_temperature": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "污水温度",
+          "en": "Sewage temperature",
+          "definition": "影响微生物活性和气体溶解度的关键参数",
+          "unit": "℃"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.277742+00:00",
+      "version": 1
+    },
+    "flow_velocity": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "流速",
+          "en": "Flow velocity",
+          "definition": "管道内污水流速，影响传质和剪切力",
+          "unit": "m/s"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.277742+00:00",
+      "version": 1
+    },
+    "pipe_slope": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "管道坡度",
+          "en": "Pipe slope",
+          "definition": "管道纵坡，决定重力流条件和流速",
+          "unit": "%"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.277742+00:00",
+      "version": 1
+    },
+    "volatile_fatty_acids": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "挥发性脂肪酸",
+          "en": "Volatile fatty acids (VFAs)",
+          "definition": "乙酸、丙酸、丁酸等短链脂肪酸，产甲烷的关键中间产物"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.277742+00:00",
+      "version": 1
+    },
+    "particulate_organic_carbon": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "颗粒态有机碳",
+          "en": "Particulate organic carbon (POC)",
+          "definition": "悬浮固体中的有机碳，需先水解为溶解态才能被利用"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.277742+00:00",
+      "version": 1
+    },
+    "dissolved_organic_carbon": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "溶解态有机碳",
+          "en": "Dissolved organic carbon (DOC)",
+          "definition": "可被微生物直接利用的有机碳形态"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.282762+00:00",
+      "version": 1
+    },
+    "biodegradable_organic_carbon": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "可生物降解有机碳",
+          "en": "Biodegradable organic carbon (BDOC)",
+          "definition": "可被微生物降解的有机碳比例，决定产甲烷潜力"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.282762+00:00",
+      "version": 1
+    },
+    "gas_flux": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "气体通量",
+          "en": "Gas flux",
+          "definition": "单位时间单位面积的气体排放量",
+          "unit": "mg/(m²·h)"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.282762+00:00",
+      "version": 1
+    },
+    "gas_dissolution": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "气体溶解",
+          "en": "Gas dissolution",
+          "definition": "气态CH4/CO2溶入液相的过程，受亨利定律控制"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.282762+00:00",
+      "version": 1
+    },
+    "stripping": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "吹脱",
+          "en": "Stripping / Gas stripping",
+          "definition": "湍流条件下溶解态气体逸出到气相的过程"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.282762+00:00",
+      "version": 1
+    },
+    "ebullition": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "气泡释放",
+          "en": "Ebullition",
+          "definition": "管道底部沉积物中气泡积聚后突然释放的现象"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.282762+00:00",
+      "version": 1
+    },
+    "mass_balance": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "质量平衡",
+          "en": "Mass balance",
+          "definition": "基于物质守恒原理的碳通量核算方法"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.287759+00:00",
+      "version": 1
+    },
+    "carbon_footprint": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "碳足迹",
+          "en": "Carbon footprint",
+          "definition": "系统全生命周期温室气体排放总量",
+          "unit": "kg CO2-eq"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.287759+00:00",
+      "version": 1
+    },
+    "emission_factor": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "排放因子",
+          "en": "Emission factor",
+          "definition": "单位活动水平对应的温室气体排放量",
+          "unit": "kg CO2-eq/unit"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.287759+00:00",
+      "version": 1
+    },
+    "gwp_weighted_emission": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "GWP加权排放",
+          "en": "GWP-weighted emission",
+          "definition": "将CH4/N2O排放量乘以GWP值转换为CO2当量"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.287759+00:00",
+      "version": 1
+    },
+    "correlation_analysis": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "相关性分析",
+          "en": "Correlation analysis",
+          "definition": "量化变量间线性/非线性关系的统计方法"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.287759+00:00",
+      "version": 1
+    },
+    "multivariate_regression": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "多元回归",
+          "en": "Multiple regression",
+          "definition": "建立因变量与多个自变量之间定量关系的统计模型"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.292757+00:00",
+      "version": 1
+    },
+    "spatial_variation": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "空间变异",
+          "en": "Spatial variation",
+          "definition": "不同采样点/管段间碳排放特征的差异"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.292757+00:00",
+      "version": 1
+    },
+    "temporal_variation": {
+      "value": {
+        "category": "domain_terms",
+        "value": {
+          "zh": "时间变异",
+          "en": "Temporal variation",
+          "definition": "碳排放随季节/昼夜/降雨等时间尺度的变化规律"
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.272742+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.292757+00:00",
+      "version": 1
+    }
+  },
+  "changelog": [
+    {
+      "action": "create",
+      "key": "sulfate_reduction",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '硫酸盐还原', 'en': 'Sulfate reduction', 'definition': 'SO4^2- 在厌氧条件下被还原为H2S的过程，与产甲烷竞争电子供体'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated':",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.272742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "denitrification",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '反硝化', 'en': 'Denitrification', 'definition': 'NO3- 在缺氧条件下被还原为N2/N2O的过程'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T0",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.272742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "nitrification",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '硝化', 'en': 'Nitrification', 'definition': 'NH4+ 在好氧条件下被氧化为NO2-/NO3-的过程'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T0",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.272742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "anaerobic_digestion",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '厌氧消化', 'en': 'Anaerobic digestion', 'definition': '有机物在厌氧条件下被微生物分解为CH4和CO2的过程'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.272742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "fermentation",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '发酵', 'en': 'Fermentation', 'definition': '有机物在无外源电子受体条件下的不完全氧化分解'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T08:40:1",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.272742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "syntrophic_degradation",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '互养降解', 'en': 'Syntrophic degradation', 'definition': '多种微生物协同降解有机物，中间产物在菌种间传递'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.272742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "redox_potential",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '氧化还原电位', 'en': 'Redox potential (ORP/Eh)', 'definition': '反映系统氧化还原状态，决定微生物代谢途径', 'unit': 'mV'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'u",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.277742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "hydraulic_retention_time",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '水力停留时间', 'en': 'Hydraulic retention time (HRT)', 'definition': '污水在管道中的平均停留时间，影响碳转化程度', 'unit': 'h'}, 'confidence': 0.9, 'source': 'expand_knowledge_scrip",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.277742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "sewage_temperature",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '污水温度', 'en': 'Sewage temperature', 'definition': '影响微生物活性和气体溶解度的关键参数', 'unit': '℃'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.277742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "flow_velocity",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '流速', 'en': 'Flow velocity', 'definition': '管道内污水流速，影响传质和剪切力', 'unit': 'm/s'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.277742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "pipe_slope",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '管道坡度', 'en': 'Pipe slope', 'definition': '管道纵坡，决定重力流条件和流速', 'unit': '%'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T0",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.277742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "volatile_fatty_acids",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '挥发性脂肪酸', 'en': 'Volatile fatty acids (VFAs)', 'definition': '乙酸、丙酸、丁酸等短链脂肪酸，产甲烷的关键中间产物'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.277742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "particulate_organic_carbon",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '颗粒态有机碳', 'en': 'Particulate organic carbon (POC)', 'definition': '悬浮固体中的有机碳，需先水解为溶解态才能被利用'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'upda",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.277742+00:00"
+    },
+    {
+      "action": "create",
+      "key": "dissolved_organic_carbon",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '溶解态有机碳', 'en': 'Dissolved organic carbon (DOC)', 'definition': '可被微生物直接利用的有机碳形态'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '202",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.282762+00:00"
+    },
+    {
+      "action": "create",
+      "key": "biodegradable_organic_carbon",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '可生物降解有机碳', 'en': 'Biodegradable organic carbon (BDOC)', 'definition': '可被微生物降解的有机碳比例，决定产甲烷潜力'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'u",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.282762+00:00"
+    },
+    {
+      "action": "create",
+      "key": "gas_flux",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '气体通量', 'en': 'Gas flux', 'definition': '单位时间单位面积的气体排放量', 'unit': 'mg/(m²·h)'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.282762+00:00"
+    },
+    {
+      "action": "create",
+      "key": "gas_dissolution",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '气体溶解', 'en': 'Gas dissolution', 'definition': '气态CH4/CO2溶入液相的过程，受亨利定律控制'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.282762+00:00"
+    },
+    {
+      "action": "create",
+      "key": "stripping",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '吹脱', 'en': 'Stripping / Gas stripping', 'definition': '湍流条件下溶解态气体逸出到气相的过程'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-1",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.282762+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ebullition",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '气泡释放', 'en': 'Ebullition', 'definition': '管道底部沉积物中气泡积聚后突然释放的现象'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T08:40:16.",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.282762+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mass_balance",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '质量平衡', 'en': 'Mass balance', 'definition': '基于物质守恒原理的碳通量核算方法'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T08:40:16.27",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.287759+00:00"
+    },
+    {
+      "action": "create",
+      "key": "carbon_footprint",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '碳足迹', 'en': 'Carbon footprint', 'definition': '系统全生命周期温室气体排放总量', 'unit': 'kg CO2-eq'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': ",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.287759+00:00"
+    },
+    {
+      "action": "create",
+      "key": "emission_factor",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '排放因子', 'en': 'Emission factor', 'definition': '单位活动水平对应的温室气体排放量', 'unit': 'kg CO2-eq/unit'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'upda",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.287759+00:00"
+    },
+    {
+      "action": "create",
+      "key": "gwp_weighted_emission",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': 'GWP加权排放', 'en': 'GWP-weighted emission', 'definition': '将CH4/N2O排放量乘以GWP值转换为CO2当量'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.287759+00:00"
+    },
+    {
+      "action": "create",
+      "key": "correlation_analysis",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '相关性分析', 'en': 'Correlation analysis', 'definition': '量化变量间线性/非线性关系的统计方法'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.287759+00:00"
+    },
+    {
+      "action": "create",
+      "key": "multivariate_regression",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '多元回归', 'en': 'Multiple regression', 'definition': '建立因变量与多个自变量之间定量关系的统计模型'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-1",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.292757+00:00"
+    },
+    {
+      "action": "create",
+      "key": "spatial_variation",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '空间变异', 'en': 'Spatial variation', 'definition': '不同采样点/管段间碳排放特征的差异'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12T08:40",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.292757+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temporal_variation",
+      "old": null,
+      "new": "{'category': 'domain_terms', 'value': {'zh': '时间变异', 'en': 'Temporal variation', 'definition': '碳排放随季节/昼夜/降雨等时间尺度的变化规律'}, 'confidence': 0.9, 'source': 'expand_knowledge_script', 'updated': '2026-06-12",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.292757+00:00"
+    }
+  ]
+}

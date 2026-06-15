@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "category": "writing_templates",
+    "description": "写作模板（句式/结构/讨论）",
+    "version": 7,
+    "created": "2026-06-12T08:29:49.966979+00:00",
+    "updated": "2026-06-12T08:40:16.302752+00:00",
+    "source": "initial"
+  },
+  "entries": {
+    "results_ghg_correlation": {
+      "value": {
+        "category": "writing_templates",
+        "value": {
+          "section": "results",
+          "pattern": "相关性分析表明，[变量A]与[变量B]呈显著[正/负]相关(r=[值], p<0.05)，这与[文献]的研究结果一致。",
+          "usage": "描述变量间相关关系的结果段"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.302752+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.302752+00:00",
+      "version": 1
+    },
+    "discussion_mechanism": {
+      "value": {
+        "category": "writing_templates",
+        "value": {
+          "section": "discussion",
+          "pattern": "本研究发现[现象]，其可能的机制如下：[机制描述]。这一解释与[文献]提出的[理论/模型]相吻合。",
+          "usage": "讨论部分解释机制的句式"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.302752+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.302752+00:00",
+      "version": 1
+    },
+    "discussion_comparison": {
+      "value": {
+        "category": "writing_templates",
+        "value": {
+          "section": "discussion",
+          "pattern": "与[研究A]报道的[数值范围]相比，本研究中[变量]的[偏高/偏低/相近]，可能归因于[原因]。",
+          "usage": "与已有研究对比的讨论句式"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.302752+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.302752+00:00",
+      "version": 1
+    },
+    "introduction_gap": {
+      "value": {
+        "category": "writing_templates",
+        "value": {
+          "section": "introduction",
+          "pattern": "尽管[领域]已有大量研究，但关于[具体问题]的认识仍不充分，尤其是[具体空白]方面缺乏系统研究。",
+          "usage": "引言部分指出研究空白"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.302752+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.302752+00:00",
+      "version": 1
+    },
+    "methods_sampling": {
+      "value": {
+        "category": "writing_templates",
+        "value": {
+          "section": "methods",
+          "pattern": "在[地点]设置[数量]个采样点，分别位于[位置描述]。采样频率为[频率]，采样时间为[时间段]。水样采集后[处理方法]。",
+          "usage": "方法部分描述采样方案"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.302752+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.302752+00:00",
+      "version": 1
+    },
+    "contribution_statement": {
+      "value": {
+        "category": "writing_templates",
+        "value": {
+          "section": "conclusion",
+          "pattern": "本研究的创新点在于：(1)[创新1]；(2)[创新2]；(3)[创新3]。研究结果为[应用领域]提供了[科学依据/数据支撑/理论参考]。",
+          "usage": "结论部分阐述贡献"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.302752+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.302752+00:00",
+      "version": 1
+    }
+  },
+  "changelog": [
+    {
+      "action": "create",
+      "key": "results_ghg_correlation",
+      "old": null,
+      "new": "{'category': 'writing_templates', 'value': {'section': 'results', 'pattern': '相关性分析表明，[变量A]与[变量B]呈显著[正/负]相关(r=[值], p<0.05)，这与[文献]的研究结果一致。', 'usage': '描述变量间相关关系的结果段'}, 'confidence': 0.85, 'source': 'ex",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.302752+00:00"
+    },
+    {
+      "action": "create",
+      "key": "discussion_mechanism",
+      "old": null,
+      "new": "{'category': 'writing_templates', 'value': {'section': 'discussion', 'pattern': '本研究发现[现象]，其可能的机制如下：[机制描述]。这一解释与[文献]提出的[理论/模型]相吻合。', 'usage': '讨论部分解释机制的句式'}, 'confidence': 0.85, 'source': 'expand_know",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.302752+00:00"
+    },
+    {
+      "action": "create",
+      "key": "discussion_comparison",
+      "old": null,
+      "new": "{'category': 'writing_templates', 'value': {'section': 'discussion', 'pattern': '与[研究A]报道的[数值范围]相比，本研究中[变量]的[偏高/偏低/相近]，可能归因于[原因]。', 'usage': '与已有研究对比的讨论句式'}, 'confidence': 0.85, 'source': 'expand_know",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.302752+00:00"
+    },
+    {
+      "action": "create",
+      "key": "introduction_gap",
+      "old": null,
+      "new": "{'category': 'writing_templates', 'value': {'section': 'introduction', 'pattern': '尽管[领域]已有大量研究，但关于[具体问题]的认识仍不充分，尤其是[具体空白]方面缺乏系统研究。', 'usage': '引言部分指出研究空白'}, 'confidence': 0.85, 'source': 'expand_know",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.302752+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methods_sampling",
+      "old": null,
+      "new": "{'category': 'writing_templates', 'value': {'section': 'methods', 'pattern': '在[地点]设置[数量]个采样点，分别位于[位置描述]。采样频率为[频率]，采样时间为[时间段]。水样采集后[处理方法]。', 'usage': '方法部分描述采样方案'}, 'confidence': 0.85, 'source': 'expa",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.302752+00:00"
+    },
+    {
+      "action": "create",
+      "key": "contribution_statement",
+      "old": null,
+      "new": "{'category': 'writing_templates', 'value': {'section': 'conclusion', 'pattern': '本研究的创新点在于：(1)[创新1]；(2)[创新2]；(3)[创新3]。研究结果为[应用领域]提供了[科学依据/数据支撑/理论参考]。', 'usage': '结论部分阐述贡献'}, 'confidence': 0.85, 'sourc",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.302752+00:00"
+    }
+  ]
+}

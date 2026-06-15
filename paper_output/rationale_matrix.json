@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "updated": "2026-06-14T16:52:22.160195+00:00",
+  "rows": [
+    {
+      "finding": "氧化亚氮(ppm)与NaCl(mg/L)相关(r=0.803)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "CO2与NO2（ppm）相关(r=0.922)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "NaCl(mg/L)与电导率(uS/cm)相关(r=0.966)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "总氮（mg/L)与铵态氮（mg/L)相关(r=0.985)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "CO2本底值季节差异(p=0.0000)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "VOCs(ppb)季节差异(p=0.0000)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "VOCs本底值季节差异(p=0.0000)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "气温（℃）季节差异(p=0.0000)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    },
+    {
+      "finding": "COD（mg/L)季节差异(p=0.0000)",
+      "mechanism": "",
+      "mechanism_en": "",
+      "evidence": "",
+      "citation": "",
+      "confidence": 0.0,
+      "section": "results",
+      "language": "zh",
+      "timestamp": "2026-06-14T16:52:22.159195+00:00"
+    }
+  ]
+}

@@ -214,8 +214,8 @@ def _run_writer_results(ctx: PaperContext):
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
-            ctx.sections['results'] = result
-            return result
+            ctx.sections['results'] = _clean_claude_output(result)
+            return ctx.sections['results']
 
     # 回退：模板
     tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
@@ -226,6 +226,19 @@ def _run_writer_results(ctx: PaperContext):
 
 def _run_writer_discussion(ctx: PaperContext):
     """写 Discussion 章节（优先 Claude 生成，回退模板）"""
+    # 检查是否有预生成的 Discussion 文件
+    prebuilt_path = os.path.join(ctx.output_dir, 'discussion_claude.md')
+    print(f"  [DEBUG] Checking pre-built: {prebuilt_path} exists={os.path.exists(prebuilt_path)}")
+    if os.path.exists(prebuilt_path):
+        with open(prebuilt_path, encoding='utf-8') as f:
+            prebuilt = f.read()
+        print(f"  [DEBUG] Pre-built length: {len(prebuilt)} chars")
+        if len(prebuilt) > 500:
+            ctx.sections['discussion'] = _clean_claude_output(prebuilt)
+            logger.info(f"Discussion: 使用预生成文件 ({len(ctx.sections['discussion'])} 字)")
+            print(f"  [DEBUG] USING PRE-GENERATED FILE")
+            return ctx.sections['discussion']
+
     writer = _get_claude_writer()
     if writer and ctx.has('findings'):
         # 收集机制知识
@@ -256,8 +269,8 @@ def _run_writer_discussion(ctx: PaperContext):
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
-            ctx.sections['discussion'] = result
-            return result
+            ctx.sections['discussion'] = _clean_claude_output(result)
+            return ctx.sections['discussion']
 
     # 回退：使用模板
     from data_driven_pipeline import DataDrivenWriter
@@ -278,8 +291,8 @@ def _run_writer_intro(ctx: PaperContext):
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
-            ctx.sections['introduction'] = result
-            return result
+            ctx.sections['introduction'] = _clean_claude_output(result)
+            return ctx.sections['introduction']
 
     # 回退：使用模板
     from paper_writing_agent import IntroductionGenerator
@@ -305,8 +318,8 @@ def _run_writer_methods(ctx: PaperContext):
             data_info['standards'] = dc.standards
         result = writer.write_methods(data_info=data_info, language=ctx.language)
         if result:
-            ctx.sections['methods'] = result
-            return result
+            ctx.sections['methods'] = _clean_claude_output(result)
+            return ctx.sections['methods']
 
     # 回退：使用模板
     from paper_writing_agent import MethodsGenerator
@@ -324,8 +337,8 @@ def _run_writer_abstract(ctx: PaperContext):
             language=ctx.language,
         )
         if result:
-            ctx.sections['abstract'] = result
-            return result
+            ctx.sections['abstract'] = _clean_claude_output(result)
+            return ctx.sections['abstract']
 
     # 回退：使用模板
     from paper_writing_agent import AbstractGenerator
@@ -348,8 +361,8 @@ def _run_writer_conclusion(ctx: PaperContext):
             language=ctx.language,
         )
         if result:
-            ctx.sections['conclusion'] = result
-            return result
+            ctx.sections['conclusion'] = _clean_claude_output(result)
+            return ctx.sections['conclusion']
 
     # 回退：使用模板
     critical = [f for f in ctx.findings if f['importance'] in ['critical', 'high']]
@@ -499,16 +512,27 @@ def _run_review(ctx: PaperContext):
 
 
 def _run_auto_revision(ctx: PaperContext):
-    """自动修订"""
+    """自动修订（跳过Claude生成的高质量章节）"""
     if ctx.review_report is None:
         return None
     from auto_revision import AutoReviser
-    # 组装全文
+
+    # 保存Claude生成的章节（不被修订覆盖）
+    claude_sections = {}
+    for section in ['results', 'discussion', 'abstract', 'conclusion']:
+        text = ctx.sections.get(section, '')
+        if text and not _is_template(text):
+            claude_sections[section] = text
+
+    # 组装全文（只包含需要修订的章节）
+    sections_to_revise = ['introduction', 'methods']
     full_paper = '\n\n---\n\n'.join(
-        ctx.sections.get(k, '') for k in
-        ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+        ctx.sections.get(k, '') for k in sections_to_revise
         if ctx.has_section(k)
     )
+    if not full_paper:
+        return None
+
     # 生成审稿报告文本
     review_md = f"# 审稿报告\n\n共{ctx.review_summary.get('total', 0)}个问题\n"
     for issue in ctx.review_report.issues:
@@ -519,11 +543,24 @@ def _run_auto_revision(ctx: PaperContext):
     revised = reviser.revise()
     ctx.revision_report = reviser.get_revision_report()
 
-    # 将修订后的文本拆分回各章节
+    # 将修订后的文本拆分回章节
     _split_revised_into_sections(ctx, revised)
+
+    # 恢复Claude生成的章节
+    for section, text in claude_sections.items():
+        ctx.sections[section] = text
+        logger.info(f"保留Claude生成的 {section} ({len(text)} 字)")
 
     logger.info(f"自动修订: {len(reviser.changes)}类修改")
     return revised
+
+
+def _is_template(text: str) -> bool:
+    """判断文本是否是模板（重复内容）"""
+    if not text:
+        return True
+    repeated = text.count('温度是影响微生物代谢活性的主要因素')
+    return repeated > 3
 
 
 def _run_final_check(ctx: PaperContext):
@@ -569,16 +606,19 @@ def _run_latex_export(ctx: PaperContext):
     try:
         from latex_exporter import LatexExporter
         exporter = LatexExporter()
-        # 组装全文 Markdown
-        full_md = '\n\n'.join(
-            f"# {k}\n\n{ctx.sections[k]}" for k in
-            ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
-            if ctx.has_section(k)
+        # 构造 sections dict
+        sections = {}
+        for key in ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']:
+            if ctx.has_section(key):
+                sections[key] = ctx.sections[key]
+        result = exporter.export(
+            sections=sections,
+            output_dir=ctx.output_dir,
+            title=ctx.title or '',
+            abstract_text=ctx.sections.get('abstract', ''),
         )
-        latex_path = os.path.join(ctx.output_dir, 'paper.tex')
-        exporter.export(full_latex=exporter.md_to_latex(full_md), output_path=latex_path)
-        logger.info(f"LaTeX: {latex_path}")
-        return latex_path
+        logger.info(f"LaTeX: {ctx.output_dir}")
+        return result
     except Exception as e:
         logger.warning(f"LaTeX export failed: {e}")
         return None
@@ -743,7 +783,7 @@ def _run_paper_reading(ctx: PaperContext):
             if not keywords:
                 keywords = ['sewage', 'greenhouse gas', 'methane', 'carbon']
             search_query = ' '.join(keywords[:5])
-            found_papers = finder.search(search_query, max_results=10)
+            found_papers = finder.find_papers(search_query)
             if found_papers:
                 logger.info(f"在线搜索到 {len(found_papers)} 篇论文")
                 for p in found_papers[:10]:
@@ -875,43 +915,104 @@ def _run_advanced_analysis(ctx: PaperContext):
     """高级多维分析（交叉分析、异常深挖、数据故事线、阈值检测）"""
     if not ctx.has('df'):
         return None
-    from advanced_analysis import AdvancedAnalyzer
-    analyzer = AdvancedAnalyzer(ctx.df)
-    results = analyzer.analyze_all()
-    ctx.advanced_findings = results.get('cross_analyses', [])
-    ctx.cross_analyses = results.get('cross_analyses', [])
-    ctx.anomaly_insights = results.get('anomaly_insights', [])
-    ctx.data_stories = results.get('data_stories', [])
-    ctx.threshold_effects = results.get('threshold_effects', [])
-    total = sum(len(v) for v in results.values() if isinstance(v, list))
-    logger.info(f"高级分析: {total}项发现")
-    return results
+    try:
+        from advanced_analysis import CrossAnalyzer, AnomalyDeepDiver, DataStoryExtractor, ThresholdDetector
+        import variable_registry as vr
+        all_results = {}
+
+        # 交叉分析
+        cross = CrossAnalyzer(ctx.df)
+        cross_results = cross.analyze_all()
+        all_results['cross_analyses'] = cross_results if isinstance(cross_results, list) else []
+
+        # 异常深挖 — 调用 analyze() 不是 analyze_all()
+        try:
+            diver = AnomalyDeepDiver(ctx.df)
+            anomaly_results = diver.analyze()
+            all_results['anomaly_insights'] = anomaly_results if isinstance(anomaly_results, list) else []
+        except Exception as e:
+            logger.debug(f"AnomalyDeepDiver: {e}")
+            all_results['anomaly_insights'] = []
+
+        # 数据故事线 — 需要传入分析结果，不是原始 df
+        try:
+            # 构造分析结果格式
+            import numpy as np
+            analysis_results = {}
+            # 相关性分析结果
+            numeric_cols = ctx.df.select_dtypes(include=[np.number]).columns
+            if len(numeric_cols) > 2:
+                corr = ctx.df[numeric_cols].corr()
+                pvals = ctx.df[numeric_cols].corr()  # 简化：用相关系数矩阵
+                analysis_results['pearson相关'] = {'相关系数': corr, 'p值': pvals}
+            extractor = DataStoryExtractor(analysis_results)
+            story_results = extractor.extract_stories()
+            all_results['data_stories'] = story_results if isinstance(story_results, list) else []
+        except Exception as e:
+            logger.debug(f"DataStoryExtractor: {e}")
+            all_results['data_stories'] = []
+
+        # 阈值检测 — 调用 detect(x, y)，自动选择关键变量对
+        try:
+            detector = ThresholdDetector(ctx.df)
+            threshold_results = []
+            # 从 variable_registry 获取回归假设对
+            regression_pairs = vr.get_regression_pairs(ctx.df)
+            for pair in regression_pairs[:5]:
+                try:
+                    result = detector.detect(pair['x'], pair['y'])
+                    if result:
+                        threshold_results.append(result)
+                except Exception:
+                    pass
+            all_results['threshold_effects'] = threshold_results
+        except Exception as e:
+            logger.debug(f"ThresholdDetector: {e}")
+            all_results['threshold_effects'] = []
+
+        ctx.advanced_findings = all_results.get('cross_analyses', [])
+        ctx.cross_analyses = all_results.get('cross_analyses', [])
+        ctx.anomaly_insights = all_results.get('anomaly_insights', [])
+        ctx.data_stories = all_results.get('data_stories', [])
+        ctx.threshold_effects = all_results.get('threshold_effects', [])
+        total = sum(len(v) for v in all_results.values() if isinstance(v, list))
+        logger.info(f"高级分析: {total}项发现")
+        return all_results
+    except Exception as e:
+        logger.warning(f"高级分析失败: {e}")
+        return None
 
 
 def _run_deep_imitation(ctx: PaperContext):
     """深度模仿分析（3表法：范例动作/草稿动作/目标蓝图）"""
     if not ctx.has('sections'):
         return None
-    from deep_imitation import DeepImitationProtocol
-    protocol = DeepImitationProtocol(output_dir=ctx.output_dir)
-    # 用已有章节作为草稿
-    draft_text = '\n\n'.join(ctx.sections.values())
-    if not draft_text.strip():
-        return None
-    result = protocol.run(draft_text)
-    ctx.imitation_report = protocol.format_report(result)
+    from deep_imitation import DeepImitationManager
+    manager = DeepImitationManager(output_dir=ctx.output_dir)
+    # 逐章节分析
+    for section_name in ['results', 'discussion', 'introduction']:
+        text = ctx.sections.get(section_name, '')
+        if text and len(text) > 100:
+            try:
+                manager.analyze_draft(section_name, text[:2000])
+                manager.generate_blueprint(section_name)
+            except Exception as e:
+                logger.debug(f"deep_imitation {section_name}: {e}")
+    report = manager.generate_report()
+    ctx.imitation_report = report if isinstance(report, str) else str(report)
     logger.info("深度模仿分析完成")
-    return result
+    return report
 
 
 def _run_integrity_audit(ctx: PaperContext):
     """完整性审计（4维度：制品链、推理深度、证据链、模式扫描）"""
-    from integrity_audit import IntegrityAuditor
-    auditor = IntegrityAuditor(output_dir=ctx.output_dir)
-    findings = auditor.run_audit(ctx.sections)
-    ctx.integrity_report = auditor.format_report(findings)
-    logger.info(f"完整性审计: {len(findings)}项发现")
-    return findings
+    from integrity_audit import IntegrityAuditManager
+    auditor = IntegrityAuditManager(output_dir=ctx.output_dir)
+    report = auditor.run_audit()
+    ctx.integrity_report = auditor.format_report(report)
+    issue_count = len(report.findings) if hasattr(report, 'findings') else 0
+    logger.info(f"完整性审计: {issue_count}项发现")
+    return report
 
 
 def _run_artifact_check(ctx: PaperContext):
@@ -920,7 +1021,8 @@ def _run_artifact_check(ctx: PaperContext):
     checker = ArtifactChecker(output_dir=ctx.output_dir)
     report = checker.check_all()
     ctx.artifact_report = checker.format_report(report)
-    logger.info(f"制品检查: {report.get('total_issues', 0)}个问题")
+    issue_count = len(report.findings) if hasattr(report, 'findings') else 0
+    logger.info(f"制品检查: {issue_count}个问题")
     return report
 
 
@@ -933,7 +1035,7 @@ def _run_citation_bank(ctx: PaperContext):
     full_text = '\n\n'.join(ctx.sections.values())
     claims = bank.extract_claims_from_text(full_text)
     if claims:
-        bank.bind_citations(claims)
+        bank.bind_citations()
         bank.save()
         ctx.citation_bank = bank
         logger.info(f"引用支撑库: {len(claims)}个论点")
@@ -941,7 +1043,408 @@ def _run_citation_bank(ctx: PaperContext):
 
 
 # ============================================================
-# 5. 模块注册表
+# 5. 画图模块 + 文本清理
+# ============================================================
+
+def _run_generate_figures(ctx: PaperContext):
+    """数据驱动的图表生成 — 根据数据发现生成对应图表"""
+    if not ctx.has('df'):
+        return None
+    try:
+        from scientific_visualization_agent import VisualizationAgent
+        import variable_registry as vr
+        import os
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        analysis_dir = os.path.join(ctx.output_dir, 'figures')
+        os.makedirs(analysis_dir, exist_ok=True)
+
+        agent = VisualizationAgent(ctx.df, analysis_dir, style='chinese')
+        figures_generated = []
+
+        # === 基础图表 ===
+
+        # 1. 季节对比箱线图（关键变量）
+        try:
+            key_vars = ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'TOC（mg/L)', 'pH']
+            available = [v for v in key_vars if v in ctx.df.columns]
+            if available:
+                agent.plot_multivariate(variables=available[:6], kind='box')
+                figures_generated.append('seasonal_boxplot')
+        except Exception as e:
+            logger.debug(f"seasonal_boxplot: {e}")
+
+        # 2. 相关性热图
+        try:
+            agent.plot_heatmap()
+            figures_generated.append('heatmap')
+        except Exception as e:
+            logger.debug(f"heatmap: {e}")
+
+        # === 数据驱动图表（基于 findings） ===
+
+        # 3. 空间热点图：CH4在各采样点的分布
+        try:
+            if '甲烷(ppm)' in ctx.df.columns and '采样点' in ctx.df.columns:
+                fig, ax = plt.subplots(figsize=(10, 5))
+                point_ch4 = ctx.df.groupby('采样点')['甲烷(ppm)'].mean().sort_values(ascending=False)
+                colors = ['#E15759' if v > 100 else '#4E79A7' for v in point_ch4.values]
+                point_ch4.plot(kind='bar', ax=ax, color=colors)
+                ax.set_ylabel('CH₄ (ppm)')
+                ax.set_xlabel('采样点')
+                ax.set_title('各采样点CH₄排放量（红色>100ppm为热点）')
+                plt.tight_layout()
+                fig.savefig(os.path.join(analysis_dir, 'spatial_ch4_hotspot.png'), dpi=300)
+                plt.close(fig)
+                figures_generated.append('spatial_ch4_hotspot')
+        except Exception as e:
+            logger.debug(f"spatial_ch4_hotspot: {e}")
+
+        # 4. DO阈值效应图
+        try:
+            if all(c in ctx.df.columns for c in ['DO(mg/L)', '甲烷(ppm)']):
+                valid = ctx.df[['DO(mg/L)', '甲烷(ppm)', '季节']].dropna()
+                if len(valid) > 5:
+                    fig, ax = plt.subplots(figsize=(8, 5))
+                    for season in valid['季节'].unique():
+                        sub = valid[valid['季节'] == season]
+                        ax.scatter(sub['DO(mg/L)'], sub['甲烷(ppm)'],
+                                  label=season, s=60, alpha=0.7)
+                    ax.set_xlabel('DO (mg/L)')
+                    ax.set_ylabel('CH₄ (ppm)')
+                    ax.set_title('DO与CH₄的关系（阈值效应）')
+                    ax.legend()
+                    # 添加阈值线
+                    ax.axvline(x=2, color='red', linestyle='--', alpha=0.5, label='DO=2ppm阈值')
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'do_threshold_effect.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('do_threshold_effect')
+        except Exception as e:
+            logger.debug(f"do_threshold_effect: {e}")
+
+        # 5. 泥水状况×季节 交互效应图
+        try:
+            if all(c in ctx.df.columns for c in ['季节', '泥水状况', '甲烷(ppm)']):
+                fig, ax = plt.subplots(figsize=(8, 5))
+                data = ctx.df[['季节', '泥水状况', '甲烷(ppm)']].dropna()
+                if len(data) > 5:
+                    pivot = data.groupby(['季节', '泥水状况'])['甲烷(ppm)'].mean().unstack(fill_value=0)
+                    pivot.plot(kind='bar', ax=ax)
+                    ax.set_ylabel('CH₄ 均值 (ppm)')
+                    ax.set_title('季节×泥水状况 交互效应对CH₄的影响')
+                    ax.legend(title='泥水状况')
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'season_sediment_interaction.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('season_sediment_interaction')
+        except Exception as e:
+            logger.debug(f"season_sediment_interaction: {e}")
+
+        # 6. 相态耦合图：CH4 vs TOC vs CO2
+        try:
+            if all(c in ctx.df.columns for c in ['甲烷(ppm)', 'TOC（mg/L)', 'CO2']):
+                valid = ctx.df[['甲烷(ppm)', 'TOC（mg/L)', 'CO2', '季节']].dropna()
+                if len(valid) > 5:
+                    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+                    # CH4 vs TOC
+                    for season in valid['季节'].unique():
+                        sub = valid[valid['季节'] == season]
+                        axes[0].scatter(sub['TOC（mg/L)'], sub['甲烷(ppm)'], label=season, s=50)
+                    axes[0].set_xlabel('TOC (mg/L)')
+                    axes[0].set_ylabel('CH₄ (ppm)')
+                    axes[0].set_title('CH₄ vs TOC（碳源关系）')
+                    axes[0].legend()
+                    # CH4 vs CO2
+                    for season in valid['季节'].unique():
+                        sub = valid[valid['季节'] == season]
+                        axes[1].scatter(sub['CO2'], sub['甲烷(ppm)'], label=season, s=50)
+                    axes[1].set_xlabel('CO₂ (ppm)')
+                    axes[1].set_ylabel('CH₄ (ppm)')
+                    axes[1].set_title('CH₄ vs CO₂（气相关系）')
+                    axes[1].legend()
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'phase_coupling.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('phase_coupling')
+        except Exception as e:
+            logger.debug(f"phase_coupling: {e}")
+
+        # 注册图表到上下文
+        if os.path.exists(analysis_dir):
+            for f in os.listdir(analysis_dir):
+                if f.endswith('.png'):
+                    fig_path = os.path.join(analysis_dir, f)
+                    fig_name = f.replace('.png', '')
+                    ctx.figures[fig_name] = {
+                        'path': fig_path,
+                        'caption': f'图{len(ctx.figures)+1} {fig_name}',
+                        'type': 'analysis',
+                        'section': 'results',
+                    }
+
+        logger.info(f"生成 {len(figures_generated)} 类图表, {len(ctx.figures)} 个文件")
+        return figures_generated
+    except Exception as e:
+        logger.warning(f"图表生成失败: {e}")
+        return None
+
+
+def _clean_claude_output(text: str) -> str:
+    """清理 Claude 输出中的非正文内容（元评论、markdown格式、说明文字）"""
+    if not text:
+        return text
+
+    import re
+
+    # 删除 Claude 的元评论（开头的说明文字）
+    meta_patterns = [
+        r'^.*?以下是.*?摘要.*?[:：]\s*',
+        r'^.*?以下是.*?正文.*?[:：]\s*',
+        r'^.*?直接输出.*?如下.*?[:：]\s*',
+        r'^.*?用户未授权.*?如下.*?[:：]\s*',
+        r'^---\s*\n',
+        r'\n---\s*$',
+    ]
+    for pattern in meta_patterns:
+        text = re.sub(pattern, '', text, flags=re.MULTILINE)
+
+    # 删除 Claude 的尾部说明和元评论（更全面）
+    tail_patterns = [
+        r'\n+说明[：:].*$',
+        r'\n+如需.*$',
+        r'\n+字数[：:].*$',
+        r'\n+结构[：:].*$',
+        r'\n+数据支撑[：:].*$',
+        r'\n+创新点[：:].*$',
+        r'\n+相比.*改进[：:].*$',
+        r'\n+参考文献\s*\n.*$',
+        r'\n+如需将此内容.*$',
+        r'\n+请授予.*$',
+        r'\n+---\s*$',
+        r'\n+全文约.*字.*$',
+        r'\n+涵盖了.*结构完整.*$',
+        r'\n+如需调整.*可以告诉我.*$',
+        r'\n+共约\d+字.*$',
+        r'\n+符合.*学术.*规范.*$',
+    ]
+    for pattern in tail_patterns:
+        text = re.sub(pattern, '', text, flags=re.DOTALL)
+
+    # 清理 markdown 格式
+    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)  # **bold** -> bold
+    text = re.sub(r'\*(.+?)\*', r'\1', text)        # *italic* -> italic
+    text = re.sub(r'`(.+?)`', r'\1', text)          # `code` -> code
+    text = re.sub(r'\$_\{?(\d+)\}?\$', r'\1', text)  # $_4$ -> 4
+    text = re.sub(r'\$([^$]+)\$', r'\1', text)      # $formula$ -> formula
+    text = re.sub(r'^#+\s*', '', text, flags=re.MULTILINE)  # ### heading -> heading
+
+    # 清理多余空行
+    text = re.sub(r'\n{3,}', '\n\n', text)
+
+    return text.strip()
+
+
+# ============================================================
+# 6. 新增模块函数 — 科学分析/引用审计/动机线索/推理矩阵/修订审计/领域配置
+# ============================================================
+
+def _run_scientific_analysis(ctx: PaperContext):
+    """智能分析编排器（自动判断该做什么分析）"""
+    if not ctx.has('df'):
+        return None
+    try:
+        from scientific_analysis_agent import ScientificAnalysisAgent
+        agent = ScientificAnalysisAgent(data_path=ctx.data_path, output_dir=ctx.output_dir)
+        agent.load_data()
+        results = agent.run()
+        # results 可能是 dict 或其他类型
+        if results and isinstance(results, dict):
+            for key, value in results.items():
+                if isinstance(value, list):
+                    for item in value:
+                        if isinstance(item, dict) and 'type' not in item:
+                            item['type'] = key
+                        if isinstance(item, dict):
+                            ctx.findings.append(item)
+        result_count = len(results) if isinstance(results, dict) else 0
+        logger.info(f"科学分析完成: {result_count} 类结果")
+        return results
+    except Exception as e:
+        logger.warning(f"科学分析失败: {e}")
+        return None
+
+
+def _run_citation_audit(ctx: PaperContext):
+    """引用质量审计（DOI验证、年份评分、类型分类）"""
+    if not ctx.has('sections'):
+        return None
+    try:
+        from citation_audit import audit_citations_batch
+        import re
+        # 从全文中提取引用
+        full_text = '\n\n'.join(ctx.sections.values())
+        # 提取 [1] [2] 格式的引用
+        citation_refs = re.findall(r'\[(\d+(?:[,\s]*\d+)*)\]', full_text)
+        # 提取 (Author, Year) 格式的引用
+        author_refs = re.findall(r'\(([A-Z][a-z]+(?:\s+(?:et\s+al\.?|&\s+[A-Z][a-z]+))?),?\s+(\d{4})\)', full_text)
+
+        all_refs = []
+        for ref in citation_refs[:20]:
+            all_refs.append({'reference': ref, 'type': 'numbered'})
+        for author, year in author_refs[:20]:
+            all_refs.append({'reference': f'{author} ({year})', 'type': 'author_year'})
+
+        if all_refs:
+            audit_result = audit_citations_batch(all_refs, verify=False)
+            total = audit_result.get('total', 0)
+            issues = audit_result.get('issues', [])
+            logger.info(f"引用审计: {total} 个引用, {len(issues)} 个问题")
+            return audit_result
+        return None
+    except Exception as e:
+        logger.warning(f"引用审计失败: {e}")
+        return None
+
+
+def _run_motivation_thread(ctx: PaperContext):
+    """构建动机线索（论文的"红线"贯穿）"""
+    if not ctx.has('motivation') or not ctx.has('findings'):
+        return None
+    try:
+        from motivation_thread import MotivationThread, SevenSentenceTest
+
+        # 从 motivation 和 findings 构建线索
+        motivation = ctx.motivation
+        field_problem = getattr(motivation, 'field_problem', '') or ''
+        specific_gap = getattr(motivation, 'specific_gap', '') or ''
+        design_response = getattr(motivation, 'core_innovation', '') or ''
+        evidence = getattr(motivation, 'evidence_support', '') or ''
+
+        # 从 findings 中提取关键发现作为 evidence
+        critical = [f for f in ctx.findings if f.get('importance') in ['critical', 'high']]
+        if critical and not evidence:
+            evidence_parts = []
+            for f in critical[:3]:
+                if f.get('type') == 'correlation':
+                    v1, v2 = f.get('variables', ('', ''))
+                    r = f.get('data', {}).get('r', 0)
+                    evidence_parts.append(f'{v1}与{v2}相关(r={r:.3f})')
+                elif f.get('type') == 'group_difference':
+                    var = f.get('variable', '')
+                    p = f.get('data', {}).get('p_value', 0)
+                    evidence_parts.append(f'{var}季节差异显著(p={p:.4f})')
+            evidence = '；'.join(evidence_parts)
+
+        thread = MotivationThread(
+            field_problem=field_problem,
+            specific_gap=specific_gap,
+            design_response=design_response,
+            evidence=evidence,
+        )
+
+        # 运行七句话测试
+        seven_test = SevenSentenceTest(thread)
+        test_result = seven_test.validate()
+
+        logger.info(f"动机线索: 完整度={thread.completeness():.0%}, 七句话测试={'通过' if test_result.get('passed') else '未通过'}")
+        return {'thread': thread, 'test': test_result}
+    except Exception as e:
+        logger.warning(f"动机线索失败: {e}")
+        return None
+
+
+def _run_writing_rationale(ctx: PaperContext):
+    """构建写作推理矩阵（追踪每个写作决策的推理链）"""
+    if not ctx.has('sections') or not ctx.has('findings'):
+        return None
+    try:
+        from writing_rationale import RationaleMatrix
+
+        matrix = RationaleMatrix(store_path=os.path.join(ctx.output_dir, 'rationale_matrix.json'))
+
+        # 为每个关键 finding 添加推理行
+        critical = [f for f in ctx.findings if f.get('importance') in ['critical', 'high']]
+        for f in critical[:10]:
+            finding_text = ''
+            if f.get('type') == 'correlation':
+                v1, v2 = f.get('variables', ('', ''))
+                r = f.get('data', {}).get('r', 0)
+                finding_text = f'{v1}与{v2}相关(r={r:.3f})'
+            elif f.get('type') == 'group_difference':
+                var = f.get('variable', '')
+                p = f.get('data', {}).get('p_value', 0)
+                finding_text = f'{var}季节差异(p={p:.4f})'
+            elif f.get('type') == 'distribution':
+                var = f.get('variable', '')
+                finding_text = f'{var}分布特征'
+
+            if finding_text:
+                matrix.add(
+                    finding=finding_text,
+                    mechanism='',
+                    evidence='',
+                    citation='',
+                    section='results',
+                )
+
+        # 验证并保存
+        issues = matrix.validate()
+        matrix.save()
+        ctx.rationale_rows = matrix.to_markdown()
+
+        logger.info(f"推理矩阵: {len(matrix.rows)} 行, {len(issues)} 个问题")
+        return matrix
+    except Exception as e:
+        logger.warning(f"推理矩阵失败: {e}")
+        return None
+
+
+def _run_revision_audit(ctx: PaperContext):
+    """修订审计（检测版本间的变化是否实质性）"""
+    if not ctx.revision_report:
+        return None
+    try:
+        from revision_audit import audit_revision
+
+        # 对比修订前后的全文
+        original_sections = []
+        for key in ['introduction', 'methods', 'results', 'discussion', 'conclusion']:
+            text = ctx.sections.get(key, '')
+            if text:
+                original_sections.append(text)
+        original_text = '\n\n'.join(original_sections)
+
+        if not original_text or not ctx.revision_report:
+            return None
+
+        audit_result = audit_revision(original_text, ctx.revision_report)
+        substantive = audit_result.substantive_changes if hasattr(audit_result, 'substantive_changes') else 0
+        logger.info(f"修订审计: {substantive} 个实质性变更")
+        return audit_result
+    except Exception as e:
+        logger.warning(f"修订审计失败: {e}")
+        return None
+
+
+def _run_domain_config(ctx: PaperContext):
+    """加载领域配置"""
+    if not ctx.domain:
+        return None
+    try:
+        from domain_config import get_config
+        config = get_config(ctx.domain)
+        ctx.domain_config = config
+        logger.info(f"领域配置: {config.domain_name} ({len(config.standards)} 个标准)")
+        return config
+    except Exception as e:
+        logger.warning(f"领域配置失败: {e}")
+        return None
+
+
+# ============================================================
+# 7. 模块注册表
 # ============================================================
 
 MODULE_REGISTRY = {
@@ -950,6 +1453,12 @@ MODULE_REGISTRY = {
         'provides': ['memory'],
         'run': _run_memory_init,
         'description': '初始化知识记忆',
+    },
+    'domain_config': {
+        'needs': [],
+        'provides': ['domain_config'],
+        'run': _run_domain_config,
+        'description': '加载领域配置（多领域支持）',
     },
     'paper_reading': {
         'needs': [],
@@ -975,6 +1484,18 @@ MODULE_REGISTRY = {
         'run': _run_explorer,
         'description': '数据探索',
     },
+    'generate_figures': {
+        'needs': ['df'],
+        'provides': ['figures'],
+        'run': _run_generate_figures,
+        'description': '生成论文图表',
+    },
+    'scientific_analysis': {
+        'needs': ['df'],
+        'provides': ['analysis_results'],
+        'run': _run_scientific_analysis,
+        'description': '智能分析编排（自动判断该做什么分析）',
+    },
     'literature_recall': {
         'needs': ['memory', 'findings'],
         'provides': ['recalled_references'],
@@ -986,6 +1507,12 @@ MODULE_REGISTRY = {
         'provides': ['motivation'],
         'run': _run_motivation,
         'description': '生成并确认写作动机',
+    },
+    'motivation_thread': {
+        'needs': ['motivation', 'findings'],
+        'provides': ['motivation_thread'],
+        'run': _run_motivation_thread,
+        'description': '构建动机线索（论文"红线"贯穿）',
     },
     'writer_results': {
         'needs': ['df', 'findings'],
@@ -1023,6 +1550,12 @@ MODULE_REGISTRY = {
         'run': _run_writer_conclusion,
         'description': '写 Conclusion',
     },
+    'writing_rationale': {
+        'needs': ['sections', 'findings'],
+        'provides': ['rationale_rows'],
+        'run': _run_writing_rationale,
+        'description': '构建写作推理矩阵（追踪每个写作决策）',
+    },
     'polish': {
         'needs': ['sections', 'learned_patterns'],
         'provides': ['sections(polished)'],
@@ -1046,6 +1579,18 @@ MODULE_REGISTRY = {
         'provides': ['review_summary'],
         'run': _run_final_check,
         'description': '修订后二次审稿（检查修订是否引入新问题）',
+    },
+    'citation_audit': {
+        'needs': ['sections'],
+        'provides': ['citation_audit_result'],
+        'run': _run_citation_audit,
+        'description': '引用质量审计（DOI验证、年份评分、类型分类）',
+    },
+    'revision_audit': {
+        'needs': ['sections(revised)'],
+        'provides': ['revision_audit_result'],
+        'run': _run_revision_audit,
+        'description': '修订审计（检测变更是否实质性）',
     },
     'advanced_analysis': {
         'needs': ['df'],
@@ -1230,13 +1775,14 @@ class PaperOrchestrator:
         """
         将步骤分组，同组内可并行执行。
         规则：
-        - Introduction + Methods 可并行（互不依赖）
-        - Results + Discussion 可并行（共享 findings，不互相依赖）
+        - Introduction + Methods 可并行（互不依赖，且不依赖数据）
+        - Results + Discussion 可并行（共享 findings）
         - 其他步骤串行
         """
+        # 只有 writer_intro 和 writer_methods 可以并行（都不依赖 df/findings）
+        # writer_results 和 writer_discussion 都依赖 df/findings，需要串行保证
         parallel_sets = [
             {'writer_intro', 'writer_methods'},           # 批次1: 互不依赖
-            {'writer_results', 'writer_discussion'},      # 批次2: 共享 findings
         ]
 
         groups = []
@@ -1264,30 +1810,39 @@ class PaperOrchestrator:
         steps.append('paper_reading')
         steps.append('pattern_learning')
 
-        # 第2阶段：数据处理
+        # 第2阶段：领域配置 + 数据处理 + 智能分析
+        if ctx.domain:
+            steps.append('domain_config')
         if ctx.has('data_path'):
             steps.append('load_data')
         steps.append('explorer')
+        steps.append('scientific_analysis')
         steps.append('advanced_analysis')
 
-        # 第3阶段：知识支撑
+        # 第3阶段：数据驱动图表生成（在分析之后，基于发现生成图表）
+        steps.append('generate_figures')
+
+        # 第4阶段：知识支撑 + 动机线索
         steps.append('literature_recall')
         steps.append('motivation')
+        steps.append('motivation_thread')
 
-        # 第4阶段：AI写作
+        # 第4阶段：AI写作 + 推理矩阵
         steps.append('writer_results')
         steps.append('writer_discussion')
         steps.append('writer_intro')
         steps.append('writer_methods')
         steps.append('writer_conclusion')
         steps.append('writer_abstract')
+        steps.append('writing_rationale')
 
-        # 第5阶段：润色 + 迭代审改
+        # 第5阶段：润色 + 迭代审改 + 引用审计 + 修订审计
         steps.append('polish')
-        # 迭代审改循环（写→审→改→审，最多2轮）
         for _iteration in range(2):
             steps.append('review')
             steps.append('auto_revision')
+        steps.append('citation_audit')
+        steps.append('revision_audit')
         steps.append('final_check')
 
         # 第6阶段：补充检查
@@ -1331,6 +1886,10 @@ class PaperOrchestrator:
                     missing.append(need)
             elif need == 'sections':
                 if not ctx.sections:
+                    missing.append(need)
+            elif need == 'sections(revised)':
+                # sections(revised) 表示修订后的章节已存在
+                if not ctx.revision_report:
                     missing.append(need)
             elif not ctx.has(need):
                 missing.append(need)

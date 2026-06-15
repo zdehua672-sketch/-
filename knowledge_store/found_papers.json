@@ -1,0 +1,125 @@
+[
+  {
+    "paper_id": "d6192d8928eb9a65b32a381f45c5e86b9b244e32",
+    "title": "Developing a simple activity test to estimate nitrous oxide production from sewage treatment.",
+    "authors": [
+      "Shuhei Masuda",
+      "S. Otomo",
+      "Toshimasa Hojo",
+      "Akihiko Terada",
+      "Hiroshi Yamazaki",
+      "Juhyun Kim",
+      "Yu-You Li",
+      "Fumiaki Takakai",
+      "N. Miyata"
+    ],
+    "year": 2025,
+    "abstract": "Developing an easy and precise method to estimate nitrous oxide (N2O) emissions from sewage treatment plants (STPs) is important for controlling greenhouse gas emissions. This study aimed to develop a simple N2O activity test to estimate the N2O profile in an STP. In addition to evaluating the stability of the developed test, the dissolved oxygen was measured in a gas-stripping-type N2O activity test to determine the experimental conditions under which N2O production could be estimated. When the developed method was applied in different STPs and compared with the actual generation quantity, the N2O production activity test demonstrated potential as a simple method for estimating the net N2O generation in the STP. Therefore, this study potentially provides an easy and effective method for quantifying N2O emissions from an STP.",
+    "citation_count": 0,
+    "reference_count": 34,
+    "venue": "Journal of Bioscience and Bioengineering",
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "url": "https://www.semanticscholar.org/paper/d6192d8928eb9a65b32a381f45c5e86b9b244e32",
+    "arxiv_id": "",
+    "doi": "10.1016/j.jbiosc.2025.03.003",
+    "source": "semantic_scholar"
+  },
+  {
+    "paper_id": "2967bf6ba0622558b21424bf3f7529bfa66b50e7",
+    "title": "Path to zero emission of nitrous oxide in sewage treatment: is nitrification controllable or avoidable?",
+    "authors": [
+      "Min Zheng",
+      "James Lloyd",
+      "P. Wardrop",
+      "Haoran Duan",
+      "Tao Liu",
+      "Liu Ye",
+      "Bing-Jie Ni"
+    ],
+    "year": 2024,
+    "abstract": "Amid growing concerns over climate change, the need to reduce nitrous oxide (N2O) emissions from sewage treatment is more urgent than ever. Sewage treatment plants are significant sources of N2O due to its production as an intermediate in nitrification and its release into the air during aeration. Effective management of the nitrification process is therefore vital for controlling or eliminating these emissions. Despite substantial efforts to quantify and understand N2O emissions from sewage treatment, success in reducing them has been limited. This review discusses and proposes promising solutions for reducing N2O emissions in sewage treatment, evaluates the potential of various strategies, and identifies ways to accelerate their development and implementation.",
+    "citation_count": 11,
+    "reference_count": 49,
+    "venue": "Current Opinion in Biotechnology",
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "url": "https://www.semanticscholar.org/paper/2967bf6ba0622558b21424bf3f7529bfa66b50e7",
+    "arxiv_id": "",
+    "doi": "10.1016/j.copbio.2024.103230",
+    "source": "semantic_scholar"
+  },
+  {
+    "paper_id": "2a6e7a83706b3ebc68249a30ced1abea30cf42e5",
+    "title": "Low nitrous oxide concentration and spatial microbial community transition across an urban river affected by treated sewage.",
+    "authors": [
+      "Yiwen Zhou",
+      "Risako Toyoda",
+      "T. Suenaga",
+      "Tomo Aoyagi",
+      "T. Hori",
+      "A. Terada"
+    ],
+    "year": 2022,
+    "abstract": "Urban rivers receive used water derived from anthropogenic activities and are a crucial source of the potent greenhouse gas nitrous oxide (N2O). However, considerable uncertainties still exist regarding the variation and mechanisms of N2O production in response to the discharge of treated sewage from municipal wastewater treatment plants (WWTPs). This study investigated N2O concentrations and microbial processes responsible for nitrogen conversion upstream and downstream of WWTPs along the Tama River flowing through Tokyo, Japan. We evaluated the effect of treated sewage on dissolved N2O concentrations and inherent N2O consumption activities in the river sediments. In summer and winter, the mean dissolved N2O concentrations were 0.67 µg-N L-1 and 0.82 µg-N L-1, respectively. Although the dissolved N2O was supersaturated (mean 288.7% in summer, mean 240.7% in winter) in the river, the N2O emission factors (EF5r, 0.013%-0.025%) were significantly lower than those in other urban rivers and the Intergovernmental Panel on Climate Change default value (0.25%). The nitrate (NO3-) concentration in the Tama River increased downstream of the WWTPs discharge sites, and it was the main nitrogen constituent. An increasing trend of NO3- concentration was observed from upstream to downstream, along with an increase in the N2O consumption potential of the river sediment. A multiple regression model showed that NO3- is the crucial factor influencing N2O saturation. The diversity in the upstream microbial communities was greater than that in the downstream ones, indicating the involvement of treated sewage discharge in shaping the microbial communities. Functional gene quantification for N2O production and consumption suggested that nirK-type denitrifiers likely contributed to N2O production. Structural equation models (SEMs) revealed that treated sewage discharged from WWTPs increased the NO3- loading from upstream to downstream in the river, inducing changes in the microbial communities and enhancing the N2O consumption activities. Collectively, aerobic conditions limited denitrification and in turn facilitated nitrification, leading to low N2O emissions even despite high NO3- loadings in the Tama River. Our findings unravel an overestimation of the N2O emission potential in an urban oxygen-rich river affected by treated sewage discharge.",
+    "citation_count": 33,
+    "reference_count": 49,
+    "venue": "Water Research",
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "url": "https://www.semanticscholar.org/paper/2a6e7a83706b3ebc68249a30ced1abea30cf42e5",
+    "arxiv_id": "",
+    "doi": "10.1016/j.watres.2022.118276",
+    "source": "semantic_scholar"
+  },
+  {
+    "paper_id": "6ea28a610d000a3eac100f76f65f8897733bfe99",
+    "title": "Contribution of co-denitrification to nitrous oxide production from subsurface wastewater infiltration system",
+    "authors": [
+      "Yinghua Li",
+      "Si-Qi Wang",
+      "Haibo Li",
+      "Yunting Fang",
+      "Lei Yang",
+      "F. Su"
+    ],
+    "year": 2020,
+    "abstract": "Abstract Sewage treatment is one of the important sources of nitrous oxide (N2O) production, understanding its microbial process is fundamental for reducing N2O emissions. In this study, the stable isotope tracer method was used to reveal the contribution of co-denitrification to the release of N2O in addition to nitrification and denitrification in subsurface wastewater infiltration system (SWIS). The effects of nitrate addition modes were also explored. The results indicated that co-denitrification, significantly affected by dissolved oxygen, pH and potential denitrification activity, had to be taken into account in N2O formation. When the addition of nitrate nitrogen changed from one-time to intermittent, the contribution of co-denitrification increased from (1.87 ± 0.3) % to (34.2 ± 3.8) %. As a result, N2O emission and conversion rate increased from (5.17 ± 1.4) × 10−3 mg/m2·h to (6.77 ± 1.7) × 10−3 mg/m2·h and from (0.17 ± 0.02) % to (0.232 ± 0.01) %, respectively. The results also suggested that, given the increasing scale of SWIS applications, more attention should be paid to the nitrogen cycle in the system. To effectively mitigate the generation and conversion of N2O, measures to reduce nitrate accumulation need to be taken.",
+    "citation_count": 15,
+    "reference_count": 19,
+    "venue": "",
+    "fields_of_study": [
+      "Chemistry"
+    ],
+    "url": "https://www.semanticscholar.org/paper/6ea28a610d000a3eac100f76f65f8897733bfe99",
+    "arxiv_id": "",
+    "doi": "10.1016/j.ecoleng.2020.105854",
+    "source": "semantic_scholar"
+  },
+  {
+    "paper_id": "9d759d088345db37ab9ef7475b34ae7de99be614",
+    "title": "Utilization of trace metals for mitigating nitrous oxide generation in anaerobic digestion.",
+    "authors": [
+      "Dokyun Kim",
+      "Chul Park",
+      "Minkyung Kim",
+      "Moonil Kim",
+      "F. Cui"
+    ],
+    "year": 2025,
+    "abstract": "In this study, trace metals were used to enhance the efficiency of anaerobic digestion and promote complete denitrification, thereby reducing nitrous oxide (N2O) production. The potential for greenhouse gas production during anaerobic digestion was evaluated. The effects of supplementation of Cu, Al, Mo, Fe, KI, Co, and Ni on greenhouse gas emissions were investigated through the anaerobic digestion of food waste and sewage sludge mixtures. The addition of trace metals increased CH4 production and decreased N2O production. The N2O mitigation rate ranged from 7.8% to 40.2% in all experiments with trace metals. The N2O production was caused by incomplete denitrification due to high concentrations of hydrogen sulfide and organic matter. Trace metals contribute to enhancing the efficiency of anaerobic digestion and mitigating N2O production.",
+    "citation_count": 0,
+    "reference_count": 43,
+    "venue": "Bioresource Technology",
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "url": "https://www.semanticscholar.org/paper/9d759d088345db37ab9ef7475b34ae7de99be614",
+    "arxiv_id": "",
+    "doi": "10.1016/j.biortech.2025.132709",
+    "source": "semantic_scholar"
+  }
+]

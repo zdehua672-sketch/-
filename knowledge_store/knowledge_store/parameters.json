@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "category": "parameters",
+    "description": "系统参数（阈值/权重）",
+    "version": 1,
+    "created": "2026-06-12T08:29:49.968783+00:00",
+    "updated": "2026-06-12T08:29:49.968783+00:00",
+    "source": "initial"
+  },
+  "entries": {},
+  "changelog": []
+}
