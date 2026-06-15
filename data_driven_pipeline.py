@@ -50,6 +50,7 @@ class DataExplorer:
         self._explore_correlations()
         self._explore_group_differences()
         self._explore_anomalies()
+        self._explore_anomaly_stories()
         self._explore_extremes()
 
         # 按重要性排序
@@ -125,69 +126,61 @@ class DataExplorer:
                 print(f"  [!] {col}: {len(outliers)}个异常值")
 
     def _explore_correlations(self):
-        """探索变量间的相关性"""
+        """探索变量间的相关性 — 报告所有结果，包括不显著的"""
         print("\n[探索3] 相关性发现...")
         if len(self.numeric_cols) < 2:
             return
 
-        # 只用有足够数据的列
-        valid_cols = [c for c in self.numeric_cols if self.df[c].dropna().shape[0] >= 8]
+        valid_cols = [c for c in self.numeric_cols if self.df[c].dropna().shape[0] >= 5]
         if len(valid_cols) < 2:
             return
 
-        df_clean = self.df[valid_cols].dropna()
-        if len(df_clean) < 5:
-            # 尝试逐对计算
-            for i, c1 in enumerate(valid_cols):
-                for c2 in valid_cols[i+1:]:
-                    pair = self.df[[c1, c2]].dropna()
-                    if len(pair) < 5:
-                        continue
-                    # 跳过常量列
-                    if pair[c1].std() == 0 or pair[c2].std() == 0:
-                        continue
-                    r, p = stats.pearsonr(pair[c1], pair[c2])
-                    if abs(r) > 0.5 and p < 0.05:
-                        direction = '正' if r > 0 else '负'
-                        self.findings.append({
-                            'type': 'correlation',
-                            'variables': (c1, c2),
-                            'importance': 'critical' if abs(r) > 0.8 else 'high',
-                            'detail': f'{c1}与{c2}呈显著{direction}相关(r={r:.3f}, p={p:.4f}, n={len(pair)})',
-                            'data': {'r': r, 'p': p, 'n': len(pair)},
-                        })
-                        print(f"  [!!] {c1} vs {c2}: r={r:.3f}, p={p:.4f}")
-            return
-
-        # 跳过常量列
-        valid_cols = [c for c in valid_cols if df_clean[c].std() > 0]
-        if len(valid_cols) < 2:
-            return
-
-        corr = df_clean[valid_cols].corr()
+        # 逐对计算（处理缺失值不同的情况）
         for i, c1 in enumerate(valid_cols):
             for c2 in valid_cols[i+1:]:
-                r = corr.loc[c1, c2]
-                if pd.isna(r):
+                pair = self.df[[c1, c2]].dropna()
+                if len(pair) < 5:
                     continue
-                # 计算p值
-                n = len(df_clean)
-                if n < 3:
+                if pair[c1].std() == 0 or pair[c2].std() == 0:
                     continue
-                t_stat = r * np.sqrt((n-2)/(1-r**2)) if abs(r) < 1 else 0
-                p = 2 * stats.t.sf(abs(t_stat), n-2)
+                r, p = stats.pearsonr(pair[c1], pair[c2])
 
-                if abs(r) > 0.5 and p < 0.05:
-                    direction = '正' if r > 0 else '负'
-                    strength = '强' if abs(r) > 0.8 else ('较强' if abs(r) > 0.6 else '中等')
+                # 效应量：r 本身就是效应量指标
+                # |r|>=0.5 大效应, 0.3-0.5 中效应, 0.1-0.3 小效应
+                effect_size = abs(r)
+
+                # 显著性分级
+                if p < 0.001:
+                    sig = '***'
+                    importance = 'critical'
+                elif p < 0.01:
+                    sig = '**'
+                    importance = 'high'
+                elif p < 0.05:
+                    sig = '*'
+                    importance = 'high'
+                elif p < 0.10:
+                    sig = '(接近显著)'
+                    importance = 'medium'
+                else:
+                    sig = 'n.s.'
+                    importance = 'low'
+
+                direction = '正' if r > 0 else '负'
+
+                # 报告所有 |r| > 0.3 的结果（中等以上效应）
+                if effect_size > 0.3:
                     self.findings.append({
                         'type': 'correlation',
                         'variables': (c1, c2),
-                        'importance': 'critical' if abs(r) > 0.8 else 'high',
-                        'detail': f'{c1}与{c2}呈{strength}{direction}相关(r={r:.3f}, p={p:.4f})',
-                        'data': {'r': r, 'p': p, 'n': n},
+                        'importance': importance,
+                        'detail': f'{c1}与{c2}呈{direction}相关(r={r:.3f}, p={p:.4f}{sig}, n={len(pair)})',
+                        'data': {'r': r, 'p': p, 'n': len(pair), 'effect_size': effect_size, 'sig': sig},
                     })
-                    print(f"  [{'!!' if abs(r) > 0.7 else '!'}] {c1} vs {c2}: r={r:.3f}")
+                    if p < 0.05:
+                        print(f"  [!!] {c1} vs {c2}: r={r:.3f}, p={p:.4f}{sig}")
+                    elif p < 0.10:
+                        print(f"  [!] {c1} vs {c2}: r={r:.3f}, p={p:.4f}{sig} (接近显著)")
 
     def _explore_group_differences(self):
         """探索组间差异（如果有分组变量）"""
@@ -213,7 +206,11 @@ class DataExplorer:
 
                 # 正态性决定检验方法
                 try:
-                    if all(len(g) >= 8 for g in group_data):
+                    if len(group_data) > 2:
+                        # 多组比较用 Kruskal-Wallis
+                        stat, p = stats.kruskal(*group_data)
+                        method = 'Kruskal-Wallis'
+                    elif all(len(g) >= 8 for g in group_data):
                         _, p_norm = stats.shapiro(np.concatenate(group_data))
                         if p_norm > 0.05:
                             stat, p = stats.ttest_ind(*group_data[:2])
@@ -224,27 +221,57 @@ class DataExplorer:
                     else:
                         stat, p = stats.mannwhitneyu(*group_data[:2], alternative='two-sided')
                         method = 'Mann-Whitney U'
+                    # 确保 p 是标量
+                    p = float(p)
                 except Exception:
                     continue
 
-                if p < 0.05:
-                    means = [g.mean() for g in group_data]
-                    higher_idx = np.argmax(means)
-                    lower_idx = np.argmin(means)
-                    sig = '***' if p < 0.001 else ('**' if p < 0.01 else '*')
+                means = [g.mean() for g in group_data]
+                stds = [g.std() for g in group_data]
+                higher_idx = np.argmax(means)
+                lower_idx = np.argmin(means)
 
+                # 效应量：Cohen's d
+                pooled_std = np.sqrt((stds[0]**2 + stds[1]**2) / 2) if len(stds) >= 2 else 1
+                cohens_d = abs(means[higher_idx] - means[lower_idx]) / pooled_std if pooled_std > 0 else 0
+
+                # 显著性分级
+                if p < 0.001:
+                    sig = '***'
+                    importance = 'critical'
+                elif p < 0.01:
+                    sig = '**'
+                    importance = 'high'
+                elif p < 0.05:
+                    sig = '*'
+                    importance = 'high'
+                elif p < 0.10:
+                    sig = '(接近显著)'
+                    importance = 'medium'
+                else:
+                    sig = 'n.s.'
+                    importance = 'low'
+
+                # 报告所有 p < 0.15 的结果（接近显著或显著）
+                # 也报告效应量大的结果（即使不显著）
+                if p < 0.15 or cohens_d > 0.8:
                     self.findings.append({
                         'type': 'group_difference',
                         'variable': col,
                         'group_col': gcol,
-                        'importance': 'critical' if p < 0.001 else 'high',
-                        'detail': f'{col}在{gcol}间差异显著({method}, p={p:.4f}{sig}): {groups[higher_idx]}({means[higher_idx]:.2f}) > {groups[lower_idx]}({means[lower_idx]:.2f})',
-                        'data': {'method': method, 'p': p, 'groups': list(groups), 'means': means, 'sig': sig},
+                        'importance': importance,
+                        'detail': f'{col}在{gcol}间差异({method}, p={p:.4f}{sig}, Cohen\'s d={cohens_d:.2f}): {groups[higher_idx]}({means[higher_idx]:.2f}) vs {groups[lower_idx]}({means[lower_idx]:.2f})',
+                        'data': {'method': method, 'p': p, 'groups': list(groups), 'means': means, 'stds': stds, 'sig': sig, 'cohens_d': cohens_d},
                     })
-                    print(f"  [{'!!' if p < 0.001 else '!'}] {col}: {groups[higher_idx]}({means[higher_idx]:.2f}) vs {groups[lower_idx]}({means[lower_idx]:.2f}) {sig}")
+                    if p < 0.05:
+                        print(f"  [{'!!' if p < 0.001 else '!'}] {col}: {groups[higher_idx]}({means[higher_idx]:.2f}) vs {groups[lower_idx]}({means[lower_idx]:.2f}) {sig} d={cohens_d:.2f}")
+                    elif p < 0.10:
+                        print(f"  [~] {col}: {groups[higher_idx]}({means[higher_idx]:.2f}) vs {groups[lower_idx]}({means[lower_idx]:.2f}) {sig} d={cohens_d:.2f}")
+                    elif cohens_d > 0.8:
+                        print(f"  [d] {col}: d={cohens_d:.2f} (大效应量) p={p:.4f}")
 
     def _explore_anomalies(self):
-        """探索数据中的异常模式"""
+        """探索数据中的异常模式 — 深挖异常值故事"""
         print("\n[探索5] 异常模式...")
 
         # 检测零值/缺失率高的变量
@@ -273,6 +300,54 @@ class DataExplorer:
                         'detail': f'TOC/IC比值变异大(均值={ratio.mean():.2f}, 范围{ratio.min():.2f}~{ratio.max():.2f})，说明有机碳与无机碳的相对比例在不同采样点差异显著',
                         'data': {'mean': ratio.mean(), 'std': ratio.std(), 'min': ratio.min(), 'max': ratio.max()},
                     })
+
+    def _explore_anomaly_stories(self):
+        """深挖异常值故事 — 每个极端值都是一个故事"""
+        print("\n[探索5b] 异常值故事...")
+        for col in self.numeric_cols:
+            data = self.df[col].dropna()
+            if len(data) < 5:
+                continue
+
+            Q1 = data.quantile(0.25)
+            Q3 = data.quantile(0.75)
+            IQR = Q3 - Q1
+            upper = Q3 + 2 * IQR  # 用2倍IQR（更严格）
+
+            outliers = self.df[self.df[col] > upper]
+            for idx, row in outliers.iterrows():
+                # 收集该采样点的所有变量
+                point = str(row.get('采样点', row.get('point', '?')))
+                season = str(row.get('季节', row.get('season', '?')))
+                sediment = str(row.get('泥水状况', row.get('sediment', '?')))
+
+                # 找到该异常值在其他变量中的位置
+                context_parts = []
+                for other_col in self.numeric_cols:
+                    if other_col == col:
+                        continue
+                    val = row.get(other_col)
+                    if pd.notna(val):
+                        other_data = self.df[other_col].dropna()
+                        if len(other_data) > 5:
+                            percentile = (other_data < val).mean() * 100
+                            if percentile > 90 or percentile < 10:
+                                context_parts.append(f'{other_col}={val:.1f}({percentile:.0f}%分位)')
+
+                context = ', '.join(context_parts[:5]) if context_parts else '无特殊'
+
+                self.findings.append({
+                    'type': 'anomaly_story',
+                    'variable': col,
+                    'importance': 'high',
+                    'detail': f'{point}({season},{sediment}): {col}={row[col]:.1f}(>{upper:.1f}) | 关联: {context}',
+                    'data': {
+                        'point': point, 'season': season, 'sediment': sediment,
+                        'value': float(row[col]), 'threshold': float(upper),
+                        'context': context_parts[:5],
+                    },
+                })
+                print(f"  [!] {point}({season}): {col}={row[col]:.1f} | {context[:60]}")
 
     def _explore_extremes(self):
         """探索极值和最大最小值"""
