@@ -1047,7 +1047,7 @@ def _run_citation_bank(ctx: PaperContext):
 # ============================================================
 
 def _run_generate_figures(ctx: PaperContext):
-    """数据驱动的图表生成 — 根据数据发现生成对应图表"""
+    """数据驱动的图表生成 — 根据 142 个发现生成对应图表"""
     if not ctx.has('df'):
         return None
     try:
@@ -1056,120 +1056,260 @@ def _run_generate_figures(ctx: PaperContext):
         import os
         import matplotlib.pyplot as plt
         import numpy as np
+        import pandas as pd
 
         analysis_dir = os.path.join(ctx.output_dir, 'figures')
         os.makedirs(analysis_dir, exist_ok=True)
 
         agent = VisualizationAgent(ctx.df, analysis_dir, style='chinese')
         figures_generated = []
+        df = ctx.df
 
-        # === 基础图表 ===
-
-        # 1. 季节对比箱线图（关键变量）
+        # ============================================================
+        # 1. 季节对比箱线图（所有关键变量）
+        # ============================================================
         try:
-            key_vars = ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'TOC（mg/L)', 'pH']
-            available = [v for v in key_vars if v in ctx.df.columns]
+            key_vars = ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'TOC（mg/L)', 'pH',
+                        'VOCs(ppb)', '总氮（mg/L)', '铵态氮（mg/L)', 'IC(mg/L)', 'NaCl(mg/L)']
+            available = [v for v in key_vars if v in df.columns]
             if available:
-                agent.plot_multivariate(variables=available[:6], kind='box')
+                agent.plot_multivariate(variables=available[:8], kind='box')
                 figures_generated.append('seasonal_boxplot')
         except Exception as e:
             logger.debug(f"seasonal_boxplot: {e}")
 
-        # 2. 相关性热图
+        # ============================================================
+        # 2. 全变量相关性热图
+        # ============================================================
         try:
             agent.plot_heatmap()
             figures_generated.append('heatmap')
         except Exception as e:
             logger.debug(f"heatmap: {e}")
 
-        # === 数据驱动图表（基于 findings） ===
-
-        # 3. 空间热点图：CH4在各采样点的分布
+        # ============================================================
+        # 3. 空间热点图：所有气体变量在各采样点的分布
+        # ============================================================
         try:
-            if '甲烷(ppm)' in ctx.df.columns and '采样点' in ctx.df.columns:
-                fig, ax = plt.subplots(figsize=(10, 5))
-                point_ch4 = ctx.df.groupby('采样点')['甲烷(ppm)'].mean().sort_values(ascending=False)
-                colors = ['#E15759' if v > 100 else '#4E79A7' for v in point_ch4.values]
-                point_ch4.plot(kind='bar', ax=ax, color=colors)
-                ax.set_ylabel('CH₄ (ppm)')
-                ax.set_xlabel('采样点')
-                ax.set_title('各采样点CH₄排放量（红色>100ppm为热点）')
+            gas_vars = [v for v in ['甲烷(ppm)', 'CO2', 'VOCs(ppb)', '氧化亚氮(ppm)'] if v in df.columns]
+            if gas_vars and '采样点' in df.columns:
+                fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+                for idx, var in enumerate(gas_vars[:4]):
+                    ax = axes[idx // 2][idx % 2]
+                    point_data = df.groupby('采样点')[var].mean().sort_values(ascending=False)
+                    colors = ['#E15759' if v > point_data.median() * 2 else '#4E79A7' for v in point_data.values]
+                    point_data.plot(kind='bar', ax=ax, color=colors)
+                    ax.set_ylabel(var)
+                    ax.set_title(f'各采样点{var}分布')
+                    ax.tick_params(axis='x', rotation=45)
+                plt.suptitle('气体污染物空间分布（红色=异常高值）', fontsize=14)
                 plt.tight_layout()
-                fig.savefig(os.path.join(analysis_dir, 'spatial_ch4_hotspot.png'), dpi=300)
+                fig.savefig(os.path.join(analysis_dir, 'spatial_gas_distribution.png'), dpi=300)
                 plt.close(fig)
-                figures_generated.append('spatial_ch4_hotspot')
+                figures_generated.append('spatial_gas_distribution')
         except Exception as e:
-            logger.debug(f"spatial_ch4_hotspot: {e}")
+            logger.debug(f"spatial_gas_distribution: {e}")
 
-        # 4. DO阈值效应图
+        # ============================================================
+        # 4. DO阈值效应图（多变量）
+        # ============================================================
         try:
-            if all(c in ctx.df.columns for c in ['DO(mg/L)', '甲烷(ppm)']):
-                valid = ctx.df[['DO(mg/L)', '甲烷(ppm)', '季节']].dropna()
-                if len(valid) > 5:
-                    fig, ax = plt.subplots(figsize=(8, 5))
-                    for season in valid['季节'].unique():
-                        sub = valid[valid['季节'] == season]
-                        ax.scatter(sub['DO(mg/L)'], sub['甲烷(ppm)'],
-                                  label=season, s=60, alpha=0.7)
-                    ax.set_xlabel('DO (mg/L)')
-                    ax.set_ylabel('CH₄ (ppm)')
-                    ax.set_title('DO与CH₄的关系（阈值效应）')
-                    ax.legend()
-                    # 添加阈值线
-                    ax.axvline(x=2, color='red', linestyle='--', alpha=0.5, label='DO=2ppm阈值')
+            if 'DO(mg/L)' in df.columns:
+                y_vars = [v for v in ['甲烷(ppm)', 'CO2', 'VOCs(ppb)'] if v in df.columns]
+                if y_vars:
+                    fig, axes = plt.subplots(1, len(y_vars), figsize=(5 * len(y_vars), 5))
+                    if len(y_vars) == 1:
+                        axes = [axes]
+                    for idx, yvar in enumerate(y_vars):
+                        valid = df[['DO(mg/L)', yvar, '季节']].dropna()
+                        if len(valid) > 5:
+                            for season in valid['季节'].unique():
+                                sub = valid[valid['季节'] == season]
+                                axes[idx].scatter(sub['DO(mg/L)'], sub[yvar], label=season, s=60, alpha=0.7)
+                            axes[idx].set_xlabel('DO (mg/L)')
+                            axes[idx].set_ylabel(yvar)
+                            axes[idx].set_title(f'DO vs {yvar}')
+                            axes[idx].axvline(x=2, color='red', linestyle='--', alpha=0.5)
+                            axes[idx].legend()
+                    plt.suptitle('DO阈值效应（红线=DO 2ppm）', fontsize=14)
                     plt.tight_layout()
-                    fig.savefig(os.path.join(analysis_dir, 'do_threshold_effect.png'), dpi=300)
+                    fig.savefig(os.path.join(analysis_dir, 'do_threshold_multi.png'), dpi=300)
                     plt.close(fig)
-                    figures_generated.append('do_threshold_effect')
+                    figures_generated.append('do_threshold_multi')
         except Exception as e:
-            logger.debug(f"do_threshold_effect: {e}")
+            logger.debug(f"do_threshold_multi: {e}")
 
-        # 5. 泥水状况×季节 交互效应图
+        # ============================================================
+        # 5. 泥水状况×季节 交互效应图（多变量）
+        # ============================================================
         try:
-            if all(c in ctx.df.columns for c in ['季节', '泥水状况', '甲烷(ppm)']):
-                fig, ax = plt.subplots(figsize=(8, 5))
-                data = ctx.df[['季节', '泥水状况', '甲烷(ppm)']].dropna()
-                if len(data) > 5:
-                    pivot = data.groupby(['季节', '泥水状况'])['甲烷(ppm)'].mean().unstack(fill_value=0)
-                    pivot.plot(kind='bar', ax=ax)
-                    ax.set_ylabel('CH₄ 均值 (ppm)')
-                    ax.set_title('季节×泥水状况 交互效应对CH₄的影响')
-                    ax.legend(title='泥水状况')
+            if all(c in df.columns for c in ['季节', '泥水状况']):
+                y_vars = [v for v in ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)'] if v in df.columns]
+                if y_vars:
+                    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+                    for idx, var in enumerate(y_vars[:4]):
+                        ax = axes[idx // 2][idx % 2]
+                        data = df[['季节', '泥水状况', var]].dropna()
+                        if len(data) > 5:
+                            pivot = data.groupby(['季节', '泥水状况'])[var].mean().unstack(fill_value=0)
+                            pivot.plot(kind='bar', ax=ax)
+                            ax.set_ylabel(var)
+                            ax.set_title(f'季节×泥水状况 对{var}的影响')
+                            ax.legend(title='泥水状况', fontsize=8)
+                            ax.tick_params(axis='x', rotation=0)
+                    plt.suptitle('季节×泥水状况 交互效应', fontsize=14)
                     plt.tight_layout()
-                    fig.savefig(os.path.join(analysis_dir, 'season_sediment_interaction.png'), dpi=300)
+                    fig.savefig(os.path.join(analysis_dir, 'season_sediment_multi.png'), dpi=300)
                     plt.close(fig)
-                    figures_generated.append('season_sediment_interaction')
+                    figures_generated.append('season_sediment_multi')
         except Exception as e:
-            logger.debug(f"season_sediment_interaction: {e}")
+            logger.debug(f"season_sediment_multi: {e}")
 
-        # 6. 相态耦合图：CH4 vs TOC vs CO2
+        # ============================================================
+        # 6. 液相变量空间分布
+        # ============================================================
         try:
-            if all(c in ctx.df.columns for c in ['甲烷(ppm)', 'TOC（mg/L)', 'CO2']):
-                valid = ctx.df[['甲烷(ppm)', 'TOC（mg/L)', 'CO2', '季节']].dropna()
-                if len(valid) > 5:
-                    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-                    # CH4 vs TOC
-                    for season in valid['季节'].unique():
-                        sub = valid[valid['季节'] == season]
-                        axes[0].scatter(sub['TOC（mg/L)'], sub['甲烷(ppm)'], label=season, s=50)
-                    axes[0].set_xlabel('TOC (mg/L)')
-                    axes[0].set_ylabel('CH₄ (ppm)')
-                    axes[0].set_title('CH₄ vs TOC（碳源关系）')
-                    axes[0].legend()
-                    # CH4 vs CO2
-                    for season in valid['季节'].unique():
-                        sub = valid[valid['季节'] == season]
-                        axes[1].scatter(sub['CO2'], sub['甲烷(ppm)'], label=season, s=50)
-                    axes[1].set_xlabel('CO₂ (ppm)')
-                    axes[1].set_ylabel('CH₄ (ppm)')
-                    axes[1].set_title('CH₄ vs CO₂（气相关系）')
-                    axes[1].legend()
-                    plt.tight_layout()
-                    fig.savefig(os.path.join(analysis_dir, 'phase_coupling.png'), dpi=300)
-                    plt.close(fig)
-                    figures_generated.append('phase_coupling')
+            liquid_vars = [v for v in ['TOC（mg/L)', 'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)', 'IC(mg/L)', 'NaCl(mg/L)'] if v in df.columns]
+            if liquid_vars and '采样点' in df.columns:
+                fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+                for idx, var in enumerate(liquid_vars[:6]):
+                    ax = axes[idx // 3][idx % 3]
+                    point_data = df.groupby('采样点')[var].mean().sort_values(ascending=False)
+                    colors = ['#F28E2B' if v > point_data.median() * 1.5 else '#59A14F' for v in point_data.values]
+                    point_data.plot(kind='bar', ax=ax, color=colors)
+                    ax.set_ylabel(var)
+                    ax.set_title(var)
+                    ax.tick_params(axis='x', rotation=45, fontsize=7)
+                plt.suptitle('液相污染物空间分布（橙色=偏高）', fontsize=14)
+                plt.tight_layout()
+                fig.savefig(os.path.join(analysis_dir, 'spatial_liquid_distribution.png'), dpi=300)
+                plt.close(fig)
+                figures_generated.append('spatial_liquid_distribution')
         except Exception as e:
-            logger.debug(f"phase_coupling: {e}")
+            logger.debug(f"spatial_liquid_distribution: {e}")
+
+        # ============================================================
+        # 7. 相态耦合图：气体 vs 液体变量关系
+        # ============================================================
+        try:
+            gas_main = [v for v in ['甲烷(ppm)', 'CO2'] if v in df.columns]
+            liquid_main = [v for v in ['TOC（mg/L)', 'DO(mg/L)', 'COD（mg/L)', 'pH'] if v in df.columns]
+            if gas_main and liquid_main:
+                fig, axes = plt.subplots(len(gas_main), len(liquid_main), figsize=(5 * len(liquid_main), 4 * len(gas_main)))
+                if len(gas_main) == 1:
+                    axes = [axes]
+                for i, gvar in enumerate(gas_main):
+                    for j, lvar in enumerate(liquid_main):
+                        ax = axes[i][j] if len(gas_main) > 1 else axes[j]
+                        valid = df[[gvar, lvar, '季节']].dropna()
+                        if len(valid) > 5:
+                            for season in valid['季节'].unique():
+                                sub = valid[valid['季节'] == season]
+                                ax.scatter(sub[lvar], sub[gvar], label=season, s=40, alpha=0.7)
+                            ax.set_xlabel(lvar)
+                            ax.set_ylabel(gvar)
+                            # 计算相关系数
+                            from scipy import stats
+                            r, p = stats.pearsonr(valid[lvar], valid[gvar])
+                            sig = '***' if p < 0.001 else ('**' if p < 0.01 else ('*' if p < 0.05 else 'n.s.'))
+                            ax.set_title(f'r={r:.2f} {sig}')
+                            ax.legend(fontsize=7)
+                plt.suptitle('气相-液相变量耦合关系', fontsize=14)
+                plt.tight_layout()
+                fig.savefig(os.path.join(analysis_dir, 'gas_liquid_coupling.png'), dpi=300)
+                plt.close(fig)
+                figures_generated.append('gas_liquid_coupling')
+        except Exception as e:
+            logger.debug(f"gas_liquid_coupling: {e}")
+
+        # ============================================================
+        # 8. 异常值故事图：CH4最高采样点的全变量雷达图
+        # ============================================================
+        try:
+            if '甲烷(ppm)' in df.columns and '采样点' in df.columns:
+                top_points = df.groupby('采样点')['甲烷(ppm)'].mean().nlargest(5).index.tolist()
+                radar_vars = [v for v in ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'pH', 'TOC（mg/L)', 'VOCs(ppb)'] if v in df.columns]
+                if top_points and radar_vars:
+                    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+                    # 标准化数据
+                    point_means = df.groupby('采样点')[radar_vars].mean()
+                    normalized = (point_means - point_means.min()) / (point_means.max() - point_means.min())
+                    angles = np.linspace(0, 2 * np.pi, len(radar_vars), endpoint=False).tolist()
+                    angles += angles[:1]
+                    for point in top_points:
+                        if point in normalized.index:
+                            values = normalized.loc[point].tolist()
+                            values += values[:1]
+                            ax.plot(angles, values, 'o-', linewidth=1.5, label=point)
+                            ax.fill(angles, values, alpha=0.1)
+                    ax.set_xticks(angles[:-1])
+                    ax.set_xticklabels(radar_vars, fontsize=8)
+                    ax.set_title('CH₄热点采样点 全变量雷达图', fontsize=12, pad=20)
+                    ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1))
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'anomaly_radar.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('anomaly_radar')
+        except Exception as e:
+            logger.debug(f"anomaly_radar: {e}")
+
+        # ============================================================
+        # 9. 季节对比小提琴图（关键变量）
+        # ============================================================
+        try:
+            key_violin = [v for v in ['甲烷(ppm)', 'COD（mg/L)', 'VOCs(ppb)', 'CO2本底值'] if v in df.columns]
+            if key_violin and '季节' in df.columns:
+                fig, axes = plt.subplots(1, len(key_violin), figsize=(4 * len(key_violin), 5))
+                if len(key_violin) == 1:
+                    axes = [axes]
+                for idx, var in enumerate(key_violin):
+                    data = df[['季节', var]].dropna()
+                    if len(data) > 5:
+                        seasons = data['季节'].unique()
+                        violin_data = [data[data['季节'] == s][var].values for s in seasons]
+                        parts = axes[idx].violinplot(violin_data, showmeans=True, showmedians=True)
+                        axes[idx].set_xticks(range(1, len(seasons) + 1))
+                        axes[idx].set_xticklabels(seasons)
+                        axes[idx].set_ylabel(var)
+                        axes[idx].set_title(var)
+                plt.suptitle('季节对比小提琴图', fontsize=14)
+                plt.tight_layout()
+                fig.savefig(os.path.join(analysis_dir, 'season_violin.png'), dpi=300)
+                plt.close(fig)
+                figures_generated.append('season_violin')
+        except Exception as e:
+            logger.debug(f"season_violin: {e}")
+
+        # ============================================================
+        # 10. 相关性气泡图（Top相关对）
+        # ============================================================
+        try:
+            sig_corrs = [f for f in ctx.findings if f.get('type') == 'correlation' and f.get('data', {}).get('p', 1) < 0.05]
+            if sig_corrs:
+                fig, ax = plt.subplots(figsize=(10, 6))
+                pairs = []
+                for f in sig_corrs[:15]:
+                    v1, v2 = f.get('variables', ('', ''))
+                    r = f.get('data', {}).get('r', 0)
+                    p = f.get('data', {}).get('p', 1)
+                    if v1 and v2:
+                        pairs.append((f'{v1}\nvs\n{v2}', r, p))
+                if pairs:
+                    labels, rs, ps = zip(*pairs)
+                    colors = ['#E15759' if r > 0 else '#4E79A7' for r in rs]
+                    sizes = [abs(r) * 300 for r in rs]
+                    ax.bar(range(len(labels)), rs, color=colors)
+                    ax.set_xticks(range(len(labels)))
+                    ax.set_xticklabels(labels, fontsize=7, rotation=45, ha='right')
+                    ax.set_ylabel('Pearson r')
+                    ax.set_title('显著相关性汇总（红色=正相关，蓝色=负相关）')
+                    ax.axhline(y=0, color='black', linewidth=0.5)
+                    plt.tight_layout()
+                    fig.savefig(os.path.join(analysis_dir, 'correlation_summary.png'), dpi=300)
+                    plt.close(fig)
+                    figures_generated.append('correlation_summary')
+        except Exception as e:
+            logger.debug(f"correlation_summary: {e}")
 
         # 注册图表到上下文
         if os.path.exists(analysis_dir):
