@@ -1047,15 +1047,16 @@ def _run_citation_bank(ctx: PaperContext):
 # ============================================================
 
 def _run_generate_figures(ctx: PaperContext):
-    """数据驱动的图表生成 — 使用项目绘图系统样式"""
+    """数据驱动的图表生成 — 使用项目绘图系统样式 + 图表审查"""
     if not ctx.has('df'):
         return None
     try:
-        from scientific_visualization_agent import VisualizationAgent
+        from scientific_visualization_agent import VisualizationAgent, ChartReviewer
         from academic_plot_style import (
             set_plot_style, save_figure, PHASE_COLORS, SEASON_COLORS,
             TABLEAU_10, OKABE_ITO, get_figure_size, format_chemical, get_label,
         )
+        from chart_qa import check_chart_quality
         import variable_registry as vr
         import os
         import matplotlib.pyplot as plt
@@ -1069,8 +1070,32 @@ def _run_generate_figures(ctx: PaperContext):
         os.makedirs(analysis_dir, exist_ok=True)
 
         agent = VisualizationAgent(ctx.df, analysis_dir, style='chinese')
+        reviewer = ChartReviewer()
         figures_generated = []
         df = ctx.df
+
+        def _qa_and_save(fig, name):
+            """图表质量审查 + 自动修复 + 保存"""
+            # 第一层：ChartReviewer 设计质量检查
+            results = reviewer.review(fig, verbose=False)
+            if reviewer.has_critical_issues(results):
+                fixes = reviewer.get_fixes(results)
+                for fix in fixes:
+                    if callable(fix.fix):
+                        try:
+                            fix.fix(fig)
+                        except Exception:
+                            pass
+            # 第二层：chart_qa 布局质量检查 + 自动修复
+            try:
+                check_chart_quality(fig, auto_fix=True, verbose=False)
+            except Exception:
+                pass
+            # 保存
+            save_figure(fig, name, analysis_dir)
+            plt.close(fig)
+            figures_generated.append(name)
+            logger.info(f"图表 {name}: 审查通过，已保存")
 
         # ============================================================
         # 1. 季节对比箱线图（所有关键变量）
@@ -1110,9 +1135,7 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_title(get_label(var))
                     ax.tick_params(axis='x', rotation=45)
                 plt.tight_layout()
-                save_figure(fig, 'spatial_gas_distribution', analysis_dir)
-                plt.close(fig)
-                figures_generated.append('spatial_gas_distribution')
+                _qa_and_save(fig, 'spatial_gas_distribution')
         except Exception as e:
             logger.debug(f"spatial_gas_distribution: {e}")
 
@@ -1139,9 +1162,7 @@ def _run_generate_figures(ctx: PaperContext):
                             axes[idx].axvline(x=2, color='#E15759', linestyle='--', alpha=0.5, linewidth=1)
                             axes[idx].legend()
                     plt.tight_layout()
-                    save_figure(fig, 'do_threshold_multi', analysis_dir)
-                    plt.close(fig)
-                    figures_generated.append('do_threshold_multi')
+                    _qa_and_save(fig, 'do_threshold_multi')
         except Exception as e:
             logger.debug(f"do_threshold_multi: {e}")
 
@@ -1163,9 +1184,7 @@ def _run_generate_figures(ctx: PaperContext):
                             ax.set_title(get_label(var))
                             ax.tick_params(axis='x', rotation=0)
                     plt.tight_layout()
-                    save_figure(fig, 'season_sediment_multi', analysis_dir)
-                    plt.close(fig)
-                    figures_generated.append('season_sediment_multi')
+                    _qa_and_save(fig, 'season_sediment_multi')
         except Exception as e:
             logger.debug(f"season_sediment_multi: {e}")
 
@@ -1185,9 +1204,7 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_title(get_label(var))
                     ax.tick_params(axis='x', rotation=45, fontsize=7)
                 plt.tight_layout()
-                save_figure(fig, 'spatial_liquid_distribution', analysis_dir)
-                plt.close(fig)
-                figures_generated.append('spatial_liquid_distribution')
+                _qa_and_save(fig, 'spatial_liquid_distribution')
         except Exception as e:
             logger.debug(f"spatial_liquid_distribution: {e}")
 
@@ -1218,9 +1235,7 @@ def _run_generate_figures(ctx: PaperContext):
                             ax.set_title(f'r={r:.2f} {sig}')
                             ax.legend(fontsize=7)
                 plt.tight_layout()
-                save_figure(fig, 'gas_liquid_coupling', analysis_dir)
-                plt.close(fig)
-                figures_generated.append('gas_liquid_coupling')
+                _qa_and_save(fig, 'gas_liquid_coupling')
         except Exception as e:
             logger.debug(f"gas_liquid_coupling: {e}")
 
@@ -1248,9 +1263,7 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_xticklabels([get_label(v) for v in radar_vars], fontsize=8)
                     ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1))
                     plt.tight_layout()
-                    save_figure(fig, 'anomaly_radar', analysis_dir)
-                    plt.close(fig)
-                    figures_generated.append('anomaly_radar')
+                    _qa_and_save(fig, 'anomaly_radar')
         except Exception as e:
             logger.debug(f"anomaly_radar: {e}")
 
@@ -1278,9 +1291,7 @@ def _run_generate_figures(ctx: PaperContext):
                         axes[idx].set_ylabel(get_label(var))
                         axes[idx].set_title(get_label(var))
                 plt.tight_layout()
-                save_figure(fig, 'season_violin', analysis_dir)
-                plt.close(fig)
-                figures_generated.append('season_violin')
+                _qa_and_save(fig, 'season_violin')
         except Exception as e:
             logger.debug(f"season_violin: {e}")
 
@@ -1307,9 +1318,7 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_ylabel('Pearson r')
                     ax.axhline(y=0, color='black', linewidth=0.5)
                     plt.tight_layout()
-                    save_figure(fig, 'correlation_summary', analysis_dir)
-                    plt.close(fig)
-                    figures_generated.append('correlation_summary')
+                    _qa_and_save(fig, 'correlation_summary')
         except Exception as e:
             logger.debug(f"correlation_summary: {e}")
 
