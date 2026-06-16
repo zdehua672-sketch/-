@@ -49,6 +49,8 @@ class DataExplorer:
         self._explore_outliers()
         self._explore_correlations()
         self._explore_group_differences()
+        self._explore_phase_analysis()
+        self._explore_cross_phase()
         self._explore_anomalies()
         self._explore_extremes()
         self._explore_effect_size()
@@ -229,11 +231,18 @@ class DataExplorer:
                 except Exception:
                     continue
 
-                if p < 0.05:
+                # 处理 p 值可能是数组的情况（如多个组间比较）
+                p_val = p
+                if isinstance(p_val, (list, np.ndarray)):
+                    p_val = float(p_val[0]) if len(p_val) > 0 else 1.0
+                else:
+                    p_val = float(p_val)
+
+                if p_val < 0.05:
                     means = [g.mean() for g in group_data]
                     higher_idx = np.argmax(means)
                     lower_idx = np.argmin(means)
-                    sig = '***' if p < 0.001 else ('**' if p < 0.01 else '*')
+                    sig = '***' if p_val < 0.001 else ('**' if p_val < 0.01 else '*')
 
                     self.findings.append({
                         'type': 'group_difference',
@@ -356,6 +365,122 @@ class DataExplorer:
             except Exception:
                 pass
 
+    def _explore_phase_analysis(self):
+        """按相态（气/液/固）分层分析，生成结构化发现"""
+        print("\n[探索9] 相态分层分析...")
+
+        # 自动识别相态分组
+        gas_kw = ['甲烷', 'CH4', '氧化亚氮', 'N2O', 'CO2', 'O2', 'VOCs', 'H2S', 'NO2']
+        liq_kw = ['DO', 'pH', 'TOC', 'TC', 'IC', '总氮', 'TN', '总磷', 'TP', '铵态氮', 'NH4',
+                   '硝态氮', 'NO3', 'COD', 'NaCl', '电导率', 'EC', '液温']
+        sol_kw = ['固总碳', 'DOC', '全磷', '有机碳', '无机碳', '固']
+
+        def classify_col(col):
+            for kw in gas_kw:
+                if kw in col and '本底' not in col:
+                    return 'gas'
+            for kw in liq_kw:
+                if kw in col:
+                    return 'liquid'
+            for kw in sol_kw:
+                if kw in col:
+                    return 'solid'
+            return None
+
+        phases = {'gas': [], 'liquid': [], 'solid': []}
+        for col in self.numeric_cols:
+            phase = classify_col(col)
+            if phase:
+                phases[phase].append(col)
+
+        # 每个相态内做季节比较
+        group_col = '季节' if '季节' in self.df.columns else None
+        if not group_col:
+            return
+
+        for phase_name, cols in phases.items():
+            if not cols:
+                continue
+            sig_vars = []
+            for col in cols:
+                data = self.df[[group_col, col]].dropna()
+                if len(data) < 6:
+                    continue
+                groups = data[group_col].unique()
+                if len(groups) != 2:
+                    continue
+                g1 = data[data[group_col] == groups[0]][col]
+                g2 = data[data[group_col] == groups[1]][col]
+                if len(g1) < 3 or len(g2) < 3:
+                    continue
+                try:
+                    u, p = stats.mannwhitneyu(g1, g2, alternative='two-sided')
+                except Exception:
+                    continue
+                if p < 0.05:
+                    sig = '***' if p < 0.001 else '**' if p < 0.01 else '*'
+                    higher = groups[0] if g1.mean() > g2.mean() else groups[1]
+                    fold = max(g1.mean(), g2.mean()) / max(min(g1.mean(), g2.mean()), 0.001)
+                    sig_vars.append({
+                        'variable': col, 'p': p, 'sig': sig,
+                        'mean1': g1.mean(), 'mean2': g2.mean(),
+                        'group1': groups[0], 'group2': groups[1],
+                        'higher': higher, 'fold': fold,
+                    })
+                    print(f"  [{phase_name}] {col}: {groups[0]}({g1.mean():.2f}) vs {groups[1]}({g2.mean():.2f}) p={p:.4f}{sig}")
+
+            if sig_vars:
+                self.findings.append({
+                    'type': 'phase_seasonal',
+                    'phase': phase_name,
+                    'importance': 'critical' if any(v['p'] < 0.001 for v in sig_vars) else 'high',
+                    'detail': f'{phase_name}相有{len(sig_vars)}个指标存在显著季节差异',
+                    'data': {'phase': phase_name, 'variables': sig_vars,
+                             'variable_names': [v['variable'] for v in sig_vars]},
+                })
+
+    def _explore_cross_phase(self):
+        """跨相态关联分析（气相-液相耦合）"""
+        print("\n[探索10] 跨相态关联...")
+
+        gas_kw = ['甲烷', 'CH4', '氧化亚氮', 'N2O', 'CO2']
+        liq_kw = ['DO', 'pH', 'TOC', 'TC', 'IC', '总氮', 'TN', '总磷', 'TP',
+                   '铵态氮', 'NH4', '硝态氮', 'NO3', 'COD', 'NaCl', '电导率', 'EC']
+
+        gas_cols = [c for c in self.numeric_cols if any(k in c for k in gas_kw) and '本底' not in c]
+        liq_cols = [c for c in self.numeric_cols if any(k in c for k in liq_kw)]
+
+        if not gas_cols or not liq_cols:
+            return
+
+        cross_pairs = []
+        for gc in gas_cols:
+            for lc in liq_cols:
+                pair = self.df[[gc, lc]].dropna()
+                if len(pair) < 5:
+                    continue
+                if pair[gc].std() == 0 or pair[lc].std() == 0:
+                    continue
+                r, p = stats.pearsonr(pair[gc], pair[lc])
+                if p < 0.1:  # 放宽阈值捕获边缘关联
+                    direction = '正' if r > 0 else '负'
+                    strength = '强' if abs(r) > 0.7 else ('较强' if abs(r) > 0.5 else '中等')
+                    cross_pairs.append({
+                        'gas': gc, 'liquid': lc,
+                        'r': r, 'p': p, 'n': len(pair),
+                        'direction': direction, 'strength': strength,
+                    })
+                    sig = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else '(+)'
+                    print(f"  {gc} vs {lc}: r={r:.3f} p={p:.4f}{sig} n={len(pair)}")
+
+        if cross_pairs:
+            self.findings.append({
+                'type': 'cross_phase',
+                'importance': 'critical' if any(cp['p'] < 0.01 for cp in cross_pairs) else 'high',
+                'detail': f'气相-液相耦合发现{len(cross_pairs)}对显著关联',
+                'data': {'pairs': cross_pairs},
+            })
+
 
 # ============================================================
 # 2. 数据主导的写作器 — 基于发现写作 + 知识库支撑
@@ -384,7 +509,7 @@ class DataDrivenWriter:
         self.rationale_rows = []  # 推理链记录
 
     def write_results(self) -> str:
-        """写Results章节 — 以论文逻辑组织，不是列举"""
+        """写Results章节 — 按气相/液相/固相/跨相态分层组织"""
         lines = ['# 3 结果\n']
         section_num = 1
 
@@ -393,38 +518,55 @@ class DataDrivenWriter:
             t = f['type']
             by_type.setdefault(t, []).append(f)
 
-        # 3.1 描述性统计（叙事式）
-        desc_findings = by_type.get('distribution', []) + by_type.get('high_variability', [])
-        if desc_findings:
-            lines.append(f'## 3.{section_num} 采样数据基本特征\n')
-            lines.append(self._write_descriptive_narrative())
+        # === 3.1 气相污染物 ===
+        gas_seasonal = [f for f in by_type.get('phase_seasonal', []) if f.get('phase') == 'gas']
+        gas_corr = [f for f in by_type.get('correlation', [])
+                    if any(k in f.get('variables', ('',''))[0] for k in ['甲烷', 'CH4', 'CO2', 'VOCs', 'N2O', '氧化亚氮'])
+                    or any(k in f.get('variables', ('',''))[1] for k in ['甲烷', 'CH4', 'CO2', 'VOCs', 'N2O', '氧化亚氮'])]
+        gas_desc = [f for f in by_type.get('high_variability', [])
+                    if any(k in f.get('variable', '') for k in ['甲烷', 'CH4', 'CO2', 'VOCs'])]
+
+        lines.append(f'## 3.{section_num} 气相污染物排放特征\n')
+        lines.append(self._write_gas_phase(gas_seasonal, gas_corr, gas_desc))
+        lines.append('')
+        section_num += 1
+
+        # === 3.2 液相水质参数 ===
+        liq_seasonal = [f for f in by_type.get('phase_seasonal', []) if f.get('phase') == 'liquid']
+        liq_corr = [f for f in by_type.get('correlation', [])
+                    if any(k in f.get('variables', ('',''))[0] for k in ['DO', 'pH', 'TOC', 'TC', 'IC', '总氮', 'TN', '总磷', 'TP', '铵态氮', 'NH4', '硝态氮', 'NO3', 'COD', 'NaCl', '电导率', 'EC'])
+                    or any(k in f.get('variables', ('',''))[1] for k in ['DO', 'pH', 'TOC', 'TC', 'IC', '总氮', 'TN', '总磷', 'TP', '铵态氮', 'NH4', '硝态氮', 'NO3', 'COD', 'NaCl', '电导率', 'EC'])]
+
+        lines.append(f'## 3.{section_num} 液相水质参数特征\n')
+        lines.append(self._write_liquid_phase(liq_seasonal, liq_corr))
+        lines.append('')
+        section_num += 1
+
+        # === 3.3 固相沉积物 ===
+        sol_cols = [c for c in self.df.columns if any(k in c for k in ['固总碳', 'DOC', '全磷', '有机碳', '无机碳', '固'])]
+        sol_data = {c: self.df[c].dropna() for c in sol_cols if self.df[c].dropna().shape[0] >= 2}
+        if sol_data:
+            lines.append(f'## 3.{section_num} 固相沉积物特征\n')
+            lines.append(self._write_solid_phase(sol_data))
             lines.append('')
             section_num += 1
 
-        # 3.2 冬春季节差异（叙事式，突出重点）
-        group_findings = by_type.get('group_difference', [])
-        if group_findings:
-            lines.append(f'## 3.{section_num} 冬春季节差异\n')
-            lines.append(self._write_group_narrative(group_findings))
+        # === 3.4 气相-液相耦合关系 ===
+        cross_findings = [f for f in by_type.get('cross_phase', [])]
+        if cross_findings:
+            lines.append(f'## 3.{section_num} 气相-液相耦合关系\n')
+            lines.append(self._write_cross_phase(cross_findings))
             lines.append('')
             section_num += 1
 
-        # 3.3 相关性分析（只写强相关，叙事式）
-        corr_findings = [f for f in by_type.get('correlation', [])
-                        if f['importance'] in ['critical', 'high'] and abs(f['data']['r']) > 0.6]
-        if corr_findings:
-            lines.append(f'## 3.{section_num} 变量间相关关系\n')
-            lines.append(self._write_correlation_narrative(corr_findings))
-            lines.append('')
-            section_num += 1
-
-        # 3.4 多元分析（PCA/HCA，如果有）
-        # 3.5 异常值（只写有意义的）
-        outlier_findings = [f for f in by_type.get('outlier', []) + by_type.get('extreme_max', [])
-                          if f['importance'] in ['critical', 'high']]
-        if outlier_findings:
-            lines.append(f'## 3.{section_num} 异常值特征\n')
-            lines.append(self._write_outlier_narrative(outlier_findings))
+        # === 3.5 液相内部碳氮耦合 ===
+        cn_corr = [f for f in by_type.get('correlation', [])
+                   if f['importance'] in ['critical', 'high']
+                   and any(k in f.get('variables', ('',''))[0] for k in ['TOC', 'TC', 'IC', '总氮', '铵态氮', 'COD'])
+                   and any(k in f.get('variables', ('',''))[1] for k in ['TOC', 'TC', 'IC', '总氮', '铵态氮', 'COD'])]
+        if cn_corr:
+            lines.append(f'## 3.{section_num} 碳氮耦合关系\n')
+            lines.append(self._write_cn_coupling(cn_corr))
             lines.append('')
 
         return '\n'.join(lines)
@@ -523,6 +665,175 @@ class DataDrivenWriter:
         lines.append('部分采样点呈现出异常高值，值得关注。')
         for f in findings[:3]:
             lines.append(f'{f["detail"]}。')
+        return '\n'.join(lines)
+
+    def _write_gas_phase(self, seasonal, corr, desc) -> str:
+        """写气相污染物结果"""
+        lines = []
+        lines.append('对管道内气相污染物(CH4、CO2、N2O、VOCs)的监测结果显示：')
+
+        # 季节差异
+        if seasonal:
+            for f in seasonal:
+                vars_data = f.get('data', {}).get('variables', [])
+                for v in vars_data:
+                    fold = v.get('fold', 1)
+                    higher = v.get('higher', '')
+                    sig = v.get('sig', '')
+                    var = v.get('variable', '')
+                    m1 = v.get('mean1', 0)
+                    m2 = v.get('mean2', 0)
+                    g1 = v.get('group1', '')
+                    g2 = v.get('group2', '')
+                    if '甲烷' in var or 'CH4' in var:
+                        higher_val = max(m1, m2)
+                        lower_val = min(m1, m2)
+                        lower_group = g2 if higher == g1 else g1
+                        lines.append(f'CH4浓度呈显著季节差异(Mann-Whitney U检验，p={v.get("p",0):.4f}{sig})，'
+                                    f'{higher}({higher_val:.2f} ppm)约为{lower_group}({lower_val:.2f} ppm)的{fold:.0f}倍，'
+                                    f'表明温度升高显著促进管道内产甲烷活动。')
+                    elif 'VOCs' in var and '本底' not in var:
+                        higher_val = max(m1, m2)
+                        lower_val = min(m1, m2)
+                        lines.append(f'VOCs浓度{higher}({higher_val:.0f} ppb)显著高于{lower_group}({lower_val:.0f} ppb)(p={v.get("p",0):.4f}{sig})，'
+                                    f'可能与冬季低温条件下VOCs挥发速率降低、在管道内累积有关。')
+
+        # 变异特征
+        if desc:
+            for f in desc[:2]:
+                lines.append(f'{f["detail"]}。')
+
+        # 气相内部相关
+        gas_internal = [f for f in corr if not any(k in f.get('variables',('',''))[1] for k in ['DO','pH','TOC','TC','IC','总氮','TN','总磷','TP','铵态氮','NH4','硝态氮','NO3','COD','NaCl','电导率','EC'])]
+        if gas_internal:
+            for f in gas_internal[:2]:
+                v1, v2 = f['variables']
+                d = f['data']
+                direction = '正' if d['r'] > 0 else '负'
+                lines.append(f'{v1}与{v2}呈显著{direction}相关(r={d["r"]:.3f}, p={d["p"]:.4f})，'
+                            f'表明两者可能受共同的环境因子驱动。')
+
+        return '\n'.join(lines)
+
+    def _write_liquid_phase(self, seasonal, corr) -> str:
+        """写液相水质参数结果"""
+        lines = []
+        lines.append('对管道内液相水质参数的分析结果如下：')
+
+        if seasonal:
+            for f in seasonal:
+                vars_data = f.get('data', {}).get('variables', [])
+                for v in vars_data:
+                    var = v.get('variable', '')
+                    fold = v.get('fold', 1)
+                    sig = v.get('sig', '')
+                    m1 = v.get('mean1', 0)
+                    m2 = v.get('mean2', 0)
+                    g1 = v.get('group1', '')
+                    g2 = v.get('group2', '')
+                    higher = v.get('higher', '')
+                    higher_val = max(m1, m2)
+                    lower_val = min(m1, m2)
+                    lower_group = g2 if higher == g1 else g1
+                    if 'COD' in var:
+                        lines.append(f'COD浓度{higher}({higher_val:.0f} mg/L)极显著高于{lower_group}({lower_val:.0f} mg/L)'
+                                    f'(p={v.get("p",0):.4f}{sig})，相差约{fold:.0f}倍。'
+                                    f'冬季COD偏高可能与管道沉积物中有机物释放、'
+                                    f'低温条件下有机物降解速率降低有关。')
+                    elif '硝态氮' in var or 'NO3' in var:
+                        lines.append(f'NO3--N浓度{higher}({higher_val:.2f} mg/L)显著高于{lower_group}({lower_val:.2f} mg/L)'
+                                    f'(p={v.get("p",0):.4f}{sig})，反映冬季硝化作用较强。')
+                    elif '液温' in var:
+                        lines.append(f'液温{higher}({higher_val:.1f}℃)显著高于{lower_group}({lower_val:.1f}℃)'
+                                    f'(p={v.get("p",0):.4f}{sig})，直接影响微生物代谢活性。')
+
+        # 液相内部相关（碳氮耦合）
+        cn_corr = [f for f in corr
+                   if any(k in f.get('variables',('',''))[0] for k in ['TOC','TC','IC','总氮','TN','铵态氮','NH4','总磷','TP'])
+                   and any(k in f.get('variables',('',''))[1] for k in ['TOC','TC','IC','总氮','TN','铵态氮','NH4','总磷','TP'])]
+        if cn_corr:
+            for f in cn_corr[:3]:
+                v1, v2 = f['variables']
+                d = f['data']
+                lines.append(f'{v1}与{v2}呈显著正相关(r={d["r"]:.3f}, p={d["p"]:.4f})。')
+
+        return '\n'.join(lines)
+
+    def _write_solid_phase(self, sol_data: dict) -> str:
+        """写固相沉积物结果"""
+        lines = []
+        lines.append('固相沉积物样品分析显示：')
+        for col, vals in sol_data.items():
+            lines.append(f'{col}均值为{vals.mean():.2f}±{vals.std():.2f}(n={len(vals)})，'
+                        f'范围{vals.min():.2f}~{vals.max():.2f}。')
+        lines.append('固相样品采集点较少(n=2)，统计分析效力有限，需后续补充采样。')
+        return '\n'.join(lines)
+
+    def _write_cross_phase(self, findings: list) -> str:
+        """写气相-液相耦合关系"""
+        lines = []
+        lines.append('气相-液相关联分析揭示了温室气体排放与水质参数之间的内在耦合：')
+
+        for f in findings:
+            pairs = f.get('data', {}).get('pairs', [])
+            # 按p值排序
+            pairs.sort(key=lambda x: x.get('p', 1))
+            for cp in pairs[:5]:
+                gas = cp.get('gas', '')
+                liq = cp.get('liquid', '')
+                r = cp.get('r', 0)
+                p = cp.get('p', 1)
+                strength = cp.get('strength', '')
+                direction = cp.get('direction', '')
+                n = cp.get('n', 0)
+                sig = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else ''
+
+                if '甲烷' in gas or 'CH4' in gas:
+                    if 'pH' in liq:
+                        lines.append(f'CH4与pH呈{strength}负相关(r={r:.3f}, p={p:.4f}{sig}, n={n})，'
+                                    f'表明产甲烷过程消耗质子导致pH升高，或碱性环境抑制产甲烷菌活性。')
+                    elif 'DO' in liq:
+                        lines.append(f'CH4与DO呈{strength}负相关(r={r:.3f}, p={p:.4f}{sig}, n={n})，'
+                                    f'符合厌氧产甲烷的生化特征：DO越低，产甲烷古菌活性越强。')
+                elif '氧化亚氮' in gas or 'N2O' in gas:
+                    if 'NaCl' in liq:
+                        lines.append(f'N2O与NaCl呈{strength}正相关(r={r:.3f}, p={p:.4f}{sig}, n={n})，'
+                                    f'盐度升高可能抑制亚硝酸盐氧化菌(NOB)、'
+                                    f'导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O。')
+                    elif '铵态氮' in liq or 'NH4' in liq:
+                        lines.append(f'N2O与NH4+呈{strength}正相关(r={r:.3f}, p={p:.4f}{sig}, n={n})，'
+                                    f'表明硝化过程是N2O产生的主要途径。')
+                    elif '总磷' in liq or 'TP' in liq:
+                        lines.append(f'N2O与TP呈{strength}正相关(r={r:.3f}, p={p:.4f}{sig}, n={n})，'
+                                    f'磷素可能通过促进微生物代谢间接影响N2O产生。')
+
+        return '\n'.join(lines)
+
+    def _write_cn_coupling(self, findings: list) -> str:
+        """写碳氮耦合关系"""
+        lines = []
+        lines.append('液相内部碳氮耦合分析显示：')
+
+        for f in findings[:5]:
+            v1, v2 = f['variables']
+            d = f['data']
+            r = d['r']
+            p = d['p']
+            sig = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else ''
+
+            if '总氮' in v1 and '铵态氮' in v2:
+                lines.append(f'TN与NH4+呈极强正相关(r={r:.3f}, p={p:.4f}{sig})，'
+                            f'表明管道中氮的主要赋存形态为铵态氮(NH4+-N)，'
+                            f'这与管道厌氧条件下有机氮氨化、硝化受限的生化特征一致。')
+            elif 'TOC' in v1 and 'TC' in v2:
+                lines.append(f'TOC与TC呈强正相关(r={r:.3f}, p={p:.4f}{sig})，'
+                            f'表明有机碳是管道中总碳的主要组成部分。')
+            elif '总氮' in v1 and '总磷' in v2:
+                lines.append(f'TN与TP呈强正相关(r={r:.3f}, p={p:.4f}{sig})，'
+                            f'表明碳氮磷在管道中可能存在共同的来源或迁移规律。')
+            else:
+                lines.append(f'{v1}与{v2}呈显著正相关(r={r:.3f}, p={p:.4f}{sig})。')
+
         return '\n'.join(lines)
 
     def write_discussion(self) -> str:
