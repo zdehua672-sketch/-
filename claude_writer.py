@@ -528,20 +528,18 @@ Write the Methods directly."""
             big_d = [f for f in group_diffs if f.get('data', {}).get('cohens_d', 0) > 0.8]
             lines.append(f'[组间差异] 显著{len(sig)}个, 接近显著{len(near)}个, 大效应量{len(big_d)}个')
             for f in sig[:5]:
-                lines.append(f'  显著: {f.get(\"detail\", \"\")}')
+                detail = f.get('detail', '')
+                lines.append(f'  显著: {detail}')
             for f in near[:3]:
-                lines.append(f'  接近显著: {f.get(\"detail\", \"\")}')
+                detail = f.get('detail', '')
+                lines.append(f'  接近显著: {detail}')
 
         # 异常值故事
         if anomalies:
             lines.append(f'[异常值故事] {len(anomalies)}个')
             for f in anomalies[:5]:
-                lines.append(f'  {f.get(\"detail\", \"\")}')
-            ftype = f.get('type', 'unknown')
-            importance = f.get('importance', 'medium')
-            var = f.get('variable', '')
-            vars_ = f.get('variables', ('', ''))
-            data = f.get('data', {})
+                detail = f.get('detail', '')
+                lines.append(f'  {detail}')
             if ftype == 'distribution':
                 lines.append(f"[分布] {var}: 均值={data.get('mean', 0):.2f}, "
                            f"CV={data.get('cv', 0):.1f}%, 偏度={data.get('skewness', 0):.2f}")
