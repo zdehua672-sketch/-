@@ -1,6 +1,6 @@
 # 引用质量审计报告
 
-- 总引用数: 7
+- 总引用数: 9
 - 综合评分: 30/100
 - 已验证DOI: 0
 - 失效DOI: 0
@@ -30,3 +30,5 @@
 | 5 | sota | N/A | 30 | unverified | 30 |  |
 | 6 | sota | N/A | 30 | unverified | 30 |  |
 | 7 | sota | N/A | 30 | unverified | 30 |  |
+| 8 | sota | N/A | 30 | unverified | 30 |  |
+| 9 | sota | N/A | 30 | unverified | 30 |  |

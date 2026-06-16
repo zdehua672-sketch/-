@@ -235,6 +235,82 @@ python check_orphans.py
 
 ---
 
+## 外部AI调用指南（CLI脚手架）
+
+**问题**：当外部AI（如 xiaomiMIMO）直接面对项目时，无法从 22+ 个 `.py` 文件中知道如何调用系统功能，容易自己重写代码导致质量差。
+
+**解决方案**：系统提供了两层外部调用接口，让AI能精确调用每个功能模块。
+
+### 方式A：CLI 命令行（推荐，开箱即用）
+
+每个模块都有独立命令行入口：
+
+```bash
+# 数据分析
+python cli.py explore                          # 数据探索，发现模式
+python cli.py analyze                          # 全部分析（基础+科学+高级）
+python cli.py figures                          # 生成图表
+
+# 论文写作（逐一写章节，或一次写全部）
+python cli.py write results                    # 写 Results
+python cli.py write discussion                 # 写 Discussion
+python cli.py write introduction               # 写 Introduction
+python cli.py write methods                    # 写 Methods
+python cli.py write conclusion                 # 写 Conclusion
+python cli.py write abstract                   # 写 Abstract
+python cli.py write all                        # 写全部章节
+
+# 质量控制
+python cli.py review                           # 审稿检查
+
+# 全流程
+python cli.py pipeline full                    # 全流程（需Claude CLI）
+python cli.py pipeline quick                   # 快速流程（离线模式）
+
+# 系统诊断
+python cli.py status                           # 系统状态检查
+
+# 指定数据文件和输出目录
+python cli.py explore --data 数据.xlsx --json
+python cli.py write results --data 数据.xlsx --output ./my_paper
+```
+
+**自动回退机制**：有 Claude CLI 时使用 AI 高质量写作，无 Claude CLI 时自动回退到模板引擎，系统永不中断。
+
+### 方式B：MCP 服务器（专业AI对接）
+
+MCP（Model Context Protocol）服务器的配置已写入 `cline_chinese_mcp_settings.json`，注册后在 AI Agent 中会看到 8 个可调用的工具：
+
+| 工具名 | 功能 | 输入参数 |
+|--------|------|----------|
+| `explore_data` | 数据探索 | `data_path`（可选） |
+| `analyze_all` | 全部分析 | `data_path`（可选） |
+| `generate_figures` | 生成图表 | `data_path`, `output_dir`（可选） |
+| `write_section` | 写论文章节 | `section`(必填), `data_path`, `output_dir` |
+| `review_paper` | 审稿检查 | `paper_path`, `output_dir`（可选） |
+| `pipeline_full` | 全流程管线 | `data_path`, `output_dir`（可选） |
+| `pipeline_quick` | 快速离线流程 | `data_path`（可选） |
+| `check_status` | 系统状态检查 | 无参数 |
+
+### CLI 内部实现示意图
+
+```
+AI Agent (xiaomiMIMO/Claude)
+        │
+        ▼
+python cli.py <command> [options]
+        │
+        ├── explore    ──→ DataExplorer (data_driven_pipeline.py)
+        ├── analyze    ──→ DataExplorer + ScientificAnalysisAgent + AdvancedAnalysis
+        ├── figures    ──→ _run_generate_figures (paper_context.py)
+        ├── write      ──→ ClaudeWriter (优先) / 模板生成器 (回退)
+        ├── review     ──→ AcademicReviewAgent (1,500+行12类检查)
+        ├── pipeline   ──→ PaperOrchestrator (25+模块自动编排)
+        └── status     ──→ 系统全面诊断
+```
+
+---
+
 ## 许可证
 
 内部项目。

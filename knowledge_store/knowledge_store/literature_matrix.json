@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "category": "literature_matrix",
+    "description": "文献矩阵（来源×主题交叉+证据收敛+知识缺口）",
+    "version": 1,
+    "created": "2026-06-12T08:29:49.969782+00:00",
+    "updated": "2026-06-12T08:29:49.969782+00:00",
+    "source": "initial"
+  },
+  "entries": {},
+  "changelog": []
+}

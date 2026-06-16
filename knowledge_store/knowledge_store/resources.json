@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "category": "resources",
+    "description": "外部资源（论文/项目/工具）",
+    "version": 6,
+    "created": "2026-06-12T08:29:49.968783+00:00",
+    "updated": "2026-06-12T08:40:16.307749+00:00",
+    "source": "initial"
+  },
+  "entries": {
+    "ref_ipcc2019_sewer": {
+      "value": {
+        "category": "resources",
+        "value": {
+          "type": "guideline",
+          "title": "2019 Refinement to the 2006 IPCC Guidelines for National Greenhouse Gas Inventories",
+          "authors": [
+            "IPCC"
+          ],
+          "year": 2019,
+          "relevance": "污水管网温室气体排放核算的国际标准参考",
+          "key_points": "Vol5 Ch6: Wastewater Treatment and Discharge - 提供CH4和N2O排放因子默认值"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.307749+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.307749+00:00",
+      "version": 1
+    },
+    "ref_guerrero2022_sewer_ghg": {
+      "value": {
+        "category": "resources",
+        "value": {
+          "type": "review",
+          "title": "Greenhouse gas emissions from sewer systems: A review",
+          "authors": [
+            "Guerrero, J.",
+            "et al."
+          ],
+          "year": 2022,
+          "relevance": "污水管网温室气体排放的综合综述",
+          "key_points": "总结了管道中CH4/N2O产生的机制、影响因素和减排策略"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.307749+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.307749+00:00",
+      "version": 1
+    },
+    "ref_liu2015_sewer_carbon": {
+      "value": {
+        "category": "resources",
+        "value": {
+          "type": "research",
+          "title": "Carbon transformations in sewer systems",
+          "authors": [
+            "Liu, Y.",
+            "et al."
+          ],
+          "year": 2015,
+          "relevance": "管道中碳转化过程的系统研究",
+          "key_points": "量化了管道中TOC/DOC/VFAs的转化规律和碳平衡"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.307749+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.307749+00:00",
+      "version": 1
+    },
+    "ref_sun2023_china_sewer": {
+      "value": {
+        "category": "resources",
+        "value": {
+          "type": "research",
+          "title": "Greenhouse gas emissions from urban sewer networks in China",
+          "authors": [
+            "Sun, J.",
+            "et al."
+          ],
+          "year": 2023,
+          "relevance": "中国城市污水管网温室气体排放特征",
+          "key_points": "提供了中国典型城市管网的CH4/N2O排放数据和影响因素"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.307749+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.307749+00:00",
+      "version": 1
+    },
+    "ref_guisasola2008_methane": {
+      "value": {
+        "category": "resources",
+        "value": {
+          "type": "research",
+          "title": "Development of a model for assessing methane production in sewer systems",
+          "authors": [
+            "Guisasola, A.",
+            "et al."
+          ],
+          "year": 2008,
+          "relevance": "管道CH4产生模型的开发和验证",
+          "key_points": "建立了管道中CH4产生的数学模型，考虑了水力学和生物过程"
+        },
+        "confidence": 0.85,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.307749+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.307749+00:00",
+      "version": 1
+    }
+  },
+  "changelog": [
+    {
+      "action": "create",
+      "key": "ref_ipcc2019_sewer",
+      "old": null,
+      "new": "{'category': 'resources', 'value': {'type': 'guideline', 'title': '2019 Refinement to the 2006 IPCC Guidelines for National Greenhouse Gas Inventories', 'authors': ['IPCC'], 'year': 2019, 'relevance':",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.307749+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_guerrero2022_sewer_ghg",
+      "old": null,
+      "new": "{'category': 'resources', 'value': {'type': 'review', 'title': 'Greenhouse gas emissions from sewer systems: A review', 'authors': ['Guerrero, J.', 'et al.'], 'year': 2022, 'relevance': '污水管网温室气体排放的综合",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.307749+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_liu2015_sewer_carbon",
+      "old": null,
+      "new": "{'category': 'resources', 'value': {'type': 'research', 'title': 'Carbon transformations in sewer systems', 'authors': ['Liu, Y.', 'et al.'], 'year': 2015, 'relevance': '管道中碳转化过程的系统研究', 'key_points': ",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.307749+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_sun2023_china_sewer",
+      "old": null,
+      "new": "{'category': 'resources', 'value': {'type': 'research', 'title': 'Greenhouse gas emissions from urban sewer networks in China', 'authors': ['Sun, J.', 'et al.'], 'year': 2023, 'relevance': '中国城市污水管网温室",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.307749+00:00"
+    },
+    {
+      "action": "create",
+      "key": "ref_guisasola2008_methane",
+      "old": null,
+      "new": "{'category': 'resources', 'value': {'type': 'research', 'title': 'Development of a model for assessing methane production in sewer systems', 'authors': ['Guisasola, A.', 'et al.'], 'year': 2008, 'rele",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.307749+00:00"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "category": "review_rules",
+    "description": "审稿规则（AI检测/禁用词/时态）",
+    "version": 1,
+    "created": "2026-06-12T08:29:49.966979+00:00",
+    "updated": "2026-06-12T08:29:49.966979+00:00",
+    "source": "initial"
+  },
+  "entries": {},
+  "changelog": []
+}

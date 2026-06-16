@@ -18,10 +18,12 @@ from scipy import stats as scipy_stats
 
 # 复用现有模块（不修改）
 from academic_plot_style import (
-    CHINESE_FONT, ENGLISH_FONT, OKABE_ITO, TABLEAU_10,
+    CHINESE_FONT, ENGLISH_FONT, CN_FONT_PROP, CN_FONT_PROP_BOLD,
+    OKABE_ITO, TABLEAU_10,
     PHASE_COLORS, SEASON_COLORS, CARBON_COLORS,
     get_label, format_chemical, significance_stars,
-    add_significance_bars, save_figure, set_plot_style
+    add_significance_bars, save_figure, set_plot_style,
+    ensure_chinese_text, setup_fonts, validate_font_render
 )
 from statistical_analysis import StandardScaler, PCA, LinearRegression, r2_score
 from variable_registry import PHASE_KEYWORDS, classify_phase, GAS_VARS, LIQUID_VARS, SOLID_VARS
@@ -1008,6 +1010,10 @@ class VisualizationAgent:
         self._caption_gen = EnhancedCaptionGenerator()
         self._chart_reviewer = ChartReviewer()
         StylePresets.apply(style)
+        # 确保中文字体已初始化（每次绑图前强制调用）
+        setup_fonts()
+        self._cn_font = CN_FONT_PROP
+        self._cn_font_bold = CN_FONT_PROP_BOLD
 
     # ==================== 风格切换 ====================
 
@@ -2411,6 +2417,439 @@ class VisualizationAgent:
                     print(f"  警告: {x_col} vs {y_col} 回归失败: {e}")
 
         return results
+
+    # ==================== 基础图表（新增8种） ====================
+
+    def plot_bar(self, x, y, group_col=None, kind='grouped', title=None):
+        """
+        条形图 — 分组/堆叠/水平
+
+        Parameters
+        ----------
+        x : str, 分类变量列名
+        y : str, 连续变量列名
+        group_col : str or None, 分组变量
+        kind : str, 'grouped' | 'stacked' | 'horizontal'
+        title : str or None
+        """
+        df = self.df.dropna(subset=[x, y])
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        if group_col and group_col in df.columns:
+            grouped = df.groupby([x, group_col])[y].agg(['mean', 'std']).reset_index()
+            pivot_mean = grouped.pivot(index=x, columns=group_col, values='mean')
+            pivot_std = grouped.pivot(index=x, columns=group_col, values='std')
+
+            if kind == 'stacked':
+                pivot_mean.plot(kind='bar', stacked=True, ax=ax,
+                               color=[SEASON_COLORS.get(c, TABLEAU_10[i])
+                                      for i, c in enumerate(pivot_mean.columns)],
+                               edgecolor='white', linewidth=0.5)
+            elif kind == 'horizontal':
+                pivot_mean.plot(kind='barh', ax=ax,
+                               color=[SEASON_COLORS.get(c, TABLEAU_10[i])
+                                      for i, c in enumerate(pivot_mean.columns)],
+                               edgecolor='white', linewidth=0.5, xerr=pivot_std)
+            else:  # grouped
+                n_groups = len(pivot_mean.columns)
+                bar_width = 0.8 / n_groups
+                for i, col in enumerate(pivot_mean.columns):
+                    offset = (i - n_groups/2 + 0.5) * bar_width
+                    x_pos = np.arange(len(pivot_mean))
+                    color = SEASON_COLORS.get(col, TABLEAU_10[i % len(TABLEAU_10)])
+                    ax.bar(x_pos + offset, pivot_mean[col], bar_width,
+                           yerr=pivot_std[col], label=col, color=color,
+                           edgecolor='white', linewidth=0.5, capsize=3)
+                ax.set_xticks(np.arange(len(pivot_mean)))
+                ax.set_xticklabels(pivot_mean.index, fontproperties=self._cn_font)
+            ax.legend(prop=self._cn_font)
+        else:
+            grouped = df.groupby(x)[y].agg(['mean', 'std']).reset_index()
+            colors = [TABLEAU_10[i % len(TABLEAU_10)] for i in range(len(grouped))]
+            if kind == 'horizontal':
+                ax.barh(grouped[x], grouped['mean'], xerr=grouped['std'],
+                        color=colors, edgecolor='white', linewidth=0.5, capsize=3)
+            else:
+                ax.bar(range(len(grouped)), grouped['mean'], yerr=grouped['std'],
+                        color=colors, edgecolor='white', linewidth=0.5, capsize=3)
+                ax.set_xticks(range(len(grouped)))
+                ax.set_xticklabels(grouped[x], fontproperties=self._cn_font)
+
+        ensure_chinese_text(ax, title=title or f'{get_label(y)} by {get_label(x)}',
+                            xlabel=get_label(x), ylabel=get_label(y))
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+        save_figure(fig, f'bar_{x}_{y}', self.output_dir)
+        return fig, {'chart_type': 'bar', 'x': x, 'y': y, 'kind': kind}
+
+    def plot_line(self, x, y, group_col=None, ci=True, title=None):
+        """
+        折线图 — 带置信区间
+
+        Parameters
+        ----------
+        x : str, X轴列名（通常是时间或连续变量）
+        y : str, Y轴列名
+        group_col : str or None, 分组变量
+        ci : bool, 是否显示95%置信区间
+        """
+        df = self.df.dropna(subset=[x, y])
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        if group_col and group_col in df.columns:
+            for i, (name, grp) in enumerate(df.groupby(group_col)):
+                color = SEASON_COLORS.get(name, TABLEAU_10[i % len(TABLEAU_10)])
+                grp_sorted = grp.sort_values(x)
+                ax.plot(grp_sorted[x], grp_sorted[y], 'o-', label=name,
+                        color=color, markersize=5, linewidth=1.5)
+                if ci and len(grp) > 3:
+                    # 简单置信区间：均值 ± 1.96*std
+                    rolling_mean = grp_sorted[y].rolling(window=3, min_periods=1).mean()
+                    rolling_std = grp_sorted[y].rolling(window=3, min_periods=1).std().fillna(0)
+                    ax.fill_between(grp_sorted[x],
+                                    rolling_mean - 1.96*rolling_std,
+                                    rolling_mean + 1.96*rolling_std,
+                                    alpha=0.15, color=color)
+            ax.legend(prop=self._cn_font)
+        else:
+            df_sorted = df.sort_values(x)
+            ax.plot(df_sorted[x], df_sorted[y], 'o-', color=TABLEAU_10[0],
+                    markersize=5, linewidth=1.5)
+            if ci and len(df) > 3:
+                rolling_mean = df_sorted[y].rolling(window=3, min_periods=1).mean()
+                rolling_std = df_sorted[y].rolling(window=3, min_periods=1).std().fillna(0)
+                ax.fill_between(df_sorted[x],
+                                rolling_mean - 1.96*rolling_std,
+                                rolling_mean + 1.96*rolling_std,
+                                alpha=0.15, color=TABLEAU_10[0])
+
+        ensure_chinese_text(ax, title=title or f'{get_label(y)} 随 {get_label(x)} 变化',
+                            xlabel=get_label(x), ylabel=get_label(y))
+        ax.grid(alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+        save_figure(fig, f'line_{x}_{y}', self.output_dir)
+        return fig, {'chart_type': 'line', 'x': x, 'y': y}
+
+    def plot_scatter(self, x, y, group_col=None, regression=True, title=None):
+        """
+        散点图 — 可选拟合回归线
+
+        Parameters
+        ----------
+        x, y : str, 列名
+        group_col : str or None, 分组变量
+        regression : bool, 是否拟合回归线
+        """
+        df = self.df.dropna(subset=[x, y])
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        if group_col and group_col in df.columns:
+            for i, (name, grp) in enumerate(df.groupby(group_col)):
+                color = SEASON_COLORS.get(name, TABLEAU_10[i % len(TABLEAU_10)])
+                ax.scatter(grp[x], grp[y], label=name, color=color,
+                           s=40, alpha=0.7, edgecolors='white', linewidth=0.5)
+                if regression and len(grp) > 3:
+                    z = np.polyfit(grp[x], grp[y], 1)
+                    p = np.poly1d(z)
+                    x_range = np.linspace(grp[x].min(), grp[x].max(), 100)
+                    ax.plot(x_range, p(x_range), '--', color=color, linewidth=1.2)
+                    r = np.corrcoef(grp[x], grp[y])[0, 1]
+                    ax.text(0.05, 0.95 - i*0.08, f'{name}: r={r:.3f}',
+                            transform=ax.transAxes, fontproperties=self._cn_font,
+                            fontsize=9, color=color)
+            ax.legend(prop=self._cn_font)
+        else:
+            ax.scatter(df[x], df[y], color=TABLEAU_10[0], s=40, alpha=0.7,
+                        edgecolors='white', linewidth=0.5)
+            if regression and len(df) > 3:
+                z = np.polyfit(df[x], df[y], 1)
+                p = np.poly1d(z)
+                x_range = np.linspace(df[x].min(), df[x].max(), 100)
+                ax.plot(x_range, p(x_range), '--', color=TABLEAU_10[1], linewidth=1.5)
+                r = np.corrcoef(df[x], df[y])[0, 1]
+                ax.text(0.05, 0.95, f'r={r:.3f}', transform=ax.transAxes,
+                        fontproperties=self._cn_font, fontsize=10)
+
+        ensure_chinese_text(ax, title=title or f'{get_label(x)} vs {get_label(y)}',
+                            xlabel=get_label(x), ylabel=get_label(y))
+        ax.grid(alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+        save_figure(fig, f'scatter_{x}_{y}', self.output_dir)
+        return fig, {'chart_type': 'scatter', 'x': x, 'y': y}
+
+    def plot_box(self, x, y, group_col=None, title=None):
+        """
+        箱线图 — x为分类变量，y为连续变量，叠加散点
+
+        Parameters
+        ----------
+        x : str, 分类变量列名
+        y : str, 连续变量列名
+        group_col : str or None, 二级分组（色盲友好配色）
+        """
+        df = self.df.dropna(subset=[x, y])
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        if group_col and group_col in df.columns:
+            order = sorted(df[x].unique())
+            sns.boxplot(data=df, x=x, y=y, hue=group_col, order=order,
+                        palette=SEASON_COLORS, ax=ax, width=0.6, fliersize=0)
+            sns.stripplot(data=df, x=x, y=y, hue=group_col, order=order,
+                          palette=SEASON_COLORS, ax=ax, size=3, alpha=0.5,
+                          dodge=True, legend=False)
+            ax.legend(prop=self._cn_font, title=group_col)
+            # 设置 legend title 字体
+            leg = ax.get_legend()
+            if leg and leg.get_title():
+                leg.get_title().set_fontproperties(self._cn_font)
+        else:
+            order = sorted(df[x].unique())
+            colors = [TABLEAU_10[i % len(TABLEAU_10)] for i in range(len(order))]
+            sns.boxplot(data=df, x=x, y=y, order=order, palette=colors,
+                        ax=ax, width=0.6, fliersize=0)
+            sns.stripplot(data=df, x=x, y=y, order=order, palette=colors,
+                          ax=ax, size=3, alpha=0.5)
+
+        # 刻度标签字体
+        for label in ax.get_xticklabels():
+            label.set_fontproperties(self._cn_font)
+        for label in ax.get_yticklabels():
+            label.set_fontproperties(self._cn_font)
+
+        ensure_chinese_text(ax, title=title or f'{get_label(y)} by {get_label(x)}',
+                            xlabel=get_label(x), ylabel=get_label(y), legend=False)
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+        save_figure(fig, f'box_{x}_{y}', self.output_dir)
+        return fig, {'chart_type': 'box', 'x': x, 'y': y}
+
+    def plot_violin(self, x, y, group_col=None, title=None):
+        """
+        小提琴图 — 展示分布形状
+
+        Parameters
+        ----------
+        x : str, 分类变量列名
+        y : str, 连续变量列名
+        group_col : str or None, 二级分组
+        """
+        df = self.df.dropna(subset=[x, y])
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        if group_col and group_col in df.columns:
+            order = sorted(df[x].unique())
+            sns.violinplot(data=df, x=x, y=y, hue=group_col, order=order,
+                           palette=SEASON_COLORS, ax=ax, inner='box', cut=0)
+            ax.legend(prop=self._cn_font)
+        else:
+            order = sorted(df[x].unique())
+            colors = [TABLEAU_10[i % len(TABLEAU_10)] for i in range(len(order))]
+            sns.violinplot(data=df, x=x, y=y, order=order, palette=colors,
+                           ax=ax, inner='box', cut=0)
+
+        for label in ax.get_xticklabels():
+            label.set_fontproperties(self._cn_font)
+        for label in ax.get_yticklabels():
+            label.set_fontproperties(self._cn_font)
+
+        ensure_chinese_text(ax, title=title or f'{get_label(y)} 分布 by {get_label(x)}',
+                            xlabel=get_label(x), ylabel=get_label(y), legend=False)
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        plt.tight_layout()
+        save_figure(fig, f'violin_{x}_{y}', self.output_dir)
+        return fig, {'chart_type': 'violin', 'x': x, 'y': y}
+
+    def plot_pie(self, col, title=None):
+        """
+        饼图/环形图 — 展示分类变量占比
+
+        Parameters
+        ----------
+        col : str, 分类变量列名
+        title : str or None
+        """
+        df = self.df.dropna(subset=[col])
+        counts = df[col].value_counts()
+        fig, ax = plt.subplots(figsize=(7, 7))
+        colors = [TABLEAU_10[i % len(TABLEAU_10)] for i in range(len(counts))]
+
+        wedges, texts, autotexts = ax.pie(
+            counts.values, labels=counts.index, colors=colors,
+            autopct='%1.1f%%', pctdistance=0.82,
+            wedgeprops=dict(width=0.45, edgecolor='white', linewidth=2),  # 环形图
+            startangle=90
+        )
+
+        # 设置字体
+        for text in texts:
+            text.set_fontproperties(self._cn_font)
+            text.set_fontsize(11)
+        for text in autotexts:
+            text.set_fontproperties(self._cn_font)
+            text.set_fontsize(9)
+            text.set_color('white')
+
+        ax.set_title(title or f'{get_label(col)} 占比分布',
+                     fontproperties=self._cn_font_bold, fontsize=14, pad=20)
+        plt.tight_layout()
+        save_figure(fig, f'pie_{col}', self.output_dir)
+        return fig, {'chart_type': 'pie', 'col': col}
+
+    def plot_radar(self, categories, values_dict, title=None):
+        """
+        雷达图 — 多维度对比
+
+        Parameters
+        ----------
+        categories : list of str, 维度名称
+        values_dict : dict, {组名: [各维度值]}
+        title : str or None
+        """
+        N = len(categories)
+        angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+        angles += angles[:1]
+
+        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+
+        for i, (name, values) in enumerate(values_dict.items()):
+            color = SEASON_COLORS.get(name, TABLEAU_10[i % len(TABLEAU_10)])
+            values_plot = list(values) + [values[0]]
+            ax.plot(angles, values_plot, 'o-', label=name, color=color,
+                    linewidth=1.5, markersize=5)
+            ax.fill(angles, values_plot, alpha=0.1, color=color)
+
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(categories, fontproperties=self._cn_font, fontsize=10)
+        ax.set_ylim(0, max(max(v) for v in values_dict.values()) * 1.2)
+        ax.legend(prop=self._cn_font, loc='upper right', bbox_to_anchor=(1.3, 1.1))
+        ax.set_title(title or '多维度对比雷达图', fontproperties=self._cn_font_bold,
+                     fontsize=14, pad=30)
+        plt.tight_layout()
+        save_figure(fig, f'radar_{title or "comparison"}', self.output_dir)
+        return fig, {'chart_type': 'radar', 'categories': categories}
+
+    def plot_waterfall(self, categories, values, title=None):
+        """
+        瀑布图 — 展示增减分解
+
+        Parameters
+        ----------
+        categories : list of str, 类别名
+        values : list of float, 各类别值（正=增加，负=减少）
+        title : str or None
+        """
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        cumulative = [0]
+        for v in values[:-1]:
+            cumulative.append(cumulative[-1] + v)
+
+        colors = []
+        for i, v in enumerate(values):
+            if i == 0:
+                colors.append(TABLEAU_10[0])  # 起始值
+            elif i == len(values) - 1:
+                colors.append(TABLEAU_10[2])  # 终值
+            elif v >= 0:
+                colors.append('#59A14F')  # 增加=绿
+            else:
+                colors.append('#E15759')  # 减少=红
+
+        bottom = [cumulative[i] if i > 0 and i < len(values)-1 else 0
+                  for i in range(len(values))]
+        # 修正：起始值和终值从0开始
+        bottom[0] = 0
+        bottom[-1] = 0
+
+        ax.bar(range(len(categories)), values, bottom=bottom,
+                color=colors, edgecolor='white', linewidth=0.5, width=0.6)
+
+        # 数值标注
+        for i, v in enumerate(values):
+            y_pos = bottom[i] + v/2
+            ax.text(i, y_pos, f'{v:+.1f}', ha='center', va='center',
+                    fontproperties=self._cn_font, fontsize=9, color='white',
+                    fontweight='bold')
+
+        ax.set_xticks(range(len(categories)))
+        ax.set_xticklabels(categories, fontproperties=self._cn_font, fontsize=10)
+        for label in ax.get_yticklabels():
+            label.set_fontproperties(self._cn_font)
+
+        ensure_chinese_text(ax, title=title or '增减分解瀑布图',
+                            xlabel='', ylabel='值')
+        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        plt.tight_layout()
+        save_figure(fig, f'waterfall_{title or "decomposition"}', self.output_dir)
+        return fig, {'chart_type': 'waterfall', 'categories': categories}
+
+    # ==================== 一键生成所有基础图 ====================
+
+    def plot_all_essentials(self):
+        """一键生成所有基础图表，返回路径字典"""
+        df = self.df
+        num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+        cat_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
+        paths = {}
+
+        # 1. 分类变量的条形图
+        for cat in cat_cols[:3]:
+            for num in num_cols[:3]:
+                try:
+                    fig, meta = self.plot_bar(x=cat, y=num)
+                    paths[f'bar_{cat}_{num}'] = meta
+                    plt.close(fig)
+                except Exception as e:
+                    print(f"  跳过 bar {cat}×{num}: {e}")
+
+        # 2. 箱线图
+        for cat in cat_cols[:2]:
+            for num in num_cols[:4]:
+                try:
+                    fig, meta = self.plot_box(x=cat, y=num)
+                    paths[f'box_{cat}_{num}'] = meta
+                    plt.close(fig)
+                except Exception as e:
+                    print(f"  跳过 box {cat}×{num}: {e}")
+
+        # 3. 散点图（前4个数值变量两两组合）
+        for i, x in enumerate(num_cols[:4]):
+            for y in num_cols[i+1:4]:
+                try:
+                    fig, meta = self.plot_scatter(x=x, y=y)
+                    paths[f'scatter_{x}_{y}'] = meta
+                    plt.close(fig)
+                except Exception as e:
+                    print(f"  跳过 scatter {x}×{y}: {e}")
+
+        # 4. 分布图
+        for col in num_cols[:6]:
+            try:
+                fig, meta = self.plot_distribution(col=col)
+                paths[f'dist_{col}'] = meta
+                plt.close(fig)
+            except Exception as e:
+                print(f"  跳过 dist {col}: {e}")
+
+        # 5. 饼图
+        for cat in cat_cols[:2]:
+            try:
+                fig, meta = self.plot_pie(col=cat)
+                paths[f'pie_{cat}'] = meta
+                plt.close(fig)
+            except Exception as e:
+                print(f"  跳过 pie {cat}: {e}")
+
+        print(f"\n[plot_all_essentials] 生成 {len(paths)} 张基础图表")
+        return paths
 
     def generate_all_figures(self):
         """

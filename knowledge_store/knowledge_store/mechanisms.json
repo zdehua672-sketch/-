@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "category": "mechanisms",
+    "description": "碳污染物生成/转化机制",
+    "version": 8,
+    "created": "2026-06-12T08:29:49.966548+00:00",
+    "updated": "2026-06-12T08:40:16.297754+00:00",
+    "source": "initial"
+  },
+  "entries": {
+    "do_methane_mechanism": {
+      "value": {
+        "category": "mechanisms",
+        "value": {
+          "pattern": "DO<1 mg/L时CH4排放显著升高",
+          "mechanism": "溶解氧(DO)是控制管道CH4排放的关键因子。当DO<1 mg/L时，管道进入缺氧/厌氧状态，产甲烷古菌活性增强，将有机碳(乙酸/CO2+H2)转化为CH4。DO>2 mg/L时，甲烷氧化菌可将CH4氧化为CO2，显著降低净排放。沿管长方向，DO逐渐消耗，下游管段CH4排放通常高于上游。",
+          "evidence": "多项现场观测和实验室研究证实DO与CH4的负相关关系",
+          "keywords": [
+            "DO",
+            "CH4",
+            "溶解氧",
+            "甲烷",
+            "厌氧",
+            "产甲烷"
+          ]
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.297754+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.297754+00:00",
+      "version": 1
+    },
+    "toc_methane_potential": {
+      "value": {
+        "category": "mechanisms",
+        "value": {
+          "pattern": "TOC浓度与CH4排放潜力正相关",
+          "mechanism": "总有机碳(TOC)是产甲烷的底物来源。污水中TOC经水解→酸化→产甲烷三步转化：(1)颗粒态有机碳(POC)被胞外酶水解为溶解态有机碳(DOC)；(2)DOC被发酵菌转化为挥发性脂肪酸(VFAs)；(3)VFAs被产甲烷古菌转化为CH4。TOC中可生物降解部分(BDOC)的比例决定了实际产甲烷潜力。校园污水TOC通常50-200 mg/L，对应CH4排放潜力0.5-3 mg/L。",
+          "evidence": "碳平衡分析表明，管道中TOC减少量与CH4+CO2生成量高度相关",
+          "keywords": [
+            "TOC",
+            "CH4",
+            "有机碳",
+            "产甲烷",
+            "水解",
+            "VFAs"
+          ]
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.297754+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.297754+00:00",
+      "version": 1
+    },
+    "cn_ratio_denitrification": {
+      "value": {
+        "category": "mechanisms",
+        "value": {
+          "pattern": "C/N比>5时反硝化效率显著提高",
+          "mechanism": "碳氮比(C/N)是影响管道反硝化效率的关键参数。反硝化过程需要有机碳作为电子供体(C/N理论值为2.86:1)。实际管道中，C/N>5时反硝化效率可达80%以上；C/N<3时，反硝化受碳源限制，NO3-积累并可能产生N2O(中间产物)。有机碳类型也影响反硝化速率：VFAs>葡萄糖>复杂有机物。",
+          "evidence": "C/N比与脱氮效率的正相关关系在多个排水系统中得到验证",
+          "keywords": [
+            "C/N",
+            "反硝化",
+            "碳源",
+            "脱氮",
+            "N2O"
+          ]
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.297754+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.297754+00:00",
+      "version": 1
+    },
+    "h2s_sulfate_reduction": {
+      "value": {
+        "category": "mechanisms",
+        "value": {
+          "pattern": "SO4^2->50 mg/L且DO<0.5时H2S显著产生",
+          "mechanism": "硫酸盐还原是管道中与产甲烷竞争的厌氧过程。当SO4^2-浓度较高时，硫酸盐还原菌(SRB)以有机碳为电子供体，将SO4^2-还原为H2S。SRB对乙酸的亲和力高于产甲烷古菌，因此高SO4^2-条件下CH4产生受抑制。H2S具有腐蚀性和毒性，是管道恶臭的主要来源。",
+          "evidence": "硫酸盐还原与CH4产生的竞争关系在厌氧消化和管道系统中均有报道",
+          "keywords": [
+            "H2S",
+            "SO4",
+            "硫酸盐还原",
+            "SRB",
+            "腐蚀"
+          ]
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.297754+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.297754+00:00",
+      "version": 1
+    },
+    "temperature_methanogenesis": {
+      "value": {
+        "category": "mechanisms",
+        "value": {
+          "pattern": "温度20-35℃时产甲烷活性最高",
+          "mechanism": "温度通过影响微生物酶活性来控制产甲烷速率。产甲烷古菌的最适温度范围为20-35℃(中温)，低于15℃时活性急剧下降。温度每升高10℃，产甲烷速率约增加1.5-2倍(Q10效应)。校园污水温度受季节影响显著(冬季10-15℃，夏季25-30℃)，导致CH4排放呈明显季节差异。",
+          "evidence": "温度-产甲烷速率关系符合Arrhenius方程，Q10值约1.5-2.0",
+          "keywords": [
+            "温度",
+            "产甲烷",
+            "季节",
+            "Q10",
+            "酶活性"
+          ]
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.297754+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.297754+00:00",
+      "version": 1
+    },
+    "biofilm_carbon_cycle": {
+      "value": {
+        "category": "mechanisms",
+        "value": {
+          "pattern": "管壁生物膜是碳转化的重要反应界面",
+          "mechanism": "管壁生物膜(厚度0.1-5mm)由细菌、古菌、真菌和胞外聚合物(EPS)组成，是管道碳转化的核心区域。生物膜内形成微氧→缺氧→厌氧的梯度结构，支持好氧、缺氧和厌氧过程的同步进行。外层(好氧)进行有机碳氧化和硝化，内层(缺氧/厌氧)进行反硝化和产甲烷。生物膜厚度和群落组成受DO、流速、温度等因素控制。",
+          "evidence": "微电极和分子生物学技术证实了生物膜内的氧和底物梯度",
+          "keywords": [
+            "生物膜",
+            "EPS",
+            "微环境",
+            "梯度",
+            "碳转化"
+          ]
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.297754+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.297754+00:00",
+      "version": 1
+    },
+    "sediment_methane_reservoir": {
+      "value": {
+        "category": "mechanisms",
+        "value": {
+          "pattern": "管道沉积物是CH4的重要储存和释放源",
+          "mechanism": "管道底部沉积物(厚度1-20cm)积累了大量有机物和微生物，是CH4产生的重要区域。沉积物中产生的CH4以三种方式释放：(1)分子扩散(缓慢)；(2)气泡释放(ebullition，突发性强)；(3)水流冲刷(与流速相关)。沉积物厚度和有机物含量越高，CH4储存潜力越大。清淤可显著降低CH4排放。",
+          "evidence": "沉积物取样和原位测量证实了沉积物作为CH4源的重要性",
+          "keywords": [
+            "沉积物",
+            "CH4",
+            "气泡",
+            "清淤",
+            "储存"
+          ]
+        },
+        "confidence": 0.9,
+        "source": "expand_knowledge_script",
+        "updated": "2026-06-12T08:40:16.297754+00:00",
+        "version": 1
+      },
+      "confidence": 1.0,
+      "source": "manual",
+      "updated": "2026-06-12T08:40:16.297754+00:00",
+      "version": 1
+    }
+  },
+  "changelog": [
+    {
+      "action": "create",
+      "key": "do_methane_mechanism",
+      "old": null,
+      "new": "{'category': 'mechanisms', 'value': {'pattern': 'DO<1 mg/L时CH4排放显著升高', 'mechanism': '溶解氧(DO)是控制管道CH4排放的关键因子。当DO<1 mg/L时，管道进入缺氧/厌氧状态，产甲烷古菌活性增强，将有机碳(乙酸/CO2+H2)转化为CH4。DO>2 mg/L时，甲烷氧化菌可将CH4氧化为CO2，显著降低净排放。",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.297754+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_methane_potential",
+      "old": null,
+      "new": "{'category': 'mechanisms', 'value': {'pattern': 'TOC浓度与CH4排放潜力正相关', 'mechanism': '总有机碳(TOC)是产甲烷的底物来源。污水中TOC经水解→酸化→产甲烷三步转化：(1)颗粒态有机碳(POC)被胞外酶水解为溶解态有机碳(DOC)；(2)DOC被发酵菌转化为挥发性脂肪酸(VFAs)；(3)VFAs被产甲烷古菌转化为CH4",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.297754+00:00"
+    },
+    {
+      "action": "create",
+      "key": "cn_ratio_denitrification",
+      "old": null,
+      "new": "{'category': 'mechanisms', 'value': {'pattern': 'C/N比>5时反硝化效率显著提高', 'mechanism': '碳氮比(C/N)是影响管道反硝化效率的关键参数。反硝化过程需要有机碳作为电子供体(C/N理论值为2.86:1)。实际管道中，C/N>5时反硝化效率可达80%以上；C/N<3时，反硝化受碳源限制，NO3-积累并可能产生N2O(中间产物)。",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.297754+00:00"
+    },
+    {
+      "action": "create",
+      "key": "h2s_sulfate_reduction",
+      "old": null,
+      "new": "{'category': 'mechanisms', 'value': {'pattern': 'SO4^2->50 mg/L且DO<0.5时H2S显著产生', 'mechanism': '硫酸盐还原是管道中与产甲烷竞争的厌氧过程。当SO4^2-浓度较高时，硫酸盐还原菌(SRB)以有机碳为电子供体，将SO4^2-还原为H2S。SRB对乙酸的亲和力高于产甲烷古菌，因此高SO4^2-条件下CH4产生受",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.297754+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_methanogenesis",
+      "old": null,
+      "new": "{'category': 'mechanisms', 'value': {'pattern': '温度20-35℃时产甲烷活性最高', 'mechanism': '温度通过影响微生物酶活性来控制产甲烷速率。产甲烷古菌的最适温度范围为20-35℃(中温)，低于15℃时活性急剧下降。温度每升高10℃，产甲烷速率约增加1.5-2倍(Q10效应)。校园污水温度受季节影响显著(冬季10-15℃，夏季25-3",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.297754+00:00"
+    },
+    {
+      "action": "create",
+      "key": "biofilm_carbon_cycle",
+      "old": null,
+      "new": "{'category': 'mechanisms', 'value': {'pattern': '管壁生物膜是碳转化的重要反应界面', 'mechanism': '管壁生物膜(厚度0.1-5mm)由细菌、古菌、真菌和胞外聚合物(EPS)组成，是管道碳转化的核心区域。生物膜内形成微氧→缺氧→厌氧的梯度结构，支持好氧、缺氧和厌氧过程的同步进行。外层(好氧)进行有机碳氧化和硝化，内层(缺氧/厌氧)进行反",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.297754+00:00"
+    },
+    {
+      "action": "create",
+      "key": "sediment_methane_reservoir",
+      "old": null,
+      "new": "{'category': 'mechanisms', 'value': {'pattern': '管道沉积物是CH4的重要储存和释放源', 'mechanism': '管道底部沉积物(厚度1-20cm)积累了大量有机物和微生物，是CH4产生的重要区域。沉积物中产生的CH4以三种方式释放：(1)分子扩散(缓慢)；(2)气泡释放(ebullition，突发性强)；(3)水流冲刷(与流速相关)。沉积物厚",
+      "source": "manual",
+      "timestamp": "2026-06-12T08:40:16.297754+00:00"
+    }
+  ]
+}

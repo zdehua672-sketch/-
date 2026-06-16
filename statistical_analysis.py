@@ -229,7 +229,115 @@ class StatisticalAnalyzer:
         
         print(result_df.to_string())
         return result_df
-    
+
+    def compare_groups_multi(self, group_col='季节', cols=None):
+        """多组比较：正态数据用单因素ANOVA，非正态用Kruskal-Wallis"""
+        print("\n" + "=" * 60)
+        print(f"多组比较分析 (按 {group_col})")
+        print("=" * 60)
+
+        if cols is None:
+            numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+            exclude_cols = ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例', '气液碳比', 'CH4_TOCT比']
+            cols = [c for c in numeric_cols if c not in exclude_cols]
+
+        if group_col not in self.df.columns:
+            print("错误: 找不到分组列")
+            return None
+
+        groups = self.df[group_col].unique()
+        if len(groups) < 3:
+            print(f"提示: 只有{len(groups)}组，建议使用 compare_groups() 两组比较")
+            return None
+
+        results = []
+        for col in cols:
+            group_data = []
+            group_names = []
+            for g in groups:
+                data = self.df[self.df[group_col] == g][col].dropna()
+                if len(data) >= 2:
+                    group_data.append(data.values)
+                    group_names.append(g)
+
+            if len(group_data) < 3:
+                continue
+
+            # 检验各组正态性
+            all_normal = True
+            for gd in group_data:
+                if len(gd) >= 3:
+                    _, p = stats.shapiro(gd)
+                    if p < 0.05:
+                        all_normal = False
+                        break
+                else:
+                    all_normal = False
+                    break
+
+            if all_normal:
+                stat, p_value = stats.f_oneway(*group_data)
+                method = '单因素ANOVA'
+            else:
+                stat, p_value = stats.kruskal(*group_data)
+                method = 'Kruskal-Wallis'
+
+            # 各组均值±标准差
+            group_stats = {}
+            for name, gd in zip(group_names, group_data):
+                group_stats[f'{name}_均值'] = round(np.mean(gd), 4)
+                group_stats[f'{name}_标准差'] = round(np.std(gd, ddof=1), 4)
+
+            results.append({
+                '变量': col,
+                '方法': method,
+                **group_stats,
+                '统计量': round(stat, 4),
+                'p值': round(p_value, 4),
+                '显著性': '***' if p_value <= 0.001 else (
+                          '**' if p_value <= 0.01 else (
+                          '*' if p_value <= 0.05 else 'n.s.'))
+            })
+
+        result_df = pd.DataFrame(results)
+        self.results['多组比较'] = result_df
+
+        print(result_df.to_string())
+        return result_df
+
+    def partial_correlation(self, x, y, covar, cols=None):
+        """偏相关分析 — 控制协变量后计算x与y的净相关"""
+        print("\n" + "=" * 60)
+        print(f"偏相关分析: {x} vs {y} (控制 {covar})")
+        print("=" * 60)
+
+        df_clean = self.df[[x, y, covar]].dropna()
+        if len(df_clean) < 5:
+            print("错误: 样本量不足")
+            return None
+
+        # 通过残差法计算偏相关
+        # 1. x 对 covar 回归，取残差
+        from scipy.stats import linregress
+        slope_x, intercept_x, _, _, _ = linregress(df_clean[covar], df_clean[x])
+        resid_x = df_clean[x] - (slope_x * df_clean[covar] + intercept_x)
+
+        # 2. y 对 covar 回归，取残差
+        slope_y, intercept_y, _, _, _ = linregress(df_clean[covar], df_clean[y])
+        resid_y = df_clean[y] - (slope_y * df_clean[covar] + intercept_y)
+
+        # 3. 残差相关
+        r, p = stats.pearsonr(resid_x, resid_y)
+
+        result = {
+            '变量1': x, '变量2': y, '控制变量': covar,
+            '偏相关系数r': round(r, 4), 'p值': round(p, 4),
+            '显著性': '***' if p <= 0.001 else ('**' if p <= 0.01 else ('*' if p <= 0.05 else 'n.s.')),
+            '样本量': len(df_clean),
+        }
+        print(f"偏相关: r={r:.4f}, p={p:.4f}")
+        return result
+
     def correlation_analysis(self, method='pearson', cols=None):
         """相关性分析 (Pearson/Spearman)"""
         print(f"\n" + "=" * 60)

@@ -288,6 +288,44 @@ class DocumentAssembler:
 
     # ==================== 渲染方法 ====================
 
+    def _clean_markdown(self, text: str) -> str:
+        """清理 markdown 符号和非文字符号，保留纯文本"""
+        import re
+
+        # 1. 去掉 ```code block```
+        text = re.sub(r'```[\s\S]*?```', '', text)
+        # 2. 去掉行内代码 `code`
+        text = re.sub(r'`([^`]+)`', r'\1', text)
+        # 3. 去掉标题符号 # ## ###（保留文字）
+        text = re.sub(r'^#{1,6}\s+', '', text, flags=re.MULTILINE)
+        # 4. **bold** → bold
+        text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
+        # 5. *italic* → italic（但避免匹配列表 * item）
+        text = re.sub(r'(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)', r'\1', text)
+        # 6. --- 分隔线 → 去掉
+        text = re.sub(r'^[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
+        # 7. [text](url) → text
+        text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
+        # 8. ![alt](img) → 去掉
+        text = re.sub(r'!\[([^\]]*)\]\([^\)]+\)', '', text)
+        # 9. HTML 标签 → 去掉
+        text = re.sub(r'<[^>]+>', '', text)
+        # 10. markdown 表格分隔线 |---|---| → 去掉
+        text = re.sub(r'^\|[-\s|]+\|$', '', text, flags=re.MULTILINE)
+        # 11. 残留的 markdown 表格行首尾 | → 去掉
+        text = re.sub(r'^\|\s*', '', text, flags=re.MULTILINE)
+        text = re.sub(r'\s*\|$', '', text, flags=re.MULTILINE)
+        # 12. 连续空行 → 最多2个空行
+        text = re.sub(r'\n{4,}', '\n\n\n', text)
+        # 13. 行首多余空格（保留段落缩进的2个空格）
+        text = re.sub(r'^[ \t]{3,}', '', text, flags=re.MULTILINE)
+        # 14. 特殊 unicode 符号（emoji、零宽字符等）
+        text = re.sub(r'[​‌‍﻿]', '', text)
+        # 15. 全角标点规范化（保持中文标点，只去掉异常符号）
+        text = re.sub(r'[□■◆◇○●★☆▲△▼▽]', '', text)
+
+        return text.strip()
+
     def _render_section(self, data):
         """渲染章节"""
         heading = data['heading']
@@ -296,6 +334,7 @@ class DocumentAssembler:
 
         self.doc.add_heading(heading, level=level)
         if text:
+            text = self._clean_markdown(text)
             self._render_text({'text': text, 'bold': False, 'indent': True, 'align': None})
 
     def _render_text(self, data):
@@ -303,6 +342,7 @@ class DocumentAssembler:
         text = data.get('text', '')
         if not text:
             return
+        text = self._clean_markdown(text)
 
         # 将文本按段落分割
         lines = text.strip().split('\n')
