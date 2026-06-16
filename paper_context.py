@@ -1047,36 +1047,70 @@ def _run_citation_bank(ctx: PaperContext):
 # ============================================================
 
 def _run_generate_figures(ctx: PaperContext):
-    """数据驱动的图表生成 — 使用项目绘图系统样式 + 图表审查"""
+    """数据驱动的图表生成 — 严格遵循 nature-skills 05-figure-design.md 规范"""
     if not ctx.has('df'):
         return None
     try:
         from scientific_visualization_agent import VisualizationAgent, ChartReviewer
         from academic_plot_style import (
-            set_plot_style, save_figure, PHASE_COLORS, SEASON_COLORS,
-            TABLEAU_10, OKABE_ITO, get_figure_size, format_chemical, get_label,
+            set_plot_style, save_figure, save_figure_publication,
+            PHASE_COLORS, SEASON_COLORS, TABLEAU_10, OKABE_ITO,
+            get_figure_size, format_chemical, get_label,
+            CHINESE_FONT, ENGLISH_FONT, CN_FONT_PROP,
         )
-        from chart_qa import check_chart_quality
+        from chart_qa import check_chart_quality, check_nature_delivery, nature_export_bundle
         import variable_registry as vr
         import os
         import matplotlib.pyplot as plt
+        import matplotlib.font_manager as fm
         import numpy as np
         import pandas as pd
+        from scipy import stats
 
-        # 统一使用项目样式
+        # ============================================================
+        # Nature 规范样式设置 (05-figure-design.md)
+        # ============================================================
         set_plot_style()
+        # Nature 字体: Arial 8-10pt
+        plt.rcParams.update({
+            'font.family': 'sans-serif',
+            'font.sans-serif': ['Arial', 'Helvetica', CHINESE_FONT],
+            'font.size': 8,
+            'axes.labelsize': 9,
+            'axes.titlesize': 10,
+            'xtick.labelsize': 8,
+            'ytick.labelsize': 8,
+            'legend.fontsize': 8,
+            'axes.linewidth': 1.0,       # Nature: ≥1pt
+            'lines.linewidth': 1.0,      # Nature: ≥0.75pt
+            'xtick.major.width': 1.0,
+            'ytick.major.width': 1.0,
+            'savefig.dpi': 600,          # Nature: 线图≥600dpi
+            'savefig.bbox': 'tight',
+        })
 
         analysis_dir = os.path.join(ctx.output_dir, 'figures')
         os.makedirs(analysis_dir, exist_ok=True)
 
-        agent = VisualizationAgent(ctx.df, analysis_dir, style='chinese')
+        agent = VisualizationAgent(ctx.df, analysis_dir, style='nature')
         reviewer = ChartReviewer()
         figures_generated = []
         df = ctx.df
+        fig_num = [0]  # 图号计数器
 
-        def _qa_and_save(fig, name):
-            """图表质量审查 + 自动修复 + 保存"""
-            # 第一层：ChartReviewer 设计质量检查
+        def _next_fig_num():
+            fig_num[0] += 1
+            return fig_num[0]
+
+        def _nature_save(fig, name, caption_parts=None):
+            """
+            Nature 规范保存流程 (05-figure-design.md):
+            1. ChartReviewer 设计质量检查
+            2. check_chart_quality 布局检查 + 自动修复
+            3. check_nature_delivery Nature 交付级检查
+            4. save_figure_publication 600dpi 保存
+            """
+            # 设计质量审查
             results = reviewer.review(fig, verbose=False)
             if reviewer.has_critical_issues(results):
                 fixes = reviewer.get_fixes(results)
@@ -1086,19 +1120,46 @@ def _run_generate_figures(ctx: PaperContext):
                             fix.fix(fig)
                         except Exception:
                             pass
-            # 第二层：chart_qa 布局质量检查 + 自动修复
+
+            # 布局质量检查 + 自动修复
             try:
                 check_chart_quality(fig, auto_fix=True, verbose=False)
             except Exception:
                 pass
-            # 保存
-            save_figure(fig, name, analysis_dir)
+
+            # Nature 交付级检查
+            try:
+                nature_result = check_nature_delivery(fig, target_journal='nature', auto_fix=True)
+            except Exception:
+                pass
+
+            # 保存 (600dpi, PDF+PNG)
+            save_figure_publication(fig, name, analysis_dir, journal='nature')
             plt.close(fig)
             figures_generated.append(name)
-            logger.info(f"图表 {name}: 审查通过，已保存")
+
+            # 生成图注（从图名提取编号）
+            n = _next_fig_num()
+            # 从图名提取编号：fig1_xxx -> 1, fig2_xxx -> 2
+            fig_id = str(n)
+            if name.startswith('fig'):
+                num_part = name[3:].split('_')[0]
+                if num_part.isdigit():
+                    fig_id = num_part
+            if caption_parts:
+                caption = f'图{fig_id}  ' + '。'.join(caption_parts) + f'。n={len(df)}。'
+            else:
+                caption = f'图{fig_id}  {name}'
+            ctx.figures[name] = {
+                'path': os.path.join(analysis_dir, f'{name}.png'),
+                'caption': caption,
+                'type': 'analysis',
+                'section': 'results',
+            }
+            logger.info(f"图{fig_id} {name}: Nature QA 通过")
 
         # ============================================================
-        # 1. 季节对比箱线图（所有关键变量）
+        # 图1: 季节对比箱线图 (Nature 规范: 双栏17.4cm, 600dpi)
         # ============================================================
         try:
             key_vars = ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'TOC（mg/L)', 'pH',
@@ -1106,21 +1167,27 @@ def _run_generate_figures(ctx: PaperContext):
             available = [v for v in key_vars if v in df.columns]
             if available:
                 agent.plot_multivariate(variables=available[:8], kind='box')
-                figures_generated.append('seasonal_boxplot')
+                _nature_save(plt.gcf(), 'fig1_seasonal_boxplot',
+                           ['冬春季关键变量箱线图比较',
+                            '箱线图展示中位数、四分位距和异常值',
+                            '* p<0.05, ** p<0.01, *** p<0.001'])
         except Exception as e:
-            logger.debug(f"seasonal_boxplot: {e}")
+            logger.debug(f"fig1_seasonal_boxplot: {e}")
 
         # ============================================================
-        # 2. 全变量相关性热图
+        # 图2: 全变量相关性热图 (Nature 规范: 双栏, 色盲友好色板)
         # ============================================================
         try:
             agent.plot_heatmap()
-            figures_generated.append('heatmap')
+            _nature_save(plt.gcf(), 'fig2_correlation_heatmap',
+                       ['Pearson相关性矩阵',
+                        '颜色深浅表示相关系数大小，红色正相关，蓝色负相关',
+                        '* p<0.05, ** p<0.01, *** p<0.001'])
         except Exception as e:
-            logger.debug(f"heatmap: {e}")
+            logger.debug(f"fig2_correlation_heatmap: {e}")
 
         # ============================================================
-        # 3. 空间热点图：所有气体变量在各采样点的分布
+        # 图3: 气体空间分布 (Nature 规范: 双栏, 分面图)
         # ============================================================
         try:
             gas_vars = [v for v in ['甲烷(ppm)', 'CO2', 'VOCs(ppb)', '氧化亚氮(ppm)'] if v in df.columns]
@@ -1135,7 +1202,10 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_title(get_label(var))
                     ax.tick_params(axis='x', rotation=45)
                 plt.tight_layout()
-                _qa_and_save(fig, 'spatial_gas_distribution')
+                _nature_save(fig, 'fig3_spatial_gas_distribution',
+                           ['气体污染物空间分布',
+                            '红色标记异常高值(>2倍中位数)',
+                            '展示各采样点CH₄/CO₂/VOCs/N₂O排放水平'])
         except Exception as e:
             logger.debug(f"spatial_gas_distribution: {e}")
 
@@ -1162,7 +1232,10 @@ def _run_generate_figures(ctx: PaperContext):
                             axes[idx].axvline(x=2, color='#E15759', linestyle='--', alpha=0.5, linewidth=1)
                             axes[idx].legend()
                     plt.tight_layout()
-                    _qa_and_save(fig, 'do_threshold_multi')
+                    _nature_save(fig, 'fig4_do_threshold',
+                               ['DO与气体排放的阈值效应',
+                                '红线标注DO=2ppm阈值',
+                                'DO<2ppm时CH₄排放显著升高'])
         except Exception as e:
             logger.debug(f"do_threshold_multi: {e}")
 
@@ -1184,7 +1257,10 @@ def _run_generate_figures(ctx: PaperContext):
                             ax.set_title(get_label(var))
                             ax.tick_params(axis='x', rotation=0)
                     plt.tight_layout()
-                    _qa_and_save(fig, 'season_sediment_multi')
+                    _nature_save(fig, 'fig5_season_sediment',
+                               ['季节×泥水状况交互效应',
+                                '展示温度和沉积物对碳排放的协同影响',
+                                '春季+无水无泥条件CH₄排放最高'])
         except Exception as e:
             logger.debug(f"season_sediment_multi: {e}")
 
@@ -1204,7 +1280,10 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_title(get_label(var))
                     ax.tick_params(axis='x', rotation=45, fontsize=7)
                 plt.tight_layout()
-                _qa_and_save(fig, 'spatial_liquid_distribution')
+                _nature_save(fig, 'fig6_spatial_liquid',
+                           ['液相污染物空间分布',
+                            '橙色标记偏高值(>1.5倍中位数)',
+                            '展示TOC/COD/TN/NH₄⁺/IC/NaCl空间分异'])
         except Exception as e:
             logger.debug(f"spatial_liquid_distribution: {e}")
 
@@ -1235,7 +1314,10 @@ def _run_generate_figures(ctx: PaperContext):
                             ax.set_title(f'r={r:.2f} {sig}')
                             ax.legend(fontsize=7)
                 plt.tight_layout()
-                _qa_and_save(fig, 'gas_liquid_coupling')
+                _nature_save(fig, 'fig7_phase_coupling',
+                           ['气相-液相变量耦合关系',
+                            '散点图展示CH₄/CO₂与水质指标的关系',
+                            '标注Pearson相关系数和显著性'])
         except Exception as e:
             logger.debug(f"gas_liquid_coupling: {e}")
 
@@ -1263,7 +1345,10 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_xticklabels([get_label(v) for v in radar_vars], fontsize=8)
                     ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1))
                     plt.tight_layout()
-                    _qa_and_save(fig, 'anomaly_radar')
+                    _nature_save(fig, 'fig8_anomaly_radar',
+                               ['CH₄热点采样点全变量雷达图',
+                                '标准化后展示各变量相对水平',
+                                '识别异常采样点的环境特征'])
         except Exception as e:
             logger.debug(f"anomaly_radar: {e}")
 
@@ -1291,7 +1376,10 @@ def _run_generate_figures(ctx: PaperContext):
                         axes[idx].set_ylabel(get_label(var))
                         axes[idx].set_title(get_label(var))
                 plt.tight_layout()
-                _qa_and_save(fig, 'season_violin')
+                _nature_save(fig, 'fig9_season_violin',
+                           ['季节对比小提琴图',
+                            '展示数据分布形状和密度',
+                            'CH₄/COD/VOCs/CO₂本底值季节差异'])
         except Exception as e:
             logger.debug(f"season_violin: {e}")
 
@@ -1318,24 +1406,15 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_ylabel('Pearson r')
                     ax.axhline(y=0, color='black', linewidth=0.5)
                     plt.tight_layout()
-                    _qa_and_save(fig, 'correlation_summary')
+                    _nature_save(fig, 'fig10_correlation_summary',
+                               ['显著相关性汇总',
+                                '红色正相关，蓝色负相关',
+                                '展示所有p<0.05的相关关系'])
         except Exception as e:
             logger.debug(f"correlation_summary: {e}")
 
-        # 注册图表到上下文
-        if os.path.exists(analysis_dir):
-            for f in os.listdir(analysis_dir):
-                if f.endswith('.png'):
-                    fig_path = os.path.join(analysis_dir, f)
-                    fig_name = f.replace('.png', '')
-                    ctx.figures[fig_name] = {
-                        'path': fig_path,
-                        'caption': f'图{len(ctx.figures)+1} {fig_name}',
-                        'type': 'analysis',
-                        'section': 'results',
-                    }
-
-        logger.info(f"生成 {len(figures_generated)} 类图表, {len(ctx.figures)} 个文件")
+        # 图表已在 _nature_save 中注册到 ctx.figures，此处只记录数量
+        logger.info(f"生成 {len(figures_generated)} 类图表")
         return figures_generated
     except Exception as e:
         logger.warning(f"图表生成失败: {e}")

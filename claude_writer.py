@@ -540,21 +540,6 @@ Write the Methods directly."""
             for f in anomalies[:5]:
                 detail = f.get('detail', '')
                 lines.append(f'  {detail}')
-            if ftype == 'distribution':
-                lines.append(f"[分布] {var}: 均值={data.get('mean', 0):.2f}, "
-                           f"CV={data.get('cv', 0):.1f}%, 偏度={data.get('skewness', 0):.2f}")
-            elif ftype == 'group_difference':
-                p = data.get('p_value', 1)
-                lines.append(f"[组间差异] {var}: {data.get('test', '')} p={p:.4f}, "
-                           f"均值={data.get('means', [])} [{importance}]")
-            elif ftype == 'correlation':
-                r = data.get('r', 0)
-                p = data.get('p', 1)
-                lines.append(f"[相关性] {vars_[0]} vs {vars_[1]}: r={r:.3f}, p={p:.4f} [{importance}]")
-            elif ftype == 'outlier':
-                lines.append(f"[异常值] {var}: {data.get('n_outliers', 0)}个异常值")
-            else:
-                lines.append(f"[{ftype}] {var or vars_}: {f.get('description', '')}")
         return '\n'.join(lines)
 
     def _format_figures(self, figures: dict) -> str:
