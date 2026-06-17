@@ -1,6 +1,6 @@
 {
   "target_count": 20,
-  "updated": "2026-06-17T02:28:26.799351+00:00",
+  "updated": "2026-06-17T04:59:13.546936+00:00",
   "candidates": [],
   "claims": [
     {
@@ -64,157 +64,247 @@
       "needs": "综述文献"
     },
     {
-      "text": "38 ppm)的74倍，表明温度升高显著促进管道内产甲烷活动",
+      "text": "9%，属高变异，表明不同采样点间CH₄排放强度差异悬殊",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "38 ppm)的74倍，表明温度升高显著促进管道内产甲烷活动",
+      "text": "7%，属低变异，表明大气CO₂背景浓度相对稳定",
       "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
     },
     {
-      "text": "VOCs浓度冬季(598 ppb)显著高于冬季(427 ppb)(p=0",
+      "text": "93 %vol（n=40），变异系数仅4",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "18 mg/L，均值为1130",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "51 mg/L（n=18），变异系数高达247",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "9%，是所有液相指标中变异程度最大的，反映了不同功能区排放负荷的显著差异",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "95 mg/L（n=18），变异系数为69",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "58 mg/L，其中无机碳（IC）占61",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "34 mg/L），有机碳（TOC）占38",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "39 mg/L，NH₄⁺-N均值为36",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "84 mg/L，NH₄⁺-N占TN的78",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "5%，说明管道内氮素以氨氮为主要存在形态",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "26 mg/L（n=18），变异系数为47",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "95 mg/L，已进入厌氧状态",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "86 mg/kg，变异系数为135",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "0%，表明沉积物有机碳的释放潜力存在显著空间差异",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "07 ppm）显著高于冬季（2",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "CO2与NO2（ppm）呈显著正相关(r=0",
+      "text": "019），春季CH₄浓度约为冬季的74倍，季节差异极为突出",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "CO2本底值与气温（℃）呈显著负相关(r=-0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "36 mg/L)显著高于春季(0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "36 mg/L)显著高于春季(0",
+      "text": "00 ppm）显著高于春季（550",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "COD浓度冬季(2426 mg/L)极显著高于春季(94 mg/L)(p=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "COD浓度冬季(2426 mg/L)极显著高于春季(94 mg/L)(p=0",
+      "text": "50 ppb）显著高于春季（426",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "0000***)，相差约26倍",
+      "text": "0001），冬季约为春季的26倍",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "TOC（mg/L)与TC(mg/L)呈显著正相关(r=0",
+      "text": "36 mg/L）显著高于春季（0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "TC(mg/L)与IC(mg/L)呈显著正相关(r=0",
+      "text": "36 mg/L）显著高于春季（0",
       "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
     },
     {
-      "text": "总氮（mg/L)与总磷（mg/L)呈显著正相关(r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "4 气相-液相耦合关系\n\n气相-液相关联分析揭示了温室气体排放与水质参数之间的内在耦合：\nCH4与pH呈较强负相关(r=-0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "0224*, n=18)，表明产甲烷过程消耗质子导致pH升高，或碱性环境抑制产甲烷菌活性",
+      "text": "043），表明春季单位有机碳的甲烷转化效率显著提升，这与温度升高促进产甲烷菌活性的机制一致",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "N2O与NaCl呈强正相关(r=0",
+      "text": "液相内部，TN与NH₄⁺-N呈极强正相关（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "0298*, n=7)，盐度升高可能抑制亚硝酸盐氧化菌(NOB)、导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O",
+      "text": "NaCl与电导率呈极强正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "气-气相关方面，CO₂与NO₂呈显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "CH₄与CH₄/TOC比值呈强正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "跨相态相关分析中，N₂O与NaCl呈显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "05），揭示了盐度对气态N₂O排放的促进作用",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "N2O与TP呈强正相关(r=0",
+      "text": "N₂O与TP呈显著正相关（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "0457*, n=8)，磷素可能通过促进微生物代谢间接影响N2O产生",
+      "text": "DO与CH₄呈显著负相关（r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "05），印证了溶解氧对产甲烷过程的抑制效应——低DO环境有利于产甲烷菌的活性表达",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "N2O与NH4+呈较强正相关(r=0",
+      "text": "水温与IC呈显著负相关（r=-0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "CH4与DO呈中等负相关(r=-0",
+      "text": "01），可能与温度升高促进CO₂从液相逸出有关",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "电导率与COD呈显著负相关（r=-0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "5 碳氮耦合关系\n\n液相内部碳氮耦合分析显示：\nTOC与TC呈强正相关(r=0",
+      "text": "8%）远高于液相指标的大部分参数，表明气相碳污染物对管道局部微环境条件的响应更为敏感",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "TC(mg/L)与IC(mg/L)呈显著正相关(r=0",
+      "text": "9%）和NH₄⁺-N（CV=103",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "TN与NH4+呈极强正相关(r=0",
+      "text": "1%）的高变异特征，则反映了不同功能区（教学区、生活区、餐饮区）排放负荷的显著差异",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "TC(mg/L)与总氮（mg/L)呈显著正相关(r=0",
+      "text": "87 mg/L，其中IC（70",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "TC(mg/L)与铵态氮（mg/L)呈显著正相关(r=0",
+      "text": "2%，与液相中有机碳的比例恰好一致",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
@@ -292,70 +382,52 @@
       "needs": "综述文献"
     },
     {
-      "text": "📋 论文诊断报告：《污水管网碳排放多相耦合特征研究》\n\n一、论文现状总评\n\n| 维度 | 评价 | 主要问题 |\n|------|------|----------|\n| 选题 | ★★★★☆ | 选题有新意，但\"校园\"尺度的学术贡献需加强论证 |\n| 数据 | ★★★☆☆ | 气液相数据充实，固相n=2严重不足 |\n| 方法 | ★★★☆☆ | 统计方法适当，但缺乏碳排放通量直接测量 |\n| 讨论 | ★★★★☆ | 机理解释较为深入，但缺文献对比 |\n| 写作 | ★★☆☆☆ | AI痕迹明显，引文为零，多处表述需修改 |\n\n二、关键问题清单\n\n🔴 严重问题（必须修改）\n\n1",
-      "section": "",
-      "claim_type": "gap_claim",
-      "needs": "综述文献"
-    },
-    {
-      "text": "固相样本量不足 — n=2无法支撑任何统计推断，需明确说明其探索性质或补充采样\n3",
-      "section": "",
-      "claim_type": "gap_claim",
-      "needs": "综述文献"
-    },
-    {
-      "text": "讨论缺乏文献对比 — 4个讨论小节均未与已有研究进行定量对比\n8",
-      "section": "",
-      "claim_type": "gap_claim",
-      "needs": "综述文献"
-    },
-    {
-      "text": "COD数据异常 — 冬季COD均值2426 mg/L远超典型生活污水范围（200-500 mg/L），需解释原因\n9",
+      "text": "当前状态总结：\n\n| 维度 | 状态 |\n|------|------|\n| 选题 | 校园污水管网固-液-气三相碳污染物赋存特征 |\n| 数据 | 40样本×36变量，冬春两季，气液固三相 |\n| 管线 | 29个模块已全部运行完成（checkpoints齐全） |\n| 论文章节 | 摘要/引言/方法/结果/讨论/结论 均已生成 |\n| 关键发现 | CH₄春季是冬季的74倍；COD冬季2426 vs 春季93；TN-NH₄⁺ r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "VOCs表述错误 — 结果部分写\"冬季(598 ppb)显著高于冬季(427 ppb)\"，应为\"春季\"\n\n🟢 可改进项\n\n10",
+      "text": "🔴 固相n=2 — 统计效力不足\n3",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "🟡 VOCs表述错误 — \"冬季显著高于冬季\"应为\"春季\"\n\n您希望我优先处理哪个方面",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "CH₄季节分异的74倍差异 — 远超文献报道范围（通常2-10倍），具有发表价值\n2",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "以下是基于论文内容重写的精炼版本：\n\n摘要\n\n污水管网是城市碳排放的重要隐性来源，但其碳污染物在固-液-气多相间的分布特征与驱动机制尚缺乏系统研究",
+      "text": "其他 — 请告诉我您最关心的问题\n\n摘要\n\n污水管网是城市碳排放的重要来源之一，但其固-液-气多相态碳污染物的赋存特征尚缺乏系统研究",
       "section": "",
       "claim_type": "gap_claim",
       "needs": "综述文献"
     },
     {
-      "text": "38 ppm）的74倍（p=0",
+      "text": "9%），CO₂浓度范围为566~19235 ppm（CV=162",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "0193），远超文献报道的季节波动范围；（2）CO₂基线浓度呈反向季节模式，冬季（638 ppm）显著高于春季（550 ppm，p<0",
-      "section": "",
-      "claim_type": "comparison_claim",
-      "needs": "比较文献"
-    },
-    {
-      "text": "53），TN与NH₄⁺-N高度相关（r=0",
+      "text": "8%）；CH₄排放存在显著季节差异，春季均值（177",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "99），表明厌氧环境促进甲烷生成且氨化与有机碳水解酸化时空耦合；（4）采样点R17的CH₄浓度达2052 ppm，超出季节均值一个数量级，揭示了\"帕累托式\"排放热点的存在",
+      "text": "38 ppm）高出约74倍（p<0",
       "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "05），温度驱动的产甲烷菌活性增强是主要机制；CO₂与NO₂呈极显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
     }
   ],
   "bindings": [
@@ -420,157 +492,247 @@
       "confidence": 0.0
     },
     {
-      "claim_text": "38 ppm)的74倍，表明温度升高显著促进管道内产甲烷活动",
+      "claim_text": "9%，属高变异，表明不同采样点间CH₄排放强度差异悬殊",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "38 ppm)的74倍，表明温度升高显著促进管道内产甲烷活动",
+      "claim_text": "7%，属低变异，表明大气CO₂背景浓度相对稳定",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "VOCs浓度冬季(598 ppb)显著高于冬季(427 ppb)(p=0",
+      "claim_text": "93 %vol（n=40），变异系数仅4",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "CO2与NO2（ppm）呈显著正相关(r=0",
+      "claim_text": "18 mg/L，均值为1130",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "CO2本底值与气温（℃）呈显著负相关(r=-0",
+      "claim_text": "51 mg/L（n=18），变异系数高达247",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "36 mg/L)显著高于春季(0",
+      "claim_text": "9%，是所有液相指标中变异程度最大的，反映了不同功能区排放负荷的显著差异",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "36 mg/L)显著高于春季(0",
+      "claim_text": "95 mg/L（n=18），变异系数为69",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "COD浓度冬季(2426 mg/L)极显著高于春季(94 mg/L)(p=0",
+      "claim_text": "58 mg/L，其中无机碳（IC）占61",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "COD浓度冬季(2426 mg/L)极显著高于春季(94 mg/L)(p=0",
+      "claim_text": "34 mg/L），有机碳（TOC）占38",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "0000***)，相差约26倍",
+      "claim_text": "39 mg/L，NH₄⁺-N均值为36",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TOC（mg/L)与TC(mg/L)呈显著正相关(r=0",
+      "claim_text": "84 mg/L，NH₄⁺-N占TN的78",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TC(mg/L)与IC(mg/L)呈显著正相关(r=0",
+      "claim_text": "5%，说明管道内氮素以氨氮为主要存在形态",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "总氮（mg/L)与总磷（mg/L)呈显著正相关(r=0",
+      "claim_text": "26 mg/L（n=18），变异系数为47",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4 气相-液相耦合关系\n\n气相-液相关联分析揭示了温室气体排放与水质参数之间的内在耦合：\nCH4与pH呈较强负相关(r=-0",
+      "claim_text": "95 mg/L，已进入厌氧状态",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "0224*, n=18)，表明产甲烷过程消耗质子导致pH升高，或碱性环境抑制产甲烷菌活性",
+      "claim_text": "86 mg/kg，变异系数为135",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "N2O与NaCl呈强正相关(r=0",
+      "claim_text": "0%，表明沉积物有机碳的释放潜力存在显著空间差异",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "0298*, n=7)，盐度升高可能抑制亚硝酸盐氧化菌(NOB)、导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O",
+      "claim_text": "07 ppm）显著高于冬季（2",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "N2O与TP呈强正相关(r=0",
+      "claim_text": "019），春季CH₄浓度约为冬季的74倍，季节差异极为突出",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "0457*, n=8)，磷素可能通过促进微生物代谢间接影响N2O产生",
+      "claim_text": "00 ppm）显著高于春季（550",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "N2O与NH4+呈较强正相关(r=0",
+      "claim_text": "50 ppb）显著高于春季（426",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "CH4与DO呈中等负相关(r=-0",
+      "claim_text": "0001），冬季约为春季的26倍",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "5 碳氮耦合关系\n\n液相内部碳氮耦合分析显示：\nTOC与TC呈强正相关(r=0",
+      "claim_text": "36 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TC(mg/L)与IC(mg/L)呈显著正相关(r=0",
+      "claim_text": "36 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TN与NH4+呈极强正相关(r=0",
+      "claim_text": "043），表明春季单位有机碳的甲烷转化效率显著提升，这与温度升高促进产甲烷菌活性的机制一致",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TC(mg/L)与总氮（mg/L)呈显著正相关(r=0",
+      "claim_text": "液相内部，TN与NH₄⁺-N呈极强正相关（r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TC(mg/L)与铵态氮（mg/L)呈显著正相关(r=0",
+      "claim_text": "NaCl与电导率呈极强正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "气-气相关方面，CO₂与NO₂呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "CH₄与CH₄/TOC比值呈强正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "跨相态相关分析中，N₂O与NaCl呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "05），揭示了盐度对气态N₂O排放的促进作用",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "N₂O与TP呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "DO与CH₄呈显著负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "05），印证了溶解氧对产甲烷过程的抑制效应——低DO环境有利于产甲烷菌的活性表达",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "水温与IC呈显著负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "01），可能与温度升高促进CO₂从液相逸出有关",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "电导率与COD呈显著负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "8%）远高于液相指标的大部分参数，表明气相碳污染物对管道局部微环境条件的响应更为敏感",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "9%）和NH₄⁺-N（CV=103",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "1%）的高变异特征，则反映了不同功能区（教学区、生活区、餐饮区）排放负荷的显著差异",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "87 mg/L，其中IC（70",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "2%，与液相中有机碳的比例恰好一致",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
@@ -648,67 +810,49 @@
       "confidence": 0.0
     },
     {
-      "claim_text": "📋 论文诊断报告：《污水管网碳排放多相耦合特征研究》\n\n一、论文现状总评\n\n| 维度 | 评价 | 主要问题 |\n|------|------|----------|\n| 选题 | ★★★★☆ | 选题有新意，但\"校园\"尺度的学术贡献需加强论证 |\n| 数据 | ★★★☆☆ | 气液相数据充实，固相n=2严重不足 |\n| 方法 | ★★★☆☆ | 统计方法适当，但缺乏碳排放通量直接测量 |\n| 讨论 | ★★★★☆ | 机理解释较为深入，但缺文献对比 |\n| 写作 | ★★☆☆☆ | AI痕迹明显，引文为零，多处表述需修改 |\n\n二、关键问题清单\n\n🔴 严重问题（必须修改）\n\n1",
+      "claim_text": "当前状态总结：\n\n| 维度 | 状态 |\n|------|------|\n| 选题 | 校园污水管网固-液-气三相碳污染物赋存特征 |\n| 数据 | 40样本×36变量，冬春两季，气液固三相 |\n| 管线 | 29个模块已全部运行完成（checkpoints齐全） |\n| 论文章节 | 摘要/引言/方法/结果/讨论/结论 均已生成 |\n| 关键发现 | CH₄春季是冬季的74倍；COD冬季2426 vs 春季93；TN-NH₄⁺ r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "固相样本量不足 — n=2无法支撑任何统计推断，需明确说明其探索性质或补充采样\n3",
+      "claim_text": "🔴 固相n=2 — 统计效力不足\n3",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "讨论缺乏文献对比 — 4个讨论小节均未与已有研究进行定量对比\n8",
+      "claim_text": "🟡 VOCs表述错误 — \"冬季显著高于冬季\"应为\"春季\"\n\n您希望我优先处理哪个方面",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "COD数据异常 — 冬季COD均值2426 mg/L远超典型生活污水范围（200-500 mg/L），需解释原因\n9",
+      "claim_text": "其他 — 请告诉我您最关心的问题\n\n摘要\n\n污水管网是城市碳排放的重要来源之一，但其固-液-气多相态碳污染物的赋存特征尚缺乏系统研究",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "VOCs表述错误 — 结果部分写\"冬季(598 ppb)显著高于冬季(427 ppb)\"，应为\"春季\"\n\n🟢 可改进项\n\n10",
+      "claim_text": "9%），CO₂浓度范围为566~19235 ppm（CV=162",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "CH₄季节分异的74倍差异 — 远超文献报道范围（通常2-10倍），具有发表价值\n2",
+      "claim_text": "8%）；CH₄排放存在显著季节差异，春季均值（177",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "以下是基于论文内容重写的精炼版本：\n\n摘要\n\n污水管网是城市碳排放的重要隐性来源，但其碳污染物在固-液-气多相间的分布特征与驱动机制尚缺乏系统研究",
+      "claim_text": "38 ppm）高出约74倍（p<0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "38 ppm）的74倍（p=0",
-      "claim_section": "",
-      "supporting_citations": [],
-      "confidence": 0.0
-    },
-    {
-      "claim_text": "0193），远超文献报道的季节波动范围；（2）CO₂基线浓度呈反向季节模式，冬季（638 ppm）显著高于春季（550 ppm，p<0",
-      "claim_section": "",
-      "supporting_citations": [],
-      "confidence": 0.0
-    },
-    {
-      "claim_text": "53），TN与NH₄⁺-N高度相关（r=0",
-      "claim_section": "",
-      "supporting_citations": [],
-      "confidence": 0.0
-    },
-    {
-      "claim_text": "99），表明厌氧环境促进甲烷生成且氨化与有机碳水解酸化时空耦合；（4）采样点R17的CH₄浓度达2052 ppm，超出季节均值一个数量级，揭示了\"帕累托式\"排放热点的存在",
+      "claim_text": "05），温度驱动的产甲烷菌活性增强是主要机制；CO₂与NO₂呈极显著正相关（r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0

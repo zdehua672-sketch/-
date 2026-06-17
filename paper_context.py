@@ -1175,14 +1175,30 @@ def _run_generate_figures(ctx: PaperContext):
             logger.debug(f"fig1_seasonal_boxplot: {e}")
 
         # ============================================================
-        # 图2: 全变量相关性热图 (Nature 规范: 双栏, 色盲友好色板)
+        # 图2: 关键变量相关性热图 (修复：只用完整数据的变量)
         # ============================================================
         try:
-            agent.plot_heatmap()
-            _nature_save(plt.gcf(), 'fig2_correlation_heatmap',
-                       ['Pearson相关性矩阵',
-                        '颜色深浅表示相关系数大小，红色正相关，蓝色负相关',
-                        '* p<0.05, ** p<0.01, *** p<0.001'])
+            # 只用缺失值<30%的数值列
+            numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            good_cols = [c for c in numeric_cols if df[c].notna().sum() >= len(df) * 0.7]
+            if len(good_cols) >= 3:
+                # 计算相关系数矩阵（pairwise，不丢弃整行）
+                corr = df[good_cols].corr(method='pearson')
+                # 生成热图
+                fig, ax = plt.subplots(figsize=get_figure_size('chinese', columns=2))
+                mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
+                sns.heatmap(corr, mask=mask, ax=ax, cmap='RdBu_r', center=0,
+                           vmin=-1, vmax=1, annot=True, fmt='.2f',
+                           square=True, linewidths=0.5,
+                           annot_kws={'size': 6},
+                           cbar_kws={'shrink': 0.8, 'label': 'Pearson r'})
+                ax.set_title('关键变量Pearson相关性矩阵', fontsize=11, pad=10)
+                ax.tick_params(axis='both', labelsize=7)
+                plt.tight_layout()
+                _nature_save(fig, 'fig2_correlation_heatmap',
+                           ['关键变量Pearson相关性矩阵',
+                            '仅包含缺失值<30%的变量',
+                            '红色正相关，蓝色负相关'])
         except Exception as e:
             logger.debug(f"fig2_correlation_heatmap: {e}")
 
@@ -1240,50 +1256,77 @@ def _run_generate_figures(ctx: PaperContext):
             logger.debug(f"do_threshold_multi: {e}")
 
         # ============================================================
-        # 5. 泥水状况×季节 交互效应图（多变量）
+        # 5. 季节差异对比图（聚焦研究重点）
         # ============================================================
         try:
-            if all(c in df.columns for c in ['季节', '泥水状况']):
-                y_vars = [v for v in ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)'] if v in df.columns]
-                if y_vars:
-                    fig, axes = plt.subplots(2, 2, figsize=get_figure_size('chinese', columns=2))
-                    for idx, var in enumerate(y_vars[:4]):
-                        ax = axes[idx // 2][idx % 2]
-                        data = df[['季节', '泥水状况', var]].dropna()
-                        if len(data) > 5:
-                            pivot = data.groupby(['季节', '泥水状况'])[var].mean().unstack(fill_value=0)
-                            pivot.plot(kind='bar', ax=ax, color=[SEASON_COLORS.get(s, c) for s, c in zip(pivot.index, TABLEAU_10)])
-                            ax.set_ylabel(get_label(var))
-                            ax.set_title(get_label(var))
-                            ax.tick_params(axis='x', rotation=0)
-                    plt.tight_layout()
-                    _nature_save(fig, 'fig5_season_sediment',
-                               ['季节×泥水状况交互效应',
-                                '展示温度和沉积物对碳排放的协同影响',
-                                '春季+无水无泥条件CH₄排放最高'])
+            sig_vars = []
+            for f in ctx.findings:
+                if f.get('type') == 'group_difference' and f.get('data', {}).get('p', 1) < 0.05:
+                    var = f.get('variable', '')
+                    if var and var in df.columns and var not in sig_vars:
+                        sig_vars.append(var)
+            if not sig_vars:
+                sig_vars = [v for v in ['甲烷(ppm)', 'COD（mg/L)', 'CO2本底值', 'VOCs(ppb)'] if v in df.columns]
+            if sig_vars and '季节' in df.columns:
+                fig, axes = plt.subplots(2, 2, figsize=get_figure_size('chinese', columns=2))
+                for idx, var in enumerate(sig_vars[:4]):
+                    ax = axes[idx // 2][idx % 2]
+                    data = df[['季节', var]].dropna()
+                    if len(data) > 3:
+                        seasons = sorted(data['季节'].unique())
+                        values = [data[data['季节'] == s][var].values for s in seasons]
+                        bp = ax.boxplot(values, labels=seasons, patch_artist=True)
+                        for si, box in enumerate(bp['boxes']):
+                            box.set_facecolor(list(SEASON_COLORS.values())[si % len(SEASON_COLORS)])
+                            box.set_alpha(0.7)
+                        for si, (s, v) in enumerate(zip(seasons, values)):
+                            ax.scatter([si+1]*len(v), v, color='black', s=20, alpha=0.5, zorder=5)
+                        ax.set_ylabel(get_label(var), fontsize=8)
+                        ax.set_title(get_label(var), fontsize=9)
+                        p = next((f['data']['p'] for f in ctx.findings
+                                 if f.get('type') == 'group_difference'
+                                 and f.get('variable') == var
+                                 and f.get('data', {}).get('p', 1) < 0.05), None)
+                        if p:
+                            sig = '***' if p < 0.001 else ('**' if p < 0.01 else '*')
+                            y_max = max(max(v) for v in values)
+                            ax.annotate(sig, xy=(1.5, y_max * 1.1), fontsize=12, ha='center')
+                plt.tight_layout()
+                _nature_save(fig, 'fig5_seasonal_comparison',
+                           ['季节差异显著变量对比',
+                            '箱线图+散点图，标注显著性',
+                            '* p<0.05, ** p<0.01, *** p<0.001'])
         except Exception as e:
-            logger.debug(f"season_sediment_multi: {e}")
+            logger.debug(f"fig5_seasonal_comparison: {e}")
 
         # ============================================================
-        # 6. 液相变量空间分布
+        # 6. 液相变量空间分布（只用缺失值<50%的变量）
         # ============================================================
         try:
             liquid_vars = [v for v in ['TOC（mg/L)', 'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)', 'IC(mg/L)', 'NaCl(mg/L)'] if v in df.columns]
+            # 过滤掉缺失值太多的变量
+            liquid_vars = [v for v in liquid_vars if df[v].notna().sum() >= len(df) * 0.5]
             if liquid_vars and '采样点' in df.columns:
-                fig, axes = plt.subplots(2, 3, figsize=get_figure_size('chinese', columns=2))
-                for idx, var in enumerate(liquid_vars[:6]):
-                    ax = axes[idx // 3][idx % 3]
-                    point_data = df.groupby('采样点')[var].mean().sort_values(ascending=False)
-                    colors = [PHASE_COLORS.get('liquid', '#F28E2B') if v > point_data.median() * 1.5 else PHASE_COLORS.get('solid', '#59A14F') for v in point_data.values]
-                    point_data.plot(kind='bar', ax=ax, color=colors)
-                    ax.set_ylabel(get_label(var))
-                    ax.set_title(get_label(var))
-                    ax.tick_params(axis='x', rotation=45, fontsize=7)
+                n_vars = min(len(liquid_vars), 6)
+                cols = min(n_vars, 3)
+                rows = (n_vars + cols - 1) // cols
+                fig, axes = plt.subplots(rows, cols, figsize=get_figure_size('chinese', columns=2))
+                if rows == 1:
+                    axes = [axes]
+                for idx, var in enumerate(liquid_vars[:n_vars]):
+                    ax = axes[idx // cols][idx % cols]
+                    point_data = df.groupby('采样点')[var].mean().dropna().sort_values(ascending=False)
+                    if len(point_data) > 0:
+                        colors = [PHASE_COLORS.get('liquid', '#F28E2B') if v > point_data.median() * 1.5 else PHASE_COLORS.get('solid', '#59A14F') for v in point_data.values]
+                        point_data.plot(kind='bar', ax=ax, color=colors)
+                        ax.set_ylabel(get_label(var), fontsize=8)
+                        ax.set_title(get_label(var), fontsize=9)
+                        ax.tick_params(axis='x', rotation=45, fontsize=6)
                 plt.tight_layout()
                 _nature_save(fig, 'fig6_spatial_liquid',
                            ['液相污染物空间分布',
-                            '橙色标记偏高值(>1.5倍中位数)',
-                            '展示TOC/COD/TN/NH₄⁺/IC/NaCl空间分异'])
+                            '仅包含缺失值<50%的变量',
+                            '橙色标记偏高值(>1.5倍中位数)'])
         except Exception as e:
             logger.debug(f"spatial_liquid_distribution: {e}")
 
@@ -1384,32 +1427,41 @@ def _run_generate_figures(ctx: PaperContext):
             logger.debug(f"season_violin: {e}")
 
         # ============================================================
-        # 10. 相关性气泡图（Top相关对）
+        # 10. 相关性汇总图（Top10，短标签避免重叠）
         # ============================================================
         try:
             sig_corrs = [f for f in ctx.findings if f.get('type') == 'correlation' and f.get('data', {}).get('p', 1) < 0.05]
             if sig_corrs:
-                fig, ax = plt.subplots(figsize=get_figure_size('chinese', columns=2))
+                # 按|r|排序，取前10
+                sig_corrs.sort(key=lambda x: abs(x.get('data', {}).get('r', 0)), reverse=True)
+                fig, ax = plt.subplots(figsize=(10, 5))
                 pairs = []
-                for f in sig_corrs[:15]:
+                for f in sig_corrs[:10]:
                     v1, v2 = f.get('variables', ('', ''))
                     r = f.get('data', {}).get('r', 0)
                     p = f.get('data', {}).get('p', 1)
                     if v1 and v2:
-                        pairs.append((f'{get_label(v1)}\nvs\n{get_label(v2)}', r, p))
+                        # 使用短标签避免重叠
+                        label = f'{get_label(v1)[:8]}\nvs\n{get_label(v2)[:8]}'
+                        pairs.append((label, r, p))
                 if pairs:
                     labels, rs, ps = zip(*pairs)
-                    colors = [PHASE_COLORS.get('gas', '#4E79A7') if r > 0 else PHASE_COLORS.get('liquid', '#F28E2B') for r in rs]
-                    ax.bar(range(len(labels)), rs, color=colors)
+                    colors = ['#4E79A7' if r > 0 else '#E15759' for r in rs]
+                    bars = ax.bar(range(len(labels)), rs, color=colors, width=0.7)
                     ax.set_xticks(range(len(labels)))
-                    ax.set_xticklabels(labels, fontsize=7, rotation=45, ha='right')
-                    ax.set_ylabel('Pearson r')
+                    ax.set_xticklabels(labels, fontsize=7, rotation=0)
+                    ax.set_ylabel('Pearson r', fontsize=9)
                     ax.axhline(y=0, color='black', linewidth=0.5)
+                    # 添加显著性标注
+                    for i, (r, p) in enumerate(zip(rs, ps)):
+                        sig = '***' if p < 0.001 else ('**' if p < 0.01 else '*')
+                        y_pos = r + 0.02 if r > 0 else r - 0.05
+                        ax.annotate(sig, xy=(i, y_pos), fontsize=8, ha='center')
                     plt.tight_layout()
                     _nature_save(fig, 'fig10_correlation_summary',
-                               ['显著相关性汇总',
-                                '红色正相关，蓝色负相关',
-                                '展示所有p<0.05的相关关系'])
+                               ['显著相关性Top10',
+                                '蓝色正相关，红色负相关',
+                                '* p<0.05, ** p<0.01, *** p<0.001'])
         except Exception as e:
             logger.debug(f"correlation_summary: {e}")
 
