@@ -1,0 +1,921 @@
+{
+  "target_count": 20,
+  "updated": "2026-06-16T16:57:08.258325+00:00",
+  "candidates": [],
+  "claims": [
+    {
+      "text": "研究表明，污水管网同时承担碳污染物输送和生物转化的双重功能，一个复杂的生物化学反应器，管道内的微生物活动可导致碳污染物在固、液、气三相之间发生显著的相间迁移（Guisasola et al",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "然而，现有研究多关注城市级污水管网系统，针对校园这一特殊功能区域的污水管网碳污染特征研究相对不足",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "早期研究主要关注管道中有机碳的生物转化过程，Guisasola等（2008）通过实验和模型模拟证实，污水在管道输送过程中，厌氧条件下的产甲烷活动可降解50%以上的有机碳，使管道成为一个重要的碳转化器",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "然而，多数研究仅关注单一相态，缺乏对固-液-气三相碳污染物的系统性联合分析",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "现有少量研究主要集中在水质指标的基础监测层面，对碳污染物在管网中的相态分布、空间分异及其影响因素缺乏分析",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "3 现有研究不足\n\n，现有研究存在以下不足：\n\n（1）多相态联合分析不足",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "已有研究多关注单一相态的碳污染物，缺乏固-液-气三相碳污染物的系统性联合分析，难以全面揭示碳在管网中的分布特征和相间迁移规律",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "现有研究以城市级管网为主，针对校园这一特殊功能区域的碳污染特征研究较少，对不同功能区（教学区、生活区、餐饮区）碳排放差异的认识不足",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "溶解氧、温度、有机负荷等因素对碳污染物相间迁移的影响因素缺乏研究",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "4 研究内容与目标\n\n针对上述研究不足，本研究以某校园污水管网为研究对象，开展以下研究工作：\n\n（1）系统采集管道内固相、液相、气相样品，测定碳污染物各指标浓度，揭示固-液-气三相碳污染物的分布特征",
+      "section": "",
+      "claim_type": "gap_claim",
+      "needs": "综述文献"
+    },
+    {
+      "text": "8%，同样表现出强烈的离散特征",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "93%（n=40），变异系数仅4",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "43 ppm）升高约74倍，呈现极其悬殊的季节差异",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "71 ppm）反而显著高于春季（550",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "74%），均未出现明显的缺氧现象",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "95 mg/L（n=18），变异系数69",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "51 mg/L，变异系数高达247",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "9%，为所有液相指标中变异程度最高者",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "58 mg/L，其中无机碳（IC）贡献均值70",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "2%，表明液相碳组成以无机碳为主",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "39 mg/L；氨氮（NH₄⁺）范围0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "84 mg/L，变异系数103",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "26 mg/L（n=18），部分采样点DO低于2 mg/L，存在厌氧或微氧环境",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "38 mg/L）显著高于春季（93",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "38 mg/L）显著高于春季（93",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "51 mg/L），差异约26倍（Mann-Whitney U，p<0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "36 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "36 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "93 mg/kg，变异系数135",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "79 mg/kg，变异系数140",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "39 mg/kg，表明沉积物中氮素以铵态氮为主",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "其中，CH₄浓度春季极显著高于冬季（p<0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "05）；CO₂本底值冬季极显著高于春季（p<0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "001）；VOCs及VOCs本底值冬季均极显著高于春季（p<0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "001）；COD冬季极显著高于春季（p<0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "001）；气温和水温春季显著高于冬季（p<0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "01）；NO₃⁻冬季显著高于春季（p<0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "气相指标内部，CO₂与NO₂呈极显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "N₂O与NaCl呈显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "05），与TP亦呈显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "液相指标内部，TN与NH₄⁺呈极显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "电导率与COD呈显著负相关（r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "01），水温与IC呈显著负相关（r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "跨相态分析显示，CO₂本底值与采样时间呈显著负相关（r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "001），VOCs本底值与采样时间呈极显著负相关（r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "CH₄与pH呈负相关（r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "CH₄与CH₄/TOC比值呈极显著正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "87 mg/L）和固相TC（均值197",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "36 g/kg）的初步估算，管网系统中固相沉积物碳储量显著高于液相溶解态碳",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "2%，有机碳（TOC）占比约38",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "PCA和回归分析部分因原始数据中PCA方差解释率为0%（疑似数据或计算问题），暂未纳入，建议补充有效数据后补写",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "3 碳氮耦合关系及其环境意义\n\nTOC（mg/L)与TC(mg/L)呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "TC(mg/L)与IC(mg/L)呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "总氮（mg/L)与总磷（mg/L)呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "TOC与TC的强正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "4 温室气体排放特征及影响因素\n\nCO2与NO2（ppm）呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "CO2本底值与气温（℃）呈显著负相关(r=-0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "VOCs(ppb)与VOCs本底值呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "5 mg/L时硝化作用几乎停止，NO3-浓度极低",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "5 盐度对碳氮转化的影响\n\nNaCl(mg/L)与电导率(uS/cm)呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "氧化亚氮(ppm)与NaCl(mg/L)呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "NaCl(mg/L)与TC(mg/L)呈显著正相关(r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "高盐度环境下，亚硝酸盐氧化菌(NOB)比氨氧化菌(AOB)更易受抑制，导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "此外，NaCl浓度升高会增加污水渗透压，影响微生物群落结构，促进N2O的产生",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "5 mg/L时硝化作用几乎停止，NO3-浓度极低",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "py 基于Claude CLI的AI写作，支持中英文双语\n- 质量控制：12类同行评审、自动修订、引用审计等\n\n请问您现在需要我帮您做什么",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "38 ppm）升高约74倍（p=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "019），与温度驱动的产甲烷菌活性增强密切相关；液相COD冬季（2426 mg/L）显著高于春季（93 mg/L）（p<0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "019），与温度驱动的产甲烷菌活性增强密切相关；液相COD冬季（2426 mg/L）显著高于春季（93 mg/L）（p<0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "001），反映低流速条件下有机底物的季节性积累；DO与CH₄呈显著负相关，TN与NH₄⁺高度耦合（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "985），揭示厌氧环境是控制碳相态转化的关键因子",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "约340字，覆盖了摘要的关键要素：\n\n| 要素 | 对应内容 |\n|------|---------|\n| 背景缺口 | 多相态碳赋存特征尚不明确 |\n| 方法 | 三相同步采样 + 36项指标 + 多元统计 |\n| 核心发现 | CH₄极端变异、74倍季节差异、DO-CH₄负相关、TN-NH₄⁺耦合 |\n| 结论 | 相态分异 + 空间分异 + 碳减排启示 |",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    }
+  ],
+  "bindings": [
+    {
+      "claim_text": "研究表明，污水管网同时承担碳污染物输送和生物转化的双重功能，一个复杂的生物化学反应器，管道内的微生物活动可导致碳污染物在固、液、气三相之间发生显著的相间迁移（Guisasola et al",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "然而，现有研究多关注城市级污水管网系统，针对校园这一特殊功能区域的污水管网碳污染特征研究相对不足",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "早期研究主要关注管道中有机碳的生物转化过程，Guisasola等（2008）通过实验和模型模拟证实，污水在管道输送过程中，厌氧条件下的产甲烷活动可降解50%以上的有机碳，使管道成为一个重要的碳转化器",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "然而，多数研究仅关注单一相态，缺乏对固-液-气三相碳污染物的系统性联合分析",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "现有少量研究主要集中在水质指标的基础监测层面，对碳污染物在管网中的相态分布、空间分异及其影响因素缺乏分析",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "3 现有研究不足\n\n，现有研究存在以下不足：\n\n（1）多相态联合分析不足",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "已有研究多关注单一相态的碳污染物，缺乏固-液-气三相碳污染物的系统性联合分析，难以全面揭示碳在管网中的分布特征和相间迁移规律",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "现有研究以城市级管网为主，针对校园这一特殊功能区域的碳污染特征研究较少，对不同功能区（教学区、生活区、餐饮区）碳排放差异的认识不足",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "溶解氧、温度、有机负荷等因素对碳污染物相间迁移的影响因素缺乏研究",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "4 研究内容与目标\n\n针对上述研究不足，本研究以某校园污水管网为研究对象，开展以下研究工作：\n\n（1）系统采集管道内固相、液相、气相样品，测定碳污染物各指标浓度，揭示固-液-气三相碳污染物的分布特征",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "8%，同样表现出强烈的离散特征",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "93%（n=40），变异系数仅4",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "43 ppm）升高约74倍，呈现极其悬殊的季节差异",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "71 ppm）反而显著高于春季（550",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "74%），均未出现明显的缺氧现象",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "95 mg/L（n=18），变异系数69",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "51 mg/L，变异系数高达247",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "9%，为所有液相指标中变异程度最高者",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "58 mg/L，其中无机碳（IC）贡献均值70",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "2%，表明液相碳组成以无机碳为主",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "39 mg/L；氨氮（NH₄⁺）范围0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "84 mg/L，变异系数103",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "26 mg/L（n=18），部分采样点DO低于2 mg/L，存在厌氧或微氧环境",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "38 mg/L）显著高于春季（93",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "38 mg/L）显著高于春季（93",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "51 mg/L），差异约26倍（Mann-Whitney U，p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "36 mg/L）显著高于春季（0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "36 mg/L）显著高于春季（0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "93 mg/kg，变异系数135",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "79 mg/kg，变异系数140",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "39 mg/kg，表明沉积物中氮素以铵态氮为主",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "其中，CH₄浓度春季极显著高于冬季（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "05）；CO₂本底值冬季极显著高于春季（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001）；VOCs及VOCs本底值冬季均极显著高于春季（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001）；COD冬季极显著高于春季（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001）；气温和水温春季显著高于冬季（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "01）；NO₃⁻冬季显著高于春季（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "气相指标内部，CO₂与NO₂呈极显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "N₂O与NaCl呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "05），与TP亦呈显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "液相指标内部，TN与NH₄⁺呈极显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "电导率与COD呈显著负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "01），水温与IC呈显著负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "跨相态分析显示，CO₂本底值与采样时间呈显著负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001），VOCs本底值与采样时间呈极显著负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "CH₄与pH呈负相关（r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "CH₄与CH₄/TOC比值呈极显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "87 mg/L）和固相TC（均值197",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "36 g/kg）的初步估算，管网系统中固相沉积物碳储量显著高于液相溶解态碳",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "2%，有机碳（TOC）占比约38",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "PCA和回归分析部分因原始数据中PCA方差解释率为0%（疑似数据或计算问题），暂未纳入，建议补充有效数据后补写",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "3 碳氮耦合关系及其环境意义\n\nTOC（mg/L)与TC(mg/L)呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "TC(mg/L)与IC(mg/L)呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "总氮（mg/L)与总磷（mg/L)呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "TOC与TC的强正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "4 温室气体排放特征及影响因素\n\nCO2与NO2（ppm）呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "CO2本底值与气温（℃）呈显著负相关(r=-0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "VOCs(ppb)与VOCs本底值呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "5 mg/L时硝化作用几乎停止，NO3-浓度极低",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "5 盐度对碳氮转化的影响\n\nNaCl(mg/L)与电导率(uS/cm)呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "氧化亚氮(ppm)与NaCl(mg/L)呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "NaCl(mg/L)与TC(mg/L)呈显著正相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "高盐度环境下，亚硝酸盐氧化菌(NOB)比氨氧化菌(AOB)更易受抑制，导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "此外，NaCl浓度升高会增加污水渗透压，影响微生物群落结构，促进N2O的产生",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "5 mg/L时硝化作用几乎停止，NO3-浓度极低",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "py 基于Claude CLI的AI写作，支持中英文双语\n- 质量控制：12类同行评审、自动修订、引用审计等\n\n请问您现在需要我帮您做什么",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "38 ppm）升高约74倍（p=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "019），与温度驱动的产甲烷菌活性增强密切相关；液相COD冬季（2426 mg/L）显著高于春季（93 mg/L）（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "019），与温度驱动的产甲烷菌活性增强密切相关；液相COD冬季（2426 mg/L）显著高于春季（93 mg/L）（p<0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "001），反映低流速条件下有机底物的季节性积累；DO与CH₄呈显著负相关，TN与NH₄⁺高度耦合（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "985），揭示厌氧环境是控制碳相态转化的关键因子",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "约340字，覆盖了摘要的关键要素：\n\n| 要素 | 对应内容 |\n|------|---------|\n| 背景缺口 | 多相态碳赋存特征尚不明确 |\n| 方法 | 三相同步采样 + 36项指标 + 多元统计 |\n| 核心发现 | CH₄极端变异、74倍季节差异、DO-CH₄负相关、TN-NH₄⁺耦合 |\n| 结论 | 相态分异 + 空间分异 + 碳减排启示 |",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    }
+  ]
+}

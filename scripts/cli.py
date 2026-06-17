@@ -183,7 +183,7 @@ def cmd_write(args):
     
     # 获取 ClaudeWriter
     from claude_writer import ClaudeWriter
-    writer = ClaudeWriter(timeout=180)
+    writer = ClaudeWriter(timeout=300)
     
     writers = {
         'results': lambda: _write_results(ctx, writer),

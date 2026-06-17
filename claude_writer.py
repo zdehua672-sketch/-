@@ -122,18 +122,16 @@ class ClaudeWriter:
         patterns_hint = self._format_patterns_hint(learned_patterns, 'result')
 
         if language == "zh":
-            prompt = f"""你是环境科学学者，撰写{domain}论文的"结果"章节(1500-2500字)。
+            prompt = f"""你是环境科学学者，撰写{domain}论文的"结果"章节(1000-1500字)。
 
 要求：
-1. 结构跟随数据发现：先描述整体特征，再报告重要发现
-2. 报告所有显著结果(p<0.05)，也要报告接近显著的结果(0.05<p<0.10)
-3. 报告效应量(Cohen's d)，不只是p值
-4. 不显著的结果也要报告（说明"未检测到显著差异"）
-5. 深挖异常值故事（为什么某个采样点特别高/低？）
-6. 引用图表(如图1所示)
-7. 客观陈述，不解释原因（留给讨论）
+1. 结构：描述统计 → 季节差异 → 相关性
+2. 每个发现必须有具体数据(均值、p值、r值)
+3. 报告显著结果(p<0.05)和接近显著(0.05<p<0.10)
+4. 引用图表(如图1所示)
+5. 客观陈述，不解释原因
 
-数据发现（包括显著和不显著的）:
+数据发现:
 {findings_text}
 {figures_text}
 
@@ -497,49 +495,28 @@ Write the Methods directly."""
     # ================================================================
 
     def _summarize_findings(self, findings: list) -> str:
-        """将 findings 列表转为可读文本摘要 — 包括不显著的结果"""
+        """将 findings 列表转为可读文本摘要 — 精简版，避免超时"""
         if not findings:
             return "暂无数据分析发现。"
-        # 按类型分组
-        correlations = [f for f in findings if f.get('type') == 'correlation']
-        group_diffs = [f for f in findings if f.get('type') == 'group_difference']
-        anomalies = [f for f in findings if f.get('type') == 'anomaly_story']
-        others = [f for f in findings if f.get('type') not in ('correlation', 'group_difference', 'anomaly_story')]
+
+        # 只取最重要的发现，严格限制数量
+        critical = [f for f in findings if f.get('importance') == 'critical'][:3]
+        high = [f for f in findings if f.get('importance') == 'high'][:3]
+        anomaly = [f for f in findings if f.get('type') == 'anomaly_story'][:3]
+        selected = critical + high + anomaly
 
         lines = []
+        for f in selected:
+            detail = f.get('detail', '')
+            if detail:
+                lines.append(f'- {detail[:100]}')
 
-        # 相关性：按显著性排序
-        if correlations:
-            sig = [f for f in correlations if f.get('data', {}).get('p', 1) < 0.05]
-            near = [f for f in correlations if 0.05 <= f.get('data', {}).get('p', 1) < 0.10]
-            ns = [f for f in correlations if f.get('data', {}).get('p', 1) >= 0.10 and f.get('data', {}).get('effect_size', 0) > 0.3]
-            lines.append(f'[相关性] 显著{len(sig)}组, 接近显著{len(near)}组, 大效应不显著{len(ns)}组')
-            for f in sig[:5]:
-                lines.append(f'  显著: {f.get("detail", "")}')
-            for f in near[:3]:
-                lines.append(f'  接近显著: {f.get("detail", "")}')
-            for f in ns[:2]:
-                lines.append(f'  大效应: {f.get("detail", "")}')
+        # 添加统计摘要
+        sig_count = len([f for f in findings if f.get('data', {}).get('p', 1) < 0.05])
+        near_count = len([f for f in findings if 0.05 <= f.get('data', {}).get('p', 1) < 0.10])
+        lines.append(f'总计: {sig_count}个显著, {near_count}个接近显著, {len(findings)}个发现')
 
-        # 组间差异
-        if group_diffs:
-            sig = [f for f in group_diffs if f.get('data', {}).get('p', 1) < 0.05]
-            near = [f for f in group_diffs if 0.05 <= f.get('data', {}).get('p', 1) < 0.10]
-            big_d = [f for f in group_diffs if f.get('data', {}).get('cohens_d', 0) > 0.8]
-            lines.append(f'[组间差异] 显著{len(sig)}个, 接近显著{len(near)}个, 大效应量{len(big_d)}个')
-            for f in sig[:5]:
-                detail = f.get('detail', '')
-                lines.append(f'  显著: {detail}')
-            for f in near[:3]:
-                detail = f.get('detail', '')
-                lines.append(f'  接近显著: {detail}')
-
-        # 异常值故事
-        if anomalies:
-            lines.append(f'[异常值故事] {len(anomalies)}个')
-            for f in anomalies[:5]:
-                detail = f.get('detail', '')
-                lines.append(f'  {detail}')
+        return '\n'.join(lines)
         return '\n'.join(lines)
 
     def _format_figures(self, figures: dict) -> str:
