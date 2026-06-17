@@ -305,6 +305,234 @@ class StatisticalAnalyzer:
         print(result_df.to_string())
         return result_df
 
+    def cohens_d(self, group1, group2):
+        """
+        计算 Cohen's d 效应量
+        d = (mean1 - mean2) / pooled_std
+
+        Parameters
+        ----------
+        group1 : array-like, 第一组数据
+        group2 : array-like, 第二组数据
+
+        Returns
+        -------
+        float: Cohen's d 值
+            |d| < 0.2: 可忽略
+            0.2 ≤ |d| < 0.5: 小效应
+            0.5 ≤ |d| < 0.8: 中效应
+            |d| ≥ 0.8: 大效应
+        """
+        group1 = np.asarray(group1, dtype=float)
+        group2 = np.asarray(group2, dtype=float)
+
+        n1, n2 = len(group1), len(group2)
+        if n1 < 2 or n2 < 2:
+            return 0.0
+
+        mean1, mean2 = np.mean(group1), np.mean(group2)
+        std1, std2 = np.std(group1, ddof=1), np.std(group2, ddof=1)
+
+        # 合并标准差 (pooled standard deviation)
+        pooled_std = np.sqrt(((n1 - 1) * std1**2 + (n2 - 1) * std2**2) / (n1 + n2 - 2))
+
+        if pooled_std == 0:
+            return 0.0
+
+        d = (mean1 - mean2) / pooled_std
+        return round(d, 4)
+
+    def cohens_d_by_group(self, group_col='季节', cols=None):
+        """
+        按分组计算所有变量的 Cohen's d 效应量
+
+        Parameters
+        ----------
+        group_col : str, 分组列名
+        cols : list of str, 要分析的列
+
+        Returns
+        -------
+        pd.DataFrame: 包含变量名、Cohen's d、效应大小
+        """
+        print("\n" + "=" * 60)
+        print("Cohen's d 效应量分析")
+        print("=" * 60)
+
+        if cols is None:
+            numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+            exclude_cols = ['气相碳', '液相碳', '固相碳', 'TOC比例', 'IC比例', '气液碳比', 'CH4_TOCT比']
+            cols = [c for c in numeric_cols if c not in exclude_cols]
+
+        if group_col not in self.df.columns:
+            print("错误: 找不到分组列")
+            return None
+
+        groups = self.df[group_col].unique()
+        if len(groups) != 2:
+            print(f"警告: Cohen's d 适用于两组比较，当前有 {len(groups)} 组")
+            return None
+
+        g1, g2 = groups[0], groups[1]
+        results = []
+
+        for col in cols:
+            data1 = self.df[self.df[group_col] == g1][col].dropna()
+            data2 = self.df[self.df[group_col] == g2][col].dropna()
+
+            if len(data1) >= 2 and len(data2) >= 2:
+                d = self.cohens_d(data1, data2)
+
+                # 判断效应大小
+                abs_d = abs(d)
+                if abs_d < 0.2:
+                    effect_size = '可忽略'
+                elif abs_d < 0.5:
+                    effect_size = '小'
+                elif abs_d < 0.8:
+                    effect_size = '中'
+                else:
+                    effect_size = '大'
+
+                results.append({
+                    '变量': col,
+                    'Cohen\'s d': d,
+                    '效应大小': effect_size,
+                    f'{g1}_均值': round(data1.mean(), 4),
+                    f'{g2}_均值': round(data2.mean(), 4),
+                    '方向': f'{g1} > {g2}' if d > 0 else f'{g2} > {g1}',
+                })
+
+        result_df = pd.DataFrame(results)
+        if not result_df.empty:
+            result_df = result_df.sort_values("Cohen\'s d", key=abs, ascending=False)
+
+        self.results['效应量'] = result_df
+        print(result_df.to_string())
+        return result_df
+
+    def shapiro_wilk(self, col):
+        """
+        Shapiro-Wilk 正态性检验
+
+        Parameters
+        ----------
+        col : str, 列名
+
+        Returns
+        -------
+        dict: {'W': float, 'p': float, 'is_normal': bool}
+        """
+        data = self.df[col].dropna()
+        if len(data) < 3:
+            return {'W': None, 'p': None, 'is_normal': None, 'error': '样本量不足'}
+
+        stat, p_value = stats.shapiro(data)
+        return {
+            'W': round(stat, 4),
+            'p': round(p_value, 4),
+            'is_normal': p_value > 0.05,
+        }
+
+    def anova(self, dependent_var, group_var):
+        """
+        单因素方差分析 (One-way ANOVA)
+
+        Parameters
+        ----------
+        dependent_var : str, 因变量列名
+        group_var : str, 分组变量列名
+
+        Returns
+        -------
+        dict: {'F': float, 'p': float, 'df_between': int, 'df_within': int}
+        """
+        groups = []
+        for g in self.df[group_var].unique():
+            data = self.df[self.df[group_var] == g][dependent_var].dropna()
+            if len(data) >= 2:
+                groups.append(data.values)
+
+        if len(groups) < 2:
+            return {'error': '有效组数不足'}
+
+        stat, p_value = stats.f_oneway(*groups)
+        n_total = sum(len(g) for g in groups)
+        k = len(groups)
+
+        return {
+            'F': round(stat, 4),
+            'p': round(p_value, 4),
+            'df_between': k - 1,
+            'df_within': n_total - k,
+            '显著性': '***' if p_value <= 0.001 else ('**' if p_value <= 0.01 else ('*' if p_value <= 0.05 else 'n.s.')),
+        }
+
+    def mann_whitney(self, dependent_var, group_var):
+        """
+        Mann-Whitney U 检验（非参数两组比较）
+
+        Parameters
+        ----------
+        dependent_var : str, 因变量列名
+        group_var : str, 分组变量列名
+
+        Returns
+        -------
+        dict: {'U': float, 'p': float, 'n1': int, 'n2': int}
+        """
+        groups = self.df[group_var].unique()
+        if len(groups) != 2:
+            return {'error': 'Mann-Whitney U 适用于两组比较'}
+
+        g1, g2 = groups[0], groups[1]
+        data1 = self.df[self.df[group_var] == g1][dependent_var].dropna()
+        data2 = self.df[self.df[group_var] == g2][dependent_var].dropna()
+
+        if len(data1) < 2 or len(data2) < 2:
+            return {'error': '样本量不足'}
+
+        stat, p_value = stats.mannwhitneyu(data1, data2, alternative='two-sided')
+
+        return {
+            'U': round(stat, 4),
+            'p': round(p_value, 4),
+            'n1': len(data1),
+            'n2': len(data2),
+            '显著性': '***' if p_value <= 0.001 else ('**' if p_value <= 0.01 else ('*' if p_value <= 0.05 else 'n.s.')),
+        }
+
+    def kruskal_wallis(self, dependent_var, group_var):
+        """
+        Kruskal-Wallis H 检验（非参数多组比较）
+
+        Parameters
+        ----------
+        dependent_var : str, 因变量列名
+        group_var : str, 分组变量列名
+
+        Returns
+        -------
+        dict: {'H': float, 'p': float, 'df': int}
+        """
+        groups = []
+        for g in self.df[group_var].unique():
+            data = self.df[self.df[group_var] == g][dependent_var].dropna()
+            if len(data) >= 2:
+                groups.append(data.values)
+
+        if len(groups) < 2:
+            return {'error': '有效组数不足'}
+
+        stat, p_value = stats.kruskal(*groups)
+
+        return {
+            'H': round(stat, 4),
+            'p': round(p_value, 4),
+            'df': len(groups) - 1,
+            '显著性': '***' if p_value <= 0.001 else ('**' if p_value <= 0.01 else ('*' if p_value <= 0.05 else 'n.s.')),
+        }
+
     def partial_correlation(self, x, y, covar, cols=None):
         """偏相关分析 — 控制协变量后计算x与y的净相关"""
         print("\n" + "=" * 60)

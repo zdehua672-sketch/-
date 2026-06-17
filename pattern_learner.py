@@ -562,7 +562,207 @@ class MechanismLearner:
 
 
 # ============================================================================
-# 4. 便捷函数
+# 4. MethodologyLearner - 方法论学习器
+# ============================================================================
+
+class MethodologyLearner:
+    """
+    从论文的 Methods 部分提取方法论模式。
+
+    功能：
+    1. 提取实验方法描述
+    2. 识别统计方法
+    3. 学习采样方法
+    4. 提取仪器/设备信息
+    """
+
+    # 方法论关键词分类
+    METHOD_CATEGORIES = {
+        'sampling': ['采样', '采集', '样品', 'sampling', 'collection', 'grab', 'composite'],
+        'analysis': ['测定', '分析', '检测', 'measurement', 'analysis', 'detection', 'determination'],
+        'statistical': ['统计', '检验', '回归', '相关', 'ANOVA', 't-test', 'Mann-Whitney',
+                       'Kruskal', 'Shapiro', 'Pearson', 'Spearman', 'p值', 'p-value'],
+        'instrument': ['仪器', '设备', '型号', 'analyzer', 'spectrometer', 'chromatograph',
+                      'sensor', 'meter', 'detector'],
+        'preprocessing': ['预处理', '前处理', '消解', '过滤', '稀释', '萃取', 'digestion',
+                         'filtration', 'dilution', 'extraction'],
+    }
+
+    # 中文方法论模式
+    ZH_METHOD_PATTERNS = [
+        # 采用XX方法测定...
+        (r'采[用取]([\w\s\+\/\(\)]+)(?:方法|法|技术|手段)(?:测定|分析|检测)([\w\s]+)',
+         'method_used'),
+        # 使用XX仪器
+        (r'使[用到]([\w\s\-\(\)]+)(?:仪器|设备|装置|分析仪)(?:测定|检测|分析)?([\w\s]*)',
+         'instrument_used'),
+        # 样品采集方法
+        (r'(?:采集|收集|取)(?:了)?([\w\s]+)(?:样品|样本|水样|气样)',
+         'sampling_method'),
+        # 统计方法
+        (r'([A-Za-z\-\s]+(?:检验|分析|相关|回归))(?:\s*\(([A-Za-z\-\s]+)\))?',
+         'statistical_method'),
+    ]
+
+    # 英文方法论模式
+    EN_METHOD_PATTERNS = [
+        # was/were measured/analyzed/determined using...
+        (r'(?:was|were)\s+(?:measured|analyzed|determined|detected|quantified)\s+(?:using|by|with)\s+([\w\s\-\(\)]+?)(?:\.|,|\()',
+         'measurement_method'),
+        # Samples were collected/collected from...
+        (r'[Ss]amples?\s+(?:were|was)\s+(?:collected|gathered|obtained|taken)\s+(?:from|at)\s+([\w\s]+?)(?:\.|,)',
+         'sampling_method'),
+        # Statistical analysis was performed using...
+        (r'[Ss]tatistical\s+(?:analysis|tests?)\s+(?:were|was)\s+(?:performed|conducted|carried out)\s+(?:using|with)\s+([\w\s\-\(\)]+?)(?:\.|,)',
+         'statistical_method'),
+    ]
+
+    def __init__(self):
+        self.methods = []
+
+    def extract_methods(self, paper_text: str, source: str = '') -> List[Dict]:
+        """
+        从论文 Methods 部分提取方法论信息。
+
+        Parameters
+        ----------
+        paper_text : str, 论文 Methods 部分文本
+        source : str, 来源标识
+
+        Returns
+        -------
+        list of dict: [{'category': str, 'method': str, 'detail': str, 'source': str}]
+        """
+        extracted = []
+
+        # 中文模式匹配
+        for pattern, method_type in self.ZH_METHOD_PATTERNS:
+            for match in re.finditer(pattern, paper_text):
+                method_text = match.group(0).strip()
+                category = self._classify_method(method_text)
+
+                extracted.append({
+                    'category': category,
+                    'type': method_type,
+                    'method': match.group(1).strip() if match.lastindex >= 1 else method_text,
+                    'detail': match.group(2).strip() if match.lastindex >= 2 else '',
+                    'evidence': method_text,
+                    'source': source,
+                    'language': 'zh',
+                })
+
+        # 英文模式匹配
+        for pattern, method_type in self.EN_METHOD_PATTERNS:
+            for match in re.finditer(pattern, paper_text, re.IGNORECASE):
+                method_text = match.group(0).strip()
+                category = self._classify_method(method_text)
+
+                extracted.append({
+                    'category': category,
+                    'type': method_type,
+                    'method': match.group(1).strip() if match.lastindex >= 1 else method_text,
+                    'detail': '',
+                    'evidence': method_text,
+                    'source': source,
+                    'language': 'en',
+                })
+
+        self.methods.extend(extracted)
+        return extracted
+
+    def learn_from_paper(self, title: str, abstract: str,
+                         sections: list = None) -> List[Dict]:
+        """
+        从完整论文中学习方法论。
+
+        Parameters
+        ----------
+        title : str, 论文标题
+        abstract : str, 摘要
+        sections : list of dict, 章节列表 [{'text': str, 'section_type': str}]
+
+        Returns
+        -------
+        list of dict
+        """
+        all_extracted = []
+
+        # 从 Methods 部分提取
+        if sections:
+            for sec in sections:
+                sec_type = sec.get('section_type', '') if isinstance(sec, dict) else getattr(sec, 'section_type', '')
+                if sec_type in ('methods', 'methodology', 'materials_and_methods'):
+                    text = sec.get('text', '') if isinstance(sec, dict) else getattr(sec, 'text', '')
+                    if text:
+                        methods = self.extract_methods(text[:5000], source=f'methods:{title[:50]}')
+                        all_extracted.extend(methods)
+
+        # 从摘要中提取方法关键词
+        if abstract:
+            method_keywords = self._extract_method_keywords(abstract)
+            for kw in method_keywords:
+                all_extracted.append({
+                    'category': self._classify_method(kw),
+                    'type': 'keyword',
+                    'method': kw,
+                    'detail': '',
+                    'evidence': kw,
+                    'source': f'abstract:{title[:50]}',
+                    'language': 'zh' if any('一' <= c <= '鿿' for c in kw) else 'en',
+                })
+
+        self.methods.extend(all_extracted)
+        return all_extracted
+
+    def get_methods(self, category: str = None) -> List[Dict]:
+        """查询已学习的方法论"""
+        results = self.methods
+        if category:
+            results = [m for m in results if m['category'] == category]
+        return results
+
+    def get_method_summary(self) -> Dict:
+        """获取方法论摘要"""
+        summary = {}
+        for m in self.methods:
+            cat = m['category']
+            if cat not in summary:
+                summary[cat] = []
+            if m['method'] not in [x['method'] for x in summary[cat]]:
+                summary[cat].append({
+                    'method': m['method'],
+                    'count': sum(1 for x in self.methods if x['method'] == m['method']),
+                })
+        return summary
+
+    def _classify_method(self, text: str) -> str:
+        """分类方法论类型"""
+        text_lower = text.lower()
+        for category, keywords in self.METHOD_CATEGORIES.items():
+            if any(kw.lower() in text_lower for kw in keywords):
+                return category
+        return 'other'
+
+    def _extract_method_keywords(self, text: str) -> List[str]:
+        """从文本中提取方法关键词"""
+        keywords = []
+        # 提取括号中的方法名
+        bracket_matches = re.findall(r'[（(]([\w\s\-\+\/]+)[）)]', text)
+        keywords.extend([m.strip() for m in bracket_matches if len(m.strip()) > 3])
+
+        # 提取常见方法名词
+        method_nouns = ['GC-MS', 'HPLC', 'ICP', 'UV-Vis', 'PCR', 'SEM', 'XRD', 'FTIR',
+                       'TOC分析', 'COD测定', 'BOD测定', '气相色谱', '液相色谱',
+                       '离子色谱', '原子吸收', '质谱分析']
+        for noun in method_nouns:
+            if noun.lower() in text.lower():
+                keywords.append(noun)
+
+        return keywords
+
+
+# ============================================================================
+# 5. 便捷函数
 # ============================================================================
 
 def learn_patterns_from_paper(paper_content, store=None) -> Dict:

@@ -316,6 +316,15 @@ def _run_writer_methods(ctx: PaperContext):
         dc = _get_domain_config(ctx)
         if dc and dc.standards:
             data_info['standards'] = dc.standards
+
+        # 注入方法论学习结果
+        if ctx.has('learned_methodologies'):
+            data_info['learned_methodologies'] = ctx.learned_methodologies.get('summary', {})
+
+        # 注入学到的写作模式
+        if ctx.has('learned_patterns'):
+            data_info['learned_patterns'] = ctx.learned_patterns
+
         result = writer.write_methods(data_info=data_info, language=ctx.language)
         if result:
             ctx.sections['methods'] = _clean_claude_output(result)
@@ -356,9 +365,21 @@ def _run_writer_conclusion(ctx: PaperContext):
     """写 Conclusion（优先 Claude 生成，回退模板）"""
     writer = _get_claude_writer()
     if writer and ctx.has('findings'):
+        # 收集机制知识用于结论
+        mechanisms = {}
+        if ctx.has('learned_mechanisms'):
+            for m in ctx.learned_mechanisms[:5]:
+                var1 = m.get('var1', '')
+                var2 = m.get('var2', '')
+                evidence = m.get('evidence', '') or m.get('mechanism', '')
+                if var1 and var2 and evidence:
+                    mechanisms[f'{var1}_vs_{var2}'] = evidence
+
         result = writer.write_conclusion(
             findings=ctx.findings,
             language=ctx.language,
+            mechanisms=mechanisms if mechanisms else None,
+            learned_patterns=ctx.learned_patterns if ctx.has('learned_patterns') else None,
         )
         if result:
             ctx.sections['conclusion'] = _clean_claude_output(result)
@@ -508,6 +529,22 @@ def _run_review(ctx: PaperContext):
 
     ctx.review_summary = ctx.review_report.summary()
     logger.info(f"审稿: {ctx.review_summary['total']}个问题")
+
+    # 反馈闭环：将审稿结果记录到 FeedbackCollector
+    try:
+        from self_evolving_engine import FeedbackCollector
+        collector = FeedbackCollector()
+        for issue in ctx.review_report.issues:
+            collector.log_review_feedback(
+                section=issue.category if hasattr(issue, 'category') else 'unknown',
+                issue_type=issue.severity.value if hasattr(issue, 'severity') else 'warning',
+                description=issue.problem if hasattr(issue, 'problem') else str(issue),
+                suggestion=issue.suggestion if hasattr(issue, 'suggestion') else '',
+            )
+        logger.info("审稿反馈已记录到 FeedbackCollector")
+    except Exception as e:
+        logger.debug(f"反馈记录跳过: {e}")
+
     return ctx.review_report
 
 
@@ -768,13 +805,13 @@ def _run_paper_reading(ctx: PaperContext):
         for ext in ['*.pdf', '*.txt', '*.md']:
             papers_found.extend(glob.glob(os.path.join(ctx.papers_dir, ext)))
 
-    # 2. 本地无文献时，自动在线搜索
+    # 2. 本地无文献时，自动在线搜索（使用 findings 驱动关键词）
     if not papers_found:
         logger.info("本地无文献，尝试自动在线搜索...")
         try:
             from auto_paper_finder import AutoPaperFinder
             finder = AutoPaperFinder()
-            # 从 findings 中提取关键词搜索
+            # 从 findings 中提取关键词搜索（现在 findings 已可用）
             keywords = []
             for f in ctx.findings[:5]:
                 vars_ = f.get('variables', ('', ''))
@@ -783,6 +820,7 @@ def _run_paper_reading(ctx: PaperContext):
             if not keywords:
                 keywords = ['sewage', 'greenhouse gas', 'methane', 'carbon']
             search_query = ' '.join(keywords[:5])
+            logger.info(f"搜索关键词（来自数据发现）: {search_query}")
             found_papers = finder.find_papers(search_query)
             if found_papers:
                 logger.info(f"在线搜索到 {len(found_papers)} 篇论文")
@@ -816,6 +854,25 @@ def _run_paper_reading(ctx: PaperContext):
             logger.warning(f"读取失败 {paper_path}: {e}")
 
     logger.info(f"成功读取 {len(ctx.papers_read)} 篇文献")
+
+    # 3. 使用 LiteratureMemory 评估论文质量
+    try:
+        from literature_memory import LiteratureMemory
+        lit_mem = LiteratureMemory()
+        assessed_count = 0
+        for paper_info in ctx.papers_read:
+            title = paper_info.get('title', '')
+            if title:
+                assessment = lit_mem.assess_paper(paper_info)
+                if assessment:
+                    paper_info['evidence_level'] = assessment.get('evidence_level', '')
+                    paper_info['credibility_score'] = assessment.get('credibility', {}).get('overall', 0)
+                    assessed_count += 1
+        if assessed_count:
+            logger.info(f"论文质量评估: {assessed_count} 篇")
+    except Exception as e:
+        logger.debug(f"论文质量评估跳过: {e}")
+
     return ctx.papers_read
 
 
@@ -1725,6 +1782,148 @@ def _run_domain_config(ctx: PaperContext):
         return None
 
 
+def _run_writer_self_check(ctx: PaperContext):
+    """
+    Writer 自检：检查每个章节的质量
+
+    检查维度：
+    1. 字数是否达标
+    2. 图表引用是否正确
+    3. 统计值是否准确报告
+    4. 格式是否规范
+    """
+    if not ctx.has('sections'):
+        return None
+
+    import re
+
+    issues = []
+
+    # 各章节目标字数
+    word_targets = {
+        'abstract': (200, 500),
+        'introduction': (800, 1500),
+        'methods': (600, 1200),
+        'results': (1000, 2000),
+        'discussion': (1200, 2500),
+        'conclusion': (300, 600),
+    }
+
+    for section_name, (min_words, max_words) in word_targets.items():
+        text = ctx.sections.get(section_name, '')
+        if not text:
+            continue
+
+        # 1. 字数检查
+        char_count = len(text)
+        if char_count < min_words:
+            issues.append(f'[{section_name}] 字数不足: {char_count}字 (目标: {min_words}-{max_words}字)')
+        elif char_count > max_words * 1.5:
+            issues.append(f'[{section_name}] 字数过多: {char_count}字 (目标: {min_words}-{max_words}字)')
+
+        # 2. 图表引用检查
+        fig_refs = re.findall(r'图\s*\d+|Fig\.?\s*\d+|Figure\s*\d+', text)
+        if section_name == 'results' and len(fig_refs) == 0:
+            issues.append(f'[results] 缺少图表引用，Results章节应引用图表')
+
+        # 3. 统计值检查
+        if section_name in ('results', 'discussion'):
+            # 检查是否报告了p值
+            p_values = re.findall(r'p\s*[<>=≤≥]\s*\d+\.?\d*', text)
+            if 'findings' in ctx and ctx.findings:
+                sig_findings = [f for f in ctx.findings if f.get('data', {}).get('p', 1) < 0.05]
+                if sig_findings and len(p_values) == 0:
+                    issues.append(f'[{section_name}] 发现显著结果但未报告p值')
+
+            # 检查是否报告了相关系数
+            r_values = re.findall(r'r\s*=\s*-?\d+\.?\d*', text)
+            corr_findings = [f for f in ctx.findings if f.get('type') == 'correlation']
+            if corr_findings and len(r_values) == 0:
+                issues.append(f'[{section_name}] 发现相关性但未报告r值')
+
+        # 4. 格式检查
+        # 检查是否有章节标题
+        if not text.strip().startswith('#'):
+            issues.append(f'[{section_name}] 缺少章节标题')
+
+        # 检查段落分隔
+        paragraphs = text.split('\n\n')
+        if len(paragraphs) < 3:
+            issues.append(f'[{section_name}] 段落过少({len(paragraphs)}段)，建议分段讨论')
+
+    # 5. 引用检查
+    if ctx.has('sections'):
+        full_text = '\n\n'.join(ctx.sections.values())
+        citation_count = len(re.findall(r'\[\d+\]', full_text))
+        if citation_count == 0:
+            issues.append('[全文] 未发现引用标记，学术论文应包含引用')
+
+    # 记录检查结果
+    if issues:
+        logger.warning(f"Writer自检发现 {len(issues)} 个问题:")
+        for issue in issues:
+            logger.warning(f"  - {issue}")
+    else:
+        logger.info("Writer自检通过，未发现问题")
+
+    return issues
+
+
+def _run_methodology_learning(ctx: PaperContext):
+    """
+    方法论学习：从已读论文中提取方法论模式
+
+    提取内容：
+    1. 实验方法（采样、分析、预处理）
+    2. 统计方法（检验、回归、相关）
+    3. 仪器设备
+    """
+    if not ctx.papers_read:
+        logger.info("无已读论文，跳过方法论学习")
+        return None
+
+    from pattern_learner import MethodologyLearner
+    from paper_reader import PaperReader
+
+    reader = PaperReader()
+    learner = MethodologyLearner()
+
+    for paper_info in ctx.papers_read[:10]:
+        path = paper_info.get('path', '')
+        if not path or not os.path.exists(path):
+            continue
+        try:
+            content = reader.read(path, fetch_metadata=False)
+            if not content:
+                continue
+
+            title = content.metadata.title if content.metadata else ''
+            abstract = content.metadata.abstract if content.metadata else ''
+            sections = []
+            for sec in content.sections:
+                sections.append({
+                    'text': sec.text,
+                    'section_type': sec.section_type if hasattr(sec, 'section_type') else 'unknown',
+                })
+
+            learner.learn_from_paper(title, abstract, sections)
+        except Exception as e:
+            logger.warning(f"方法论学习失败 {path}: {e}")
+
+    # 获取方法论摘要
+    method_summary = learner.get_method_summary()
+    ctx.learned_methodologies = {
+        'methods': learner.get_methods(),
+        'summary': method_summary,
+        'total_count': len(learner.methods),
+        'papers_learned': len(ctx.papers_read),
+    }
+
+    logger.info(f"方法论学习: {len(learner.methods)} 个方法, "
+               f"分类: {list(method_summary.keys())}")
+    return ctx.learned_methodologies
+
+
 # ============================================================
 # 7. 模块注册表
 # ============================================================
@@ -1910,6 +2109,18 @@ MODULE_REGISTRY = {
         'run': _run_assemble,
         'description': '排版 DOCX',
     },
+    'writer_self_check': {
+        'needs': ['sections', 'findings'],
+        'provides': ['self_check_issues'],
+        'run': _run_writer_self_check,
+        'description': 'Writer自检（字数/图表引用/统计值/格式检查）',
+    },
+    'methodology_learning': {
+        'needs': ['papers_read'],
+        'provides': ['learned_methodologies'],
+        'run': _run_methodology_learning,
+        'description': '方法论学习（从论文中提取实验方法/统计方法/采样方法）',
+    },
     'latex_export': {
         'needs': ['sections'],
         'provides': ['latex_path'],
@@ -2087,12 +2298,10 @@ class PaperOrchestrator:
         """根据上下文状态自动推断执行步骤"""
         steps = []
 
-        # 第1阶段：知识初始化 + 文献学习
+        # 第1阶段：知识初始化
         steps.append('memory_init')
-        steps.append('paper_reading')
-        steps.append('pattern_learning')
 
-        # 第2阶段：领域配置 + 数据处理 + 智能分析
+        # 第2阶段：领域配置 + 数据处理 + 智能分析（必须在文献搜索之前）
         if ctx.domain:
             steps.append('domain_config')
         if ctx.has('data_path'):
@@ -2104,12 +2313,17 @@ class PaperOrchestrator:
         # 第3阶段：数据驱动图表生成（在分析之后，基于发现生成图表）
         steps.append('generate_figures')
 
-        # 第4阶段：知识支撑 + 动机线索
+        # 第4阶段：文献搜索 + 模式学习 + 方法论学习（使用 findings 驱动关键词）
+        steps.append('paper_reading')
+        steps.append('pattern_learning')
+        steps.append('methodology_learning')
+
+        # 第5阶段：知识支撑 + 动机线索
         steps.append('literature_recall')
         steps.append('motivation')
         steps.append('motivation_thread')
 
-        # 第4阶段：AI写作 + 推理矩阵
+        # 第6阶段：AI写作 + 推理矩阵
         steps.append('writer_results')
         steps.append('writer_discussion')
         steps.append('writer_intro')
@@ -2118,7 +2332,7 @@ class PaperOrchestrator:
         steps.append('writer_abstract')
         steps.append('writing_rationale')
 
-        # 第5阶段：润色 + 迭代审改 + 引用审计 + 修订审计
+        # 第7阶段：润色 + 迭代审改 + 引用审计 + 修订审计
         steps.append('polish')
         for _iteration in range(2):
             steps.append('review')
@@ -2126,14 +2340,15 @@ class PaperOrchestrator:
         steps.append('citation_audit')
         steps.append('revision_audit')
         steps.append('final_check')
+        steps.append('writer_self_check')
 
-        # 第6阶段：补充检查
+        # 第8阶段：补充检查
         steps.append('deep_imitation')
         steps.append('integrity_audit')
         steps.append('artifact_check')
         steps.append('citation_bank')
 
-        # 第7阶段：排版 + LaTeX
+        # 第9阶段：排版 + LaTeX
         steps.append('assemble')
         steps.append('latex_export')
 
