@@ -1123,13 +1123,16 @@ class DiscussionChecker:
 
 # ---------- 9. AI痕迹检查 ----------
 class AIDetector:
-    """AI生成文本痕迹检查"""
+    """AI生成文本痕迹检查（增强版）"""
 
     @staticmethod
     def check(sections, language='en'):
         issues = []
         patterns = ReviewKB.AI_PATTERNS_EN if language == 'en' else ReviewKB.AI_PATTERNS_ZH
         hollow = ReviewKB.HOLLOW_PATTERNS_EN if language == 'en' else ReviewKB.HOLLOW_PATTERNS_ZH
+
+        # 合并全文用于增强检测
+        full_text = '\n\n'.join(sec.body for sec in sections.values() if hasattr(sec, 'body'))
 
         for sec_name, sec in sections.items():
             if sec_name in ('references', 'acknowledgments', 'preamble'):
@@ -1161,6 +1164,40 @@ class AIDetector:
                         original=context.strip(),
                         suggestion='删除或替换为有具体数据支撑的表述'
                     ))
+
+        # ========== 增强检测：四大AI特征 ==========
+        try:
+            from ai_trace_enhanced import detect_ai_trace
+            trace_report = detect_ai_trace(full_text)
+
+            # 将增强检测结果转换为 Issue 格式
+            level_map = {
+                'CRITICAL': Severity.CRITICAL,
+                'MAJOR': Severity.MAJOR,
+                'MINOR': Severity.MINOR,
+                'INFO': Severity.INFO,
+            }
+
+            for trace_issue in trace_report.issues:
+                issues.append(Issue(
+                    category=f'AI痕迹-{trace_issue.feature}',
+                    severity=level_map.get(trace_issue.level.value, Severity.MINOR),
+                    section='全文',
+                    location=trace_issue.location,
+                    problem=trace_issue.problem,
+                    original=trace_issue.original,
+                    suggestion=trace_issue.suggestion,
+                    fix=trace_issue.auto_fix,
+                ))
+
+            # 记录评分
+            if trace_report.scores:
+                logger.info(f"AI痕迹评分: {trace_report.scores}")
+
+        except ImportError:
+            logger.debug("ai_trace_enhanced 模块未安装，跳过增强检测")
+        except Exception as e:
+            logger.debug(f"AI痕迹增强检测失败: {e}")
 
         # 检查全文句式重复度
         all_sentences = []
