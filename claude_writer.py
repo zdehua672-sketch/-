@@ -163,7 +163,8 @@ Write the Results directly, use ## for subsections."""
     def write_discussion(self, findings: list, mechanisms: dict = None,
                          domain: str = "污水管网碳排放", language: str = "zh",
                          recalled_refs: list = None,
-                         learned_patterns: dict = None) -> str:
+                         learned_patterns: dict = None,
+                         injection_context: str = None) -> str:
         """
         生成 Discussion 章节（分段生成避免超时）。
         拆成3个小prompt：概述+季节讨论、相关性+机制、局限性+意义。
@@ -178,24 +179,33 @@ Write the Results directly, use ## for subsections."""
         seasonal_text = self._summarize_findings(seasonal)
         corr_text = self._summarize_findings(corr)
 
+        # 构建注入上下文
+        injection_hint = ""
+        if injection_context:
+            injection_hint = f"\n\n【补充分析结果】\n{injection_context}\n\n请在讨论中引用上述分析结果。"
+
         parts = []
 
         # 第1段：概述 + 季节差异讨论
         if language == "zh":
-            prompt1 = f"""写{domain}论文讨论的前半部分(800-1200字)。
+            prompt1 = f"""写{domain}论文讨论的前半部分。
 
 ## 4.1 主要发现概述
 用1-2段话总结研究的核心发现。
 
 ## 4.2 季节差异分析
-对每个季节差异给出机制解释。
+对每个季节差异给出机制解释，引用文献支撑（如 [1] [2] 格式）。
 
 季节差异发现:
 {seasonal_text}
 
 {refs_text}
+{injection_hint}
 
-直接输出正文，用 ## 标记。"""
+要求：
+1. 每个机制解释必须引用1-2篇文献
+2. 使用 [数字] 格式引用文献
+3. 直接输出正文，用 ## 标记子章节。"""
         else:
             prompt1 = f"""Write Discussion part 1 (600-1000 words) for {domain}.
 
@@ -216,7 +226,7 @@ Write directly."""
 
         # 第2段：相关性 + 机制讨论
         if language == "zh":
-            prompt2 = f"""写{domain}论文讨论的后半部分(600-1000字)。
+            prompt2 = f"""写{domain}论文讨论的后半部分。
 
 ## 4.3 相关性与机制分析
 对重要相关关系给出机制解释。
@@ -246,7 +256,7 @@ Write directly."""
 
         # 第3段：局限性 + 意义
         if language == "zh":
-            prompt3 = f"""写{domain}论文讨论的结尾部分(300-500字)。
+            prompt3 = f"""写{domain}论文讨论的结尾部分。
 
 ## 4.4 研究意义
 本研究的科学价值和实际应用价值。
@@ -278,18 +288,24 @@ Write directly."""
 
     def write_introduction(self, findings: list, domain: str = "污水管网碳排放",
                            language: str = "zh", recalled_refs: list = None,
-                           learned_patterns: dict = None) -> str:
+                           learned_patterns: dict = None,
+                           motivation_context: str = None) -> str:
         """生成 Introduction 章节"""
         findings_text = self._summarize_findings(findings)
         refs_text = self._format_references(recalled_refs)
         patterns_hint = self._format_patterns_hint(learned_patterns, 'background')
 
+        # 构建动机上下文
+        motivation_hint = ""
+        if motivation_context:
+            motivation_hint = f"\n\n【研究动机】\n{motivation_context}\n\n请在引言中体现这些研究动机。"
+
         if language == "zh":
-            prompt = f"""你是环境科学学者，撰写{domain}论文的"引言"(1000-1500字)。
+            prompt = f"""你是环境科学学者，撰写{domain}论文的"引言"。
 
 要求：
 1. 倒三角：领域重要性 → 现有研究 → 不足 → 本文目标
-2. 引用3-5篇文献
+2. 引用3-5篇文献，使用 [数字] 格式
 3. 用"本研究"不用"本文"
 4. 列出2-3个研究目标
 
@@ -297,6 +313,7 @@ Write directly."""
 {findings_text}
 
 {refs_text}
+{motivation_hint}
 
 直接输出引言正文，用 ## 标记子章节。"""
         else:
@@ -329,15 +346,17 @@ Write the Introduction directly, use ## for subsections."""
         results_summary = self._extract_key_stats(sections.get('results', ''))
 
         if language == "zh":
-            prompt = f"""写{domain}论文摘要(250-350字)。
+            prompt = f"""写{domain}论文摘要。
 
 结构：目的→方法→结果→结论
-结果必须包含关键数据。最后列5-8个关键词。
+结果必须包含关键数据（至少3个具体数值）。最后列5-8个关键词。
 
 关键数据:
 {results_summary}
 
-直接输出：
+要求：
+1. 必须包含具体数据（如 r=0.647, p=0.004）
+2. 直接输出：
 【摘要】(正文)
 【关键词】(列表)"""
         else:
@@ -382,11 +401,11 @@ Write directly."""
         if language == "zh":
             prompt = f"""你是一位环境科学领域的资深学者，正在撰写一篇关于{domain}的中文学术论文。
 
-请根据以下数据分析发现，撰写"结论"章节（约500-800字）。
+请根据以下数据分析发现，撰写"结论"章节。
 
 要求：
 1. 列出3-5条主要结论，每条用编号标注
-2. 每条结论要包含具体数据支撑
+2. 每条结论要包含具体数据支撑（如 r=0.647, p=0.004）
 3. 最后指出研究的科学意义和实际应用价值
 4. 语言精炼、有力
 5. 不要重复摘要内容

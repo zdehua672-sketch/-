@@ -113,15 +113,13 @@ print(f"  图表: {len(ctx.figures)}张")
 orch.run(ctx)
 
 # ============================================================
-# 后处理：复制到桌面 + 推理链报告 + 审稿报告
+# 后处理：推理链报告 + 审稿报告
 # ============================================================
-print("\n[后处理] 输出到桌面...")
+print("\n[后处理] 生成报告...")
 
-# 复制 DOCX 到桌面
+# DOCX 已在 paper_output 目录
 if ctx.has('docx_path') and os.path.exists(ctx.docx_path):
-    desktop_docx = os.path.join(DESKTOP, '冬春数据论文_PaperContext版.docx')
-    shutil.copy2(ctx.docx_path, desktop_docx)
-    print(f"  DOCX: {desktop_docx}")
+    print(f"  DOCX: {ctx.docx_path}")
 
 # 推理链报告
 if ctx.rationale_rows:
@@ -176,9 +174,14 @@ for name in ['abstract', 'introduction', 'methods', 'results', 'discussion', 'co
 
 # 推理链统计
 if ctx.rationale_rows:
-    complete = sum(1 for r in ctx.rationale_rows if r.get('completeness', 0) >= 0.8)
-    partial = sum(1 for r in ctx.rationale_rows if 0.3 <= r.get('completeness', 0) < 0.8)
-    print(f"\n推理链: {len(ctx.rationale_rows)}条 (完整:{complete} 部分:{partial})")
+    # 过滤出字典类型的元素
+    valid_rows = [r for r in ctx.rationale_rows if isinstance(r, dict)]
+    if valid_rows:
+        complete = sum(1 for r in valid_rows if r.get('completeness', 0) >= 0.8)
+        partial = sum(1 for r in valid_rows if 0.3 <= r.get('completeness', 0) < 0.8)
+        print(f"\n推理链: {len(ctx.rationale_rows)}条 (完整:{complete} 部分:{partial})")
+    else:
+        print(f"\n推理链: {len(ctx.rationale_rows)}条 (均为字符串格式)")
 
 # 审稿统计
 if ctx.has('review_summary'):

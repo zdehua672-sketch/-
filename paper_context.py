@@ -20,10 +20,87 @@ def _get_claude_writer():
     if _claude_writer is None:
         try:
             from claude_writer import ClaudeWriter
-            _claude_writer = ClaudeWriter(timeout=180)
+            _claude_writer = ClaudeWriter(timeout=2400)
         except Exception as e:
             logger.warning(f"ClaudeWriter init failed: {e}")
     return _claude_writer
+
+
+def _is_valid_academic_text(text: str) -> bool:
+    """
+    检查文本是否是有效的学术文本（不是元评论）
+
+    判断标准：
+    1. 长度 > 100字
+    2. 包含学术特征（如"本研究"、"结果表明"等）
+    3. 不包含元评论特征（如"请问您"、"需要我"等）
+    """
+    if not text or len(text) < 100:
+        return False
+
+    # 元评论特征（优先级高，直接排除）
+    meta_patterns = [
+        '请问您', '需要我', '是否需要', '如何帮您',
+        '我来帮您', 'Here is', 'I will write', 'Let me write',
+        '作为环境科学', '我可以协助', '请告诉我您的',
+        '具体需求', '您希望我', '优先处理',
+    ]
+    for pattern in meta_patterns:
+        if pattern in text:
+            return False
+
+    # 学术特征（优先级中，包含则通过）
+    academic_patterns = [
+        '本研究', '结果表明', '分析表明', '研究发现',
+        '主要结论', '综上所述', '本研究发现',
+        '结论如下', '碳污染物', '管网', '甲烷',
+    ]
+    for pattern in academic_patterns:
+        if pattern in text:
+            return True
+
+    # 如果没有明显的学术特征，但长度足够，也认为是有效的
+    return len(text) > 300
+
+
+def _call_claude_with_retry(writer, func_name: str, max_retries: int = 3, **kwargs) -> str:
+    """
+    带重试机制的 Claude 调用
+
+    Parameters
+    ----------
+    writer : ClaudeWriter
+    func_name : str, 函数名（如 'write_conclusion'）
+    max_retries : int, 最大重试次数
+    **kwargs : 传递给函数的参数
+
+    Returns
+    -------
+    str : 有效的学术文本，或空字符串
+    """
+    func = getattr(writer, func_name, None)
+    if not func:
+        logger.warning(f"ClaudeWriter 没有 {func_name} 方法")
+        return ""
+
+    for attempt in range(max_retries):
+        try:
+            result = func(**kwargs)
+
+            # 检查结果是否是有效的学术文本
+            if result and _is_valid_academic_text(result):
+                return result
+            elif result:
+                logger.warning(f"{func_name} 第{attempt+1}次返回元评论，重试...")
+            else:
+                logger.warning(f"{func_name} 第{attempt+1}次返回空结果，重试...")
+
+        except Exception as e:
+            logger.warning(f"{func_name} 第{attempt+1}次调用失败: {e}")
+
+    # 所有重试都失败
+    logger.warning(f"{func_name} 所有{max_retries}次重试都失败")
+    return ""
 
 
 def _get_domain_config(ctx):
@@ -208,7 +285,10 @@ def _run_writer_results(ctx: PaperContext):
     # 优先用 Claude 生成 Results
     claude = _get_claude_writer()
     if claude and ctx.has('findings'):
-        result = claude.write_results(
+        # 使用重试机制调用 Claude
+        result = _call_claude_with_retry(
+            claude, 'write_results',
+            max_retries=3,
             findings=ctx.findings,
             figures=ctx.figures if ctx.figures else None,
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
@@ -261,12 +341,28 @@ def _run_writer_discussion(ctx: PaperContext):
                 if var1 and var2 and evidence:
                     mechanisms[f'{var1}_vs_{var2}'] = evidence
 
-        result = writer.write_discussion(
+        # 构建注入上下文（高级分析结果 + 引用支撑库）
+        injection_context = ""
+        advanced_injection = _build_advanced_injection(ctx)
+        if advanced_injection:
+            injection_context += f"\n\n【高级分析结果】\n{advanced_injection}"
+            logger.info(f"注入高级分析结果到Discussion: {len(advanced_injection)} 字")
+
+        citation_injection = _build_citation_injection(ctx)
+        if citation_injection:
+            injection_context += f"\n\n【引用支撑库】\n{citation_injection}"
+            logger.info(f"注入引用支撑到Discussion: {len(citation_injection)} 字")
+
+        # 使用重试机制调用 Claude
+        result = _call_claude_with_retry(
+            writer, 'write_discussion',
+            max_retries=3,
             findings=ctx.findings,
             mechanisms=mechanisms,
             language=ctx.language,
             recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
+            injection_context=injection_context if injection_context else None,
         )
         if result:
             ctx.sections['discussion'] = _clean_claude_output(result)
@@ -284,11 +380,25 @@ def _run_writer_intro(ctx: PaperContext):
     """写 Introduction 章节（优先 Claude 生成，回退模板）"""
     writer = _get_claude_writer()
     if writer and ctx.has('findings'):
+        # 构建动机线索上下文
+        motivation_context = ""
+        if ctx.has('motivation'):
+            motivation_context += f"\n\n【研究动机】\n{ctx.motivation.motivation_statement}"
+        if ctx.has('motivation_thread'):
+            thread = ctx.motivation_thread.get('thread', {})
+            if hasattr(thread, 'field_problem'):
+                motivation_context += f"\n\n【领域问题】\n{thread.field_problem}"
+            if hasattr(thread, 'specific_gap'):
+                motivation_context += f"\n\n【研究空白】\n{thread.specific_gap}"
+            if hasattr(thread, 'design_response'):
+                motivation_context += f"\n\n【设计回应】\n{thread.design_response}"
+
         result = writer.write_introduction(
             findings=ctx.findings,
             language=ctx.language,
             recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else None,
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
+            motivation_context=motivation_context if motivation_context else None,
         )
         if result:
             ctx.sections['introduction'] = _clean_claude_output(result)
@@ -365,7 +475,7 @@ def _run_writer_conclusion(ctx: PaperContext):
     """写 Conclusion（优先 Claude 生成，回退模板）"""
     writer = _get_claude_writer()
     if writer and ctx.has('findings'):
-        # 收集机制知识用于结论
+        # 收集机制知识用于结论（作为findings的补充信息）
         mechanisms = {}
         if ctx.has('learned_mechanisms'):
             for m in ctx.learned_mechanisms[:5]:
@@ -375,43 +485,86 @@ def _run_writer_conclusion(ctx: PaperContext):
                 if var1 and var2 and evidence:
                     mechanisms[f'{var1}_vs_{var2}'] = evidence
 
-        result = writer.write_conclusion(
-            findings=ctx.findings,
+        # 将机制知识注入到findings中
+        enhanced_findings = ctx.findings.copy()
+        if mechanisms:
+            enhanced_findings.append({
+                'type': 'mechanism_summary',
+                'importance': 'high',
+                'data': mechanisms,
+                'description': '从文献学到的机制知识'
+            })
+
+        # 使用重试机制调用 Claude
+        result = _call_claude_with_retry(
+            writer, 'write_conclusion',
+            max_retries=3,
+            findings=enhanced_findings,
             language=ctx.language,
-            mechanisms=mechanisms if mechanisms else None,
-            learned_patterns=ctx.learned_patterns if ctx.has('learned_patterns') else None,
         )
         if result:
             ctx.sections['conclusion'] = _clean_claude_output(result)
             return ctx.sections['conclusion']
 
-    # 回退：使用模板
+    # 回退：使用优化的模板
     critical = [f for f in ctx.findings if f['importance'] in ['critical', 'high']]
     group_findings = [f for f in critical if f['type'] == 'group_difference']
     corr_findings = [f for f in critical if f['type'] == 'correlation']
+    distribution_findings = [f for f in critical if f['type'] == 'distribution']
 
     lines = ['# 5 结论\n']
     lines.append('本研究以校园污水管网为对象，系统分析了冬春两季固-液-气三相碳污染物的赋存特征与驱动机制。主要结论如下：\n')
 
     idx = 1
+
+    # 结论1：季节差异
     if group_findings:
         lines.append(f'({idx}) 碳污染物呈现显著的季节分异。')
-        top = group_findings[0]
-        d = top['data']
-        higher = d['groups'][np.argmax(d['means'])]
-        lines.append(f'{top["variable"]}等指标在{higher}显著偏高，'
-                    f'温度和水文条件是驱动季节差异的主要因素。\n')
+        # 收集所有显著的季节差异变量
+        sig_vars = []
+        for f in group_findings[:3]:
+            var = f.get('variable', '')
+            d = f.get('data', {})
+            p = d.get('p', 1)
+            if var and p < 0.05:
+                groups = d.get('groups', [])
+                means = d.get('means', [])
+                if groups and means:
+                    higher = groups[np.argmax(means)]
+                    sig_vars.append(f'{var}在{higher}显著偏高')
+        if sig_vars:
+            lines.append('；'.join(sig_vars) + '。')
+        lines.append('温度和水文条件是驱动季节差异的主要因素。\n')
         idx += 1
 
+    # 结论2：相关性
     if corr_findings:
         lines.append(f'({idx}) 变量间存在多组显著关联。')
-        top = corr_findings[0]
-        v1, v2 = top['variables']
-        lines.append(f'{v1}与{v2}的相关性最强(r={top["data"]["r"]:.3f})，'
-                    f'揭示了碳氮耦合和多相态转化的内在机制。\n')
+        # 收集最强的3个相关性
+        top_corrs = []
+        for f in corr_findings[:3]:
+            v1, v2 = f.get('variables', ('', ''))
+            r = f.get('data', {}).get('r', 0)
+            if v1 and v2:
+                top_corrs.append(f'{v1}与{v2}相关(r={r:.3f})')
+        if top_corrs:
+            lines.append('；'.join(top_corrs) + '。')
+        lines.append('揭示了碳氮耦合和多相态转化的内在机制。\n')
         idx += 1
 
+    # 结论3：分布特征
+    if distribution_findings:
+        lines.append(f'({idx}) 碳污染物在空间分布上呈现明显的分异特征。')
+        for f in distribution_findings[:2]:
+            var = f.get('variable', '')
+            if var:
+                lines.append(f'{var}的空间变异系数较大，')
+        lines.append('反映了不同功能区排放源强度的差异。\n')
+        idx += 1
+
+    # 结论4：科学意义
     lines.append(f'({idx}) 上述发现为校园污水管网碳排放核算和碳管理策略制定提供了数据支撑和科学依据。')
+    lines.append('建议温室气体清单核算采用分温度段排放因子，并对高排放管段实施精准管控。')
 
     ctx.sections['conclusion'] = '\n'.join(lines)
     return ctx.sections['conclusion']
@@ -449,9 +602,8 @@ def _run_polish(ctx: PaperContext):
 
 
 def _run_review(ctx: PaperContext):
-    """审稿检查（整合完整性审计 + 制品检查结果）"""
+    """审稿检查（整合所有审计结果）"""
     from academic_review_agent import AcademicReviewAgent
-    # 组装全文
     full_paper = '\n\n---\n\n'.join(
         ctx.sections.get(k, '') for k in
         ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
@@ -459,15 +611,36 @@ def _run_review(ctx: PaperContext):
     )
     if not full_paper:
         return None
+
     reviewer = AcademicReviewAgent(paper_type='chinese_journal', language=ctx.language)
     ctx.review_report = reviewer.review(full_paper)
 
-    # 将完整性审计和制品检查结果附加到审稿报告
+    # 整合所有审计结果
     extra_issues = []
+
+    # 完整性审计
     if ctx.integrity_report:
         extra_issues.append(f'[完整性审计] {ctx.integrity_report[:500]}')
+
+    # 制品检查
     if ctx.artifact_report:
         extra_issues.append(f'[制品检查] {ctx.artifact_report[:500]}')
+
+    # 深度模仿分析
+    if ctx.imitation_report:
+        extra_issues.append(f'[模仿分析] {ctx.imitation_report[:500]}')
+
+    # 引用支撑库问题
+    if ctx.citation_bank and hasattr(ctx.citation_bank, 'bindings'):
+        # ClaimBinding 是 dataclass，检查 supporting_citations 属性
+        unbound = [b for b in ctx.citation_bank.bindings
+                   if not (hasattr(b, 'supporting_citations') and b.supporting_citations)]
+        if unbound:
+            extra_issues.append(f'[引用支撑] {len(unbound)} 个论点缺少引用支撑')
+
+    # 推理矩阵问题
+    if ctx.rationale_rows:
+        extra_issues.append(f'[推理矩阵] {len(ctx.rationale_rows)} 个写作决策已记录')
 
     # 中文核心期刊投稿检查
     if ctx.language == 'zh':
@@ -480,11 +653,10 @@ def _run_review(ctx: PaperContext):
         except Exception as e:
             logger.debug(f"cn_core_rules check skipped: {e}")
 
-    # 引用安全检查（防幻觉）
+    # 引用安全检查
     try:
         from citation_guard import CitationGuard
         guard = CitationGuard()
-        # 检查文中引用是否有幻觉风险
         import re
         citation_patterns = re.findall(r'\[(\d+(?:[-,]\d+)*)\]', full_paper)
         if citation_patterns:
@@ -492,7 +664,7 @@ def _run_review(ctx: PaperContext):
     except Exception as e:
         logger.debug(f"citation_guard check skipped: {e}")
 
-    # 文本质量检查（使用 text_utils）
+    # 文本质量检查
     try:
         from text_utils import split_sentences
         all_sentences = split_sentences(full_paper)
@@ -502,12 +674,11 @@ def _run_review(ctx: PaperContext):
     except Exception as e:
         logger.debug(f"text_utils check skipped: {e}")
 
-    # 文献质量验证（使用 literature_memory 的引用验证功能）
+    # 文献质量验证
     if ctx.has('memory'):
         try:
             from literature_memory import LiteratureMemory
             lit_mem = LiteratureMemory()
-            # 从 recalled_references 中验证引用质量
             if ctx.has('recalled_references'):
                 verified = 0
                 questionable = 0
@@ -524,13 +695,18 @@ def _run_review(ctx: PaperContext):
         except Exception as e:
             logger.debug(f"literature_memory check skipped: {e}")
 
+    # Writer自检结果
+    if ctx.has('self_check_issues'):
+        for issue in ctx.self_check_issues[:5]:
+            extra_issues.append(f'[Writer自检] {issue}')
+
     if extra_issues:
         ctx.review_report.extra_notes = extra_issues
 
     ctx.review_summary = ctx.review_report.summary()
     logger.info(f"审稿: {ctx.review_summary['total']}个问题")
 
-    # 反馈闭环：将审稿结果记录到 FeedbackCollector
+    # 反馈闭环
     try:
         from self_evolving_engine import FeedbackCollector
         collector = FeedbackCollector()
@@ -549,20 +725,25 @@ def _run_review(ctx: PaperContext):
 
 
 def _run_auto_revision(ctx: PaperContext):
-    """自动修订（跳过Claude生成的高质量章节）"""
+    """自动修订（覆盖所有章节，保留Claude高质量章节）"""
     if ctx.review_report is None:
         return None
     from auto_revision import AutoReviser
 
-    # 保存Claude生成的章节（不被修订覆盖）
+    # 标记Claude生成的高质量章节（不被修订覆盖）
     claude_sections = {}
     for section in ['results', 'discussion', 'abstract', 'conclusion']:
         text = ctx.sections.get(section, '')
         if text and not _is_template(text):
             claude_sections[section] = text
 
-    # 组装全文（只包含需要修订的章节）
+    # 组装全文（包含所有需要修订的章节）
     sections_to_revise = ['introduction', 'methods']
+    # 如果其他章节是模板生成的，也纳入修订范围
+    for section in ['results', 'discussion', 'conclusion']:
+        if section not in claude_sections:
+            sections_to_revise.append(section)
+
     full_paper = '\n\n---\n\n'.join(
         ctx.sections.get(k, '') for k in sections_to_revise
         if ctx.has_section(k)
@@ -570,11 +751,13 @@ def _run_auto_revision(ctx: PaperContext):
     if not full_paper:
         return None
 
-    # 生成审稿报告文本
+    # 生成审稿报告文本（包含完整问题列表）
     review_md = f"# 审稿报告\n\n共{ctx.review_summary.get('total', 0)}个问题\n"
     for issue in ctx.review_report.issues:
         review_md += f"\n### [{issue.severity.value}] {issue.category}\n"
         review_md += f"- {issue.problem}\n"
+        if hasattr(issue, 'suggestion') and issue.suggestion:
+            review_md += f"- 建议: {issue.suggestion}\n"
 
     reviser = AutoReviser(full_paper, review_md)
     revised = reviser.revise()
@@ -663,6 +846,15 @@ def _run_latex_export(ctx: PaperContext):
 
 def _run_assemble(ctx: PaperContext):
     """排版 DOCX（图文对应）"""
+    # 在排版前注入引用支撑
+    _inject_citations_to_sections(ctx)
+
+    # 在排版前重排图片编号
+    _renumber_figures(ctx)
+
+    # 替换图X引用为实际图号
+    _replace_fig_x_references(ctx)
+
     from data_driven_pipeline import InlineDocumentAssembler
     assembler = InlineDocumentAssembler(
         title=ctx.title or '论文',
@@ -683,10 +875,27 @@ def _run_assemble(ctx: PaperContext):
         text = ctx.sections.get(key, '')
         if not text:
             continue
-        # 去掉 markdown 标题
+
+        # 将 markdown 标题转换为子标题格式
         lines = text.strip().split('\n')
-        body_lines = [l for l in lines if not l.strip().startswith('#')]
-        body = '\n'.join(body_lines).strip()
+        processed_lines = []
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith('## '):
+                # ## 3.1 -> 3.1 标题内容
+                sub_heading = stripped[3:].strip()
+                processed_lines.append(f'\n{sub_heading}\n')
+            elif stripped.startswith('### '):
+                # ### 3.1.1 -> 3.1.1 标题内容
+                sub_heading = stripped[4:].strip()
+                processed_lines.append(f'\n{sub_heading}\n')
+            elif stripped.startswith('# '):
+                # # 主标题 -> 跳过（使用 section_order 中的 heading）
+                continue
+            else:
+                processed_lines.append(line)
+
+        body = '\n'.join(processed_lines).strip()
         if body:
             # 匹配该章节的图表
             figures = _match_figures_for_section(ctx, key)
@@ -780,12 +989,152 @@ def _build_citation_injection(ctx: PaperContext) -> str:
         return ''
     lines = ['### 引用支撑索引\n']
     for binding in ctx.citation_bank.bindings[:10]:
-        claim = binding.get('claim', '')
-        refs = binding.get('references', [])
+        # ClaimBinding 是 dataclass，直接访问属性
+        claim = binding.claim_text if hasattr(binding, 'claim_text') else ''
+        refs = binding.supporting_citations if hasattr(binding, 'supporting_citations') else []
         if claim and refs:
             ref_str = ', '.join(str(r) for r in refs[:3])
             lines.append(f'- 论点: {claim[:80]}  支撑文献: {ref_str}')
     return '\n'.join(lines) if len(lines) > 1 else ''
+
+
+def _inject_citations_to_sections(ctx: PaperContext):
+    """将引用支撑库的引用注入到各章节"""
+    if not ctx.citation_bank or not hasattr(ctx.citation_bank, 'bindings'):
+        return
+
+    import re
+
+    # 构建论点->引用映射
+    claim_to_refs = {}
+    for binding in ctx.citation_bank.bindings:
+        # ClaimBinding 是 dataclass，直接访问属性
+        claim = binding.claim_text if hasattr(binding, 'claim_text') else ''
+        refs = binding.supporting_citations if hasattr(binding, 'supporting_citations') else []
+        if claim and refs:
+            claim_to_refs[claim[:50]] = refs[:3]  # 取前3个引用
+
+    # 为每个章节注入引用
+    for section_name in ['introduction', 'discussion', 'conclusion']:
+        text = ctx.sections.get(section_name, '')
+        if not text:
+            continue
+
+        # 检查是否已有足够引用
+        existing_citations = len(re.findall(r'\[\d+\]', text))
+        if existing_citations >= 3:
+            continue
+
+        # 尝试为关键段落添加引用
+        paragraphs = text.split('\n\n')
+        enhanced_paragraphs = []
+        for para in paragraphs:
+            # 检查段落是否包含可引用的论点
+            for claim, refs in claim_to_refs.items():
+                if claim in para and '[' not in para:  # 段落包含论点但无引用
+                    ref_str = f"[{', '.join(str(r) for r in refs)}]"
+                    para = para.rstrip() + f" {ref_str}"
+                    break
+            enhanced_paragraphs.append(para)
+
+        ctx.sections[section_name] = '\n\n'.join(enhanced_paragraphs)
+        logger.info(f"为 {section_name} 注入引用支撑")
+
+
+def _renumber_figures(ctx: PaperContext):
+    """
+    重排图片编号，确保连续无间隔。
+    同时更新章节文本中的图片引用。
+    """
+    import re
+
+    if not ctx.figures:
+        return
+
+    # 按 fig_num 排序
+    sorted_figs = sorted(ctx.figures.items(), key=lambda x: x[1].get('fig_num', 999))
+
+    # 构建旧编号->新编号映射
+    num_mapping = {}
+    new_figs = {}
+    new_num = 1
+
+    for name, info in sorted_figs:
+        old_num = info.get('fig_num', new_num)
+        num_mapping[old_num] = new_num
+        info['fig_num'] = new_num
+        # 更新 caption
+        old_caption = info.get('caption', '')
+        new_caption = re.sub(r'^图\d+', f'图{new_num}', old_caption)
+        info['caption'] = new_caption
+        new_figs[name] = info
+        new_num += 1
+
+    ctx.figures = new_figs
+
+    # 更新章节文本中的图片引用（图数字格式）
+    for section_name, text in ctx.sections.items():
+        if not text:
+            continue
+
+        def replace_fig_ref(match):
+            old_num = int(match.group(1))
+            new_num_val = num_mapping.get(old_num, old_num)
+            return f'图{new_num_val}'
+
+        new_text = re.sub(r'图(\d+)', replace_fig_ref, text)
+        if new_text != text:
+            ctx.sections[section_name] = new_text
+            logger.info(f"更新 {section_name} 中的图片引用")
+
+
+def _replace_fig_x_references(ctx: PaperContext):
+    """
+    替换章节文本中的"图X"为实际的图片编号。
+    根据图片的 section 属性和顺序，为每个章节生成正确的图号。
+    """
+    import re
+
+    if not ctx.figures:
+        return
+
+    # 按章节分组图片
+    fig_by_section = {}
+    for name, info in ctx.figures.items():
+        section = info.get('section', 'results')
+        fig_num = info.get('fig_num', 0)
+        if section not in fig_by_section:
+            fig_by_section[section] = []
+        fig_by_section[section].append((fig_num, name, info))
+
+    # 对每个章节的图片按 fig_num 排序
+    for section in fig_by_section:
+        fig_by_section[section].sort(key=lambda x: x[0])
+
+    # 替换每个章节中的"图X"
+    for section_name, text in ctx.sections.items():
+        if not text:
+            continue
+
+        # 获取该章节的图片列表
+        figs = fig_by_section.get(section_name, [])
+        if not figs:
+            continue
+
+        # 替换"图X"为实际图号
+        fig_idx = 0
+        def replace_fig_x(match):
+            nonlocal fig_idx
+            if fig_idx < len(figs):
+                fig_num = figs[fig_idx][0]
+                fig_idx += 1
+                return f'图{fig_num}'
+            return match.group(0)  # 保留原样
+
+        new_text = re.sub(r'图X', replace_fig_x, text)
+        if new_text != text:
+            ctx.sections[section_name] = new_text
+            logger.info(f"替换 {section_name} 中的图X引用")
 
 
 # ============================================================
@@ -794,6 +1143,12 @@ def _build_citation_injection(ctx: PaperContext) -> str:
 
 def _run_paper_reading(ctx: PaperContext):
     """读论文：优先本地目录，无文献时自动在线搜索"""
+    # 如果既没有本地文献目录，也没有findings用于在线搜索，则跳过
+    if not ctx.papers_dir and not ctx.has('findings'):
+        logger.info("无文献目录且无findings，跳过文献阅读")
+        ctx.papers_read = []
+        return []
+
     from paper_reader import PaperReader
     reader = PaperReader()
 
@@ -805,7 +1160,17 @@ def _run_paper_reading(ctx: PaperContext):
         for ext in ['*.pdf', '*.txt', '*.md']:
             papers_found.extend(glob.glob(os.path.join(ctx.papers_dir, ext)))
 
-    # 2. 本地无文献时，自动在线搜索（使用 findings 驱动关键词）
+    # 2. 如果本地目录不存在，尝试默认的 papers/ 目录
+    if not papers_found:
+        default_papers_dir = os.path.join(os.path.dirname(__file__), 'papers')
+        if os.path.isdir(default_papers_dir):
+            import glob
+            for ext in ['*.pdf', '*.txt', '*.md']:
+                papers_found.extend(glob.glob(os.path.join(default_papers_dir, ext)))
+            if papers_found:
+                logger.info(f"从默认 papers/ 目录找到 {len(papers_found)} 篇文献")
+
+    # 3. 本地无文献时，自动在线搜索（使用 findings 驱动关键词）
     if not papers_found:
         logger.info("本地无文献，尝试自动在线搜索...")
         try:
@@ -838,24 +1203,43 @@ def _run_paper_reading(ctx: PaperContext):
         return None
 
     logger.info(f"发现 {len(papers_found)} 篇文献，开始阅读...")
-    for paper_path in papers_found[:20]:  # 最多读20篇
+
+    # 4. 读取本地文献（支持 markdown 文件直接读取）
+    for paper_path in papers_found[:30]:  # 最多读30篇
         try:
-            content = reader.read(paper_path, fetch_metadata=False)
-            if content and content.metadata:
+            # 对于 markdown 文件，直接读取内容
+            if paper_path.endswith('.md'):
+                with open(paper_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                # 从文件名提取标题
+                title = os.path.basename(paper_path).replace('.md', '').replace('paper_', '')
                 ctx.papers_read.append({
                     'path': paper_path,
-                    'title': content.metadata.title,
-                    'authors': content.metadata.authors,
-                    'abstract': content.metadata.abstract,
-                    'sections': len(content.sections),
-                    'references': len(content.references),
+                    'title': title,
+                    'authors': [],
+                    'abstract': content[:500] if len(content) > 500 else content,
+                    'content': content,
+                    'source': 'local_md',
                 })
+            else:
+                # 对于 PDF 和其他文件，使用 PaperReader
+                content = reader.read(paper_path, fetch_metadata=False)
+                if content and content.metadata:
+                    ctx.papers_read.append({
+                        'path': paper_path,
+                        'title': content.metadata.title,
+                        'authors': content.metadata.authors,
+                        'abstract': content.metadata.abstract,
+                        'sections': len(content.sections),
+                        'references': len(content.references),
+                        'source': 'local_pdf',
+                    })
         except Exception as e:
             logger.warning(f"读取失败 {paper_path}: {e}")
 
     logger.info(f"成功读取 {len(ctx.papers_read)} 篇文献")
 
-    # 3. 使用 LiteratureMemory 评估论文质量
+    # 5. 使用 LiteratureMemory 评估论文质量
     try:
         from literature_memory import LiteratureMemory
         lit_mem = LiteratureMemory()
@@ -1104,216 +1488,340 @@ def _run_citation_bank(ctx: PaperContext):
 # ============================================================
 
 def _run_generate_figures(ctx: PaperContext):
-    """数据驱动的图表生成 — 严格遵循 nature-skills 05-figure-design.md 规范"""
+    """
+    数据驱动的图表生成 — 使用 academic_plot_style 规范系统
+
+    图表设计原则：
+    1. 符合 Nature/Science 期刊规范
+    2. 色盲友好配色
+    3. 统一尺寸和样式
+    4. 包含误差棒、面板标签、显著性标注
+    """
     if not ctx.has('df'):
         return None
+
     try:
-        from scientific_visualization_agent import VisualizationAgent, ChartReviewer
-        from academic_plot_style import (
-            set_plot_style, save_figure, save_figure_publication,
-            PHASE_COLORS, SEASON_COLORS, TABLEAU_10, OKABE_ITO,
-            get_figure_size, format_chemical, get_label,
-            CHINESE_FONT, ENGLISH_FONT, CN_FONT_PROP,
-        )
-        from chart_qa import check_chart_quality, check_nature_delivery, nature_export_bundle
-        import variable_registry as vr
         import os
-        import matplotlib.pyplot as plt
-        import matplotlib.font_manager as fm
         import numpy as np
         import pandas as pd
+        import matplotlib.pyplot as plt
+        import seaborn as sns
         from scipy import stats
 
+        # 导入学术图表规范系统
+        from academic_plot_style import (
+            set_academic_style, get_figure_size, get_save_dpi,
+            get_label, get_color_palette, save_figure_publication,
+            add_panel_label, add_significance_bar, add_shared_legend,
+            add_error_bars, add_sample_size, set_axis_labels,
+            SEASON_COLORS, PHASE_COLORS, NATURE_COLORS, COLORBLIND_SAFE,
+            CHEMICAL_LABELS, CN_FONT_PROP,
+        )
+
         # ============================================================
-        # Nature 规范样式设置 (05-figure-design.md)
+        # 初始化
         # ============================================================
-        set_plot_style()
-        # Nature 字体: Arial 8-10pt
-        plt.rcParams.update({
-            'font.family': 'sans-serif',
-            'font.sans-serif': ['Arial', 'Helvetica', CHINESE_FONT],
-            'font.size': 8,
-            'axes.labelsize': 9,
-            'axes.titlesize': 10,
-            'xtick.labelsize': 8,
-            'ytick.labelsize': 8,
-            'legend.fontsize': 8,
-            'axes.linewidth': 1.0,       # Nature: ≥1pt
-            'lines.linewidth': 1.0,      # Nature: ≥0.75pt
-            'xtick.major.width': 1.0,
-            'ytick.major.width': 1.0,
-            'savefig.dpi': 600,          # Nature: 线图≥600dpi
-            'savefig.bbox': 'tight',
-        })
+        set_academic_style('nature')
 
         analysis_dir = os.path.join(ctx.output_dir, 'figures')
         os.makedirs(analysis_dir, exist_ok=True)
 
-        agent = VisualizationAgent(ctx.df, analysis_dir, style='nature')
-        reviewer = ChartReviewer()
         figures_generated = []
         df = ctx.df
-        fig_num = [0]  # 图号计数器
+        fig_num = [0]
+
+        # 图片分类规则
+        FIGURE_SECTION_MAP = {
+            'seasonal_boxplot': 'results',
+            'correlation_heatmap': 'results',
+            'spatial_distribution': 'results',
+            'seasonal_comparison': 'results',
+            'phase_coupling': 'discussion',
+            'anomaly_profile': 'discussion',
+        }
 
         def _next_fig_num():
             fig_num[0] += 1
             return fig_num[0]
 
-        def _nature_save(fig, name, caption_parts=None):
-            """
-            Nature 规范保存流程 (05-figure-design.md):
-            1. ChartReviewer 设计质量检查
-            2. check_chart_quality 布局检查 + 自动修复
-            3. check_nature_delivery Nature 交付级检查
-            4. save_figure_publication 600dpi 保存
-            """
-            # 设计质量审查
-            results = reviewer.review(fig, verbose=False)
-            if reviewer.has_critical_issues(results):
-                fixes = reviewer.get_fixes(results)
-                for fix in fixes:
-                    if callable(fix.fix):
-                        try:
-                            fix.fix(fig)
-                        except Exception:
-                            pass
+        def _get_figure_section(name):
+            """根据图片名称自动判断所属章节"""
+            for key, section in FIGURE_SECTION_MAP.items():
+                if key in name:
+                    return section
+            return 'results'
 
-            # 布局质量检查 + 自动修复
-            try:
-                check_chart_quality(fig, auto_fix=True, verbose=False)
-            except Exception:
-                pass
-
-            # Nature 交付级检查
-            try:
-                nature_result = check_nature_delivery(fig, target_journal='nature', auto_fix=True)
-            except Exception:
-                pass
-
-            # 保存 (600dpi, PDF+PNG)
+        def _save_figure(fig, name, caption_parts=None, section='results'):
+            """保存图表并注册到上下文"""
+            # 保存
             save_figure_publication(fig, name, analysis_dir, journal='nature')
             plt.close(fig)
             figures_generated.append(name)
 
-            # 生成图注（从图名提取编号）
+            # 生成图注
             n = _next_fig_num()
-            # 从图名提取编号：fig1_xxx -> 1, fig2_xxx -> 2
             fig_id = str(n)
             if name.startswith('fig'):
                 num_part = name[3:].split('_')[0]
                 if num_part.isdigit():
                     fig_id = num_part
+
             if caption_parts:
                 caption = f'图{fig_id}  ' + '。'.join(caption_parts) + f'。n={len(df)}。'
             else:
                 caption = f'图{fig_id}  {name}'
+
+            # 注册到上下文
             ctx.figures[name] = {
                 'path': os.path.join(analysis_dir, f'{name}.png'),
                 'caption': caption,
                 'type': 'analysis',
-                'section': 'results',
+                'section': section,
+                'fig_num': int(fig_id),
             }
-            logger.info(f"图{fig_id} {name}: Nature QA 通过")
+            logger.info(f"图{fig_id} {name}: 已保存 -> {section}")
 
         # ============================================================
-        # 图1: 季节对比箱线图 (Nature 规范: 双栏17.4cm, 600dpi)
+        # 图1: 季节对比箱线图（带散点叠加和显著性标注）
         # ============================================================
         try:
             key_vars = ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'TOC（mg/L)', 'pH',
                         'VOCs(ppb)', '总氮（mg/L)', '铵态氮（mg/L)', 'IC(mg/L)', 'NaCl(mg/L)']
             available = [v for v in key_vars if v in df.columns]
-            if available:
-                agent.plot_multivariate(variables=available[:8], kind='box')
-                _nature_save(plt.gcf(), 'fig1_seasonal_boxplot',
+
+            if available and '季节' in df.columns:
+                n_vars = min(len(available), 8)
+                cols = min(n_vars, 4)
+                rows = (n_vars + cols - 1) // cols
+
+                fig, axes = plt.subplots(rows, cols,
+                                        figsize=get_figure_size('nature', columns=2, height_ratio=0.4 * rows))
+                if rows == 1 and cols == 1:
+                    axes = np.array([[axes]])
+                elif rows == 1:
+                    axes = axes.reshape(1, -1)
+                elif cols == 1:
+                    axes = axes.reshape(-1, 1)
+
+                season_list = sorted(df['季节'].unique())
+                season_colors = [SEASON_COLORS.get(s, NATURE_COLORS[i]) for i, s in enumerate(season_list)]
+
+                for idx, var in enumerate(available[:n_vars]):
+                    ax = axes[idx // cols][idx % cols]
+                    data = df[['季节', var]].dropna()
+
+                    if len(data) > 3:
+                        # 准备数据
+                        values = [data[data['季节'] == s][var].values for s in season_list]
+
+                        # 箱线图
+                        bp = ax.boxplot(values, labels=season_list, patch_artist=True,
+                                       widths=0.6, showmeans=True, meanprops={'marker': 'D', 'markersize': 4})
+
+                        # 设置颜色
+                        for si, box in enumerate(bp['boxes']):
+                            box.set_facecolor(season_colors[si])
+                            box.set_alpha(0.7)
+                            box.set_linewidth(0.8)
+                        for si, whisker in enumerate(bp['whiskers']):
+                            whisker.set_linewidth(0.8)
+                        for si, cap in enumerate(bp['caps']):
+                            cap.set_linewidth(0.8)
+                        for si, median in enumerate(bp['medians']):
+                            median.set_linewidth(1.0)
+                            median.set_color('#333333')
+
+                        # 叠加散点
+                        for si, (s, v) in enumerate(zip(season_list, values)):
+                            jitter = np.random.normal(0, 0.05, len(v))
+                            ax.scatter([si + 1 + j for j in jitter], v,
+                                      color=season_colors[si], s=15, alpha=0.6, zorder=5,
+                                      edgecolors='white', linewidth=0.3)
+
+                        # 设置标签
+                        ax.set_ylabel(get_label(var), fontsize=7)
+                        ax.set_title(get_label(var), fontsize=8, pad=5)
+
+                        # 添加样本量
+                        for si, s in enumerate(season_list):
+                            n = len(values[si])
+                            ax.text(si + 1, ax.get_ylim()[0], f'n={n}',
+                                    ha='center', va='top', fontsize=6, style='italic')
+
+                        # 添加显著性标注（如果有）
+                        p = next((f['data']['p'] for f in ctx.findings
+                                 if f.get('type') == 'group_difference'
+                                 and f.get('variable') == var
+                                 and f.get('data', {}).get('p', 1) < 0.05), None)
+                        if p:
+                            y_max = max(max(v) for v in values)
+                            y_range = ax.get_ylim()[1] - ax.get_ylim()[0]
+                            add_significance_bar(ax, 1, 2, y_max + y_range * 0.05, p)
+
+                        # 简化刻度
+                        ax.tick_params(axis='x', labelsize=7)
+                        ax.tick_params(axis='y', labelsize=6)
+
+                # 隐藏多余子图
+                for idx in range(n_vars, rows * cols):
+                    axes[idx // cols][idx % cols].set_visible(False)
+
+                # 添加面板标签
+                for idx in range(n_vars):
+                    add_panel_label(axes[idx // cols][idx % cols], idx)
+
+                plt.tight_layout(pad=1.0, w_pad=0.5, h_pad=0.5)
+
+                _save_figure(fig, 'fig1_seasonal_boxplot',
                            ['冬春季关键变量箱线图比较',
                             '箱线图展示中位数、四分位距和异常值',
-                            '* p<0.05, ** p<0.01, *** p<0.001'])
+                            '* p<0.05, ** p<0.01, *** p<0.001'],
+                           section='results')
+
         except Exception as e:
-            logger.debug(f"fig1_seasonal_boxplot: {e}")
+            logger.warning(f"fig1_seasonal_boxplot: {e}")
 
         # ============================================================
-        # 图2: 关键变量相关性热图 (修复：只用完整数据的变量)
+        # 图2: 关键变量相关性热图
         # ============================================================
         try:
-            # 只用缺失值<30%的数值列
             numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
             good_cols = [c for c in numeric_cols if df[c].notna().sum() >= len(df) * 0.7]
+
             if len(good_cols) >= 3:
-                # 计算相关系数矩阵（pairwise，不丢弃整行）
                 corr = df[good_cols].corr(method='pearson')
-                # 生成热图
-                fig, ax = plt.subplots(figsize=get_figure_size('chinese', columns=2))
+
+                # 计算 p 值矩阵
+                n = len(df)
+                p_matrix = np.zeros_like(corr)
+                for i in range(len(good_cols)):
+                    for j in range(len(good_cols)):
+                        if i != j:
+                            r = corr.iloc[i, j]
+                            t = r * np.sqrt((n - 2) / (1 - r**2)) if abs(r) < 1 else 0
+                            p_matrix[i, j] = 2 * (1 - stats.t.cdf(abs(t), n - 2))
+
+                # 创建标签
+                labels = [get_label(c) for c in good_cols]
+
+                # 绘制热图
+                fig, ax = plt.subplots(figsize=get_figure_size('nature', columns=2, height_ratio=0.85))
+
                 mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
+
+                # 自定义注释（显示相关系数和显著性）
+                annot = np.empty_like(corr, dtype=object)
+                for i in range(len(good_cols)):
+                    for j in range(len(good_cols)):
+                        if i == j:
+                            annot[i, j] = ''
+                        elif mask[i, j]:
+                            annot[i, j] = ''
+                        else:
+                            r = corr.iloc[i, j]
+                            p = p_matrix[i, j]
+                            stars = '***' if p < 0.001 else ('**' if p < 0.01 else ('*' if p < 0.05 else ''))
+                            annot[i, j] = f'{r:.2f}{stars}'
+
                 sns.heatmap(corr, mask=mask, ax=ax, cmap='RdBu_r', center=0,
-                           vmin=-1, vmax=1, annot=True, fmt='.2f',
+                           vmin=-1, vmax=1, annot=annot, fmt='',
                            square=True, linewidths=0.5,
                            annot_kws={'size': 6},
-                           cbar_kws={'shrink': 0.8, 'label': 'Pearson r'})
-                ax.set_title('关键变量Pearson相关性矩阵', fontsize=11, pad=10)
-                ax.tick_params(axis='both', labelsize=7)
-                plt.tight_layout()
-                _nature_save(fig, 'fig2_correlation_heatmap',
+                           cbar_kws={'shrink': 0.6, 'label': 'Pearson r', 'aspect': 20, 'pad': 0.02})
+
+                ax.set_xticklabels(labels, rotation=45, ha='right', fontsize=6)
+                ax.set_yticklabels(labels, rotation=0, fontsize=6)
+                ax.set_title('关键变量Pearson相关性矩阵', fontsize=9, pad=10)
+
+                # 添加样本量标注（移到左下角，避免与颜色条重叠）
+                ax.text(0.02, -0.08, f'n={n}', transform=ax.transAxes,
+                        ha='left', va='top', fontsize=7, style='italic')
+
+                plt.tight_layout(pad=1.5)
+
+                _save_figure(fig, 'fig2_correlation_heatmap',
                            ['关键变量Pearson相关性矩阵',
                             '仅包含缺失值<30%的变量',
-                            '红色正相关，蓝色负相关'])
+                            '红色正相关，蓝色负相关，* p<0.05, ** p<0.01, *** p<0.001'],
+                           section='results')
+
         except Exception as e:
-            logger.debug(f"fig2_correlation_heatmap: {e}")
+            logger.warning(f"fig2_correlation_heatmap: {e}")
 
         # ============================================================
-        # 图3: 气体空间分布 (Nature 规范: 双栏, 分面图)
+        # 图3: 气体空间分布（带误差棒）
         # ============================================================
         try:
-            gas_vars = [v for v in ['甲烷(ppm)', 'CO2', 'VOCs(ppb)', '氧化亚氮(ppm)'] if v in df.columns]
+            gas_vars = [v for v in ['甲烷(ppm)', 'CO2', 'VOCs(ppb)', 'H2S'] if v in df.columns]
+
             if gas_vars and '采样点' in df.columns:
-                fig, axes = plt.subplots(2, 2, figsize=get_figure_size('chinese', columns=2))
-                for idx, var in enumerate(gas_vars[:4]):
-                    ax = axes[idx // 2][idx % 2]
-                    point_data = df.groupby('采样点')[var].mean().sort_values(ascending=False)
-                    colors = [PHASE_COLORS.get('gas', '#4E79A7') if v <= point_data.median() * 2 else '#E15759' for v in point_data.values]
-                    point_data.plot(kind='bar', ax=ax, color=colors)
-                    ax.set_ylabel(get_label(var))
-                    ax.set_title(get_label(var))
-                    ax.tick_params(axis='x', rotation=45)
-                plt.tight_layout()
-                _nature_save(fig, 'fig3_spatial_gas_distribution',
+                n_vars = min(len(gas_vars), 4)
+                cols = min(n_vars, 2)
+                rows = (n_vars + cols - 1) // cols
+
+                fig, axes = plt.subplots(rows, cols,
+                                        figsize=get_figure_size('nature', columns=2, height_ratio=0.5 * rows))
+                if rows == 1 and cols == 1:
+                    axes = np.array([[axes]])
+                elif rows == 1:
+                    axes = axes.reshape(1, -1)
+                elif cols == 1:
+                    axes = axes.reshape(-1, 1)
+
+                for idx, var in enumerate(gas_vars[:n_vars]):
+                    ax = axes[idx // cols][idx % cols]
+
+                    # 计算均值和标准误
+                    stats_df = df.groupby('采样点')[var].agg(['mean', 'std', 'count']).reset_index()
+                    stats_df['se'] = stats_df['std'] / np.sqrt(stats_df['count'])
+                    stats_df = stats_df.sort_values('mean', ascending=False)
+
+                    # 柱状图（带误差棒）
+                    colors = get_color_palette(len(stats_df), palette='nature')
+                    bars = ax.bar(range(len(stats_df)), stats_df['mean'],
+                                 color=colors, alpha=0.8, edgecolor='white', linewidth=0.5)
+
+                    # 误差棒
+                    add_error_bars(ax, range(len(stats_df)), stats_df['mean'], stats_df['se'])
+
+                    # 设置标签
+                    ax.set_xticks(range(len(stats_df)))
+                    ax.set_xticklabels(stats_df['采样点'], rotation=45, ha='right', fontsize=6)
+                    ax.set_ylabel(get_label(var), fontsize=7)
+                    ax.set_title(get_label(var), fontsize=8, pad=5)
+
+                    # 标记异常高值
+                    median_val = stats_df['median']
+                    for i, (val, point) in enumerate(zip(stats_df['mean'], stats_df['采样点'])):
+                        if val > median_val * 2:
+                            ax.annotate(f'{val:.0f}', (i, val), ha='center', va='bottom',
+                                       fontsize=6, color='#E64B35')
+
+                    # 添加样本量
+                    ax.text(0.95, 0.95, f'n={stats_df["count"].iloc[0]}', transform=ax.transAxes,
+                            ha='right', va='top', fontsize=7, style='italic')
+
+                # 隐藏多余子图
+                for idx in range(n_vars, rows * cols):
+                    axes[idx // cols][idx % cols].set_visible(False)
+
+                # 添加面板标签
+                for idx in range(n_vars):
+                    add_panel_label(axes[idx // cols][idx % cols], idx)
+
+                plt.tight_layout(pad=1.0, w_pad=0.5, h_pad=0.5)
+
+                _save_figure(fig, 'fig3_spatial_distribution',
                            ['气体污染物空间分布',
-                            '红色标记异常高值(>2倍中位数)',
-                            '展示各采样点CH₄/CO₂/VOCs/N₂O排放水平'])
+                            '误差棒表示标准误(SE)',
+                            '标注异常高值(>2倍中位数)'],
+                           section='results')
+
         except Exception as e:
-            logger.debug(f"spatial_gas_distribution: {e}")
+            logger.warning(f"fig3_spatial_distribution: {e}")
 
         # ============================================================
-        # 4. DO阈值效应图（多变量）
-        # ============================================================
-        try:
-            if 'DO(mg/L)' in df.columns:
-                y_vars = [v for v in ['甲烷(ppm)', 'CO2', 'VOCs(ppb)'] if v in df.columns]
-                if y_vars:
-                    fig, axes = plt.subplots(1, len(y_vars), figsize=(5 * len(y_vars), 5))
-                    if len(y_vars) == 1:
-                        axes = [axes]
-                    for idx, yvar in enumerate(y_vars):
-                        valid = df[['DO(mg/L)', yvar, '季节']].dropna()
-                        if len(valid) > 5:
-                            for si, season in enumerate(valid['季节'].unique()):
-                                sub = valid[valid['季节'] == season]
-                                axes[idx].scatter(sub['DO(mg/L)'], sub[yvar],
-                                                label=get_label(season) if season in ['冬季', '春季'] else season,
-                                                s=60, alpha=0.7, color=list(SEASON_COLORS.values())[si % len(SEASON_COLORS)])
-                            axes[idx].set_xlabel(get_label('DO(mg/L)'))
-                            axes[idx].set_ylabel(get_label(yvar))
-                            axes[idx].axvline(x=2, color='#E15759', linestyle='--', alpha=0.5, linewidth=1)
-                            axes[idx].legend()
-                    plt.tight_layout()
-                    _nature_save(fig, 'fig4_do_threshold',
-                               ['DO与气体排放的阈值效应',
-                                '红线标注DO=2ppm阈值',
-                                'DO<2ppm时CH₄排放显著升高'])
-        except Exception as e:
-            logger.debug(f"do_threshold_multi: {e}")
-
-        # ============================================================
-        # 5. 季节差异对比图（聚焦研究重点）
+        # 图4: 季节差异对比图（聚焦显著变量）
         # ============================================================
         try:
             sig_vars = []
@@ -1322,262 +1830,347 @@ def _run_generate_figures(ctx: PaperContext):
                     var = f.get('variable', '')
                     if var and var in df.columns and var not in sig_vars:
                         sig_vars.append(var)
+
             if not sig_vars:
-                sig_vars = [v for v in ['甲烷(ppm)', 'COD（mg/L)', 'CO2本底值', 'VOCs(ppb)'] if v in df.columns]
+                sig_vars = [v for v in ['甲烷(ppm)', 'COD（mg/L)', 'CO2', 'VOCs(ppb)'] if v in df.columns]
+
             if sig_vars and '季节' in df.columns:
-                fig, axes = plt.subplots(2, 2, figsize=get_figure_size('chinese', columns=2))
-                for idx, var in enumerate(sig_vars[:4]):
-                    ax = axes[idx // 2][idx % 2]
+                n_vars = min(len(sig_vars), 4)
+                cols = min(n_vars, 2)
+                rows = (n_vars + cols - 1) // cols
+
+                fig, axes = plt.subplots(rows, cols,
+                                        figsize=get_figure_size('nature', columns=2, height_ratio=0.5 * rows))
+                if rows == 1 and cols == 1:
+                    axes = np.array([[axes]])
+                elif rows == 1:
+                    axes = axes.reshape(1, -1)
+                elif cols == 1:
+                    axes = axes.reshape(-1, 1)
+
+                season_list = sorted(df['季节'].unique())
+                season_colors = [SEASON_COLORS.get(s, NATURE_COLORS[i]) for i, s in enumerate(season_list)]
+
+                for idx, var in enumerate(sig_vars[:n_vars]):
+                    ax = axes[idx // cols][idx % cols]
                     data = df[['季节', var]].dropna()
+
                     if len(data) > 3:
-                        seasons = sorted(data['季节'].unique())
-                        values = [data[data['季节'] == s][var].values for s in seasons]
-                        bp = ax.boxplot(values, labels=seasons, patch_artist=True)
+                        # 准备数据
+                        values = [data[data['季节'] == s][var].values for s in season_list]
+
+                        # 小提琴+箱线+散点组合图
+                        parts = ax.violinplot(values, showmeans=False, showmedians=False, showextrema=False)
+                        for si, pc in enumerate(parts['bodies']):
+                            pc.set_facecolor(season_colors[si])
+                            pc.set_alpha(0.3)
+
+                        # 箱线图
+                        bp = ax.boxplot(values, labels=season_list, patch_artist=True,
+                                       widths=0.3, showmeans=True, meanprops={'marker': 'D', 'markersize': 4})
                         for si, box in enumerate(bp['boxes']):
-                            box.set_facecolor(list(SEASON_COLORS.values())[si % len(SEASON_COLORS)])
-                            box.set_alpha(0.7)
-                        for si, (s, v) in enumerate(zip(seasons, values)):
-                            ax.scatter([si+1]*len(v), v, color='black', s=20, alpha=0.5, zorder=5)
-                        ax.set_ylabel(get_label(var), fontsize=8)
-                        ax.set_title(get_label(var), fontsize=9)
+                            box.set_facecolor(season_colors[si])
+                            box.set_alpha(0.8)
+                            box.set_linewidth(0.8)
+
+                        # 散点
+                        for si, (s, v) in enumerate(zip(season_list, values)):
+                            jitter = np.random.normal(0, 0.05, len(v))
+                            ax.scatter([si + 1 + j for j in jitter], v,
+                                      color=season_colors[si], s=20, alpha=0.7, zorder=5,
+                                      edgecolors='white', linewidth=0.3)
+
+                        # 设置标签
+                        ax.set_ylabel(get_label(var), fontsize=7)
+                        ax.set_title(get_label(var), fontsize=8, pad=5)
+
+                        # 添加显著性标注
                         p = next((f['data']['p'] for f in ctx.findings
                                  if f.get('type') == 'group_difference'
                                  and f.get('variable') == var
                                  and f.get('data', {}).get('p', 1) < 0.05), None)
                         if p:
-                            sig = '***' if p < 0.001 else ('**' if p < 0.01 else '*')
                             y_max = max(max(v) for v in values)
-                            ax.annotate(sig, xy=(1.5, y_max * 1.1), fontsize=12, ha='center')
-                plt.tight_layout()
-                _nature_save(fig, 'fig5_seasonal_comparison',
+                            y_range = ax.get_ylim()[1] - ax.get_ylim()[0]
+                            add_significance_bar(ax, 1, 2, y_max + y_range * 0.05, p)
+
+                        ax.tick_params(axis='x', labelsize=7)
+                        ax.tick_params(axis='y', labelsize=6)
+
+                # 隐藏多余子图
+                for idx in range(n_vars, rows * cols):
+                    axes[idx // cols][idx % cols].set_visible(False)
+
+                # 添加面板标签
+                for idx in range(n_vars):
+                    add_panel_label(axes[idx // cols][idx % cols], idx)
+
+                plt.tight_layout(pad=1.0, w_pad=0.5, h_pad=0.5)
+
+                _save_figure(fig, 'fig4_seasonal_comparison',
                            ['季节差异显著变量对比',
-                            '箱线图+散点图，标注显著性',
-                            '* p<0.05, ** p<0.01, *** p<0.001'])
+                            '小提琴+箱线+散点组合图',
+                            '* p<0.05, ** p<0.01, *** p<0.001'],
+                           section='results')
+
         except Exception as e:
-            logger.debug(f"fig5_seasonal_comparison: {e}")
+            logger.warning(f"fig4_seasonal_comparison: {e}")
 
         # ============================================================
-        # 6. 液相变量空间分布（只用缺失值<50%的变量）
-        # ============================================================
-        try:
-            liquid_vars = [v for v in ['TOC（mg/L)', 'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)', 'IC(mg/L)', 'NaCl(mg/L)'] if v in df.columns]
-            # 过滤掉缺失值太多的变量
-            liquid_vars = [v for v in liquid_vars if df[v].notna().sum() >= len(df) * 0.5]
-            if liquid_vars and '采样点' in df.columns:
-                n_vars = min(len(liquid_vars), 6)
-                cols = min(n_vars, 3)
-                rows = (n_vars + cols - 1) // cols
-                fig, axes = plt.subplots(rows, cols, figsize=get_figure_size('chinese', columns=2))
-                if rows == 1:
-                    axes = [axes]
-                for idx, var in enumerate(liquid_vars[:n_vars]):
-                    ax = axes[idx // cols][idx % cols]
-                    point_data = df.groupby('采样点')[var].mean().dropna().sort_values(ascending=False)
-                    if len(point_data) > 0:
-                        colors = [PHASE_COLORS.get('liquid', '#F28E2B') if v > point_data.median() * 1.5 else PHASE_COLORS.get('solid', '#59A14F') for v in point_data.values]
-                        point_data.plot(kind='bar', ax=ax, color=colors)
-                        ax.set_ylabel(get_label(var), fontsize=8)
-                        ax.set_title(get_label(var), fontsize=9)
-                        ax.tick_params(axis='x', rotation=45, fontsize=6)
-                plt.tight_layout()
-                _nature_save(fig, 'fig6_spatial_liquid',
-                           ['液相污染物空间分布',
-                            '仅包含缺失值<50%的变量',
-                            '橙色标记偏高值(>1.5倍中位数)'])
-        except Exception as e:
-            logger.debug(f"spatial_liquid_distribution: {e}")
-
-        # ============================================================
-        # 7. 相态耦合图：气体 vs 液体变量关系
+        # 图5: 相态耦合散点图矩阵
         # ============================================================
         try:
             gas_main = [v for v in ['甲烷(ppm)', 'CO2'] if v in df.columns]
             liquid_main = [v for v in ['TOC（mg/L)', 'DO(mg/L)', 'COD（mg/L)', 'pH'] if v in df.columns]
+
             if gas_main and liquid_main:
-                fig, axes = plt.subplots(len(gas_main), len(liquid_main), figsize=(5 * len(liquid_main), 4 * len(gas_main)))
-                if len(gas_main) == 1:
-                    axes = [axes]
+                n_gas = len(gas_main)
+                n_liquid = len(liquid_main)
+
+                fig, axes = plt.subplots(n_gas, n_liquid,
+                                        figsize=get_figure_size('nature', columns=2, height_ratio=0.5 * n_gas))
+                if n_gas == 1:
+                    axes = axes.reshape(1, -1)
+                if n_liquid == 1:
+                    axes = axes.reshape(-1, 1)
+
+                season_list = sorted(df['季节'].unique())
+                season_colors = [SEASON_COLORS.get(s, NATURE_COLORS[i]) for i, s in enumerate(season_list)]
+
                 for i, gvar in enumerate(gas_main):
                     for j, lvar in enumerate(liquid_main):
-                        ax = axes[i][j] if len(gas_main) > 1 else axes[j]
+                        ax = axes[i][j]
                         valid = df[[gvar, lvar, '季节']].dropna()
+
                         if len(valid) > 5:
-                            for si, season in enumerate(valid['季节'].unique()):
+                            # 按季节着色
+                            for si, season in enumerate(season_list):
                                 sub = valid[valid['季节'] == season]
-                                ax.scatter(sub[lvar], sub[gvar], label=season, s=40, alpha=0.7,
-                                          color=list(SEASON_COLORS.values())[si % len(SEASON_COLORS)])
-                            ax.set_xlabel(get_label(lvar))
-                            ax.set_ylabel(get_label(gvar))
-                            from scipy import stats
-                            r, p = stats.pearsonr(valid[lvar], valid[gvar])
+                                ax.scatter(sub[lvar], sub[gvar],
+                                          label=season, s=30, alpha=0.7,
+                                          color=season_colors[si],
+                                          edgecolors='white', linewidth=0.3)
+
+                            # 添加回归线
+                            x = valid[lvar].values
+                            y = valid[gvar].values
+                            slope, intercept, r, p, se = stats.linregress(x, y)
+                            x_line = np.linspace(x.min(), x.max(), 100)
+                            ax.plot(x_line, slope * x_line + intercept,
+                                    color='#333333', linewidth=1, linestyle='--', alpha=0.5)
+
+                            # 添加相关系数
                             sig = '***' if p < 0.001 else ('**' if p < 0.01 else ('*' if p < 0.05 else 'n.s.'))
-                            ax.set_title(f'r={r:.2f} {sig}')
-                            ax.legend(fontsize=7)
-                plt.tight_layout()
-                _nature_save(fig, 'fig7_phase_coupling',
+                            ax.text(0.05, 0.95, f'r={r:.2f} {sig}', transform=ax.transAxes,
+                                    ha='left', va='top', fontsize=7, fontweight='bold')
+
+                            # 设置标签
+                            ax.set_xlabel(get_label(lvar), fontsize=7)
+                            ax.set_ylabel(get_label(gvar), fontsize=7)
+
+                            # 只在第一行添加图例
+                            if i == 0 and j == 0:
+                                ax.legend(fontsize=6, loc='upper right')
+
+                # 添加面板标签
+                for i in range(n_gas):
+                    for j in range(n_liquid):
+                        idx = i * n_liquid + j
+                        add_panel_label(axes[i][j], idx)
+
+                plt.tight_layout(pad=1.0, w_pad=0.5, h_pad=0.5)
+
+                _save_figure(fig, 'fig5_phase_coupling',
                            ['气相-液相变量耦合关系',
                             '散点图展示CH₄/CO₂与水质指标的关系',
-                            '标注Pearson相关系数和显著性'])
+                            '标注Pearson相关系数和显著性'],
+                           section='discussion')
+
         except Exception as e:
-            logger.debug(f"gas_liquid_coupling: {e}")
+            logger.warning(f"fig5_phase_coupling: {e}")
 
         # ============================================================
-        # 8. 异常值故事图：CH4最高采样点的全变量雷达图
+        # 图6: 异常采样点特征剖面图（替代雷达图）
         # ============================================================
         try:
             if '甲烷(ppm)' in df.columns and '采样点' in df.columns:
-                top_points = df.groupby('采样点')['甲烷(ppm)'].mean().nlargest(5).index.tolist()
-                radar_vars = [v for v in ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'pH', 'TOC（mg/L)', 'VOCs(ppb)'] if v in df.columns]
-                if top_points and radar_vars:
-                    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
-                    point_means = df.groupby('采样点')[radar_vars].mean()
-                    normalized = (point_means - point_means.min()) / (point_means.max() - point_means.min())
-                    angles = np.linspace(0, 2 * np.pi, len(radar_vars), endpoint=False).tolist()
-                    angles += angles[:1]
-                    for pi, point in enumerate(top_points):
-                        if point in normalized.index:
-                            values = normalized.loc[point].tolist()
-                            values += values[:1]
-                            color = TABLEAU_10[pi % len(TABLEAU_10)]
-                            ax.plot(angles, values, 'o-', linewidth=1.5, label=point, color=color)
-                            ax.fill(angles, values, alpha=0.08, color=color)
-                    ax.set_xticks(angles[:-1])
-                    ax.set_xticklabels([get_label(v) for v in radar_vars], fontsize=8)
-                    ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1))
-                    plt.tight_layout()
-                    _nature_save(fig, 'fig8_anomaly_radar',
-                               ['CH₄热点采样点全变量雷达图',
-                                '标准化后展示各变量相对水平',
-                                '识别异常采样点的环境特征'])
+                # 找出CH4最高的采样点
+                top_points = df.groupby('采样点')['甲烷(ppm)'].mean().nlargest(3).index.tolist()
+
+                if top_points:
+                    # 选择关键变量
+                    profile_vars = [v for v in ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'TOC（mg/L)', 'DO(mg/L)', 'pH'] if v in df.columns]
+
+                    if profile_vars:
+                        # 标准化数据
+                        point_means = df.groupby('采样点')[profile_vars].mean()
+                        normalized = (point_means - point_means.min()) / (point_means.max() - point_means.min())
+
+                        # 创建分组柱状图
+                        fig, ax = plt.subplots(figsize=get_figure_size('nature', columns=2, height_ratio=0.5))
+
+                        x = np.arange(len(profile_vars))
+                        width = 0.25
+                        colors = get_color_palette(len(top_points), palette='nature')
+
+                        for pi, point in enumerate(top_points):
+                            if point in normalized.index:
+                                values = normalized.loc[point].values
+                                bars = ax.bar(x + pi * width, values, width,
+                                             label=point, color=colors[pi], alpha=0.8,
+                                             edgecolor='white', linewidth=0.5)
+
+                        # 设置标签
+                        ax.set_xticks(x + width * (len(top_points) - 1) / 2)
+                        ax.set_xticklabels([get_label(v) for v in profile_vars],
+                                          rotation=45, ha='right', fontsize=7)
+                        ax.set_ylabel('标准化值', fontsize=8)
+                        ax.set_title('异常采样点特征剖面', fontsize=9, pad=10)
+
+                        # 添加图例
+                        ax.legend(fontsize=7, loc='upper right', title='采样点', title_fontsize=7)
+
+                        # 添加参考线
+                        ax.axhline(y=0.5, color='#999999', linestyle=':', linewidth=0.5, alpha=0.5)
+
+                        plt.tight_layout()
+
+                        _save_figure(fig, 'fig6_anomaly_profile',
+                                   ['异常采样点特征剖面图',
+                                    '标准化后展示各变量相对水平',
+                                    '识别异常采样点的环境特征'],
+                                   section='discussion')
+
         except Exception as e:
-            logger.debug(f"anomaly_radar: {e}")
+            logger.warning(f"fig6_anomaly_profile: {e}")
 
         # ============================================================
-        # 9. 季节对比小提琴图（关键变量）
+        # 记录生成结果
         # ============================================================
-        try:
-            key_violin = [v for v in ['甲烷(ppm)', 'COD（mg/L)', 'VOCs(ppb)', 'CO2本底值'] if v in df.columns]
-            if key_violin and '季节' in df.columns:
-                fig, axes = plt.subplots(1, len(key_violin), figsize=(4 * len(key_violin), 5))
-                if len(key_violin) == 1:
-                    axes = [axes]
-                for idx, var in enumerate(key_violin):
-                    data = df[['季节', var]].dropna()
-                    if len(data) > 5:
-                        seasons = data['季节'].unique()
-                        violin_data = [data[data['季节'] == s][var].values for s in seasons]
-                        parts = axes[idx].violinplot(violin_data, showmeans=True, showmedians=True)
-                        # 设置小提琴颜色
-                        for si, pc in enumerate(parts['bodies']):
-                            pc.set_facecolor(list(SEASON_COLORS.values())[si % len(SEASON_COLORS)])
-                            pc.set_alpha(0.7)
-                        axes[idx].set_xticks(range(1, len(seasons) + 1))
-                        axes[idx].set_xticklabels([get_label(s) for s in seasons])
-                        axes[idx].set_ylabel(get_label(var))
-                        axes[idx].set_title(get_label(var))
-                plt.tight_layout()
-                _nature_save(fig, 'fig9_season_violin',
-                           ['季节对比小提琴图',
-                            '展示数据分布形状和密度',
-                            'CH₄/COD/VOCs/CO₂本底值季节差异'])
-        except Exception as e:
-            logger.debug(f"season_violin: {e}")
-
-        # ============================================================
-        # 10. 相关性汇总图（Top10，短标签避免重叠）
-        # ============================================================
-        try:
-            sig_corrs = [f for f in ctx.findings if f.get('type') == 'correlation' and f.get('data', {}).get('p', 1) < 0.05]
-            if sig_corrs:
-                # 按|r|排序，取前10
-                sig_corrs.sort(key=lambda x: abs(x.get('data', {}).get('r', 0)), reverse=True)
-                fig, ax = plt.subplots(figsize=(10, 5))
-                pairs = []
-                for f in sig_corrs[:10]:
-                    v1, v2 = f.get('variables', ('', ''))
-                    r = f.get('data', {}).get('r', 0)
-                    p = f.get('data', {}).get('p', 1)
-                    if v1 and v2:
-                        # 使用短标签避免重叠
-                        label = f'{get_label(v1)[:8]}\nvs\n{get_label(v2)[:8]}'
-                        pairs.append((label, r, p))
-                if pairs:
-                    labels, rs, ps = zip(*pairs)
-                    colors = ['#4E79A7' if r > 0 else '#E15759' for r in rs]
-                    bars = ax.bar(range(len(labels)), rs, color=colors, width=0.7)
-                    ax.set_xticks(range(len(labels)))
-                    ax.set_xticklabels(labels, fontsize=7, rotation=0)
-                    ax.set_ylabel('Pearson r', fontsize=9)
-                    ax.axhline(y=0, color='black', linewidth=0.5)
-                    # 添加显著性标注
-                    for i, (r, p) in enumerate(zip(rs, ps)):
-                        sig = '***' if p < 0.001 else ('**' if p < 0.01 else '*')
-                        y_pos = r + 0.02 if r > 0 else r - 0.05
-                        ax.annotate(sig, xy=(i, y_pos), fontsize=8, ha='center')
-                    plt.tight_layout()
-                    _nature_save(fig, 'fig10_correlation_summary',
-                               ['显著相关性Top10',
-                                '蓝色正相关，红色负相关',
-                                '* p<0.05, ** p<0.01, *** p<0.001'])
-        except Exception as e:
-            logger.debug(f"correlation_summary: {e}")
-
-        # 图表已在 _nature_save 中注册到 ctx.figures，此处只记录数量
-        logger.info(f"生成 {len(figures_generated)} 类图表")
+        logger.info(f"生成 {len(figures_generated)} 类图表: {figures_generated}")
         return figures_generated
+
     except Exception as e:
         logger.warning(f"图表生成失败: {e}")
         return None
 
 
 def _clean_claude_output(text: str) -> str:
-    """清理 Claude 输出中的非正文内容（元评论、markdown格式、说明文字）"""
+    """
+    智能清理 Claude 输出中的非正文内容。
+
+    设计原则：
+    1. 保守策略：宁可保留元评论，也不能误杀正文
+    2. 只清理开头和结尾的元评论，中间内容全部保留
+    3. 使用精确匹配，避免误杀
+    """
     if not text:
         return text
 
     import re
 
-    # 删除 Claude 的元评论（开头的说明文字）
-    meta_patterns = [
-        r'^.*?以下是.*?摘要.*?[:：]\s*',
-        r'^.*?以下是.*?正文.*?[:：]\s*',
-        r'^.*?直接输出.*?如下.*?[:：]\s*',
-        r'^.*?用户未授权.*?如下.*?[:：]\s*',
-        r'^---\s*\n',
-        r'\n---\s*$',
-    ]
-    for pattern in meta_patterns:
-        text = re.sub(pattern, '', text, flags=re.MULTILINE)
+    lines = text.split('\n')
+    total_lines = len(lines)
 
-    # 删除 Claude 的尾部说明和元评论（更全面）
-    tail_patterns = [
-        r'\n+说明[：:].*$',
-        r'\n+如需.*$',
-        r'\n+字数[：:].*$',
-        r'\n+结构[：:].*$',
-        r'\n+数据支撑[：:].*$',
-        r'\n+创新点[：:].*$',
-        r'\n+相比.*改进[：:].*$',
-        r'\n+参考文献\s*\n.*$',
-        r'\n+如需将此内容.*$',
-        r'\n+请授予.*$',
-        r'\n+---\s*$',
-        r'\n+全文约.*字.*$',
-        r'\n+涵盖了.*结构完整.*$',
-        r'\n+如需调整.*可以告诉我.*$',
-        r'\n+共约\d+字.*$',
-        r'\n+符合.*学术.*规范.*$',
-    ]
-    for pattern in tail_patterns:
-        text = re.sub(pattern, '', text, flags=re.DOTALL)
+    # ============================================================
+    # 第一步：识别开头的元评论（只检查前10行）
+    # ============================================================
+    start_skip = 0
+    for i in range(min(10, total_lines)):
+        line = lines[i].strip()
 
-    # 清理 markdown 格式
+        # 精确匹配开头元评论（必须是独立的元评论行，不能是正文的一部分）
+        is_meta = False
+
+        # 检查是否是独立的元评论行（以冒号结尾，且内容较短）
+        if line.endswith('：') or line.endswith(':'):
+            # 进一步检查内容是否是元评论
+            meta_keywords = ['以下是', '好的', '根据', '我来', 'Here is', 'I will', 'Let me', 'Now I have']
+            for keyword in meta_keywords:
+                if keyword in line:
+                    is_meta = True
+                    break
+
+        # 检查是否是调试信息
+        if line.startswith('[DEBUG]') or line.startswith('[debug]'):
+            is_meta = True
+
+        # 检查是否是表格分隔符（| --- | --- |）
+        if re.match(r'^\|[\s\-|]+\|$', line):
+            is_meta = True
+
+        if is_meta:
+            start_skip = i + 1
+        else:
+            break
+
+    # ============================================================
+    # 第二步：识别结尾的元评论（只检查最后15行）
+    # ============================================================
+    end_skip = total_lines
+    found_meta = False  # 标记是否找到元评论
+    for i in range(total_lines - 1, max(total_lines - 16, start_skip), -1):
+        line = lines[i].strip()
+
+        # 精确匹配结尾元评论
+        is_meta = False
+
+        # 空行：如果已经找到元评论，则继续向后检查；否则跳过
+        if not line:
+            if found_meta:
+                continue  # 空行在元评论区域，继续检查
+            else:
+                break  # 空行在正文区域，停止检查
+
+        # 检查是否是交互式问题（必须是独立的问题行）
+        if line.endswith('？') or line.endswith('?'):
+            question_keywords = ['请问', '需要', '是否', '如何', '怎样', 'what', 'how', 'do you', '您希望']
+            for keyword in question_keywords:
+                if keyword in line:
+                    is_meta = True
+                    break
+
+        # 检查是否是表格行（| 内容 | 内容 | 内容 |）
+        if re.match(r'^\|', line) and line.endswith('|'):
+            is_meta = True
+
+        # 检查是否是数字列表的审稿意见（1. 修复数据一致性）
+        if re.match(r'^\d+\.\s+(修复|完善|补充|优化|改进|撰写|全面)', line):
+            is_meta = True
+
+        # 检查是否是审稿意见标题
+        if '审稿意见' in line or '问题清单' in line or '改进点' in line:
+            is_meta = True
+
+        # 检查是否是单独的emoji行（🔴 🟡 等）
+        if re.match(r'^[🔴🟡🟢⚪⚫]+$', line):
+            is_meta = True
+
+        if is_meta:
+            end_skip = i
+            found_meta = True  # 标记找到元评论
+        else:
+            # 遇到非元评论行，停止检查
+            break
+
+    # ============================================================
+    # 第三步：提取正文内容
+    # ============================================================
+    if start_skip >= end_skip:
+        # 如果开头和结尾重叠，说明没有正文
+        return text
+
+    content_lines = lines[start_skip:end_skip]
+
+    # ============================================================
+    # 第四步：清理 markdown 格式（保留化学式）
+    # ============================================================
+    text = '\n'.join(content_lines)
+
+    # 清理粗体（但保留化学式中的下标）
     text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)  # **bold** -> bold
     text = re.sub(r'\*(.+?)\*', r'\1', text)        # *italic* -> italic
     text = re.sub(r'`(.+?)`', r'\1', text)          # `code` -> code
-    text = re.sub(r'\$_\{?(\d+)\}?\$', r'\1', text)  # $_4$ -> 4
-    text = re.sub(r'\$([^$]+)\$', r'\1', text)      # $formula$ -> formula
-    text = re.sub(r'^#+\s*', '', text, flags=re.MULTILINE)  # ### heading -> heading
 
     # 清理多余空行
     text = re.sub(r'\n{3,}', '\n\n', text)
@@ -1830,7 +2423,7 @@ def _run_writer_self_check(ctx: PaperContext):
         if section_name in ('results', 'discussion'):
             # 检查是否报告了p值
             p_values = re.findall(r'p\s*[<>=≤≥]\s*\d+\.?\d*', text)
-            if 'findings' in ctx and ctx.findings:
+            if ctx.has('findings'):
                 sig_findings = [f for f in ctx.findings if f.get('data', {}).get('p', 1) < 0.05]
                 if sig_findings and len(p_values) == 0:
                     issues.append(f'[{section_name}] 发现显著结果但未报告p值')
@@ -1973,7 +2566,7 @@ MODULE_REGISTRY = {
     },
     'scientific_analysis': {
         'needs': ['df'],
-        'provides': ['analysis_results'],
+        'provides': ['findings'],
         'run': _run_scientific_analysis,
         'description': '智能分析编排（自动判断该做什么分析）',
     },
@@ -1985,7 +2578,7 @@ MODULE_REGISTRY = {
     },
     'motivation': {
         'needs': ['findings'],
-        'provides': ['motivation'],
+        'provides': ['motivation', 'blueprint'],
         'run': _run_motivation,
         'description': '生成并确认写作动机',
     },
@@ -2045,13 +2638,13 @@ MODULE_REGISTRY = {
     },
     'review': {
         'needs': ['sections'],
-        'provides': ['review_report'],
+        'provides': ['review_report', 'review_summary'],
         'run': _run_review,
         'description': '审稿检查',
     },
     'auto_revision': {
         'needs': ['review_report'],
-        'provides': ['sections(revised)'],
+        'provides': ['revision_report', 'sections(revised)'],
         'run': _run_auto_revision,
         'description': '自动修订',
     },
@@ -2111,7 +2704,7 @@ MODULE_REGISTRY = {
     },
     'writer_self_check': {
         'needs': ['sections', 'findings'],
-        'provides': ['self_check_issues'],
+        'provides': [],
         'run': _run_writer_self_check,
         'description': 'Writer自检（字数/图表引用/统计值/格式检查）',
     },
@@ -2266,16 +2859,18 @@ class PaperOrchestrator:
 
     def _find_parallel_groups(self, steps):
         """
-        将步骤分组，同组内可并行执行。
+        将步骤分组，同组内可并行执行（增强版）。
         规则：
         - Introduction + Methods 可并行（互不依赖，且不依赖数据）
-        - Results + Discussion 可并行（共享 findings）
+        - 审计类模块可并行（citation_audit, revision_audit, deep_imitation, integrity_audit, artifact_check）
+        - 初始化模块可并行（memory_init, domain_config）
         - 其他步骤串行
         """
-        # 只有 writer_intro 和 writer_methods 可以并行（都不依赖 df/findings）
-        # writer_results 和 writer_discussion 都依赖 df/findings，需要串行保证
+        # 定义可并行的模块组
         parallel_sets = [
-            {'writer_intro', 'writer_methods'},           # 批次1: 互不依赖
+            {'writer_intro', 'writer_methods'},           # 互不依赖
+            {'citation_audit', 'revision_audit', 'deep_imitation', 'integrity_audit', 'artifact_check'},  # 审计类可并行
+            {'memory_init', 'domain_config'},              # 初始化可并行
         ]
 
         groups = []
@@ -2295,60 +2890,63 @@ class PaperOrchestrator:
         return groups
 
     def _auto_plan(self, ctx: PaperContext) -> list:
-        """根据上下文状态自动推断执行步骤"""
+        """根据上下文状态自动推断执行步骤（优化版）"""
         steps = []
 
-        # 第1阶段：知识初始化
+        # 第1阶段：知识初始化（可并行）
         steps.append('memory_init')
-
-        # 第2阶段：领域配置 + 数据处理 + 智能分析（必须在文献搜索之前）
         if ctx.domain:
             steps.append('domain_config')
+
+        # 第2阶段：数据处理（串行）
         if ctx.has('data_path'):
             steps.append('load_data')
         steps.append('explorer')
         steps.append('scientific_analysis')
+
+        # 第3阶段：高级分析（依赖scientific_analysis的结果）
         steps.append('advanced_analysis')
 
-        # 第3阶段：数据驱动图表生成（在分析之后，基于发现生成图表）
+        # 第4阶段：图表生成（依赖所有分析结果）
         steps.append('generate_figures')
 
-        # 第4阶段：文献搜索 + 模式学习 + 方法论学习（使用 findings 驱动关键词）
+        # 第5阶段：文献学习（可与图表生成并行，但当前串行更安全）
         steps.append('paper_reading')
         steps.append('pattern_learning')
         steps.append('methodology_learning')
 
-        # 第5阶段：知识支撑 + 动机线索
+        # 第6阶段：知识支撑 + 动机线索
         steps.append('literature_recall')
         steps.append('motivation')
         steps.append('motivation_thread')
 
-        # 第6阶段：AI写作 + 推理矩阵
+        # 第7阶段：AI写作（优化顺序：先写Results/Discussion，再写Introduction/Methods）
         steps.append('writer_results')
         steps.append('writer_discussion')
+        # Introduction 和 Methods 可以并行，但当前串行更稳定
         steps.append('writer_intro')
         steps.append('writer_methods')
         steps.append('writer_conclusion')
         steps.append('writer_abstract')
         steps.append('writing_rationale')
 
-        # 第7阶段：润色 + 迭代审改 + 引用审计 + 修订审计
+        # 第8阶段：润色 + 审改循环
         steps.append('polish')
         for _iteration in range(2):
             steps.append('review')
             steps.append('auto_revision')
+
+        # 第9阶段：补充审计（可并行）
         steps.append('citation_audit')
         steps.append('revision_audit')
         steps.append('final_check')
         steps.append('writer_self_check')
-
-        # 第8阶段：补充检查
         steps.append('deep_imitation')
         steps.append('integrity_audit')
         steps.append('artifact_check')
         steps.append('citation_bank')
 
-        # 第9阶段：排版 + LaTeX
+        # 第10阶段：输出
         steps.append('assemble')
         steps.append('latex_export')
 

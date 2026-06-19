@@ -1237,23 +1237,44 @@ class DataDrivenWriter:
             return ''
 
         lines = ['# 推理链完整性报告\n']
-        complete = sum(1 for r in self.rationale_rows if r['completeness'] >= 0.8)
-        partial = sum(1 for r in self.rationale_rows if 0.3 <= r['completeness'] < 0.8)
-        weak = sum(1 for r in self.rationale_rows if r['completeness'] < 0.3)
+
+        # 过滤出字典类型的元素
+        valid_rows = [r for r in self.rationale_rows if isinstance(r, dict)]
+        string_rows = [r for r in self.rationale_rows if isinstance(r, str)]
+
+        if not valid_rows:
+            # 如果没有字典类型的元素，直接返回字符串
+            lines.append(f'共{len(self.rationale_rows)}条推理链（均为字符串格式）：\n')
+            for i, r in enumerate(string_rows, 1):
+                lines.append(f'{i}. {r[:100]}...' if len(r) > 100 else f'{i}. {r}')
+            return '\n'.join(lines)
+
+        # 统计完整性
+        complete = sum(1 for r in valid_rows if r.get('completeness', 0) >= 0.8)
+        partial = sum(1 for r in valid_rows if 0.3 <= r.get('completeness', 0) < 0.8)
+        weak = sum(1 for r in valid_rows if r.get('completeness', 0) < 0.3)
 
         lines.append(f'共{len(self.rationale_rows)}条推理链：')
         lines.append(f'- 完整(≥80%): {complete}条')
         lines.append(f'- 部分(30-80%): {partial}条')
         lines.append(f'- 薄弱(<30%): {weak}条\n')
 
-        for i, r in enumerate(self.rationale_rows, 1):
-            icon = '✓' if r['completeness'] >= 0.8 else ('△' if r['completeness'] >= 0.3 else '✗')
-            lines.append(f'{i}. [{icon}] {r["finding"]}')
-            if r['mechanism']:
+        for i, r in enumerate(valid_rows, 1):
+            completeness = r.get('completeness', 0)
+            icon = '✓' if completeness >= 0.8 else ('△' if completeness >= 0.3 else '✗')
+            finding = r.get('finding', '未知')
+            lines.append(f'{i}. [{icon}] {finding}')
+            if r.get('mechanism'):
                 lines.append(f'   机制: {r["mechanism"]}')
-            if r['citation']:
+            if r.get('citation'):
                 lines.append(f'   引用: {r["citation"]}')
             lines.append('')
+
+        # 添加字符串类型的行
+        if string_rows:
+            lines.append(f'\n## 字符串格式推理链 ({len(string_rows)}条)\n')
+            for i, r in enumerate(string_rows, 1):
+                lines.append(f'{i}. {r[:100]}...' if len(r) > 100 else f'{i}. {r}')
 
         return '\n'.join(lines)
 

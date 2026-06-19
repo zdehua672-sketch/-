@@ -13,6 +13,7 @@ import json
 import os
 import re
 import time
+import ssl
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -20,6 +21,9 @@ import xml.etree.ElementTree as ET
 import logging
 from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Optional
+
+# 禁用 SSL 验证（解决证书问题）
+ssl._create_default_https_context = ssl._create_unverified_context
 
 logger = logging.getLogger(__name__)
 
@@ -31,10 +35,13 @@ logger = logging.getLogger(__name__)
 class RateLimitedClient:
     """带速率限制的 HTTP 客户端"""
 
-    def __init__(self, min_interval=1.0, max_retries=3):
+    def __init__(self, min_interval=1.0, max_retries=3, use_proxy=True):
         self.min_interval = min_interval
         self.max_retries = max_retries
         self._last_request_time = 0
+        self.use_proxy = use_proxy
+        # 延迟加载代理配置
+        self._proxy_config = None
 
     def _wait(self):
         """等待直到可以发起下一次请求"""
@@ -43,13 +50,42 @@ class RateLimitedClient:
             time.sleep(self.min_interval - elapsed)
         self._last_request_time = time.time()
 
+    def _get_proxy_config(self):
+        """获取代理配置（延迟加载）"""
+        if self._proxy_config is None:
+            try:
+                from proxy_config import get_proxy_config
+                self._proxy_config = get_proxy_config()
+            except ImportError:
+                self._proxy_config = {
+                    'http': os.environ.get('HTTP_PROXY', ''),
+                    'https': os.environ.get('HTTPS_PROXY', ''),
+                }
+        return self._proxy_config
+
+    def _get_proxy_handler(self):
+        """获取代理处理器"""
+        if not self.use_proxy:
+            return urllib.request.ProxyHandler({})
+
+        proxies = self._get_proxy_config()
+        # 过滤空值
+        proxies = {k: v for k, v in proxies.items() if v}
+
+        if proxies:
+            return urllib.request.ProxyHandler(proxies)
+        return urllib.request.ProxyHandler({})
+
     def _fetch(self, url, headers=None, timeout=15):
         """带重试和退避的 HTTP GET"""
         for attempt in range(self.max_retries):
             self._wait()
             try:
                 req = urllib.request.Request(url, headers=headers or {})
-                with urllib.request.urlopen(req, timeout=timeout) as resp:
+                # 使用代理
+                proxy_handler = self._get_proxy_handler()
+                opener = urllib.request.build_opener(proxy_handler)
+                with opener.open(req, timeout=timeout) as resp:
                     return resp.read().decode('utf-8', errors='replace')
             except urllib.error.HTTPError as e:
                 if e.code == 429:
@@ -107,8 +143,13 @@ class ArxivSearcher(RateLimitedClient):
         -------
         list of dict
         """
+        # 清理查询字符串（移除特殊字符）
+        import re
+        clean_query = re.sub(r'[^\w\s一-鿿]', ' ', query)
+        clean_query = re.sub(r'\s+', ' ', clean_query).strip()
+
         # 构建查询
-        search_query = f'all:{query}'
+        search_query = f'all:{clean_query}'
         if categories:
             cat_filter = ' OR '.join(f'cat:{c}' for c in categories)
             search_query = f'({search_query}) AND ({cat_filter})'
@@ -436,9 +477,13 @@ class GoogleScholarSearcher(RateLimitedClient):
 
     def _search_mirror(self, query: str, max_results: int) -> List[Dict]:
         """直接请求镜像站搜索（降级方案）"""
+        # 清理查询字符串（移除特殊字符）
+        clean_query = re.sub(r'[^\w\s一-鿿]', ' ', query)
+        clean_query = re.sub(r'\s+', ' ', clean_query).strip()
+
         for mirror in self.MIRRORS:
             try:
-                encoded_q = urllib.parse.quote(query)
+                encoded_q = urllib.parse.quote(clean_query)
                 url = f"{mirror}/scholar?q={encoded_q}&hl=zh-CN&num={max_results}"
                 html = self._fetch(url, headers={
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -588,23 +633,25 @@ class AutoPaperFinder:
     结果自动存入知识库。
     """
 
-    def __init__(self, store=None):
+    def __init__(self, store=None, papers_dir=None):
         """
         Parameters
         ----------
         store : KnowledgeStore or None, 知识库实例。None 时不自动存储。
+        papers_dir : str or None, 本地文献目录路径。
         """
         self.arxiv = ArxivSearcher()
         self.s2 = SemanticScholarSearcher()
         self.google = GoogleScholarSearcher()
         self.connected = ConnectedPapersSearcher()
         self.store = store
+        self.papers_dir = papers_dir or os.path.join(os.path.dirname(__file__), 'papers')
 
     def find_papers(self, topic: str, max_results: int = 20,
                     min_citations: int = 0,
                     year_range: str = None) -> List[Dict]:
         """
-        综合搜索 arxiv + Semantic Scholar。
+        综合搜索 arxiv + Semantic Scholar + 本地文献。
 
         Parameters
         ----------
@@ -618,6 +665,14 @@ class AutoPaperFinder:
         list of dict: 去重排序后的论文列表
         """
         all_papers = {}
+
+        # 0. 优先搜索本地文献
+        logger.info(f"Searching local papers: {topic}")
+        local_results = self._search_local_papers(topic, max_results)
+        for p in local_results:
+            key = self._dedup_key(p)
+            all_papers[key] = p
+        logger.info(f"Found {len(local_results)} local papers")
 
         # 1. arxiv 搜索
         logger.info(f"Searching arxiv: {topic}")
@@ -784,6 +839,72 @@ class AutoPaperFinder:
                 "discovered_at": datetime.now(timezone.utc).isoformat(),
             }, source="auto_paper_finder",
                confidence=min(1.0, max(0.3, p.get('citation_count', 0) / 100)))
+
+    def _search_local_papers(self, topic: str, max_results: int) -> List[Dict]:
+        """
+        搜索本地文献目录中的论文。
+
+        Parameters
+        ----------
+        topic : str, 搜索关键词
+        max_results : int, 最大结果数
+
+        Returns
+        -------
+        list of dict: 匹配的论文列表
+        """
+        results = []
+        if not os.path.isdir(self.papers_dir):
+            logger.warning(f"本地文献目录不存在: {self.papers_dir}")
+            return results
+
+        # 将搜索词拆分为关键词
+        keywords = topic.lower().split()
+
+        for filename in os.listdir(self.papers_dir):
+            if not filename.endswith(('.md', '.txt')):
+                continue
+
+            filepath = os.path.join(self.papers_dir, filename)
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+
+                # 检查标题和内容是否包含关键词
+                title = filename.replace('.md', '').replace('.txt', '').replace('paper_', '')
+                content_lower = content.lower()
+                title_lower = title.lower()
+
+                # 计算匹配分数
+                score = 0
+                for keyword in keywords:
+                    if keyword in title_lower:
+                        score += 3  # 标题匹配权重更高
+                    if keyword in content_lower:
+                        score += 1
+
+                if score > 0:
+                    # 提取摘要（前500字）
+                    abstract = content[:500] if len(content) > 500 else content
+                    results.append({
+                        'title': title,
+                        'authors': [],
+                        'year': 0,
+                        'abstract': abstract,
+                        'venue': '',
+                        'citation_count': 0,
+                        'url': filepath,
+                        'doi': '',
+                        'arxiv_id': '',
+                        'source': 'local',
+                        'score': score,
+                    })
+            except Exception as e:
+                logger.debug(f"读取本地文献失败 {filename}: {e}")
+
+        # 按匹配分数排序
+        results.sort(key=lambda x: x.get('score', 0), reverse=True)
+        return results[:max_results]
 
 
 # ============================================================================
