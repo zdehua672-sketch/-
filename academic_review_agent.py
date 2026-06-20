@@ -1134,15 +1134,24 @@ class AIDetector:
         # 合并全文用于增强检测
         full_text = '\n\n'.join(sec.body for sec in sections.values() if hasattr(sec, 'body'))
 
+        # 统计每个类别的问题数量，避免重复报告
+        category_counts = {}
+        max_per_category = 5  # 每个类别最多报告5个问题
+
         for sec_name, sec in sections.items():
             if sec_name in ('references', 'acknowledgments', 'preamble'):
                 continue
             body = sec.body
 
-            # AI套话模式匹配
+            # AI套话模式匹配（限制每个章节最多2个）
+            ai_pattern_count = 0
             for pattern in patterns:
+                if ai_pattern_count >= 2:
+                    break
                 matches = list(re.finditer(pattern, body, re.IGNORECASE))
-                for m in matches[:2]:
+                for m in matches[:1]:  # 每个模式只报告1个
+                    if ai_pattern_count >= 2:
+                        break
                     context = body[max(0, m.start()-10):m.end()+10]
                     issues.append(Issue(
                         category='AI痕迹', severity=Severity.MAJOR,
@@ -1151,11 +1160,17 @@ class AIDetector:
                         original=context.strip(),
                         suggestion='替换为更自然的学术表达，避免模板化套话'
                     ))
+                    ai_pattern_count += 1
 
-            # 空洞表达检查
+            # 空洞表达检查（限制每个章节最多1个）
+            hollow_count = 0
             for pattern in hollow:
+                if hollow_count >= 1:
+                    break
                 matches = list(re.finditer(pattern, body, re.IGNORECASE))
-                for m in matches[:2]:
+                for m in matches[:1]:
+                    if hollow_count >= 1:
+                        break
                     context = body[max(0, m.start()-10):m.end()+10]
                     issues.append(Issue(
                         category='AI痕迹', severity=Severity.MINOR,
@@ -1164,13 +1179,14 @@ class AIDetector:
                         original=context.strip(),
                         suggestion='删除或替换为有具体数据支撑的表述'
                     ))
+                    hollow_count += 1
 
         # ========== 增强检测：四大AI特征 ==========
         try:
             from ai_trace_enhanced import detect_ai_trace
             trace_report = detect_ai_trace(full_text)
 
-            # 将增强检测结果转换为 Issue 格式
+            # 将增强检测结果转换为 Issue 格式（限制每个特征最多3个问题）
             level_map = {
                 'CRITICAL': Severity.CRITICAL,
                 'MAJOR': Severity.MAJOR,
@@ -1178,9 +1194,14 @@ class AIDetector:
                 'INFO': Severity.INFO,
             }
 
+            feature_counts = {}
             for trace_issue in trace_report.issues:
+                feature = trace_issue.feature
+                if feature_counts.get(feature, 0) >= 3:
+                    continue  # 每个特征最多3个问题
+
                 issues.append(Issue(
-                    category=f'AI痕迹-{trace_issue.feature}',
+                    category=f'AI痕迹-{feature}',
                     severity=level_map.get(trace_issue.level.value, Severity.MINOR),
                     section='全文',
                     location=trace_issue.location,
@@ -1189,6 +1210,7 @@ class AIDetector:
                     suggestion=trace_issue.suggestion,
                     fix=trace_issue.auto_fix,
                 ))
+                feature_counts[feature] = feature_counts.get(feature, 0) + 1
 
             # 记录评分
             if trace_report.scores:
@@ -1199,7 +1221,7 @@ class AIDetector:
         except Exception as e:
             logger.debug(f"AI痕迹增强检测失败: {e}")
 
-        # 检查全文句式重复度
+        # 检查全文句式重复度（限制最多3个）
         all_sentences = []
         for sec in sections.values():
             all_sentences.extend(sec.sentences)

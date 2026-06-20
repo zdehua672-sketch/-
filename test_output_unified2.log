@@ -1,0 +1,18 @@
+============================================================
+  PaperContext 架构全流程
+============================================================
+
+[预处理] 生成图表...
+[绘图风格] 已加载 Nature 期刊规范
+============================================================
+学术论文作图系统 v2.0 已加载
+中文字体: Microsoft YaHei
+英文字体: Arial
+默认期刊: nature
+============================================================
+Traceback (most recent call last):
+  File "C:\Users\赵华华\Downloads\python-sdk-master\test_full_pipeline.py", line 64, in <module>
+    from scientific_visualization_agent import VisualizationAgent
+  File "C:\Users\赵华华\Downloads\python-sdk-master\scientific_visualization_agent.py", line 20, in <module>
+    from academic_plot_style import (
+ImportError: cannot import name 'setup_fonts' from 'academic_plot_style' (C:\Users\赵华华\Downloads\python-sdk-master\academic_plot_style.py)

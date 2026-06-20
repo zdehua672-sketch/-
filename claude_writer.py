@@ -160,6 +160,208 @@ Write the Results directly, use ## for subsections."""
         logger.info(f"Results: Claude 生成 {len(result)} 字")
         return result
 
+    def write_results_discussion(self, findings: list, mechanisms: dict = None,
+                                  domain: str = "污水管网碳排放", language: str = "zh",
+                                  recalled_refs: list = None,
+                                  learned_patterns: dict = None,
+                                  injection_context: str = None,
+                                  figures: dict = None) -> str:
+        """
+        生成结果与讨论交织的章节（符合中文核心期刊规范）
+
+        结构：每个主题先展示结果，然后立即讨论
+        3.1 气相碳污染物分布特征
+          - 结果数据
+          - 相关图片
+          - 讨论分析
+        3.2 季节差异分析
+          - 结果数据
+          - 相关图片
+          - 讨论分析
+        """
+        findings_text = self._summarize_findings(findings)
+        mech_text = self._format_mechanisms(mechanisms)
+        refs_text = self._format_references(recalled_refs)
+
+        # 分离不同类型的发现
+        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:4]
+        corr = [f for f in findings if f.get('type') == 'correlation'][:4]
+        distribution = [f for f in findings if f.get('type') == 'distribution'][:4]
+
+        seasonal_text = self._summarize_findings(seasonal)
+        corr_text = self._summarize_findings(corr)
+        distribution_text = self._summarize_findings(distribution)
+
+        # 构建注入上下文
+        injection_hint = ""
+        if injection_context:
+            injection_hint = f"\n\n【补充分析结果】\n{injection_context}\n\n请在讨论中引用上述分析结果。"
+
+        # 构建图片提示
+        figures_hint = ""
+        if figures:
+            fig_list = []
+            for name, info in figures.items():
+                caption = info.get('caption', '')
+                fig_num = info.get('fig_num', '')
+                if caption:
+                    fig_list.append(f"图{fig_num}: {caption}")
+            if fig_list:
+                figures_hint = "\n\n【可用图片】\n" + "\n".join(fig_list[:8])
+
+        parts = []
+
+        # 第1部分：气相碳污染物分布特征（结果+讨论）
+        if language == "zh":
+            prompt1 = f"""写{domain}论文的"结果与分析"章节第1部分。
+
+## 3.1 气相碳污染物分布特征
+
+要求：
+1. 先描述气相碳污染物的分布特征（结果数据）
+2. 引用相关图片（如"如图1所示"）
+3. 然后立即讨论这些特征的机制原因
+4. 引用文献支撑讨论
+
+气相相关发现:
+{seasonal_text[:500]}
+
+{refs_text}
+{figures_hint}
+
+直接输出正文，用 ## 标记子章节。"""
+        else:
+            prompt1 = f"""Write Results & Discussion section 1 for {domain}.
+
+## 3.1 Gas-phase carbon pollutant distribution characteristics
+
+Gas findings:
+{seasonal_text[:500]}
+
+{refs_text}
+
+Write directly."""
+
+        part1 = self._call_claude(prompt1)
+        if part1:
+            parts.append(part1)
+            logger.info(f"Results-Discussion Part1: {len(part1)} 字")
+
+        # 第2部分：季节差异分析（结果+讨论）
+        if language == "zh":
+            prompt2 = f"""写{domain}论文的"结果与分析"章节第2部分。
+
+## 3.2 季节差异分析
+
+要求：
+1. 先描述冬春季节的差异数据（结果）
+2. 引用相关图片
+3. 然后立即讨论季节差异的机制（温度、水文等）
+4. 引用文献支撑
+
+季节差异发现:
+{seasonal_text}
+
+{refs_text}
+{injection_hint}
+
+直接输出正文，用 ## 标记子章节。"""
+        else:
+            prompt2 = f"""Write Results & Discussion section 2 for {domain}.
+
+## 3.2 Seasonal difference analysis
+
+Seasonal findings:
+{seasonal_text}
+
+{refs_text}
+
+Write directly."""
+
+        part2 = self._call_claude(prompt2)
+        if part2:
+            parts.append(part2)
+            logger.info(f"Results-Discussion Part2: {len(part2)} 字")
+
+        # 第3部分：相关性分析（结果+讨论）
+        if language == "zh":
+            prompt3 = f"""写{domain}论文的"结果与分析"章节第3部分。
+
+## 3.3 多变量相关性分析
+
+要求：
+1. 先描述关键相关性结果（r值、p值）
+2. 引用相关性热图
+3. 然后立即讨论相关性的机制意义
+4. 引用文献支撑
+
+相关性发现:
+{corr_text}
+
+{mech_text}
+{figures_hint}
+
+直接输出正文，用 ## 标记子章节。"""
+        else:
+            prompt3 = f"""Write Results & Discussion section 3 for {domain}.
+
+## 3.3 Multivariate correlation analysis
+
+Correlation findings:
+{corr_text}
+
+{mech_text}
+
+Write directly."""
+
+        part3 = self._call_claude(prompt3)
+        if part3:
+            parts.append(part3)
+            logger.info(f"Results-Discussion Part3: {len(part3)} 字")
+
+        # 第4部分：固相碳赋存特征（结果+讨论）
+        if language == "zh":
+            prompt4 = f"""写{domain}论文的"结果与分析"章节第4部分。
+
+## 3.4 固相碳赋存特征与多相态碳分布
+
+要求：
+1. 先描述固相碳的赋存特征（结果数据）
+2. 描述三相碳的分布格局
+3. 然后讨论碳在不同相态间的迁移机制
+4. 引用文献支撑
+
+分布发现:
+{distribution_text}
+
+{refs_text}
+
+直接输出正文，用 ## 标记子章节。"""
+        else:
+            prompt4 = f"""Write Results & Discussion section 4 for {domain}.
+
+## 3.4 Solid-phase carbon distribution
+
+Distribution findings:
+{distribution_text}
+
+{refs_text}
+
+Write directly."""
+
+        part4 = self._call_claude(prompt4)
+        if part4:
+            parts.append(part4)
+            logger.info(f"Results-Discussion Part4: {len(part4)} 字")
+
+        if not parts:
+            logger.warning("Claude 生成 Results-Discussion 全部失败")
+            return ""
+
+        result = '\n\n'.join(parts)
+        logger.info(f"Results-Discussion 总计: {len(result)} 字 ({len(parts)} 段)")
+        return result
+
     def write_discussion(self, findings: list, mechanisms: dict = None,
                          domain: str = "污水管网碳排放", language: str = "zh",
                          recalled_refs: list = None,
@@ -346,17 +548,18 @@ Write the Introduction directly, use ## for subsections."""
         results_summary = self._extract_key_stats(sections.get('results', ''))
 
         if language == "zh":
-            prompt = f"""写{domain}论文摘要。
+            prompt = f"""写{domain}论文摘要，严格控制在300-400字。
 
 结构：目的→方法→结果→结论
-结果必须包含关键数据（至少3个具体数值）。最后列5-8个关键词。
+结果必须包含关键数据（3-5个具体数值）。最后列5-8个关键词。
 
 关键数据:
 {results_summary}
 
 要求：
-1. 必须包含具体数据（如 r=0.647, p=0.004）
-2. 直接输出：
+1. 严格控制在300-400字，不要超过400字
+2. 必须包含具体数据（如 r=0.647, p=0.004）
+3. 直接输出：
 【摘要】(正文)
 【关键词】(列表)"""
         else:
