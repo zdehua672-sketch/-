@@ -223,6 +223,8 @@ Write the Results directly, use ## for subsections."""
 3. 然后立即讨论这些特征的机制原因
 4. 引用文献支撑讨论
 
+重要：直接输出正文，不要添加任何元评论、说明或交互式文字。不要添加"如需调整"、"请告知"等文字。
+
 气相相关发现:
 {seasonal_text[:500]}
 

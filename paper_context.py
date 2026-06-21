@@ -2804,104 +2804,101 @@ def _clean_claude_output(text: str) -> str:
 
     import re
 
+    # ============================================================
+    # 第一步：清理中间的Claude元评论（全文扫描）
+    # ============================================================
+    # 匹配Claude元评论模式（独立行，不是正文的一部分）
+    meta_line_patterns = [
+        r'^写入权限未开启.*$',
+        r'^文件写入权限未开启.*$',
+        r'^需要您授予.*$',
+        r'^文件写入需要您授予.*$',
+        r'^内容已准备完毕.*$',
+        r'^包含以下.*核心章节.*$',
+        r'^如需调整.*请告知.*$',
+        r'^如需写入文件.*请授予.*$',
+        r'^本节要点[：:].*$',
+        r'^以下是撰写的.*$',
+        r'^全文约\d+字.*$',
+        r'^共约\d+字.*$',
+        r'^如需调整内容深度.*$',
+        r'^如需写入文件.*$',
+        r'^接下来可继续撰写.*$',
+        r'^文件写入权限.*$',
+        r'^接下来可继续.*$',
+        r'^如需调整.*$',
+        r'^如需写入.*$',
+        r'^Now I have.*$',
+        r'^Let me.*$',
+        r'^I will.*$',
+        r'^Here is.*$',
+        r'^根据.*分析.*$',
+        r'^基于.*分析.*$',
+        r'^综合.*分析.*$',
+        r'^请在弹出的权限.*$',
+        r'^我将把.*写入.*$',
+        r'^请在弹出.*$',
+        r'^内容已呈现完毕.*$',
+        r'^数据核验说明[：:].*$',
+        r'^所有r值.*$',
+        r'^CH₄/TOC比值.*$',
+        r'^CH₄与固相TOC.*$',
+        r'^CO₂与NO₂.*$',
+        r'^PCA和HCA.*$',
+    ]
+
     lines = text.split('\n')
-    total_lines = len(lines)
-
-    # ============================================================
-    # 第一步：识别开头的元评论（只检查前10行）
-    # ============================================================
-    start_skip = 0
-    for i in range(min(10, total_lines)):
-        line = lines[i].strip()
-
-        # 精确匹配开头元评论（必须是独立的元评论行，不能是正文的一部分）
+    cleaned_lines = []
+    for line in lines:
+        stripped = line.strip()
         is_meta = False
 
-        # 检查是否是独立的元评论行（以冒号结尾，且内容较短）
-        if line.endswith('：') or line.endswith(':'):
-            # 进一步检查内容是否是元评论
-            meta_keywords = ['以下是', '好的', '根据', '我来', 'Here is', 'I will', 'Let me', 'Now I have']
-            for keyword in meta_keywords:
-                if keyword in line:
-                    is_meta = True
-                    break
+        # 检查是否是Claude元评论
+        for pattern in meta_line_patterns:
+            if re.match(pattern, stripped, re.IGNORECASE):
+                is_meta = True
+                break
 
-        # 检查是否是调试信息
-        if line.startswith('[DEBUG]') or line.startswith('[debug]'):
+        # 检查是否是LaTeX代码块标记
+        if stripped.startswith('```latex') or stripped.startswith('```'):
             is_meta = True
 
-        # 检查是否是表格分隔符（| --- | --- |）
-        if re.match(r'^\|[\s\-|]+\|$', line):
-            is_meta = True
-
-        if is_meta:
-            start_skip = i + 1
-        else:
-            break
-
-    # ============================================================
-    # 第二步：识别结尾的元评论（只检查最后15行）
-    # ============================================================
-    end_skip = total_lines
-    found_meta = False  # 标记是否找到元评论
-    for i in range(total_lines - 1, max(total_lines - 16, start_skip), -1):
-        line = lines[i].strip()
-
-        # 精确匹配结尾元评论
-        is_meta = False
-
-        # 空行：如果已经找到元评论，则继续向后检查；否则跳过
-        if not line:
-            if found_meta:
-                continue  # 空行在元评论区域，继续检查
-            else:
-                break  # 空行在正文区域，停止检查
-
-        # 检查是否是交互式问题（必须是独立的问题行）
-        if line.endswith('？') or line.endswith('?'):
+        # 检查是否是交互式问题
+        if stripped.endswith('？') or stripped.endswith('?'):
             question_keywords = ['请问', '需要', '是否', '如何', '怎样', 'what', 'how', 'do you', '您希望']
             for keyword in question_keywords:
-                if keyword in line:
+                if keyword in stripped:
                     is_meta = True
                     break
 
         # 检查是否是表格行（| 内容 | 内容 | 内容 |）
-        if re.match(r'^\|', line) and line.endswith('|'):
+        if re.match(r'^\|', stripped) and stripped.endswith('|'):
             is_meta = True
 
         # 检查是否是数字列表的审稿意见（1. 修复数据一致性）
-        if re.match(r'^\d+\.\s+(修复|完善|补充|优化|改进|撰写|全面)', line):
+        if re.match(r'^\d+\.\s+(修复|完善|补充|优化|改进|撰写|全面)', stripped):
             is_meta = True
 
         # 检查是否是审稿意见标题
-        if '审稿意见' in line or '问题清单' in line or '改进点' in line:
+        if '审稿意见' in stripped or '问题清单' in stripped or '改进点' in stripped:
             is_meta = True
 
         # 检查是否是单独的emoji行（🔴 🟡 等）
-        if re.match(r'^[🔴🟡🟢⚪⚫]+$', line):
+        if re.match(r'^[🔴🟡🟢⚪⚫]+$', stripped):
             is_meta = True
 
-        if is_meta:
-            end_skip = i
-            found_meta = True  # 标记找到元评论
-        else:
-            # 遇到非元评论行，停止检查
-            break
+        # 检查是否是调试信息
+        if stripped.startswith('[DEBUG]') or stripped.startswith('[debug]'):
+            is_meta = True
+
+        if not is_meta:
+            cleaned_lines.append(line)
+
+    text = '\n'.join(cleaned_lines)
 
     # ============================================================
-    # 第三步：提取正文内容
+    # 第二步：清理 markdown 格式（保留化学式）
     # ============================================================
-    if start_skip >= end_skip:
-        # 如果开头和结尾重叠，说明没有正文
-        return text
-
-    content_lines = lines[start_skip:end_skip]
-
-    # ============================================================
-    # 第四步：清理 markdown 格式（保留化学式）
-    # ============================================================
-    text = '\n'.join(content_lines)
-
     # 清理粗体（但保留化学式中的下标）
     text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)  # **bold** -> bold
     text = re.sub(r'\*(.+?)\*', r'\1', text)        # *italic* -> italic
@@ -3465,7 +3462,41 @@ MODULE_REGISTRY = {
         'run': _run_latex_export,
         'description': '导出 LaTeX 格式论文',
     },
+    'gas_distribution_figures': {
+        'needs': ['df'],
+        'provides': ['gas_figures'],
+        'run': _run_gas_distribution_figures,
+        'description': '生成气体污染物空间分布图（按功能区分组）',
+    },
 }
+
+
+def _run_gas_distribution_figures(ctx: PaperContext):
+    """生成气体污染物空间分布图（按功能区分组）"""
+    if not ctx.has('df'):
+        return None
+    try:
+        from gas_distribution_figures import load_gas_data, create_gas_distribution_figures
+
+        # 优先使用桌面数据
+        data = load_gas_data()
+        if data is None:
+            data = ctx.df
+
+        if data is not None:
+            analysis_dir = os.path.join(ctx.output_dir, 'figures')
+            os.makedirs(analysis_dir, exist_ok=True)
+
+            figures = create_gas_distribution_figures(data, analysis_dir)
+            if figures:
+                ctx.gas_figures = figures
+                logger.info(f"气体分布图: 生成 {len(figures)} 张")
+                return figures
+
+        return None
+    except Exception as e:
+        logger.warning(f"气体分布图生成失败: {e}")
+        return None
 
 
 def _load_data(ctx: PaperContext):
@@ -3761,6 +3792,108 @@ class PaperOrchestrator:
             f.write(full_paper)
         ctx.paper_md_path = path
         logger.info(f"论文MD: {path}")
+
+        # 自动执行全文自检
+        self._self_check_paper(ctx)
+
+    def _self_check_paper(self, ctx: PaperContext) -> dict:
+        """
+        全流程完成后自动检查论文质量
+
+        检查维度：
+        1. 章节完整性（是否有缺失章节）
+        2. 字数检查（各章节字数是否合理）
+        3. 元评论检查（是否有Claude元评论残留）
+        4. 占位符检查（是否有未填充的占位符）
+        5. 图片检查（图片是否正确嵌入）
+        6. 引用检查（是否有引用标记）
+        """
+        import re
+
+        issues = []
+        report = {}
+
+        # 读取论文内容
+        paper_path = os.path.join(ctx.output_dir, 'paper.md')
+        if not os.path.exists(paper_path):
+            issues.append('论文文件不存在')
+            return {'issues': issues, 'score': 0}
+
+        with open(paper_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # 1. 章节完整性检查
+        required_sections = ['引言', '材料与方法', '结果', '讨论', '结论']
+        for section in required_sections:
+            if section not in content and section.replace('与分析', '') not in content:
+                issues.append(f'缺少章节: {section}')
+
+        # 2. 字数检查
+        chinese_chars = len(re.findall(r'[一-鿿]', content))
+        report['chinese_chars'] = chinese_chars
+        if chinese_chars < 3000:
+            issues.append(f'论文字数过少: {chinese_chars}字')
+
+        # 3. 元评论检查
+        meta_patterns = [
+            '写入权限未开启',
+            '需要您授予',
+            '内容已准备完毕',
+            '包含以下核心章节',
+            '本节要点',
+            '以下是撰写的',
+            '如需调整',
+            '如需写入',
+            '请在弹出的权限',
+            '内容已呈现完毕',
+            '数据核验说明',
+        ]
+        for pattern in meta_patterns:
+            if pattern in content:
+                issues.append(f'发现Claude元评论: {pattern}')
+
+        # 4. 占位符检查
+        placeholders = ['X公顷', 'X万人', 'X m³/d', 'X个采样点']
+        for placeholder in placeholders:
+            if placeholder in content:
+                issues.append(f'发现未填充占位符: {placeholder}')
+
+        # 5. 图片检查
+        figure_count = len(ctx.figures)
+        report['figure_count'] = figure_count
+        if figure_count == 0:
+            issues.append('没有生成图片')
+
+        # 6. 引用检查
+        citation_count = len(re.findall(r'\[\d+\]', content))
+        report['citation_count'] = citation_count
+        if citation_count == 0:
+            issues.append('没有引用标记')
+
+        # 计算评分
+        score = 100 - len(issues) * 10
+        score = max(0, min(100, score))
+
+        report['issues'] = issues
+        report['score'] = score
+
+        # 输出检查结果
+        print("\n" + "=" * 60)
+        print("  论文自检报告")
+        print("=" * 60)
+        print(f"  中文字数: {chinese_chars}")
+        print(f"  图片数量: {figure_count}")
+        print(f"  引用数量: {citation_count}")
+        print(f"  评分: {score}/100")
+        if issues:
+            print(f"\n  发现 {len(issues)} 个问题:")
+            for issue in issues:
+                print(f"    ❌ {issue}")
+        else:
+            print("\n  ✅ 未发现问题")
+        print("=" * 60)
+
+        return report
 
     def get_log(self) -> list:
         return self.execution_log

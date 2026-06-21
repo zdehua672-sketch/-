@@ -13,14 +13,18 @@ from datetime import datetime
 # ============================================================
 _HERE = os.path.dirname(os.path.abspath(__file__))
 
-# 数据文件优先级：环境变量 > data/sample_data.xlsx > 桌面/冬春数据.xlsx
+# 数据文件优先级：环境变量 > 桌面/冬春数据.xlsx > data/sample_data.xlsx
 DATA_FILE = os.environ.get('PAPER_DATA_FILE', '')
 if not DATA_FILE or not os.path.exists(DATA_FILE):
-    _candidate = os.path.join(_HERE, 'data', 'sample_data.xlsx')
+    _candidate = os.path.join(os.path.expanduser('~'), 'OneDrive', '桌面', '冬春数据.xlsx')
     if os.path.exists(_candidate):
         DATA_FILE = _candidate
 if not DATA_FILE or not os.path.exists(DATA_FILE):
     _candidate = os.path.join(os.path.expanduser('~'), 'Desktop', '冬春数据.xlsx')
+    if os.path.exists(_candidate):
+        DATA_FILE = _candidate
+if not DATA_FILE or not os.path.exists(DATA_FILE):
+    _candidate = os.path.join(_HERE, 'data', 'sample_data.xlsx')
     if os.path.exists(_candidate):
         DATA_FILE = _candidate
 if not DATA_FILE:
