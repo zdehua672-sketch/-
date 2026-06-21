@@ -240,6 +240,12 @@ class DiscussionLearner:
         '总之', '综上', '本研究表明', '总结',
     ]
 
+    COMPARISON_SIGNALS = [
+        'compared to', 'in contrast', 'however', 'whereas', 'while',
+        'on the other hand', 'nevertheless', 'nonetheless',
+        '相比', '对比', '然而', '但是', '而', '相反', '不过',
+    ]
+
     def __init__(self):
         self.structures = []
 

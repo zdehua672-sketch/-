@@ -1,0 +1,84 @@
+{
+  "rules": [
+    {
+      "id": "ai_trace_meta_comment",
+      "category": "ai_trace",
+      "pattern": "如需写入|如需调整|请在弹出",
+      "description": "Claude元评论残留",
+      "suggestion": "删除元评论，保留正文内容",
+      "severity": "CRITICAL",
+      "examples": [
+        "如需写入文件，请授予写入权限"
+      ],
+      "counter_examples": [],
+      "created_at": "2026-06-21T18:19:10.825152",
+      "updated_at": "",
+      "hit_count": 1,
+      "is_active": true
+    },
+    {
+      "id": "ai_trace_long_sentence",
+      "category": "ai_trace",
+      "pattern": ".{80,}",
+      "description": "超长句子（>80字）",
+      "suggestion": "在逗号处拆分为两个短句",
+      "severity": "MINOR",
+      "examples": [],
+      "counter_examples": [],
+      "created_at": "2026-06-21T18:19:10.825152",
+      "updated_at": "",
+      "hit_count": 0,
+      "is_active": true
+    },
+    {
+      "id": "citation_orphan",
+      "category": "citation",
+      "pattern": "\\[\\d+\\]",
+      "description": "孤立引用（引用编号不在参考文献列表中）",
+      "suggestion": "检查引用编号是否正确，或补充缺失的参考文献",
+      "severity": "MAJOR",
+      "examples": [],
+      "counter_examples": [],
+      "created_at": "2026-06-21T18:19:10.825152",
+      "updated_at": "",
+      "hit_count": 0,
+      "is_active": true
+    },
+    {
+      "id": "language_colloquial",
+      "category": "language",
+      "pattern": "其实|然后就是| basically",
+      "description": "口语化表达",
+      "suggestion": "使用正式的学术语言",
+      "severity": "MINOR",
+      "examples": [
+        "其实这个结果很有意思",
+        "然后就是说"
+      ],
+      "counter_examples": [
+        "值得注意的是",
+        "结果表明"
+      ],
+      "created_at": "2026-06-21T18:19:10.825152",
+      "updated_at": "",
+      "hit_count": 0,
+      "is_active": true
+    },
+    {
+      "id": "structure_no_evidence",
+      "category": "structure",
+      "pattern": "",
+      "description": "主张缺少数据支撑",
+      "suggestion": "为每个主张添加数据支撑或文献引用",
+      "severity": "MAJOR",
+      "examples": [],
+      "counter_examples": [],
+      "created_at": "2026-06-21T18:19:10.825152",
+      "updated_at": "",
+      "hit_count": 0,
+      "is_active": true
+    }
+  ],
+  "negative_samples": [],
+  "updated_at": "2026-06-21T18:19:10.826108"
+}

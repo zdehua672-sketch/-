@@ -102,12 +102,28 @@ class KnowledgeStore:
         }
 
     def save(self, category: str):
-        """保存指定分类"""
+        """保存指定分类（原子写入，防止并发损坏）"""
         store = self._stores.get(category)
         if store:
             store["meta"]["updated"] = datetime.now(timezone.utc).isoformat()
-            with open(self._path(category), "w", encoding="utf-8") as f:
-                json.dump(store, f, ensure_ascii=False, indent=2)
+            filepath = self._path(category)
+            tmp_path = filepath.with_suffix('.tmp')
+            try:
+                # 先写入临时文件
+                with open(tmp_path, "w", encoding="utf-8") as f:
+                    json.dump(store, f, ensure_ascii=False, indent=2)
+                # 原子替换
+                import os
+                os.replace(tmp_path, filepath)
+            except Exception as e:
+                # 清理临时文件
+                import os
+                if os.path.exists(tmp_path):
+                    try:
+                        os.remove(tmp_path)
+                    except:
+                        pass
+                raise e
 
     def save_all(self):
         """保存所有分类"""

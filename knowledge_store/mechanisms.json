@@ -1,8 +1,8 @@
 {
   "meta": {
     "count": 36,
-    "updated": "2026-06-11T16:04:52.320536+00:00",
-    "version": 37
+    "updated": "2026-06-21T16:20:02.531101+00:00",
+    "version": 43
   },
   "entries": {
     "c_n_coupling_pattern": {
@@ -746,6 +746,96 @@
       "source": "inject",
       "updated": "2026-06-11T16:04:52.320536+00:00",
       "version": 1
+    },
+    "learned_has_attracted_positive_effect_attention_0": {
+      "value": {
+        "pattern": "has attracted positive_effect attention",
+        "mechanism": "has attracted increasing attention.",
+        "var1": "has attracted",
+        "var2": "attention",
+        "relation_type": "positive_effect",
+        "source": "01-sci-rules",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "confidence": 0.8,
+      "source": "manual",
+      "updated": "2026-06-21T16:20:02.515092+00:00",
+      "version": 1
+    },
+    "learned_has_received_negative_effect_attention_1": {
+      "value": {
+        "pattern": "has received negative_effect attention",
+        "mechanism": "has received limited attention.",
+        "var1": "has received",
+        "var2": "attention",
+        "relation_type": "negative_effect",
+        "source": "01-sci-rules",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "confidence": 0.8,
+      "source": "manual",
+      "updated": "2026-06-21T16:20:02.519098+00:00",
+      "version": 1
+    },
+    "learned_several_negative_effect_of_this_study_s_2": {
+      "value": {
+        "pattern": "Several negative_effect of this study should be acknowledged",
+        "mechanism": "Several limitations of this study should be acknowledged.",
+        "var1": "Several",
+        "var2": "of this study should be acknowledged",
+        "relation_type": "negative_effect",
+        "source": "04-discussion-library",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "confidence": 0.8,
+      "source": "manual",
+      "updated": "2026-06-21T16:20:02.521142+00:00",
+      "version": 1
+    },
+    "learned_指标a_positive_correlation_指标b_3": {
+      "value": {
+        "pattern": "指标A positive_correlation 指标B",
+        "mechanism": "指标A与指标B呈正相关",
+        "var1": "指标A",
+        "var2": "指标B",
+        "relation_type": "positive_correlation",
+        "source": "04-discussion-library",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "confidence": 0.8,
+      "source": "manual",
+      "updated": "2026-06-21T16:20:02.524143+00:00",
+      "version": 1
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4": {
+      "value": {
+        "pattern": "可能与冬季厌氧条件 positive_effect 有关",
+        "mechanism": "可能与冬季厌氧条件增强有关",
+        "var1": "可能与冬季厌氧条件",
+        "var2": "有关",
+        "relation_type": "positive_effect",
+        "source": "06-data-analysis-logic",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "confidence": 0.8,
+      "source": "manual",
+      "updated": "2026-06-21T16:20:02.527143+00:00",
+      "version": 1
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5": {
+      "value": {
+        "pattern": "微生物分解速率 negative_effect 以及春季降雨稀释效应有关",
+        "mechanism": "微生物分解速率降低以及春季降雨稀释效应有关",
+        "var1": "微生物分解速率",
+        "var2": "以及春季降雨稀释效应有关",
+        "relation_type": "negative_effect",
+        "source": "06-data-analysis-logic",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "confidence": 0.8,
+      "source": "manual",
+      "updated": "2026-06-21T16:20:02.530143+00:00",
+      "version": 1
     }
   },
   "changelog": [
@@ -1292,6 +1382,54 @@
       "new": "{'key': 'sediment_effect', 'pattern': 'Sediment -> CH4/CO2', 'mechanism': '管网沉积物是碳排放的重要来源。沉积物中有机物浓度高、DO极低，是产甲烷的热区。沉积物厚度增加→厌氧体积增大→甲烷产量增加。泥水界面是生物地球化学反应的活跃区域，碳氮硫的转化在此集中发生。', 'mechanism_en': 'Sewer sedime",
       "source": "inject",
       "timestamp": "2026-06-11T16:04:52.320536+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_has_attracted_positive_effect_attention_0",
+      "old": null,
+      "new": "{'pattern': 'has attracted positive_effect attention', 'mechanism': 'has attracted increasing attention.', 'var1': 'has attracted', 'var2': 'attention', 'relation_type': 'positive_effect', 'source': '",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.515092+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_has_received_negative_effect_attention_1",
+      "old": null,
+      "new": "{'pattern': 'has received negative_effect attention', 'mechanism': 'has received limited attention.', 'var1': 'has received', 'var2': 'attention', 'relation_type': 'negative_effect', 'source': '01-sci",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.519098+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_several_negative_effect_of_this_study_s_2",
+      "old": null,
+      "new": "{'pattern': 'Several negative_effect of this study should be acknowledged', 'mechanism': 'Several limitations of this study should be acknowledged.', 'var1': 'Several', 'var2': 'of this study should b",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.521142+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_指标a_positive_correlation_指标b_3",
+      "old": null,
+      "new": "{'pattern': '指标A positive_correlation 指标B', 'mechanism': '指标A与指标B呈正相关', 'var1': '指标A', 'var2': '指标B', 'relation_type': 'positive_correlation', 'source': '04-discussion-library', 'learned_at': '2026-06",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.524143+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4",
+      "old": null,
+      "new": "{'pattern': '可能与冬季厌氧条件 positive_effect 有关', 'mechanism': '可能与冬季厌氧条件增强有关', 'var1': '可能与冬季厌氧条件', 'var2': '有关', 'relation_type': 'positive_effect', 'source': '06-data-analysis-logic', 'learned_at': '2026",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.527143+00:00"
+    },
+    {
+      "action": "create",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5",
+      "old": null,
+      "new": "{'pattern': '微生物分解速率 negative_effect 以及春季降雨稀释效应有关', 'mechanism': '微生物分解速率降低以及春季降雨稀释效应有关', 'var1': '微生物分解速率', 'var2': '以及春季降雨稀释效应有关', 'relation_type': 'negative_effect', 'source': '06-data-analysis-log",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.531101+00:00"
     }
   ]
 }

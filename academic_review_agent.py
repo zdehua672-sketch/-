@@ -875,36 +875,66 @@ class CitationChecker:
 
         # 统计正文中引用次数
         all_text = ' '.join(sec.body for sec in sections.values() if sec.body)
-        citations = re.findall(r'\[(\d+(?:[-,]\d+)*)\]', all_text)
-        unique_refs = set()
-        for c in citations:
+
+        # 数字编号格式: [1], [1-3], [1,2,3]
+        numeric_citations = re.findall(r'\[(\d+(?:[-,]\d+)*)\]', all_text)
+        unique_numeric_refs = set()
+        for c in numeric_citations:
             for part in re.split(r'[,]', c):
                 if '-' in part:
                     start, end = part.split('-')
                     for i in range(int(start), int(end)+1):
-                        unique_refs.add(i)
+                        unique_numeric_refs.add(i)
                 else:
-                    unique_refs.add(int(part))
+                    unique_numeric_refs.add(int(part))
+
+        # 作者-年份格式: (Author et al., Year), (Author and Author, Year), Author等（Year）
+        author_year_pattern = r'\(([A-Z][a-z]+(?:\s+(?:et\s+al|and|[A-Z][a-z]+))*(?:\s+等)?,?\s*\d{4}(?:\s*;\s*[A-Z][a-z]+(?:\s+(?:et\s+al|and|[A-Z][a-z]+))*(?:\s+等)?,?\s*\d{4})*)\)'
+        author_year_citations = re.findall(author_year_pattern, all_text)
+
+        # 也匹配中文格式: Author等（Year）
+        cn_author_pattern = r'[A-Z][a-z]+等（\d{4}）'
+        cn_author_citations = re.findall(cn_author_pattern, all_text)
+
+        # 提取唯一的作者-年份引用
+        unique_author_refs = set()
+        for c in author_year_citations:
+            # 分割多个引用
+            refs = re.split(r';\s*', c)
+            for ref in refs:
+                ref = ref.strip()
+                if ref:
+                    unique_author_refs.add(ref)
+
+        # 总引用数
+        total_refs = len(unique_numeric_refs) + len(unique_author_refs) + len(cn_author_citations)
 
         # 引用数量检查
-        if len(unique_refs) < 15:
+        if total_refs < 15:
             issues.append(Issue(
-                category='引文规范', severity=Severity.MAJOR if len(unique_refs) < 10 else Severity.MINOR,
+                category='引文规范', severity=Severity.MAJOR if total_refs < 10 else Severity.MINOR,
                 section='全文', location='参考文献',
-                problem=f'参考文献数量偏少({len(unique_refs)}篇)，SCI论文通常需要25-50篇',
-                original=f'共引用{len(unique_refs)}篇文献',
+                problem=f'参考文献数量偏少({total_refs}篇)，SCI论文通常需要25-50篇',
+                original=f'共引用{total_refs}篇文献（数字编号{len(unique_numeric_refs)}篇，作者-年份{len(unique_author_refs)+len(cn_author_citations)}篇）',
                 suggestion='补充领域内近5年的重要文献'
             ))
 
         # 引用分布检查
         for sec_name in ['introduction', 'discussion']:
             if sec_name in sections:
-                sec_refs = re.findall(r'\[\d+\]', sections[sec_name].body)
-                if len(sec_refs) < 3:
+                sec_text = sections[sec_name].body
+                # 数字编号引用
+                sec_numeric_refs = re.findall(r'\[\d+\]', sec_text)
+                # 作者-年份引用
+                sec_author_refs = re.findall(author_year_pattern, sec_text)
+                sec_cn_refs = re.findall(cn_author_pattern, sec_text)
+                total_sec_refs = len(sec_numeric_refs) + len(sec_author_refs) + len(sec_cn_refs)
+
+                if total_sec_refs < 3:
                     issues.append(Issue(
                         category='引文规范', severity=Severity.MAJOR,
                         section=sec_name, location='正文',
-                        problem=f'{sec_name}章节引用不足({len(sec_refs)}处)',
+                        problem=f'{sec_name}章节引用不足({total_sec_refs}处)',
                         original='',
                         suggestion=f'{sec_name}应充分引用文献支撑论述'
                     ))
@@ -1598,18 +1628,44 @@ class StructuralDiagnosisChecker:
             'en': ['introduction', 'methods', 'results', 'discussion', 'conclusion'],
             'zh': ['引言', '方法', '结果', '讨论', '结论'],
         }
-        req = required_sections.get(language, required_sections['en'])
+        # 同时检查中英文章节名
+        en_required = required_sections['en']
+        zh_required = required_sections['zh']
         present = [s.lower() for s in section_names]
-        for rs in req:
-            if not any(rs in p for p in present):
+
+        # 中英文映射
+        zh_en_map = {
+            '引言': 'introduction',
+            '方法': 'methods',
+            '结果': 'results',
+            '讨论': 'discussion',
+            '结论': 'conclusion',
+        }
+
+        for en_name, zh_name in zip(en_required, zh_required):
+            # 检查是否包含英文或中文名称
+            found = False
+            for p in present:
+                if en_name in p or zh_name in p:
+                    found = True
+                    break
+            # 也检查中英文混合的情况（如 "results_discussion"）
+            if not found:
+                for p in present:
+                    if 'result' in p and 'discussion' in p:
+                        # results_discussion 同时包含结果和讨论
+                        if en_name in ['results', 'discussion']:
+                            found = True
+                            break
+            if not found:
                 issues.append(Issue(
                     category='Nature结构诊断',
                     severity=Severity.MAJOR,
                     section='全局',
                     location='章节结构',
-                    problem=f'缺少必要章节: {rs}',
+                    problem=f'缺少必要章节: {zh_name}({en_name})',
                     original='',
-                    suggestion=f'补充{rs}章节',
+                    suggestion=f'补充{zh_name}章节',
                     root_cause='wrong_paper_type',
                     fix_action='补充缺失章节',
                     downstream_impact='审稿人可能直接拒稿',

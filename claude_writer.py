@@ -35,8 +35,9 @@ class ClaudeWriter:
         self.timeout = timeout
         self.model = model
         self.domain_config = domain_config
-        # 全局禁用 SSL 验证（Claude CLI 使用自定义 API 端点）
-        os.environ['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+        # 安全改进：不再全局禁用 SSL 验证
+        # 如果确实需要禁用 SSL，应该通过配置文件或环境变量显式设置
+        # os.environ['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'  # 已移除
 
     def _get_domain_context(self) -> str:
         """从领域配置生成上下文文本"""
@@ -51,11 +52,39 @@ class ClaudeWriter:
             lines.append(f"典型局限性参考: {'; '.join(dc.typical_limitations[:3])}")
         return '\n'.join(lines)
 
+    def _sanitize_prompt(self, prompt: str) -> str:
+        """
+        清理 prompt，移除潜在的注入风险
+
+        Parameters
+        ----------
+        prompt : str, 原始 prompt
+
+        Returns
+        -------
+        str : 清理后的 prompt
+        """
+        import re
+        # 移除可能导致命令注入的字符
+        # 保留基本的标点和换行符
+        sanitized = prompt
+        # 移除控制字符（保留换行和制表符）
+        sanitized = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', sanitized)
+        # 限制长度，避免过长的 prompt
+        max_length = 10000
+        if len(sanitized) > max_length:
+            sanitized = sanitized[:max_length] + '...'
+            logger.warning(f"Prompt 过长，已截断到 {max_length} 字符")
+        return sanitized
+
     def _call_claude(self, prompt: str) -> str:
         """调用 Claude CLI 生成文本"""
+        # 清理 prompt
+        prompt = self._sanitize_prompt(prompt)
+
         # 自动查找 claude CLI 路径
         claude_cmd = "claude"
-        # Windows: 优先使用批处理包装器（解决 SSL 环境变量传递问题）
+        # Windows: 优先使用批处理包装器
         wrapper_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'claude_wrapper.bat')
         if os.name == 'nt' and os.path.exists(wrapper_path):
             claude_cmd = wrapper_path
@@ -74,15 +103,26 @@ class ClaudeWriter:
         if self.model:
             cmd.extend(["--model", self.model])
         try:
-            # 修复 SSL 证书问题：Windows 需要 shell=True 才能正确传递环境变量
+            # 安全改进：使用完整的可执行路径，避免 shell=True
+            # 对于 Windows，使用完整路径可以避免命令注入风险
             env = os.environ.copy()
-            env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+
+            # 安全改进：不再全局禁用 SSL 验证
+            # 如果确实需要，可以通过配置文件设置
+            # env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+
+            # 安全改进：避免 shell=True，使用完整可执行路径
+            # 对于 .cmd 文件，需要通过 cmd.exe 调用
             is_windows = os.name == 'nt'
+            if is_windows and claude_cmd.endswith('.cmd'):
+                # Windows .cmd 文件需要通过 cmd.exe 调用
+                cmd = ['cmd', '/c'] + cmd
+
             result = subprocess.run(
                 cmd, capture_output=True, text=True,
                 timeout=self.timeout, encoding='utf-8', errors='replace',
                 env=env,
-                shell=is_windows,
+                shell=False,  # 安全改进：不使用 shell=True
             )
             if result.returncode != 0:
                 logger.error(f"Claude CLI error: {result.stderr[:300]}")

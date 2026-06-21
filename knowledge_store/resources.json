@@ -2,9 +2,9 @@
   "meta": {
     "category": "resources",
     "description": "外部资源（论文/项目/工具）",
-    "version": 755,
+    "version": 895,
     "created": "2026-05-23T09:59:33.120836+00:00",
-    "updated": "2026-06-20T01:53:17.909845+00:00",
+    "updated": "2026-06-21T16:20:03.874754+00:00",
     "source": "initial"
   },
   "entries": {
@@ -3086,12 +3086,12 @@
         "citation_count": 0,
         "sections_count": 0,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.401836+00:00"
+        "read_at": "2026-06-21T16:20:03.340973+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.428836+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.372062+00:00",
+      "version": 68
     },
     "paper_01-sci-rules": {
       "value": {
@@ -3103,12 +3103,12 @@
         "citation_count": 0,
         "sections_count": 6,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.459835+00:00"
+        "read_at": "2026-06-21T16:20:03.404110+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.485836+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.428061+00:00",
+      "version": 68
     },
     "paper_02-chinese-rules": {
       "value": {
@@ -3120,12 +3120,12 @@
         "citation_count": 0,
         "sections_count": 0,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.517835+00:00"
+        "read_at": "2026-06-21T16:20:03.464059+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.541836+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.487012+00:00",
+      "version": 68
     },
     "paper_03-sentence-bank": {
       "value": {
@@ -3137,12 +3137,12 @@
         "citation_count": 0,
         "sections_count": 2,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.570839+00:00"
+        "read_at": "2026-06-21T16:20:03.519378+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.595836+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.543330+00:00",
+      "version": 68
     },
     "paper_04-discussion-library": {
       "value": {
@@ -3154,12 +3154,12 @@
         "citation_count": 0,
         "sections_count": 2,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.626881+00:00"
+        "read_at": "2026-06-21T16:20:03.576580+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.648836+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.598581+00:00",
+      "version": 68
     },
     "paper_05-figure-design": {
       "value": {
@@ -3171,12 +3171,12 @@
         "citation_count": 0,
         "sections_count": 0,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.679883+00:00"
+        "read_at": "2026-06-21T16:20:03.631625+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.703642+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.655591+00:00",
+      "version": 68
     },
     "paper_06-data-analysis-logic": {
       "value": {
@@ -3188,12 +3188,12 @@
         "citation_count": 0,
         "sections_count": 1,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.734209+00:00"
+        "read_at": "2026-06-21T16:20:03.688756+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.755162+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.711763+00:00",
+      "version": 68
     },
     "paper_07-reviewer-comments": {
       "value": {
@@ -3205,12 +3205,12 @@
         "citation_count": 0,
         "sections_count": 0,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.785209+00:00"
+        "read_at": "2026-06-21T16:20:03.744759+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.808163+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.767762+00:00",
+      "version": 68
     },
     "paper_08-common-mistakes": {
       "value": {
@@ -3222,12 +3222,12 @@
         "citation_count": 0,
         "sections_count": 0,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.835896+00:00"
+        "read_at": "2026-06-21T16:20:03.798908+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.858844+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.821906+00:00",
+      "version": 68
     },
     "paper_09-structure-templates": {
       "value": {
@@ -3239,12 +3239,12 @@
         "citation_count": 0,
         "sections_count": 0,
         "abstract_snippet": "",
-        "read_at": "2026-06-20T01:53:17.887889+00:00"
+        "read_at": "2026-06-21T16:20:03.852732+00:00"
       },
       "confidence": 1.0,
       "source": "manual",
-      "updated": "2026-06-20T01:53:17.909845+00:00",
-      "version": 54
+      "updated": "2026-06-21T16:20:03.874754+00:00",
+      "version": 68
     }
   },
   "changelog": [
@@ -15339,6 +15339,2526 @@
       "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T01:53:17.",
       "source": "manual",
       "timestamp": "2026-06-20T01:53:17.909845+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.401836+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.095683+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.144100+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.459835+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.185341+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.213072+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.517835+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.268352",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.291301+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.570839+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.321149",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.344108+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.626881+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.4",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.424026+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.679883+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.460844",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.483794+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.734209+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.538166+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.785209+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.57",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.597471+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.835896+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.6254",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.648423+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T01:53:17.887889+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.700517+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.095683+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.738956+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.760963+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.185341+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.791122+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.813073+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.268352+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.844727",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.867691+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.321149+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.899062",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.921054+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.400727+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:53.9",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:53.975017+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.460844+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:54.005303",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:54.028253+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.512515+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:54.",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:54.080429+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.575470+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:54.11",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:54.131993+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.625452+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:54.1588",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:54.182498+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.677519+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T06:37:54.",
+      "source": "manual",
+      "timestamp": "2026-06-20T06:37:54.231253+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.738956+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:19.913935+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:19.939286+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.791122+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:19.981481+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.059313+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.844727+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.115248",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.136205+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.899062+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.167558",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.192851+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:53.953022+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.2",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.269538+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:54.005303+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.310645",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.331483+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:54.059409+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.383646+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:54.110027+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.42",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.446712+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:54.158885+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.4750",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.497078+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T06:37:54.210299+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.548625+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:19.913935+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.586422+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.609421+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:19.981481+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.638607+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.662651+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.115248+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.694143",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.716098+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.167558+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.745773",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.769766+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.247173+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.8",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.829939+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.310645+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.861409",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.888372+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.361483+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.942404+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.424091+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:20.97",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:20.994246+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.475023+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:21.0221",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:21.044152+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.526662+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T07:10:21.",
+      "source": "manual",
+      "timestamp": "2026-06-20T07:10:21.094550+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.586422+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:34.496196+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:34.520955+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.638607+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:34.563103+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:34.678544+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.694143+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:34.739597",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:34.764956+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.745773+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:34.796530",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:34.822531+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.801798+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:34.8",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:34.904304+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.861409+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:34.943149",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:34.969120+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.920373+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.026177+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:20.972378+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.06",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.093963+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:21.022192+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.1245",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.150526+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T07:10:21.072573+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.206692+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:34.496196+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.248612+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.274565+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:34.563103+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.307613+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.335563+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:34.739597+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.366560",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.392570+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:34.796530+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.424610",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.451564+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:34.879303+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.4",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.511571+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:34.943149+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.543038",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.568001+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.002217+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.626071+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.064419+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.65",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.683707+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.124565+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.7164",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.740473+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.182686+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T15:52:35.",
+      "source": "manual",
+      "timestamp": "2026-06-20T15:52:35.797545+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.248612+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.310511+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.332265+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.307613+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.376595+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.405462+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.366560+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.463947",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.485987+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.424610+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.516163",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.539112+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.485561+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.5",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.618443+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.543038+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.656732",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.680785+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.600736+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.737215+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.658747+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.77",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.798600+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.716473+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.8291",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.852112+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T15:52:35.770483+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.904516+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.310511+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:24.944759+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:24.969252+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.376595+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.000636+00:",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.027594+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.463947+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.060758",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.082360+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.516163+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.112700",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.137657+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.595041+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.1",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.191480+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.656732+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.222525",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.246484+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.711049+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.301284+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.775549+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.33",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.357427+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.829162+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.3882",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.410201+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.881510+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-20T16:24:25.",
+      "source": "manual",
+      "timestamp": "2026-06-20T16:24:25.464667+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:24.944759+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.119470+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.175002+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.000636+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.219623+00:",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.245680+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.060758+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.303687",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.329688+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.112700+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.360688",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.383687+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.168519+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.4",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.462687+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.222525+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.497315",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.519269+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.278328+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.573780+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.333468+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.61",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.637784+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.388220+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.6657",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.690783+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-20T16:24:25.441663+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.750784+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.119470+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.789284+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.813250+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.219623+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.843252+00:",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.870010+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.303687+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.902691",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.924690+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.360688+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:02.958649",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:02.985658+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.439689+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:03.0",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:03.065645+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.497315+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:03.099643",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:03.123643+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.549315+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:03.",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:03.179644+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.613826+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:03.21",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:03.235645+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.665780+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:03.2666",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:03.295644+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.726785+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T06:03:03.",
+      "source": "manual",
+      "timestamp": "2026-06-21T06:03:03.352645+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.789284+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:26.964890+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:26.990854+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.843252+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.034849+00:",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.145967+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.902691+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.207965",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.233832+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:02.958649+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.266430",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.290438+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:03.033645+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.3",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.372632+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:03.099643+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.410093",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.433290+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:03.155648+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.491187+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:03.210643+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.53",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.555175+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:03.266646+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.5857",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.610791+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T06:03:03.328648+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.664442+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:26.964890+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.707200+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.732157+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.034849+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.765392+00:",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.790357+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.207965+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.824261",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.848263+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.266430+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.879905",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.904952+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.348238+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.9",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:27.962362+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.410093+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:27.996658",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:28.019658+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.464680+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:28.",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:28.073891+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.531085+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:28.10",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:28.127676+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.585792+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:28.1584",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:28.179429+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.641420+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T08:23:28.",
+      "source": "manual",
+      "timestamp": "2026-06-21T08:23:28.241495+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.707200+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:01.870435+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:01.886390+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.765392+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:01.927858+00:",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:01.955236+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.824261+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.018284",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.040244+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.879905+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.072940",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.095933+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.940397+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.1",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.180903+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:27.996658+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.223514",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.247512+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:28.050934+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.303758+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:28.105714+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.34",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.364694+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:28.158438+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.3946",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.428695+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T08:23:28.212484+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:02.",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:02.487023+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_00-index",
+      "old": {
+        "title": "00-index",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:01.870435+00:00"
+      },
+      "new": "{'title': '00-index', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.340973+00:00'}",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.372062+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_01-sci-rules",
+      "old": {
+        "title": "01-sci-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 6,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:01.927858+00:00"
+      },
+      "new": "{'title': '01-sci-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 6, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.404110+00:",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.428061+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_02-chinese-rules",
+      "old": {
+        "title": "02-chinese-rules",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.018284+00:00"
+      },
+      "new": "{'title': '02-chinese-rules', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.464059",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.487012+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_03-sentence-bank",
+      "old": {
+        "title": "03-sentence-bank",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.072940+00:00"
+      },
+      "new": "{'title': '03-sentence-bank', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.519378",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.543330+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_04-discussion-library",
+      "old": {
+        "title": "04-discussion-library",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 2,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.155948+00:00"
+      },
+      "new": "{'title': '04-discussion-library', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 2, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.5",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.598581+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_05-figure-design",
+      "old": {
+        "title": "05-figure-design",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.223514+00:00"
+      },
+      "new": "{'title': '05-figure-design', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.631625",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.655591+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_06-data-analysis-logic",
+      "old": {
+        "title": "06-data-analysis-logic",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 1,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.281697+00:00"
+      },
+      "new": "{'title': '06-data-analysis-logic', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 1, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.711763+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_07-reviewer-comments",
+      "old": {
+        "title": "07-reviewer-comments",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.342557+00:00"
+      },
+      "new": "{'title': '07-reviewer-comments', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.74",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.767762+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_08-common-mistakes",
+      "old": {
+        "title": "08-common-mistakes",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.394697+00:00"
+      },
+      "new": "{'title': '08-common-mistakes', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.7989",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.821906+00:00"
+    },
+    {
+      "action": "update",
+      "key": "paper_09-structure-templates",
+      "old": {
+        "title": "09-structure-templates",
+        "authors": [],
+        "year": 0,
+        "source": "local_text",
+        "arxiv_id": "",
+        "citation_count": 0,
+        "sections_count": 0,
+        "abstract_snippet": "",
+        "read_at": "2026-06-21T16:20:02.464977+00:00"
+      },
+      "new": "{'title': '09-structure-templates', 'authors': [], 'year': 0, 'source': 'local_text', 'arxiv_id': '', 'citation_count': 0, 'sections_count': 0, 'abstract_snippet': '', 'read_at': '2026-06-21T16:20:03.",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:20:03.874754+00:00"
     }
   ]
 }

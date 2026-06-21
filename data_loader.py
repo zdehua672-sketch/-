@@ -435,11 +435,93 @@ class DataLoader:
         print(f"\n数据质量报告已保存: {filepath}")
         return filepath
     
+    def extract_metadata(self):
+        """
+        从数据集中提取元数据，用于填充论文占位符
+
+        Returns
+        -------
+        dict : 包含以下键值对
+            - n_sampling_points: 采样点数量
+            - sampling_point_names: 采样点名称列表
+            - winter_months: 冬季采样月份
+            - spring_months: 春季采样月份
+            - n_samples: 总样本数
+            - n_winter_samples: 冬季样本数
+            - n_spring_samples: 春季样本数
+        """
+        if self.df is None:
+            self.load_data()
+
+        df = self.df
+
+        # 采样点数量和名称
+        sampling_points = df['采样点'].unique().tolist()
+        n_sampling_points = len(sampling_points)
+
+        # 冬季和春季样本数
+        winter_df = df[df['季节'] == '冬季']
+        spring_df = df[df['季节'] == '春季']
+        n_winter_samples = len(winter_df)
+        n_spring_samples = len(spring_df)
+
+        # 尝试从数据中提取采样月份
+        winter_months = '12'  # 默认值
+        spring_months = '3'   # 默认值
+
+        if '采样时间' in df.columns:
+            try:
+                # 尝试解析采样时间
+                winter_times = winter_df['采样时间'].dropna()
+                spring_times = spring_df['采样时间'].dropna()
+
+                if len(winter_times) > 0:
+                    # 尝试转换为日期
+                    for t in winter_times:
+                        try:
+                            dt = pd.to_datetime(t)
+                            winter_months = str(dt.month)
+                            break
+                        except:
+                            pass
+
+                if len(spring_times) > 0:
+                    for t in spring_times:
+                        try:
+                            dt = pd.to_datetime(t)
+                            spring_months = str(dt.month)
+                            break
+                        except:
+                            pass
+            except:
+                pass
+
+        # 从列名或数据中推断月份
+        for col in df.columns:
+            col_str = str(col)
+            if '12月' in col_str or '1月' in col_str or '2月' in col_str:
+                winter_months = '12-2'
+            elif '3月' in col_str or '4月' in col_str or '5月' in col_str:
+                spring_months = '3-5'
+
+        metadata = {
+            'n_sampling_points': n_sampling_points,
+            'sampling_point_names': sampling_points,
+            'winter_months': winter_months,
+            'spring_months': spring_months,
+            'n_samples': len(df),
+            'n_winter_samples': n_winter_samples,
+            'n_spring_samples': n_spring_samples,
+            'sampling_locations': ', '.join(sampling_points),
+        }
+
+        return metadata
+
     def get_analysis_ready_data(self):
         """返回分析就绪的数据"""
         if self.df is None:
             self.load_data()
-        
+
         df = self.df.copy()
         
         # 计算衍生变量

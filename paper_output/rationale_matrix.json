@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "updated": "2026-06-20T02:11:05.269925+00:00",
+  "updated": "2026-06-21T14:23:08.609919+00:00",
   "rows": [
     {
-      "finding": "CH4平均值与总磷（mg/L)相关(r=0.522)",
+      "finding": "CO2与NO2（ppm）相关(r=0.842)",
       "mechanism": "",
       "mechanism_en": "",
       "evidence": "",
@@ -11,10 +11,10 @@
       "confidence": 0.0,
       "section": "results",
       "language": "zh",
-      "timestamp": "2026-06-20T02:11:05.269925+00:00"
+      "timestamp": "2026-06-21T14:23:08.609919+00:00"
     },
     {
-      "finding": "CH4平均值与铵态氮（mg/L)相关(r=-0.482)",
+      "finding": "CO2本底值与气温（℃）相关(r=-0.572)",
       "mechanism": "",
       "mechanism_en": "",
       "evidence": "",
@@ -22,62 +22,7 @@
       "confidence": 0.0,
       "section": "results",
       "language": "zh",
-      "timestamp": "2026-06-20T02:11:05.269925+00:00"
-    },
-    {
-      "finding": "CH4平均值与有机碳（g/kg)相关(r=0.647)",
-      "mechanism": "",
-      "mechanism_en": "",
-      "evidence": "",
-      "citation": "",
-      "confidence": 0.0,
-      "section": "results",
-      "language": "zh",
-      "timestamp": "2026-06-20T02:11:05.269925+00:00"
-    },
-    {
-      "finding": "N2O平均值与NaCl(mg/L)相关(r=0.500)",
-      "mechanism": "",
-      "mechanism_en": "",
-      "evidence": "",
-      "citation": "",
-      "confidence": 0.0,
-      "section": "results",
-      "language": "zh",
-      "timestamp": "2026-06-20T02:11:05.269925+00:00"
-    },
-    {
-      "finding": "VOCs(ppb)与O2(%vol)相关(r=-0.577)",
-      "mechanism": "",
-      "mechanism_en": "",
-      "evidence": "",
-      "citation": "",
-      "confidence": 0.0,
-      "section": "results",
-      "language": "zh",
-      "timestamp": "2026-06-20T02:11:05.269925+00:00"
-    },
-    {
-      "finding": "VOCs(ppb)与电导率(uS/cm)相关(r=-0.506)",
-      "mechanism": "",
-      "mechanism_en": "",
-      "evidence": "",
-      "citation": "",
-      "confidence": 0.0,
-      "section": "results",
-      "language": "zh",
-      "timestamp": "2026-06-20T02:11:05.269925+00:00"
-    },
-    {
-      "finding": "O2(%vol)与有机碳（g/kg)相关(r=0.481)",
-      "mechanism": "",
-      "mechanism_en": "",
-      "evidence": "",
-      "citation": "",
-      "confidence": 0.0,
-      "section": "results",
-      "language": "zh",
-      "timestamp": "2026-06-20T02:11:05.269925+00:00"
+      "timestamp": "2026-06-21T14:23:08.609919+00:00"
     }
   ]
 }

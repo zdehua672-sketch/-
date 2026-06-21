@@ -11,11 +11,70 @@ PaperContext 中央上下文 + 模块编排器
 import os
 import logging
 import numpy as np
+import time
+
+# 审计日志
+try:
+    from audit_logger import get_audit_logger
+    _audit_logger = get_audit_logger()
+except ImportError:
+    _audit_logger = None
+
+# 质量评分器
+try:
+    from quality_scorer import QualityScorer, select_best_candidate
+    _quality_scorer = QualityScorer()
+except ImportError:
+    _quality_scorer = None
+
+# 事实检查器
+try:
+    from fact_checker import get_fact_checker
+    _fact_checker = get_fact_checker()
+except ImportError:
+    _fact_checker = None
+
+# 断言控制器
+try:
+    from assertion_control import get_assertion_controller, control_assertions
+    _assertion_controller = get_assertion_controller()
+except ImportError:
+    _assertion_controller = None
+
+# 学习环路
+try:
+    from learning_loop import get_learning_loop
+    _learning_loop = None  # 延迟初始化，需要 memory
+except ImportError:
+    _learning_loop = None
+
+# 运行时指标
+try:
+    from runtime_metrics import get_runtime_metrics
+    _runtime_metrics = get_runtime_metrics()
+except ImportError:
+    _runtime_metrics = None
+
+# 人工在环
+try:
+    from human_in_loop import get_human_in_loop
+    _human_in_loop = get_human_in_loop()
+except ImportError:
+    _human_in_loop = None
+
+# 写作 Schema
+try:
+    from writer_schema import WritingRequest, WritingResponse, create_request_from_context
+except ImportError:
+    WritingRequest = None
+    WritingResponse = None
+    create_request_from_context = None
 
 # Claude 写作引擎（通过 CLI 调用）
 _claude_writer = None
 
 def _get_claude_writer():
+    """获取ClaudeWriter单例"""
     global _claude_writer
     if _claude_writer is None:
         try:
@@ -26,14 +85,36 @@ def _get_claude_writer():
     return _claude_writer
 
 
+def _require_writer() -> 'ClaudeWriter':
+    """
+    获取ClaudeWriter，如果不可用则抛出异常
+
+    Returns
+    -------
+    ClaudeWriter : 写作引擎实例
+
+    Raises
+    ------
+    RuntimeError : ClaudeWriter 不可用时
+    """
+    writer = _get_claude_writer()
+    if writer is None:
+        raise RuntimeError("ClaudeWriter 不可用，请检查 claude_writer 模块是否正确安装")
+    return writer
+
+
 def _is_valid_academic_text(text: str) -> bool:
     """
     检查文本是否是有效的学术文本（不是元评论）
 
     判断标准：
     1. 长度 > 100字
-    2. 包含学术特征（如"本研究"、"结果表明"等）
-    3. 不包含元评论特征（如"请问您"、"需要我"等）
+    2. 不包含元评论特征
+    3. 通过质量评分（引用、结构、语言）
+
+    Returns
+    -------
+    bool : 是否是有效的学术文本
     """
     if not text or len(text) < 100:
         return False
@@ -44,23 +125,107 @@ def _is_valid_academic_text(text: str) -> bool:
         '我来帮您', 'Here is', 'I will write', 'Let me write',
         '作为环境科学', '我可以协助', '请告诉我您的',
         '具体需求', '您希望我', '优先处理',
+        '如需写入', '如需调整', '请在弹出',
     ]
     for pattern in meta_patterns:
         if pattern in text:
             return False
 
-    # 学术特征（优先级中，包含则通过）
+    # 计算质量分数
+    score = _calculate_text_quality_score(text)
+    return score >= 30  # 30分以上认为是有效文本
+
+
+def _calculate_text_quality_score(text: str) -> int:
+    """
+    计算文本质量分数（0-100）
+
+    评分维度：
+    1. 长度分数（0-20分）
+    2. 引用分数（0-20分）
+    3. 学术特征分数（0-20分）
+    4. 结构分数（0-20分）
+    5. 数据支撑分数（0-20分）
+
+    Parameters
+    ----------
+    text : str, 待评估文本
+
+    Returns
+    -------
+    int : 质量分数（0-100）
+    """
+    import re
+    score = 0
+
+    # 1. 长度分数（0-20分）
+    text_len = len(text)
+    if text_len >= 500:
+        score += 20
+    elif text_len >= 300:
+        score += 15
+    elif text_len >= 200:
+        score += 10
+    elif text_len >= 100:
+        score += 5
+
+    # 2. 引用分数（0-20分）
+    # 数字引用格式 [1], [1-3]
+    numeric_refs = re.findall(r'\[\d+(?:[-,]\d+)*\]', text)
+    # 作者-年份格式 (Author et al., Year)
+    author_year_refs = re.findall(r'\([A-Z][a-z]+(?:\s+(?:et\s+al|and|[A-Z][a-z]+))*(?:\s+等)?,?\s*\d{4}\)', text)
+    # 中文引用 Author等（Year）
+    cn_refs = re.findall(r'[A-Z][a-z]+等（\d{4}）', text)
+    total_refs = len(numeric_refs) + len(author_year_refs) + len(cn_refs)
+    if total_refs >= 5:
+        score += 20
+    elif total_refs >= 3:
+        score += 15
+    elif total_refs >= 1:
+        score += 10
+
+    # 3. 学术特征分数（0-20分）
     academic_patterns = [
         '本研究', '结果表明', '分析表明', '研究发现',
-        '主要结论', '综上所述', '本研究发现',
-        '结论如下', '碳污染物', '管网', '甲烷',
+        '主要结论', '综上所述', '本研究发现', '结论如下',
+        '显著', '相关', '差异', '影响', '因素',
+        '机制', '过程', '特征', '规律', '趋势',
     ]
-    for pattern in academic_patterns:
-        if pattern in text:
-            return True
+    academic_count = sum(1 for p in academic_patterns if p in text)
+    if academic_count >= 5:
+        score += 20
+    elif academic_count >= 3:
+        score += 15
+    elif academic_count >= 1:
+        score += 10
 
-    # 如果没有明显的学术特征，但长度足够，也认为是有效的
-    return len(text) > 300
+    # 4. 结构分数（0-20分）
+    # 检查是否有段落结构
+    paragraphs = text.split('\n\n')
+    if len(paragraphs) >= 3:
+        score += 15
+    elif len(paragraphs) >= 2:
+        score += 10
+    # 检查是否有标题结构
+    if re.search(r'^#{1,3}\s+', text, re.MULTILINE):
+        score += 5
+
+    # 5. 数据支撑分数（0-20分）
+    # 检查是否有数值数据
+    numbers = re.findall(r'\d+\.?\d*', text)
+    if len(numbers) >= 5:
+        score += 10
+    elif len(numbers) >= 3:
+        score += 5
+    # 检查是否有统计值
+    stat_patterns = [r'p\s*[<>=]\s*\d+', r'[rt]\s*=\s*[-\d.]+', r'\d+\.?\d*\s*%']
+    stat_count = sum(len(re.findall(p, text)) for p in stat_patterns)
+    if stat_count >= 3:
+        score += 10
+    elif stat_count >= 1:
+        score += 5
+
+    return min(100, score)
 
 
 def _call_claude_with_retry(writer, func_name: str, max_retries: int = 3, **kwargs) -> str:
@@ -112,6 +277,168 @@ def _get_domain_config(ctx):
         ctx.domain_config = get_config(ctx.domain)
         return ctx.domain_config
     return None
+
+
+def _log_writing_audit(section_type: str, step_name: str, prompt: str,
+                       output: str, quality_score: float = 0.0,
+                       candidates: list = None, **kwargs):
+    """
+    记录写作审计日志
+
+    Parameters
+    ----------
+    section_type : str, 章节类型
+    step_name : str, 步骤名称
+    prompt : str, 输入 prompt
+    output : str, 模型输出
+    quality_score : float, 质量分数
+    candidates : list of str, 候选输出
+    **kwargs : 其他参数
+    """
+    if _audit_logger:
+        try:
+            _audit_logger.log_writing(
+                section_type=section_type,
+                step_name=step_name,
+                prompt=prompt[:2000],  # 限制长度
+                output=output[:2000],
+                quality_score=quality_score,
+                candidates=[c[:500] for c in (candidates or [])],
+                **kwargs,
+            )
+        except Exception as e:
+            logger.warning(f"审计日志记录失败: {e}")
+
+
+def _generate_and_select_best(writer_func, num_candidates: int = 1,
+                              findings: list = None, section_type: str = 'general',
+                              **kwargs) -> tuple:
+    """
+    生成多个候选并选择最佳
+
+    Parameters
+    ----------
+    writer_func : callable, 写作函数
+    num_candidates : int, 候选数量
+    findings : list, 数据发现
+    section_type : str, 章节类型
+    **kwargs : 传递给写作函数的参数
+
+    Returns
+    -------
+    tuple : (最佳文本, 质量分数)
+    """
+    if num_candidates <= 1 or not _quality_scorer:
+        # 单候选模式
+        result = writer_func(**kwargs)
+        if result:
+            score = _quality_scorer.score(result, findings=findings, section_type=section_type) if _quality_scorer else None
+            return result, score.total if score else 0.0
+        return '', 0.0
+
+    # 多候选模式
+    candidates = []
+    for i in range(num_candidates):
+        try:
+            result = writer_func(**kwargs)
+            if result:
+                candidates.append(result)
+        except Exception as e:
+            logger.warning(f"候选 {i+1} 生成失败: {e}")
+
+    if not candidates:
+        return '', 0.0
+
+    # 选择最佳候选
+    best_text, best_score = select_best_candidate(
+        candidates, _quality_scorer, findings=findings, section_type=section_type
+    )
+    return best_text, best_score.total
+
+
+def _post_process_writing(text: str, section_type: str, ctx,
+                          quality_score: float = 0.0) -> tuple:
+    """
+    统一写作后处理流程
+
+    Parameters
+    ----------
+    text : str, 生成的文本
+    section_type : str, 章节类型
+    ctx : PaperContext, 论文上下文
+    quality_score : float, 质量分数
+
+    Returns
+    -------
+    tuple : (处理后文本, 是否需要人工复核, 复核原因列表)
+    """
+    import time
+    start_time = time.time()
+
+    needs_review = False
+    review_reasons = []
+
+    # 1. 事实一致性检查
+    fact_check_passed = True
+    fact_check_issues = []
+    if _fact_checker and ctx.has('findings'):
+        fact_result = _fact_checker.check(text, ctx.findings)
+        fact_check_passed = fact_result.passed
+        fact_check_issues = fact_result.issues
+        if not fact_check_passed:
+            needs_review = True
+            review_reasons.append(f"事实检查未通过: {len(fact_check_issues)} 个问题")
+            logger.warning(f"事实检查未通过: {len(fact_check_issues)} 个问题")
+
+    # 2. 可控断言处理
+    if _assertion_controller:
+        assertion_result = _assertion_controller.control(text, ctx.findings)
+        if assertion_result.modification_count > 0:
+            text = assertion_result.modified_text
+            logger.info(f"断言控制: 修改 {assertion_result.modification_count} 处")
+
+    # 3. 人工在环检测
+    if _human_in_loop:
+        review_items = _human_in_loop.detect_review_needed(
+            text=text,
+            section_type=section_type,
+            quality_score=quality_score,
+            fact_check_passed=fact_check_passed,
+            fact_check_issues=fact_check_issues,
+        )
+        if review_items:
+            needs_review = True
+            review_reasons.extend([item.reason for item in review_items])
+
+    # 4. 记录运行时指标
+    if _runtime_metrics:
+        duration = time.time() - start_time
+        _runtime_metrics.record_call(
+            module_name=f'writer_{section_type}',
+            success=True,
+            duration=duration,
+        )
+        _runtime_metrics.record_quality_check(
+            passed=fact_check_passed,
+            quality_score=quality_score,
+            needs_review=needs_review,
+        )
+
+    # 5. 学习环路（从高质量文本中学习）
+    if _learning_loop and quality_score >= 70:
+        try:
+            from knowledge_memory import KnowledgeMemory
+            if ctx.has('memory'):
+                _learning_loop.memory = ctx.memory
+                learn_result = _learning_loop.learn_from_accepted(
+                    section_type, text, quality_score
+                )
+                if learn_result.patterns_learned > 0:
+                    logger.info(f"学习环路: 学到 {learn_result.patterns_learned} 个模式")
+        except Exception as e:
+            logger.warning(f"学习环路失败: {e}")
+
+    return text, needs_review, review_reasons
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -142,6 +469,7 @@ class PaperContext:
 
     # === 数据层 ===
     df: Any = None                    # pd.DataFrame
+    metadata: dict = field(default_factory=dict)    # 数据元数据（采样点数、月份等）
     findings: list = field(default_factory=list)   # DataExplorer 输出
 
     # === 知识层 ===
@@ -208,6 +536,10 @@ class PaperContext:
         if isinstance(val, (list, dict, str)):
             return len(val) > 0
         return True
+
+    def has_section(self, name: str) -> bool:
+        """检查上下文是否有某个章节且非空"""
+        return name in self.sections and bool(self.sections[name])
 
 
 # ============================================================
@@ -279,12 +611,16 @@ def _run_motivation(ctx: PaperContext):
 
 
 def _run_writer_results(ctx: PaperContext):
-    """写 Results 章节（带深度模仿指导）"""
+    """写 Results 章节（全管线接入：审计 + 事实检查 + 断言控制 + 学习）"""
     from data_driven_pipeline import DataDrivenWriter
-    writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
+    start_time = time.time()
+
     # 优先用 Claude 生成 Results
     claude = _get_claude_writer()
     if claude and ctx.has('findings'):
+        # 构建 prompt 用于审计
+        prompt = f"生成 Results 章节，findings 数量: {len(ctx.findings)}"
+
         # 使用重试机制调用 Claude
         result = _call_claude_with_retry(
             claude, 'write_results',
@@ -294,13 +630,41 @@ def _run_writer_results(ctx: PaperContext):
             learned_patterns=ctx.learned_patterns if ctx.learned_patterns else None,
         )
         if result:
-            ctx.sections['results'] = _clean_claude_output(result)
+            cleaned = _clean_claude_output(result)
+            quality_score = _calculate_text_quality_score(cleaned)
+
+            # 全管线后处理
+            processed, needs_review, review_reasons = _post_process_writing(
+                cleaned, 'results', ctx, quality_score
+            )
+            ctx.sections['results'] = processed
+
+            # 记录审计日志
+            _log_writing_audit(
+                section_type='results',
+                step_name='writer_results',
+                prompt=prompt,
+                output=processed,
+                quality_score=quality_score,
+            )
+
+            if needs_review:
+                logger.warning(f"Results 需要人工复核: {review_reasons}")
             return ctx.sections['results']
 
     # 回退：模板
     tpl_writer = DataDrivenWriter(ctx.df, ctx.findings, ctx.output_dir, memory=ctx.memory)
     ctx.sections['results'] = tpl_writer.write_results()
     ctx.rationale_rows.extend(tpl_writer.rationale_rows)
+
+    # 记录审计日志（模板模式）
+    _log_writing_audit(
+        section_type='results',
+        step_name='writer_results_template',
+        prompt='模板模式',
+        output=ctx.sections['results'],
+        quality_score=50.0,
+    )
     return ctx.sections['results']
 
 
@@ -365,7 +729,26 @@ def _run_writer_discussion(ctx: PaperContext):
             injection_context=injection_context if injection_context else None,
         )
         if result:
-            ctx.sections['discussion'] = _clean_claude_output(result)
+            cleaned = _clean_claude_output(result)
+            quality_score = _calculate_text_quality_score(cleaned)
+
+            # 全管线后处理
+            processed, needs_review, review_reasons = _post_process_writing(
+                cleaned, 'discussion', ctx, quality_score
+            )
+            ctx.sections['discussion'] = processed
+
+            # 记录审计日志
+            _log_writing_audit(
+                section_type='discussion',
+                step_name='writer_discussion',
+                prompt='Discussion 生成',
+                output=processed,
+                quality_score=quality_score,
+            )
+
+            if needs_review:
+                logger.warning(f"Discussion 需要人工复核: {review_reasons}")
             return ctx.sections['discussion']
 
     # 回退：使用模板
@@ -401,7 +784,26 @@ def _run_writer_intro(ctx: PaperContext):
             motivation_context=motivation_context if motivation_context else None,
         )
         if result:
-            ctx.sections['introduction'] = _clean_claude_output(result)
+            cleaned = _clean_claude_output(result)
+            quality_score = _calculate_text_quality_score(cleaned)
+
+            # 全管线后处理
+            processed, needs_review, review_reasons = _post_process_writing(
+                cleaned, 'introduction', ctx, quality_score
+            )
+            ctx.sections['introduction'] = processed
+
+            # 记录审计日志
+            _log_writing_audit(
+                section_type='introduction',
+                step_name='writer_intro',
+                prompt='Introduction 生成',
+                output=processed,
+                quality_score=quality_score,
+            )
+
+            if needs_review:
+                logger.warning(f"Introduction 需要人工复核: {review_reasons}")
             return ctx.sections['introduction']
 
     # 回退：使用模板
@@ -588,7 +990,26 @@ def _run_writer_conclusion(ctx: PaperContext):
                     cleaned = cleaned[:last_period + 1]
                 else:
                     cleaned = cleaned[:1000] + '...'
-            ctx.sections['conclusion'] = cleaned
+
+            quality_score = _calculate_text_quality_score(cleaned)
+
+            # 全管线后处理（结论使用更严格的断言控制）
+            processed, needs_review, review_reasons = _post_process_writing(
+                cleaned, 'conclusion', ctx, quality_score
+            )
+            ctx.sections['conclusion'] = processed
+
+            # 记录审计日志
+            _log_writing_audit(
+                section_type='conclusion',
+                step_name='writer_conclusion',
+                prompt='Conclusion 生成',
+                output=processed,
+                quality_score=quality_score,
+            )
+
+            if needs_review:
+                logger.warning(f"Conclusion 需要人工复核: {review_reasons}")
             return ctx.sections['conclusion']
 
     # 回退：使用优化的模板（严格控制字数）
@@ -1256,6 +1677,13 @@ def _run_assemble(ctx: PaperContext):
         if ctx.sections[key]:
             ctx.sections[key] = _format_chemical_formulas(ctx.sections[key])
 
+    # 填充占位符（X公顷、X万人等）
+    if ctx.metadata:
+        for key in ctx.sections:
+            if ctx.sections[key]:
+                ctx.sections[key] = _fill_placeholders(ctx.sections[key], ctx.metadata)
+        logger.info(f"已用元数据填充占位符: {ctx.metadata}")
+
     # 生成参考文献（GB/T 7714格式）
     references_text = _generate_references_gb7714(ctx)
     ctx.sections['references'] = references_text
@@ -1745,7 +2173,7 @@ def _run_pattern_learning(ctx: PaperContext):
     if ctx.has('memory') and mechanism_learner.mechanisms:
         ks_format = mechanism_learner.to_knowledge_store_format()
         for key, entry in ks_format.items():
-            ctx.memory.remember(key, entry, category='mechanisms')
+            ctx.memory.remember(entry, category='mechanisms', key=key)
         logger.info(f"已将 {len(ks_format)} 个学到的机制存入知识库")
 
     # 存储到 ctx（完整数据，不只是计数）
@@ -1989,8 +2417,19 @@ def _run_generate_figures(ctx: PaperContext):
 
         def _save_figure(fig, name, caption_parts=None, section='results'):
             """保存图表并注册到上下文"""
-            # 保存
-            save_figure_publication(fig, name, analysis_dir, journal='nature')
+            # 保存：先运行 QA 自动修复并保存 PNG，然后保存 PDF 作为稿件交付件
+            try:
+                from chart_qa import qa_and_save
+                png_path = os.path.join(analysis_dir, f'{name}.png')
+                qa_and_save(fig, png_path, name=name, dpi=300)
+            except Exception:
+                # 回退到默认保存方式
+                save_figure_publication(fig, name, analysis_dir, journal='nature')
+            try:
+                # 额外保存 PDF 作为交付格式
+                save_figure_publication(fig, name, analysis_dir, journal='nature')
+            except Exception:
+                pass
             plt.close(fig)
             figures_generated.append(name)
 
@@ -2051,8 +2490,11 @@ def _run_generate_figures(ctx: PaperContext):
                         values = [data[data['季节'] == s][var].values for s in season_list]
 
                         # 箱线图
-                        bp = ax.boxplot(values, labels=season_list, patch_artist=True,
+                        bp = ax.boxplot(values, patch_artist=True,
                                        widths=0.6, showmeans=True, meanprops={'marker': 'D', 'markersize': 4})
+
+                        # 设置x轴标签
+                        ax.set_xticklabels(season_list)
 
                         # 设置颜色
                         for si, box in enumerate(bp['boxes']):
@@ -2189,6 +2631,8 @@ def _run_generate_figures(ctx: PaperContext):
         # ============================================================
         try:
             gas_vars = [v for v in ['甲烷(ppm)', 'CO2', 'VOCs(ppb)', 'H2S'] if v in df.columns]
+            # 过滤掉极高缺失率的变量（缺失率 > 80%），如H2S
+            gas_vars = [v for v in gas_vars if df[v].isna().mean() <= 0.8]
 
             if gas_vars and '采样点' in df.columns:
                 n_vars = min(len(gas_vars), 4)
@@ -2226,15 +2670,23 @@ def _run_generate_figures(ctx: PaperContext):
                     ax.set_ylabel(get_label(var), fontsize=7)
                     ax.set_title(get_label(var), fontsize=8, pad=5)
 
-                    # 标记异常高值
-                    median_val = stats_df['median']
+                    # 标记异常高值（使用均值的中位数作为比较基准）
+                    median_of_means = stats_df['mean'].median() if 'mean' in stats_df.columns else None
                     for i, (val, point) in enumerate(zip(stats_df['mean'], stats_df['采样点'])):
-                        if val > median_val * 2:
-                            ax.annotate(f'{val:.0f}', (i, val), ha='center', va='bottom',
-                                       fontsize=6, color='#E64B35')
+                        try:
+                            if median_of_means is not None and val > median_of_means * 2:
+                                ax.annotate(f'{val:.0f}', (i, val), ha='center', va='bottom',
+                                           fontsize=6, color='#E64B35')
+                        except Exception:
+                            # 忽略注释错误，继续绘图
+                            pass
 
-                    # 添加样本量
-                    ax.text(0.95, 0.95, f'n={stats_df["count"].iloc[0]}', transform=ax.transAxes,
+                    # 添加样本量（显示总样本或最大样本量以便阅读）
+                    try:
+                        n_total = int(stats_df['count'].sum())
+                    except Exception:
+                        n_total = len(df)
+                    ax.text(0.95, 0.95, f'n={n_total}', transform=ax.transAxes,
                             ha='right', va='top', fontsize=7, style='italic')
 
                 # 隐藏多余子图
@@ -2302,8 +2754,12 @@ def _run_generate_figures(ctx: PaperContext):
                             pc.set_alpha(0.3)
 
                         # 箱线图
-                        bp = ax.boxplot(values, labels=season_list, patch_artist=True,
+                        bp = ax.boxplot(values, patch_artist=True,
                                        widths=0.3, showmeans=True, meanprops={'marker': 'D', 'markersize': 4})
+
+                        # 设置x轴标签
+                        ax.set_xticklabels(season_list)
+
                         for si, box in enumerate(bp['boxes']):
                             box.set_facecolor(season_colors[si])
                             box.set_alpha(0.8)
@@ -2567,9 +3023,13 @@ def _generate_three_line_tables(ctx: PaperContext, df):
 
     # 表1：描述性统计表
     try:
-        # 选择关键变量
-        key_vars = ['甲烷(ppm)', 'CO2', 'VOCs(ppb)', 'H2S', 'DO(mg/L)', 'pH',
-                    'TOC（mg/L)', 'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)']
+        # 选择关键变量（气相、液相、固相）
+        key_vars = ['甲烷(ppm)', 'CO2', 'VOCs(ppb)', 'DO(mg/L)', 'pH',
+                    'TOC（mg/L)', 'COD（mg/L)', '总氮（mg/L)', '铵态氮（mg/L)',
+                    '固总碳（g/kg)', '有机碳（g/kg)', '无机碳（g/kg)', 'DOC(mg/kg)']
+        # 注意：H2S缺失率92.5%，已排除
+
+        # 所有变量都分析（固相变量虽然缺失率高，但仍有2个有效值）
         available_vars = [v for v in key_vars if v in df.columns]
 
         if available_vars:
@@ -2845,6 +3305,7 @@ def _clean_claude_output(text: str) -> str:
         r'^CH₄与固相TOC.*$',
         r'^CO₂与NO₂.*$',
         r'^PCA和HCA.*$',
+        r'^如需.*请.*$',  # 通用的"如需...请..."模式
     ]
 
     lines = text.split('\n')
@@ -2910,6 +3371,21 @@ def _clean_claude_output(text: str) -> str:
 
     # 清理多余空行
     text = re.sub(r'\n{3,}', '\n\n', text)
+
+    # ============================================================
+    # 第三步：清理行内元评论片段
+    # ============================================================
+    # 移除行内出现的"如需写入"、"如需调整"等片段
+    inline_meta_patterns = [
+        r'如需写入文件.*?，?\s*',
+        r'如需调整.*?，?\s*',
+        r'如需写入.*?，?\s*',
+        r'请在弹出的权限.*?，?\s*',
+        r'内容已呈现完毕.*?，?\s*',
+        r'全文约\d+字.*?，?\s*',
+    ]
+    for pattern in inline_meta_patterns:
+        text = re.sub(pattern, '', text)
 
     return text.strip()
 
@@ -3254,7 +3730,229 @@ def _run_methodology_learning(ctx: PaperContext):
 
 
 # ============================================================
-# 7. 模块注册表
+# 7. 气体分布图函数
+# ============================================================
+
+def _run_gas_distribution_figures(ctx: PaperContext):
+    """生成气体污染物空间分布图（按功能区分组）"""
+    if not ctx.has('df'):
+        return None
+    try:
+        from gas_distribution_figures import load_gas_data, create_gas_distribution_figures
+
+        # 优先使用桌面数据
+        data = load_gas_data()
+        if data is None:
+            data = ctx.df
+
+        if data is not None:
+            analysis_dir = os.path.join(ctx.output_dir, 'figures')
+            os.makedirs(analysis_dir, exist_ok=True)
+
+            figures = create_gas_distribution_figures(data, analysis_dir)
+            if figures:
+                ctx.gas_figures = figures
+                logger.info(f"气体分布图: 生成 {len(figures)} 张")
+                return figures
+
+        return None
+    except Exception as e:
+        logger.warning(f"气体分布图生成失败: {e}")
+        return None
+
+
+def _run_auto_paper_finder(ctx: PaperContext):
+    """自动文献搜索（arxiv + Semantic Scholar）"""
+    try:
+        from auto_paper_finder import AutoPaperFinder
+
+        # 从领域配置获取搜索关键词
+        domain_config = ctx.domain_config if ctx.has('domain_config') else {}
+        search_query = domain_config.get('search_query', '')
+
+        if not search_query:
+            # 从findings中提取关键词
+            if ctx.has('findings'):
+                keywords = []
+                for f in ctx.findings[:5]:
+                    if 'variable' in f:
+                        keywords.append(f['variable'])
+                search_query = ' '.join(keywords[:3])
+
+        if not search_query:
+            logger.warning("自动文献搜索: 缺少搜索关键词")
+            return None
+
+        finder = AutoPaperFinder()
+        papers = finder.search_and_save(search_query, max_results=10)
+
+        if papers:
+            ctx.papers_found = papers
+            logger.info(f"自动文献搜索: 找到 {len(papers)} 篇论文")
+            return papers
+
+        return None
+    except Exception as e:
+        logger.warning(f"自动文献搜索失败: {e}")
+        return None
+
+
+def _run_fact_checker(ctx: PaperContext):
+    """事实一致性检查（检测幻觉）"""
+    if not ctx.has('sections') or not ctx.has('findings'):
+        return None
+
+    try:
+        from fact_checker import get_fact_checker
+
+        checker = get_fact_checker()
+        full_paper = '\n\n'.join(
+            ctx.sections.get(k, '') for k in
+            ['introduction', 'methods', 'results', 'discussion', 'conclusion']
+            if ctx.has_section(k)
+        )
+
+        if not full_paper:
+            return None
+
+        result = checker.check_consistency(full_paper, ctx.findings)
+        ctx.fact_check_result = result
+
+        if result.get('issues'):
+            logger.warning(f"事实检查: 发现 {len(result['issues'])} 个问题")
+        else:
+            logger.info(f"事实检查: 通过 (分数: {result.get('score', 0):.2f})")
+
+        return result
+    except Exception as e:
+        logger.warning(f"事实检查失败: {e}")
+        return None
+
+
+def _run_human_in_loop(ctx: PaperContext):
+    """人工在环审核"""
+    if not ctx.has('sections'):
+        return None
+
+    try:
+        from human_in_loop import get_human_in_loop
+
+        hil = get_human_in_loop()
+
+        # 收集需要审核的内容
+        items_to_review = []
+
+        # 低置信度的审稿问题
+        if ctx.has('review_report') and hasattr(ctx.review_report, 'issues'):
+            for issue in ctx.review_report.issues:
+                if issue.severity.value in ['CRITICAL', 'MAJOR']:
+                    items_to_review.append({
+                        'type': 'review_issue',
+                        'section': issue.section,
+                        'problem': issue.problem,
+                        'suggestion': issue.suggestion,
+                    })
+
+        # 事实检查问题
+        if ctx.has('fact_check_result'):
+            fact_result = ctx.fact_check_result
+            if fact_result.get('issues'):
+                for issue in fact_result['issues'][:5]:
+                    items_to_review.append({
+                        'type': 'fact_check',
+                        'detail': issue,
+                    })
+
+        if not items_to_review:
+            logger.info("人工在环: 无需审核")
+            return None
+
+        # 记录待审核项（不阻塞流程）
+        review_result = hil.submit_for_review(items_to_review)
+        ctx.human_review_pending = items_to_review
+        logger.info(f"人工在环: 提交 {len(items_to_review)} 项待审核")
+
+        return review_result
+    except Exception as e:
+        logger.warning(f"人工在环失败: {e}")
+        return None
+
+
+def _run_learning_loop(ctx: PaperContext):
+    """学习环路（高质量段落回写记忆）"""
+    if not ctx.has('sections') or not ctx.has('memory'):
+        return None
+
+    try:
+        from learning_loop import get_learning_loop
+
+        loop = get_learning_loop(ctx.memory)
+
+        # 评估各章节质量
+        learned_count = 0
+        for section_name in ['results', 'discussion', 'introduction']:
+            text = ctx.sections.get(section_name, '')
+            if not text or len(text) < 200:
+                continue
+
+            # 评估段落质量
+            quality = loop.evaluate_paragraph_quality(text)
+            if quality and quality.get('score', 0) > 0.7:
+                # 提取句式模式
+                patterns = loop.extract_patterns(text)
+                if patterns:
+                    loop.write_to_memory(section_name, patterns, quality)
+                    learned_count += 1
+
+        if learned_count:
+            logger.info(f"学习环路: 回写 {learned_count} 个高质量章节")
+            ctx.learned_from_output = learned_count
+
+        return learned_count
+    except Exception as e:
+        logger.warning(f"学习环路失败: {e}")
+        return None
+
+
+def _run_quality_scorer(ctx: PaperContext):
+    """文本质量评分"""
+    if not ctx.has('sections'):
+        return None
+
+    try:
+        from quality_scorer import QualityScorer
+
+        scorer = QualityScorer()
+
+        full_paper = '\n\n'.join(
+            ctx.sections.get(k, '') for k in
+            ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+            if ctx.has_section(k)
+        )
+
+        if not full_paper:
+            return None
+
+        # 获取引用和发现
+        references = ctx.recalled_references if ctx.has('recalled_references') else []
+        findings = ctx.findings if ctx.has('findings') else []
+
+        score = scorer.score(full_paper, references=references, findings=findings)
+        ctx.quality_score = score
+
+        logger.info(f"质量评分: 总分={score.get('total', 0):.2f}, "
+                    f"引用={score.get('citation', 0):.2f}, "
+                    f"覆盖={score.get('coverage', 0):.2f}, "
+                    f"语言={score.get('language', 0):.2f}")
+
+        return score
+    except Exception as e:
+        logger.warning(f"质量评分失败: {e}")
+        return None
+
+
+# ============================================================
+# 8. 模块注册表
 # ============================================================
 
 MODULE_REGISTRY = {
@@ -3468,35 +4166,37 @@ MODULE_REGISTRY = {
         'run': _run_gas_distribution_figures,
         'description': '生成气体污染物空间分布图（按功能区分组）',
     },
+    'auto_paper_finder': {
+        'needs': ['domain_config', 'findings'],
+        'provides': ['papers_found'],
+        'run': _run_auto_paper_finder,
+        'description': '自动文献搜索（arxiv + Semantic Scholar）',
+    },
+    'fact_checker': {
+        'needs': ['sections', 'findings'],
+        'provides': ['fact_check_result'],
+        'run': _run_fact_checker,
+        'description': '事实一致性检查（检测幻觉）',
+    },
+    'human_in_loop': {
+        'needs': ['sections', 'review_report'],
+        'provides': ['human_review_pending'],
+        'run': _run_human_in_loop,
+        'description': '人工在环审核（低置信内容复核）',
+    },
+    'learning_loop': {
+        'needs': ['sections', 'memory'],
+        'provides': ['learned_from_output'],
+        'run': _run_learning_loop,
+        'description': '学习环路（高质量段落回写记忆）',
+    },
+    'quality_scorer': {
+        'needs': ['sections'],
+        'provides': ['quality_score'],
+        'run': _run_quality_scorer,
+        'description': '文本质量评分（引用/覆盖/语言/学术）',
+    },
 }
-
-
-def _run_gas_distribution_figures(ctx: PaperContext):
-    """生成气体污染物空间分布图（按功能区分组）"""
-    if not ctx.has('df'):
-        return None
-    try:
-        from gas_distribution_figures import load_gas_data, create_gas_distribution_figures
-
-        # 优先使用桌面数据
-        data = load_gas_data()
-        if data is None:
-            data = ctx.df
-
-        if data is not None:
-            analysis_dir = os.path.join(ctx.output_dir, 'figures')
-            os.makedirs(analysis_dir, exist_ok=True)
-
-            figures = create_gas_distribution_figures(data, analysis_dir)
-            if figures:
-                ctx.gas_figures = figures
-                logger.info(f"气体分布图: 生成 {len(figures)} 张")
-                return figures
-
-        return None
-    except Exception as e:
-        logger.warning(f"气体分布图生成失败: {e}")
-        return None
 
 
 def _load_data(ctx: PaperContext):
@@ -3505,14 +4205,54 @@ def _load_data(ctx: PaperContext):
     loader = DataLoader(ctx.data_path)
     ctx.df = loader.load_data()
     logger.info(f"数据: {ctx.df.shape[0]}行 x {ctx.df.shape[1]}列")
+
+    # 提取元数据用于填充占位符
+    ctx.metadata = loader.extract_metadata()
+    logger.info(f"元数据: 采样点{ctx.metadata['n_sampling_points']}个, "
+                f"冬季{ctx.metadata['n_winter_samples']}样本, "
+                f"春季{ctx.metadata['n_spring_samples']}样本")
+
     return ctx.df
 
 
-# 给 PaperContext 加 has_section 方法
-def _has_section(self, name: str) -> bool:
-    return name in self.sections and self.sections[name]
+def _fill_placeholders(text: str, metadata: dict) -> str:
+    """
+    用元数据填充论文中的占位符
 
-PaperContext.has_section = _has_section
+    Parameters
+    ----------
+    text : str, 论文文本
+    metadata : dict, 从DataLoader.extract_metadata()获取的元数据
+
+    Returns
+    -------
+    str : 填充后的文本
+    """
+    if not metadata:
+        return text
+
+    # 占位符映射表
+    placeholder_map = {
+        'X公顷': metadata.get('campus_area', 'X公顷'),
+        'X万人': metadata.get('population', 'X万人'),
+        'X m³/d': metadata.get('daily_sewage', 'X m³/d'),
+        'X个采样点': f"{metadata.get('n_sampling_points', 'X')}个采样点",
+        '2024年X月': f"2024年{metadata.get('winter_months', 'X')}月",
+        '2025年X月': f"2025年{metadata.get('spring_months', 'X')}月",
+    }
+
+    # 如果metadata中有采样点信息，直接使用
+    if 'n_sampling_points' in metadata:
+        placeholder_map['X个采样点'] = f"{metadata['n_sampling_points']}个采样点"
+
+    # 替换占位符
+    result = text
+    for placeholder, value in placeholder_map.items():
+        if placeholder in result:
+            result = result.replace(placeholder, str(value))
+            logger.info(f"填充占位符: {placeholder} -> {value}")
+
+    return result
 
 
 # ============================================================

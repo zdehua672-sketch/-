@@ -231,7 +231,7 @@ class KnowledgeMemory:
         }
 
     def _calc_relevance(self, query_tokens: set, key: str, value: dict) -> float:
-        """计算查询与条目的相关性（Jaccard + 子串匹配 + 中文字符重叠）"""
+        """计算查询与条目的相关性（混合检索：Jaccard + 子串匹配 + 变量名匹配 + TF-IDF余弦相似度）"""
         # 从 key 和 value 中提取文本
         text_parts = [key.lower()]
         for v in value.values():
@@ -307,8 +307,75 @@ class KnowledgeMemory:
         else:
             var_score = 0.0
 
-        # 综合得分：取最高
-        return max(jaccard, char_score, var_score)
+        # 4. TF-IDF 余弦相似度（增强语义检索）
+        tfidf_score = self._calc_tfidf_similarity(query_tokens, text_tokens)
+
+        # 综合得分：加权平均（TF-IDF权重较高，因为语义能力更强）
+        weights = {
+            'jaccard': 0.2,
+            'char_score': 0.2,
+            'var_score': 0.3,
+            'tfidf_score': 0.3,
+        }
+        final_score = (
+            jaccard * weights['jaccard'] +
+            char_score * weights['char_score'] +
+            var_score * weights['var_score'] +
+            tfidf_score * weights['tfidf_score']
+        )
+        return final_score
+
+    def _calc_tfidf_similarity(self, query_tokens: set, text_tokens: set) -> float:
+        """
+        计算 TF-IDF 余弦相似度
+
+        使用简化的 TF-IDF 计算：
+        - TF: 词频（token在查询/文本中出现的比例）
+        - IDF: 逆文档频率（使用预设的常见词权重）
+        - 余弦相似度: 两个向量的夹角余弦值
+        """
+        if not query_tokens or not text_tokens:
+            return 0.0
+
+        # 构建词汇表
+        vocab = query_tokens | text_tokens
+        if not vocab:
+            return 0.0
+
+        # 预设的 IDF 权重（常见学术词汇权重较低）
+        IDF_WEIGHTS = {
+            '的': 0.1, '了': 0.1, '在': 0.1, '是': 0.1, '和': 0.1,
+            '与': 0.1, '对': 0.1, '等': 0.1, '中': 0.1, '为': 0.1,
+            '研究': 0.3, '分析': 0.3, '结果': 0.3, '发现': 0.3,
+            '表明': 0.3, '显示': 0.3, '显著': 0.4, '相关': 0.4,
+            '差异': 0.4, '影响': 0.4, '因素': 0.4, '机制': 0.5,
+            '数据': 0.3, '样本': 0.3, '统计': 0.3, '检验': 0.3,
+        }
+
+        # 计算 TF-IDF 向量
+        def calc_tfidf_vector(tokens):
+            vector = {}
+            token_count = len(tokens)
+            for token in vocab:
+                # TF: 词频
+                tf = 1.0 if token in tokens else 0.0
+                # IDF: 使用预设权重或默认值
+                idf = IDF_WEIGHTS.get(token, 0.5)
+                vector[token] = tf * idf
+            return vector
+
+        query_vector = calc_tfidf_vector(query_tokens)
+        text_vector = calc_tfidf_vector(text_tokens)
+
+        # 计算余弦相似度
+        dot_product = sum(query_vector.get(t, 0) * text_vector.get(t, 0) for t in vocab)
+        query_norm = sum(v ** 2 for v in query_vector.values()) ** 0.5
+        text_norm = sum(v ** 2 for v in text_vector.values()) ** 0.5
+
+        if query_norm == 0 or text_norm == 0:
+            return 0.0
+
+        return dot_product / (query_norm * text_norm)
 
 
 # ============================================================================

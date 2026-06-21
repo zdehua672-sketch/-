@@ -36,7 +36,8 @@ class DataExplorer:
                 self.category_cols.append(col)
                 continue
             if pd.api.types.is_numeric_dtype(self.df[col]):
-                if self.df[col].dropna().shape[0] >= 3:
+                # 有效值 >= 2 即可分析（固相变量可能只有2个有效值）
+                if self.df[col].dropna().shape[0] >= 2:
                     self.numeric_cols.append(col)
 
     def explore(self) -> list:
@@ -66,6 +67,32 @@ class DataExplorer:
     def _explore_distributions(self):
         """探索每个变量的分布特征"""
         print("\n[探索1] 分布特征...")
+
+        # 首先检查数据质量（缺失率）
+        print("\n  [数据质量] 缺失率检查:")
+        for col in self.numeric_cols:
+            total = len(self.df)
+            missing = self.df[col].isna().sum()
+            missing_rate = missing / total
+
+            if missing_rate > 0.5:
+                # 高缺失率变量
+                if missing_rate > 0.9:
+                    severity = 'critical'
+                    print(f"  [!!!] {col}: 缺失率={missing_rate:.1%} ({missing}/{total}) - 数据严重不足，建议排除")
+                else:
+                    severity = 'high'
+                    print(f"  [!!] {col}: 缺失率={missing_rate:.1%} ({missing}/{total}) - 有效样本仅{total-missing}个")
+
+                self.findings.append({
+                    'type': 'data_quality',
+                    'variable': col,
+                    'importance': severity,
+                    'detail': f'{col}缺失率{missing_rate:.1%}({missing}/{total})，仅{total-missing}个有效样本',
+                    'data': {'missing_rate': missing_rate, 'missing': missing, 'total': total},
+                })
+
+        # 然后检查分布特征
         for col in self.numeric_cols:
             data = self.df[col].dropna()
             if len(data) < 5:
@@ -130,7 +157,7 @@ class DataExplorer:
                 print(f"  [!] {col}: {len(outliers)}个异常值")
 
     def _explore_correlations(self):
-        """探索变量间的相关性 — 报告所有结果，包括不显著的"""
+        """探索变量间的相关性 — 同时计算 Pearson 和 Spearman，报告所有结果"""
         print("\n[探索3] 相关性发现...")
         if len(self.numeric_cols) < 2:
             return
@@ -147,7 +174,20 @@ class DataExplorer:
                     continue
                 if pair[c1].std() == 0 or pair[c2].std() == 0:
                     continue
-                r, p = stats.pearsonr(pair[c1], pair[c2])
+
+                # 同时计算 Pearson 和 Spearman
+                r_pearson, p_pearson = stats.pearsonr(pair[c1], pair[c2])
+                r_spearman, p_spearman = stats.spearmanr(pair[c1], pair[c2])
+
+                # 使用更保守的结果（p值更大的）
+                if p_pearson > p_spearman:
+                    r, p, method = r_pearson, p_pearson, 'Pearson'
+                else:
+                    r, p, method = r_spearman, p_spearman, 'Spearman'
+
+                # 检查 Pearson 和 Spearman 差异（非线性检测）
+                r_diff = abs(r_pearson - r_spearman)
+                nonlinear_flag = r_diff > 0.2
 
                 # 效应量：r 本身就是效应量指标
                 # |r|>=0.5 大效应, 0.3-0.5 中效应, 0.1-0.3 小效应
@@ -172,19 +212,33 @@ class DataExplorer:
 
                 direction = '正' if r > 0 else '负'
 
+                # 构建详细信息
+                detail = f'{c1}与{c2}呈{direction}相关({method}: r={r:.3f}, p={p:.4f}{sig}, n={len(pair)})'
+                if nonlinear_flag:
+                    detail += f' [非线性可能: Pearson={r_pearson:.3f}, Spearman={r_spearman:.3f}]'
+
                 # 报告所有 |r| > 0.3 的结果（中等以上效应）
                 if effect_size > 0.3:
                     self.findings.append({
                         'type': 'correlation',
                         'variables': (c1, c2),
                         'importance': importance,
-                        'detail': f'{c1}与{c2}呈{direction}相关(r={r:.3f}, p={p:.4f}{sig}, n={len(pair)})',
-                        'data': {'r': r, 'p': p, 'n': len(pair), 'effect_size': effect_size, 'sig': sig},
+                        'detail': detail,
+                        'data': {
+                            'r': r, 'p': p, 'n': len(pair),
+                            'effect_size': effect_size, 'sig': sig,
+                            'method': method,
+                            'r_pearson': r_pearson, 'p_pearson': p_pearson,
+                            'r_spearman': r_spearman, 'p_spearman': p_spearman,
+                            'nonlinear': nonlinear_flag,
+                        },
                     })
                     if p < 0.05:
-                        print(f"  [!!] {c1} vs {c2}: r={r:.3f}, p={p:.4f}{sig}")
+                        print(f"  [!!] {c1} vs {c2}: {method} r={r:.3f}, p={p:.4f}{sig}")
                     elif p < 0.10:
-                        print(f"  [!] {c1} vs {c2}: r={r:.3f}, p={p:.4f}{sig} (接近显著)")
+                        print(f"  [!] {c1} vs {c2}: {method} r={r:.3f}, p={p:.4f}{sig} (接近显著)")
+                    if nonlinear_flag:
+                        print(f"       ⚠️ 非线性可能: Pearson={r_pearson:.3f}, Spearman={r_spearman:.3f}")
 
     def _explore_group_differences(self):
         """探索组间差异（如果有分组变量）"""

@@ -1,6 +1,6 @@
 {
   "target_count": 20,
-  "updated": "2026-06-20T02:11:05.357933+00:00",
+  "updated": "2026-06-21T14:23:08.669076+00:00",
   "candidates": [],
   "claims": [
     {
@@ -64,499 +64,679 @@
       "needs": "综述文献"
     },
     {
-      "text": "0%），同样表现为中等变异特征",
+      "text": "8%，同样表现为高变异特征；R13采样点CO₂浓度高达19234",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "4%），远低于大气O₂浓度（约20",
+      "text": "3%，在气相指标中变异程度最低",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "9%），表明管网内部整体处于低氧状态，部分管段O₂浓度不足1%vol，已接近厌氧条件",
+      "text": "2%），表明管网整体处于微氧至有氧状态",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "9%），表明管网内部整体处于低氧状态，部分管段O₂浓度不足1%vol，已接近厌氧条件",
+      "text": "90%（CV=0%），而管网内O₂浓度略高于大气本底，暗示部分管段存在好氧微环境，但局部厌氧微区的存在仍为产甲烷过程提供了条件",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "7%），显著高于大气CO₂浓度水平（约420 ppm），反映了管网周边土壤呼吸和污水释放对近地表CO₂本底的抬升效应",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "7%），显著高于大气CO₂浓度水平（约420 ppm），反映了管网周边土壤呼吸和污水释放对近地表CO₂本底的抬升效应",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "气相碳污染物的高空间异质性（CV 41%~379%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "气相碳污染物的高空间异质性（CV 41%~379%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "8%）意味着少数\"热点管段\"贡献了绝大部分排放量，多数管段的排放水平相对较低，呈现典型的帕累托分布特征",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "33 ppm，增幅约74倍（Mann-Whitney $U$检验，$p=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "9%），各采样点均维持在2~4 ppm的低水平；而春季变异急剧增大（CV=265",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "7%），R17单点浓度达2052",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "71 ppm）显著高于春季（550",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "42℃）抑制了产甲烷菌的活性，有机底物在管网中积累（表现为COD冬季均值高达2426",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "39 ppm）尤为突出，是总均值的近23倍，呈现典型的\"少数管段贡献多数排放\"的帕累托特征",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "9%，指示管网不同区段有机物负荷差异悬殊",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "39 mg/L，NH₄⁺-N均值36",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "TN与NH₄⁺之间呈极强正相关（$r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "88 mg/L），进一步印证了硝化作用的微弱",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "26 mg/L），变化幅度较大，反映管网不同断面的氧化还原条件存在显著梯度",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "25 mg/L），与电导率呈极强正相关（$r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "93 mg/kg），指示沉积物中溶解性有机碳的释放潜力存在显著差异",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "79 mg/kg，进一步印证了管网沉积物作为氮素\"源-汇\"的双重角色",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "33 ppm，增幅约74倍（$p=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "00 ppm）显著高于春季（550",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "这一模式与CH₄的季节变化方向相反，提示冬季管网内有机物大量积累但受低温抑制难以被微生物分解；春季升温后，累积的有机底物被快速消耗并转化为CH₄等气态产物，形成了\"冬积春排\"的排放脉冲特征",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "37 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "37 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "\"冬积春排\"碳节律 — 核心机制解释：冬季低温→有机碳积累（COD 2426 mg/L）→春季升温→CH₄爆发（74倍），CH₄/TOC比值（0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "33 ppm，增幅约74倍（Mann-Whitney U，$p$=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "53 ppm的窄幅区间内，表明低温条件下产甲烷活性被全面抑制；而春季CV飙升至265",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "1倍，但受高离散度影响未达统计显著（$p$=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "71 ppm）显著高于春季（550",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "001），这一反直觉的模式可能与冬季大气边界层较低、管网内外气体交换减弱导致挥发性组分在管内富集有关",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "001），降幅约26倍（图Xb）",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "55 °C）抑制难以被微生物分解；春季水温升至17",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "36 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "36 mg/L）显著高于春季（0",
+      "section": "",
+      "claim_type": "comparison_claim",
+      "needs": "比较文献"
+    },
+    {
+      "text": "在厌氧条件下，NO₃⁻作为电子受体优先于CO₂被反硝化菌利用，其消耗可能间接促进了产甲烷过程——这与CH₄春季激增的观测结果一致，表明碳氮转化在管网中存在耦合效应",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "001），反映了矿化度对水体导电性能的主导控制作用",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "001），提示两者可能受共同的环境驱动因子——温度促进有机质分解和硝化反应——所控制",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "022），表明产甲烷过程伴随的有机酸（如乙酸、丙酸等挥发性脂肪酸）积累导致局部酸化，pH的降低反过来可能抑制产甲烷菌活性，构成负反馈调节",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "027），这可能与高浓度氨氮对产甲烷菌的毒性抑制效应有关——游离氨（FA）可穿透细胞膜干扰产甲烷菌的辅酶F₄₂₀功能",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "前者提示管网盐度可能通过选择性抑制亚硝酸盐氧化菌（NOB）而非氨氧化菌（AOB），导致亚硝态氮累积，从而促进反硝化过程中N₂O的产生；后者则暗示磷素营养盐对硝化-反硝化过程的促进作用",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "010）与温度升高促进无机碳（HCO₃⁻）向CO₂转化逸出的化学平衡机理一致",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "HCA与PCA结论相互印证，共同表明季节因素是控制管网碳污染物分布格局的首要驱动力",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "CH₄高浓度点主要集中在管网中后段（R9、R10、R17），这些区段的共同特征为：DO水平较低（<3 mg/L）、水力停留时间较长、有机物沉积量较高，为厌氧产甲烷菌的富集和活性表达提供了有利条件",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "39 ppm）尤为突出，是总均值的近23倍，呈现典型的\"少数管段贡献多数排放\"的帕累托特征——仅R17一个采样点即贡献了全部CH₄排放总量的约28",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "6倍，与该点同时出现的高CH₄（866",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "18 mg/L）和R1（6896",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "64 mg/L），这些上游管段可能承接了高有机负荷的直排废水，而下游管段因微生物降解作用COD逐渐降低",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "05 mg/L），与该点的高CH₄排放形成对应，进一步支持了\"氨化-产甲烷\"耦合过程的空间一致性",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "这些热点管段的共同特征包括：（1）较长的水力停留时间，有利于厌氧微环境的形成和维持；（2）较低的溶解氧水平（<3 mg/L），满足产甲烷菌的严格厌氧需求；（3）较高的有机物沉积量，为微生物代谢提供充足的碳源和电子供体；（4）适宜的温度条件（春季水温>15 °C），使产甲烷菌活性达到峰值",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "结果显示，前两个主成分的方差贡献率较低，累计解释方差不足50%，表明管网碳污染物的变异是多因素共同作用的结果，难以用少数几个综合变量进行降维表征",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "结果显示，前两个主成分的方差贡献率较低，累计解释方差不足50%，表明管网碳污染物的变异是多因素共同作用的结果，难以用少数几个综合变量进行降维表征",
       "section": "",
       "claim_type": "gap_claim",
       "needs": "综述文献"
     },
     {
-      "text": "8%），作为厌氧硫酸盐还原的指示性产物，其较高浓度进一步印证了管网内局部厌氧微环境的普遍存在",
+      "text": "47 mg/L），表明餐饮废水的高有机负荷是驱动CH₄异常产生的关键因素",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "气相碳污染物的高空间异质性（CV 51%~72%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "气相碳污染物的高空间异质性（CV 51%~72%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
+      "text": "CO₂与CH₄空间分布的解耦暗示两者的主要生成途径存在差异：CH₄主要由厌氧发酵产生，受有机底物和厌氧微环境控制；CO₂则同时来源于好氧呼吸和厌氧发酵，受更多因素叠加影响",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "05 ppm）显著低于文献报道的城市污水主干管CH₄浓度（通常为数百至数千ppm级），这可能与校园管网管径较小、水力停留时间较短、且整体O₂水平相对较高（均值3",
+      "text": "87 mg/L，按日均排水量200 m³/d估算，液相日均碳通量约22",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "86 mg/kg）向液相释放溶解性有机碳，是液相TOC的补充来源之一",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "6%）表明沉积物中约四分之一的有机碳以溶解态形式存在，具有向液相释放的潜力",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "007）反映了温度升高促进CO₂从液相逸出的过程",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "CH₄与液相TOC几乎无关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "38 mg/L），沉积物DOC释放速率较低，气相CH₄排放微弱（2",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "春季（升温期）：温度回升后，微生物活性增强，冬季积累的液相有机碳被快速水解酸化，一部分经好氧矿化途径转化为CO₂（液相IC减少，气相CO₂增加），另一部分经厌氧发酵途径转化为CH₄（CH₄浓度爆发式增长74倍）",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "51 mg/L），碳储量净减少，碳向气相排放转移",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "41%vol）有关，较低的O₂抑制了严格的厌氧产甲烷过程",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "41%vol）有关，较低的O₂抑制了严格的厌氧产甲烷过程",
+      "text": "箭头粗细表示碳迁移通量大小，虚线表示冬季低温抑制的迁移路径",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "9%），指示管网不同区段有机物负荷存在明显差异",
+      "text": "87 mg/L、DOC均值3332",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "6%，无机碳（IC）占比约36",
+      "text": "86 mg/kg等均与原始数据核对一致",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "2%，表明液相碳组分以有机碳为主，但无机碳亦占有相当比例，这与管网内碳酸盐平衡体系及微生物矿化作用密切相关",
+      "text": "75 ppm/(mg·L⁻¹)，即液相TOC每增加1 mg/L，气相CO₂浓度平均升高约9",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "0%，表明在管网还原性条件下，氨化作用主导了氮的形态转化，有机氮被大量分解为NH₄⁺-N",
+      "text": "4%，两者之间不存在显著的线性关系",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "8%，比例相对较低，暗示管网内反硝化过程可能较为活跃，NO₃⁻作为电子受体被还原",
+      "text": "52 mg/L）的发现相互印证",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "7%），空间变异与氮素指标相当",
+      "text": "378 mg/(mg·L⁻¹)，即TOC每增加1 mg/L，TN平均升高约0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "2%，是所有监测指标中空间变异最小的，表明管网水体具有较强的pH缓冲能力",
+      "text": "5节TN-NH₄⁺极强正相关（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "6%），变化幅度较大，反映管网不同断面的氧化还原条件存在显著梯度",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "3%），两者变异程度相近，反映了管网水体矿化度受生活污水排入和管道沿途稀释/浓缩的共同影响",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "6%，表明管壁沉积物碳库以有机碳为主导",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "4%）在所有固相指标中最低，说明无机碳组分在管网空间上分布相对均匀，可能与管道建材的化学风化及碳酸盐沉积的均一性有关",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "4%），作为沉积物中可被微生物直接利用的活性有机碳组分，其含量指示了沉积物有机碳的释放潜力",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "3%），磷素在固相中的富集与有机质矿化和铁锰氧化物吸附作用有关",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "06 ppm；空间异质性高（CV 51%~72%）；管网整体低氧（O₂均值3",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "65 mg/L；NH₄⁺-N占TN的70%，氨化作用主导；pH空间变异最小（CV=6",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "4%；无机碳空间分布最均匀（CV=23",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "4%）\n\n如需写入文件，请授予写入权限",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "第一群组以CH₄为核心，包含固相有机碳（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "第二群组以NH₄⁺-N为中心，与TN（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "043），暗示产甲烷菌与氨化微生物之间可能存在底物竞争或氨氮毒性抑制效应",
+      "text": "985）的结论一致：管网中TN的变化主要由NH₄⁺-N驱动，而NH₄⁺-N的赋存受氨化过程控制，与有机碳的水解酸化过程虽共享相似的微生物功能群和环境条件，但在统计上表现为相对独立的转化路径",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "第三群组由电导率、NaCl（r=0",
+      "text": "136 mg/(mg·L⁻¹)，R²=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "001）和IC构成，表征管网水体的矿化度特征，其中NaCl与N₂O的正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "233)$$\n\n该模型表明，NH₄⁺-N每增加1 mg/L，CH₄浓度平均降低0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "这一负向关系的生物学机制可能涉及两个层面：其一，高浓度游离氨（FA）对产甲烷古菌具有直接毒性，当NH₄⁺-N浓度升高时，FA浓度相应增加，可抑制产甲烷菌的关键酶（如甲基辅酶M还原酶）活性（Wang et al",
+      "text": "TOC→IC回归的不显著性表明，液相有机碳的矿化并非控制IC浓度的主要因素，碳酸盐缓冲体系的稳定性（pH变异系数仅11",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": ", 2023）；其二，氨氧化菌（AOB）与产甲烷古菌在厌氧微环境中对H₂和乙酸等共同底物存在竞争关系，当NH₄⁺-N浓度升高促进了氨氧化过程时，产甲烷过程可能受到间接抑制",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "TOC作为液相有机碳的核心指标，与CH₄的正相关关系未达统计显著水平（r=0",
+      "text": "0%）对IC的调控作用可能更为重要",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "相比之下，固相有机碳与CH₄的显著正相关（r=0",
+      "text": "上述回归分析结果共同表明，液相有机碳浓度并非气相碳排放的直接控制变量",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "这一发现为后续讨论章节中引入DO梯度和沉积物碳库等非线性控制因子的分析提供了统计学依据",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "87 mg/L，TOC均值44",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "4节揭示的\"冬积春排\"模式一致：冬季COD高值反映有机物积累而非活跃分解，此时低温抑制了产甲烷活性，COD与CH₄呈反向关系；春季升温后有机物被快速消耗，COD降低而CH₄升高，二者在时间序列上呈现动态的负耦合特征",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "pH与CH₄呈正相关趋势但未达显著水平（r=0",
+      "text": "2%，表明管网污水中碳的赋存以无机态为主导",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "130），方向与既有研究中\"产甲烷过程伴随有机酸积累导致局部酸化\"的预期相反",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "44），产甲烷过程对pH的局部影响被管网水体的缓冲能力所稀释，且碳酸盐-碳酸氢盐缓冲体系的存在使得IC与pH之间形成了复杂的非线性关系（IC与pH相关系数r=0",
+      "text": "86 mg/kg）向液相释放溶解性有机碳，是液相TOC的补充来源之一",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "672），这与预期中\"低DO促进产甲烷\"的假设存在偏差",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "41%），多数采样点已处于微氧至缺氧状态，DO的空间变异未能形成对产甲烷活性的有效梯度约束",
+      "text": "6%）表明沉积物中约四分之一的有机碳以溶解态形式存在，具有向液相释放的潜力",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "换言之，当DO整体低于产甲烷菌的抑制阈值（通常<1 mg/L自由氧）时，DO的进一步变化对CH₄产生的边际效应已不显著",
+      "text": "007）反映了温度升高促进CO₂从液相逸出的过程",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "CH₄与液相TOC几乎无关（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "换言之，当DO整体低于产甲烷菌的抑制阈值（通常<1 mg/L自由氧）时，DO的进一步变化对CH₄产生的边际效应已不显著",
+      "text": "38 mg/L），沉积物DOC释放速率较低，气相CH₄排放微弱（2",
       "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
     },
     {
-      "text": "这一结果提示，在低DO管网环境中，有机碳供给（固相沉积物）和温度可能比DO本身是更强的CH₄排放控制因子",
+      "text": "05℃），微生物活性增强，冬季积累的液相有机碳被快速水解酸化，一部分经好氧矿化途径转化为CO₂（液相IC减少，气相CO₂增加），另一部分经厌氧发酵途径转化为CH₄（CH₄浓度爆发式增长74倍，由2",
       "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
     },
     {
-      "text": "综合回归分析与相关性结果，本研究提出校园污水管网碳排放的\"三因子驱动\"概念模型（图X）：（1）碳源因子——管壁沉积物有机碳含量决定了产甲烷的底物供给潜力，是CH₄排放的根本驱动力；（2）环境因子——水温通过调控微生物代谢速率控制碳排放的季节节律，形成\"冬积春排\"的脉冲式排放特征；（3）抑制因子——NH₄⁺-N通过氨毒性效应和底物竞争机制对产甲烷过程产生负向调控",
+      "text": "51 mg/L），碳储量净减少，碳向气相排放转移",
       "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
     },
     {
-      "text": "有机碳在总碳中的主导地位表明，管壁沉积物是有机碳的重要蓄积库，其含量水平显著高于一般城市河流沉积物（通常<30 g/kg），提示管网沉积物具有较大的碳储存和释放潜力",
+      "text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
       "section": "",
       "claim_type": "comparison_claim",
       "needs": "比较文献"
     },
     {
-      "text": "56 mg/kg），仅占固相有机碳的约1",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "12 mg/L），其中无机碳（IC）均值21",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "64 mg/L）与COD均值（92",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "3，表明管网气相碳排放以CO₂为主导，CH₄的贡献相对有限但其温室效应当量不可忽视（CH₄的全球增温潜势约为CO₂的28倍）",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "固相有机碳与CH₄呈显著正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "固相有机碳与O₂浓度呈显著正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "05），而CH₄与O₂亦呈正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "液相TOC与固相有机碳之间呈正相关趋势（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "IC与NH₄⁺-N呈显著正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "010），与温度升高促进碳酸盐分解释放CO₂逸出的热力学过程一致",
+      "text": "1 DO梯度下的碳转化路径分异\n\nDO是控制管网碳转化方向的关键变量",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "14 mg/L）高于春季（29",
+      "text": "在DO<2 mg/L的低氧区段，有机碳主要经厌氧发酵途径转化为CH₄和有机酸，CH₄浓度显著升高（与DO呈负相关趋势，r=−0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "13 mg/L），而IC呈相反趋势（冬季17",
+      "text": "在DO>5 mg/L的好氧区段，有机碳主要经好氧呼吸矿化为CO₂/HCO₃⁻，液相IC占比增大，CH₄产生受到抑制",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "079），暗示春季升温促进了有机碳的矿化分解，有机碳向无机碳转化并以CO₂形式逸出",
+      "text": "在DO>5 mg/L的好氧区段，有机碳主要经好氧呼吸矿化为CO₂/HCO₃⁻，液相IC占比增大，CH₄产生受到抑制",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "27 ppm）显著高于春季（530",
+      "text": "55 mg/L），对应CH₄浓度的爆发式增长（74倍）和IC占比的相对下降",
       "section": "",
-      "claim_type": "comparison_claim",
-      "needs": "比较文献"
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
     },
     {
-      "text": "030），与液相IC的季节趋势一致，提示冬季较低的气温抑制了CO₂从液相向气相的逸出速率，导致CO₂在管网气相空间中积累",
+      "text": "38 ppm，表明有机碳在低DO条件下虽大量存在，但低温对产甲烷菌活性的抑制作用更为显著；春季升温后，DO略降而CH₄骤升，说明温度对产甲烷过程的激活效应远大于DO降低的促进效应",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "4%，沉积物是有机碳重要储库 |\n| 液相碳组成 | TOC占TC 59",
+      "text": "TN与NH₄⁺-N的极强正相关（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "2%，碳酸盐缓冲体系贡献显著 |\n| 气相碳组成 | CO₂主导，CH₄温室效应贡献不可忽视 |\n| 三相耦合 | 固相有机碳→CH₄（r=0",
+      "text": "CO₂与NO₂的强正相关（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "7 多元统计分析\n\n为识别控制碳污染物分布的关键因子并揭示采样点的内在分组特征，本节采用主成分分析（PCA）和层次聚类分析（HCA）对26个水质与气体变量进行多元统计分析",
+      "text": "3 盐度对碳氮转化的调控效应\n\nNaCl与电导率的极强正相关（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "盐度通过两条路径影响碳氮转化：\n\n一是NaCl与液相TC（r=0",
+      "section": "",
+      "claim_type": "data_claim",
+      "needs": "数据来源文献"
+    },
+    {
+      "text": "高盐度环境下，耐盐微生物种群占优势，其代谢特征可能偏向于有机碳的不完全降解，导致液相TC和IC积累",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "前两个主成分（PC1和PC2）的累计方差贡献率约为55%~65%，基本涵盖了数据集的主要信息（图X，表X）",
+      "text": "二是N₂O与NaCl的显著正相关（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "PC2主要受矿化度和无机碳指标控制",
+      "text": "030）揭示了盐度对脱氮过程的抑制效应——高盐度环境下亚硝酸盐氧化菌（NOB）比氨氧化菌（AOB）更易受渗透压胁迫而活性降低（Chandran et al",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "聚类II（高有机物负荷类型） 以冬季采样点为主，COD和TOC浓度显著高于其他聚类，但CH₄浓度相对较低，对应3",
-      "section": "",
-      "claim_type": "comparison_claim",
-      "needs": "比较文献"
-    },
-    {
-      "text": "4节所述的\"冬积\"阶段——有机底物积累但低温抑制了产甲烷转化",
+      "text": ", 2016），导致NO₂⁻积累，进而通过硝化细菌的硝化反硝化（nitrifier denitrification）途径产生更多N₂O",
       "section": "",
       "claim_type": "causal_claim",
       "needs": "机制文献"
     },
     {
-      "text": "87 mg/L，换算为单位质量浓度后约合0",
+      "text": "433）提示温度升高可能促进了NH₄⁺向气相NH₃的挥发损失或增强了硝化消耗",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "DO浓度作为氧化还原条件的综合指标，控制着碳转化路径的分支方向，是理解管网碳排放机制的核心变量",
+      "section": "",
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
+    },
+    {
+      "text": "盐度则通过抑制NOB活性影响N₂O排放（r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "从碳质量占比来看，固相碳在管网碳库中占据绝对优势（>99%），液相碳和气相碳合计不足1%",
+      "text": "盐度则通过抑制NOB活性影响N₂O排放（r=0",
       "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
+      "claim_type": "causal_claim",
+      "needs": "机制文献"
     },
     {
-      "text": "从碳质量占比来看，固相碳在管网碳库中占据绝对优势（>99%），液相碳和气相碳合计不足1%",
+      "text": "3节明确提出\"碳平衡分析薄弱\"为研究不足之一，3",
       "section": "",
       "claim_type": "gap_claim",
       "needs": "综述文献"
     },
     {
-      "text": "93 mg/kg，CV>100%），提示不同采样点沉积物中溶解性有机碳的释放能力存在显著差异，这一差异可能与沉积物的粒径组成、有机质老化程度和微生物矿化活性有关",
+      "text": "CO2与NO2（ppm）相关(r=0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
     },
     {
-      "text": "38 mg/L），但低温（气温4",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "产甲烷菌活性骤增导致CH₄排放量较冬季增长约74倍，CH₄/TOC比值从0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "产甲烷菌活性骤增导致CH₄排放量较冬季增长约74倍，CH₄/TOC比值从0",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "51 mg/L（降幅约26倍），反映了液相有机碳的快速消耗",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "固相有机碳（SOC）与CH₄的显著正相关（r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "010）反映了碳酸盐系统的温度敏感性：升温促进HCO₃⁻分解为CO₂逸出，降低了液相无机碳浓度，同时增加了气相CO₂通量",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "81 g/kg），是管网长期碳排放的\"源\"，定期清淤可有效降低碳排放潜力；（2）春季是碳排放的高峰期，应在升温前采取预处理措施（如提前清淤、增加曝气）以抑制产甲烷爆发；（3）热点管段（如R17、R13）贡献了不成比例的碳排放量，应优先纳入精准管控清单；（4）有机物在冬季管网中的大量积累提示，控制餐饮区等高有机负荷源的排放强度，可从源头减少碳排放的\"蓄积-释放\"循环",
-      "section": "",
-      "claim_type": "causal_claim",
-      "needs": "机制文献"
-    },
-    {
-      "text": "CH4平均值与总磷（mg/L)相关(r=0",
-      "section": "",
-      "claim_type": "data_claim",
-      "needs": "数据来源文献"
-    },
-    {
-      "text": "522)；CH4平均值与铵态氮（mg/L)相关(r=-0",
+      "text": "842)；CO2本底值与气温（℃）相关(r=-0",
       "section": "",
       "claim_type": "data_claim",
       "needs": "数据来源文献"
@@ -624,499 +804,679 @@
       "confidence": 0.0
     },
     {
-      "claim_text": "0%），同样表现为中等变异特征",
+      "claim_text": "8%，同样表现为高变异特征；R13采样点CO₂浓度高达19234",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4%），远低于大气O₂浓度（约20",
+      "claim_text": "3%，在气相指标中变异程度最低",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "9%），表明管网内部整体处于低氧状态，部分管段O₂浓度不足1%vol，已接近厌氧条件",
+      "claim_text": "2%），表明管网整体处于微氧至有氧状态",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "9%），表明管网内部整体处于低氧状态，部分管段O₂浓度不足1%vol，已接近厌氧条件",
+      "claim_text": "90%（CV=0%），而管网内O₂浓度略高于大气本底，暗示部分管段存在好氧微环境，但局部厌氧微区的存在仍为产甲烷过程提供了条件",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "8%），作为厌氧硫酸盐还原的指示性产物，其较高浓度进一步印证了管网内局部厌氧微环境的普遍存在",
+      "claim_text": "7%），显著高于大气CO₂浓度水平（约420 ppm），反映了管网周边土壤呼吸和污水释放对近地表CO₂本底的抬升效应",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "气相碳污染物的高空间异质性（CV 51%~72%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
+      "claim_text": "7%），显著高于大气CO₂浓度水平（约420 ppm），反映了管网周边土壤呼吸和污水释放对近地表CO₂本底的抬升效应",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "气相碳污染物的高空间异质性（CV 51%~72%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
+      "claim_text": "气相碳污染物的高空间异质性（CV 41%~379%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "05 ppm）显著低于文献报道的城市污水主干管CH₄浓度（通常为数百至数千ppm级），这可能与校园管网管径较小、水力停留时间较短、且整体O₂水平相对较高（均值3",
+      "claim_text": "气相碳污染物的高空间异质性（CV 41%~379%）表明，管网碳排放并非均匀分布，而是受局部水力条件、有机物沉积和微生物群落结构的协同控制",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "41%vol）有关，较低的O₂抑制了严格的厌氧产甲烷过程",
+      "claim_text": "8%）意味着少数\"热点管段\"贡献了绝大部分排放量，多数管段的排放水平相对较低，呈现典型的帕累托分布特征",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "41%vol）有关，较低的O₂抑制了严格的厌氧产甲烷过程",
+      "claim_text": "33 ppm，增幅约74倍（Mann-Whitney $U$检验，$p=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "9%），指示管网不同区段有机物负荷存在明显差异",
+      "claim_text": "9%），各采样点均维持在2~4 ppm的低水平；而春季变异急剧增大（CV=265",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "6%，无机碳（IC）占比约36",
+      "claim_text": "7%），R17单点浓度达2052",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "2%，表明液相碳组分以有机碳为主，但无机碳亦占有相当比例，这与管网内碳酸盐平衡体系及微生物矿化作用密切相关",
+      "claim_text": "71 ppm）显著高于春季（550",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "0%，表明在管网还原性条件下，氨化作用主导了氮的形态转化，有机氮被大量分解为NH₄⁺-N",
+      "claim_text": "42℃）抑制了产甲烷菌的活性，有机底物在管网中积累（表现为COD冬季均值高达2426",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "8%，比例相对较低，暗示管网内反硝化过程可能较为活跃，NO₃⁻作为电子受体被还原",
+      "claim_text": "39 ppm）尤为突出，是总均值的近23倍，呈现典型的\"少数管段贡献多数排放\"的帕累托特征",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "7%），空间变异与氮素指标相当",
+      "claim_text": "9%，指示管网不同区段有机物负荷差异悬殊",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "2%，是所有监测指标中空间变异最小的，表明管网水体具有较强的pH缓冲能力",
+      "claim_text": "39 mg/L，NH₄⁺-N均值36",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "6%），变化幅度较大，反映管网不同断面的氧化还原条件存在显著梯度",
+      "claim_text": "TN与NH₄⁺之间呈极强正相关（$r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "3%），两者变异程度相近，反映了管网水体矿化度受生活污水排入和管道沿途稀释/浓缩的共同影响",
+      "claim_text": "88 mg/L），进一步印证了硝化作用的微弱",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "6%，表明管壁沉积物碳库以有机碳为主导",
+      "claim_text": "26 mg/L），变化幅度较大，反映管网不同断面的氧化还原条件存在显著梯度",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4%）在所有固相指标中最低，说明无机碳组分在管网空间上分布相对均匀，可能与管道建材的化学风化及碳酸盐沉积的均一性有关",
+      "claim_text": "25 mg/L），与电导率呈极强正相关（$r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4%），作为沉积物中可被微生物直接利用的活性有机碳组分，其含量指示了沉积物有机碳的释放潜力",
+      "claim_text": "93 mg/kg），指示沉积物中溶解性有机碳的释放潜力存在显著差异",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "3%），磷素在固相中的富集与有机质矿化和铁锰氧化物吸附作用有关",
+      "claim_text": "79 mg/kg，进一步印证了管网沉积物作为氮素\"源-汇\"的双重角色",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "06 ppm；空间异质性高（CV 51%~72%）；管网整体低氧（O₂均值3",
+      "claim_text": "33 ppm，增幅约74倍（$p=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "65 mg/L；NH₄⁺-N占TN的70%，氨化作用主导；pH空间变异最小（CV=6",
+      "claim_text": "00 ppm）显著高于春季（550",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4%；无机碳空间分布最均匀（CV=23",
+      "claim_text": "这一模式与CH₄的季节变化方向相反，提示冬季管网内有机物大量积累但受低温抑制难以被微生物分解；春季升温后，累积的有机底物被快速消耗并转化为CH₄等气态产物，形成了\"冬积春排\"的排放脉冲特征",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4%）\n\n如需写入文件，请授予写入权限",
+      "claim_text": "37 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "第一群组以CH₄为核心，包含固相有机碳（r=0",
+      "claim_text": "37 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "第二群组以NH₄⁺-N为中心，与TN（r=0",
+      "claim_text": "\"冬积春排\"碳节律 — 核心机制解释：冬季低温→有机碳积累（COD 2426 mg/L）→春季升温→CH₄爆发（74倍），CH₄/TOC比值（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "043），暗示产甲烷菌与氨化微生物之间可能存在底物竞争或氨氮毒性抑制效应",
+      "claim_text": "33 ppm，增幅约74倍（Mann-Whitney U，$p$=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "第三群组由电导率、NaCl（r=0",
+      "claim_text": "53 ppm的窄幅区间内，表明低温条件下产甲烷活性被全面抑制；而春季CV飙升至265",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "001）和IC构成，表征管网水体的矿化度特征，其中NaCl与N₂O的正相关（r=0",
+      "claim_text": "1倍，但受高离散度影响未达统计显著（$p$=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "233)$$\n\n该模型表明，NH₄⁺-N每增加1 mg/L，CH₄浓度平均降低0",
+      "claim_text": "71 ppm）显著高于春季（550",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "这一负向关系的生物学机制可能涉及两个层面：其一，高浓度游离氨（FA）对产甲烷古菌具有直接毒性，当NH₄⁺-N浓度升高时，FA浓度相应增加，可抑制产甲烷菌的关键酶（如甲基辅酶M还原酶）活性（Wang et al",
+      "claim_text": "001），这一反直觉的模式可能与冬季大气边界层较低、管网内外气体交换减弱导致挥发性组分在管内富集有关",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": ", 2023）；其二，氨氧化菌（AOB）与产甲烷古菌在厌氧微环境中对H₂和乙酸等共同底物存在竞争关系，当NH₄⁺-N浓度升高促进了氨氧化过程时，产甲烷过程可能受到间接抑制",
+      "claim_text": "001），降幅约26倍（图Xb）",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "TOC作为液相有机碳的核心指标，与CH₄的正相关关系未达统计显著水平（r=0",
+      "claim_text": "55 °C）抑制难以被微生物分解；春季水温升至17",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "相比之下，固相有机碳与CH₄的显著正相关（r=0",
+      "claim_text": "36 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4节揭示的\"冬积春排\"模式一致：冬季COD高值反映有机物积累而非活跃分解，此时低温抑制了产甲烷活性，COD与CH₄呈反向关系；春季升温后有机物被快速消耗，COD降低而CH₄升高，二者在时间序列上呈现动态的负耦合特征",
+      "claim_text": "36 mg/L）显著高于春季（0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "pH与CH₄呈正相关趋势但未达显著水平（r=0",
+      "claim_text": "在厌氧条件下，NO₃⁻作为电子受体优先于CO₂被反硝化菌利用，其消耗可能间接促进了产甲烷过程——这与CH₄春季激增的观测结果一致，表明碳氮转化在管网中存在耦合效应",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "130），方向与既有研究中\"产甲烷过程伴随有机酸积累导致局部酸化\"的预期相反",
+      "claim_text": "001），反映了矿化度对水体导电性能的主导控制作用",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "44），产甲烷过程对pH的局部影响被管网水体的缓冲能力所稀释，且碳酸盐-碳酸氢盐缓冲体系的存在使得IC与pH之间形成了复杂的非线性关系（IC与pH相关系数r=0",
+      "claim_text": "001），提示两者可能受共同的环境驱动因子——温度促进有机质分解和硝化反应——所控制",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "672），这与预期中\"低DO促进产甲烷\"的假设存在偏差",
+      "claim_text": "022），表明产甲烷过程伴随的有机酸（如乙酸、丙酸等挥发性脂肪酸）积累导致局部酸化，pH的降低反过来可能抑制产甲烷菌活性，构成负反馈调节",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "41%），多数采样点已处于微氧至缺氧状态，DO的空间变异未能形成对产甲烷活性的有效梯度约束",
+      "claim_text": "027），这可能与高浓度氨氮对产甲烷菌的毒性抑制效应有关——游离氨（FA）可穿透细胞膜干扰产甲烷菌的辅酶F₄₂₀功能",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "换言之，当DO整体低于产甲烷菌的抑制阈值（通常<1 mg/L自由氧）时，DO的进一步变化对CH₄产生的边际效应已不显著",
+      "claim_text": "前者提示管网盐度可能通过选择性抑制亚硝酸盐氧化菌（NOB）而非氨氧化菌（AOB），导致亚硝态氮累积，从而促进反硝化过程中N₂O的产生；后者则暗示磷素营养盐对硝化-反硝化过程的促进作用",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "换言之，当DO整体低于产甲烷菌的抑制阈值（通常<1 mg/L自由氧）时，DO的进一步变化对CH₄产生的边际效应已不显著",
+      "claim_text": "010）与温度升高促进无机碳（HCO₃⁻）向CO₂转化逸出的化学平衡机理一致",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "这一结果提示，在低DO管网环境中，有机碳供给（固相沉积物）和温度可能比DO本身是更强的CH₄排放控制因子",
+      "claim_text": "HCA与PCA结论相互印证，共同表明季节因素是控制管网碳污染物分布格局的首要驱动力",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "综合回归分析与相关性结果，本研究提出校园污水管网碳排放的\"三因子驱动\"概念模型（图X）：（1）碳源因子——管壁沉积物有机碳含量决定了产甲烷的底物供给潜力，是CH₄排放的根本驱动力；（2）环境因子——水温通过调控微生物代谢速率控制碳排放的季节节律，形成\"冬积春排\"的脉冲式排放特征；（3）抑制因子——NH₄⁺-N通过氨毒性效应和底物竞争机制对产甲烷过程产生负向调控",
+      "claim_text": "CH₄高浓度点主要集中在管网中后段（R9、R10、R17），这些区段的共同特征为：DO水平较低（<3 mg/L）、水力停留时间较长、有机物沉积量较高，为厌氧产甲烷菌的富集和活性表达提供了有利条件",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "有机碳在总碳中的主导地位表明，管壁沉积物是有机碳的重要蓄积库，其含量水平显著高于一般城市河流沉积物（通常<30 g/kg），提示管网沉积物具有较大的碳储存和释放潜力",
+      "claim_text": "39 ppm）尤为突出，是总均值的近23倍，呈现典型的\"少数管段贡献多数排放\"的帕累托特征——仅R17一个采样点即贡献了全部CH₄排放总量的约28",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "56 mg/kg），仅占固相有机碳的约1",
+      "claim_text": "6倍，与该点同时出现的高CH₄（866",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "12 mg/L），其中无机碳（IC）均值21",
+      "claim_text": "18 mg/L）和R1（6896",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "64 mg/L）与COD均值（92",
+      "claim_text": "64 mg/L），这些上游管段可能承接了高有机负荷的直排废水，而下游管段因微生物降解作用COD逐渐降低",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "3，表明管网气相碳排放以CO₂为主导，CH₄的贡献相对有限但其温室效应当量不可忽视（CH₄的全球增温潜势约为CO₂的28倍）",
+      "claim_text": "05 mg/L），与该点的高CH₄排放形成对应，进一步支持了\"氨化-产甲烷\"耦合过程的空间一致性",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "固相有机碳与CH₄呈显著正相关（r=0",
+      "claim_text": "这些热点管段的共同特征包括：（1）较长的水力停留时间，有利于厌氧微环境的形成和维持；（2）较低的溶解氧水平（<3 mg/L），满足产甲烷菌的严格厌氧需求；（3）较高的有机物沉积量，为微生物代谢提供充足的碳源和电子供体；（4）适宜的温度条件（春季水温>15 °C），使产甲烷菌活性达到峰值",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "固相有机碳与O₂浓度呈显著正相关（r=0",
+      "claim_text": "结果显示，前两个主成分的方差贡献率较低，累计解释方差不足50%，表明管网碳污染物的变异是多因素共同作用的结果，难以用少数几个综合变量进行降维表征",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "05），而CH₄与O₂亦呈正相关（r=0",
+      "claim_text": "结果显示，前两个主成分的方差贡献率较低，累计解释方差不足50%，表明管网碳污染物的变异是多因素共同作用的结果，难以用少数几个综合变量进行降维表征",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "液相TOC与固相有机碳之间呈正相关趋势（r=0",
+      "claim_text": "47 mg/L），表明餐饮废水的高有机负荷是驱动CH₄异常产生的关键因素",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "IC与NH₄⁺-N呈显著正相关（r=0",
+      "claim_text": "CO₂与CH₄空间分布的解耦暗示两者的主要生成途径存在差异：CH₄主要由厌氧发酵产生，受有机底物和厌氧微环境控制；CO₂则同时来源于好氧呼吸和厌氧发酵，受更多因素叠加影响",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "010），与温度升高促进碳酸盐分解释放CO₂逸出的热力学过程一致",
+      "claim_text": "87 mg/L，按日均排水量200 m³/d估算，液相日均碳通量约22",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "14 mg/L）高于春季（29",
+      "claim_text": "86 mg/kg）向液相释放溶解性有机碳，是液相TOC的补充来源之一",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "13 mg/L），而IC呈相反趋势（冬季17",
+      "claim_text": "6%）表明沉积物中约四分之一的有机碳以溶解态形式存在，具有向液相释放的潜力",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "079），暗示春季升温促进了有机碳的矿化分解，有机碳向无机碳转化并以CO₂形式逸出",
+      "claim_text": "007）反映了温度升高促进CO₂从液相逸出的过程",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "27 ppm）显著高于春季（530",
+      "claim_text": "CH₄与液相TOC几乎无关（r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "030），与液相IC的季节趋势一致，提示冬季较低的气温抑制了CO₂从液相向气相的逸出速率，导致CO₂在管网气相空间中积累",
+      "claim_text": "38 mg/L），沉积物DOC释放速率较低，气相CH₄排放微弱（2",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4%，沉积物是有机碳重要储库 |\n| 液相碳组成 | TOC占TC 59",
+      "claim_text": "春季（升温期）：温度回升后，微生物活性增强，冬季积累的液相有机碳被快速水解酸化，一部分经好氧矿化途径转化为CO₂（液相IC减少，气相CO₂增加），另一部分经厌氧发酵途径转化为CH₄（CH₄浓度爆发式增长74倍）",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "2%，碳酸盐缓冲体系贡献显著 |\n| 气相碳组成 | CO₂主导，CH₄温室效应贡献不可忽视 |\n| 三相耦合 | 固相有机碳→CH₄（r=0",
+      "claim_text": "51 mg/L），碳储量净减少，碳向气相排放转移",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "7 多元统计分析\n\n为识别控制碳污染物分布的关键因子并揭示采样点的内在分组特征，本节采用主成分分析（PCA）和层次聚类分析（HCA）对26个水质与气体变量进行多元统计分析",
+      "claim_text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "前两个主成分（PC1和PC2）的累计方差贡献率约为55%~65%，基本涵盖了数据集的主要信息（图X，表X）",
+      "claim_text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "PC2主要受矿化度和无机碳指标控制",
+      "claim_text": "箭头粗细表示碳迁移通量大小，虚线表示冬季低温抑制的迁移路径",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "聚类II（高有机物负荷类型） 以冬季采样点为主，COD和TOC浓度显著高于其他聚类，但CH₄浓度相对较低，对应3",
+      "claim_text": "87 mg/L、DOC均值3332",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "4节所述的\"冬积\"阶段——有机底物积累但低温抑制了产甲烷转化",
+      "claim_text": "86 mg/kg等均与原始数据核对一致",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "87 mg/L，换算为单位质量浓度后约合0",
+      "claim_text": "75 ppm/(mg·L⁻¹)，即液相TOC每增加1 mg/L，气相CO₂浓度平均升高约9",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "从碳质量占比来看，固相碳在管网碳库中占据绝对优势（>99%），液相碳和气相碳合计不足1%",
+      "claim_text": "4%，两者之间不存在显著的线性关系",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "从碳质量占比来看，固相碳在管网碳库中占据绝对优势（>99%），液相碳和气相碳合计不足1%",
+      "claim_text": "52 mg/L）的发现相互印证",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "93 mg/kg，CV>100%），提示不同采样点沉积物中溶解性有机碳的释放能力存在显著差异，这一差异可能与沉积物的粒径组成、有机质老化程度和微生物矿化活性有关",
+      "claim_text": "378 mg/(mg·L⁻¹)，即TOC每增加1 mg/L，TN平均升高约0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "38 mg/L），但低温（气温4",
+      "claim_text": "5节TN-NH₄⁺极强正相关（r=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "产甲烷菌活性骤增导致CH₄排放量较冬季增长约74倍，CH₄/TOC比值从0",
+      "claim_text": "985）的结论一致：管网中TN的变化主要由NH₄⁺-N驱动，而NH₄⁺-N的赋存受氨化过程控制，与有机碳的水解酸化过程虽共享相似的微生物功能群和环境条件，但在统计上表现为相对独立的转化路径",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "产甲烷菌活性骤增导致CH₄排放量较冬季增长约74倍，CH₄/TOC比值从0",
+      "claim_text": "136 mg/(mg·L⁻¹)，R²=0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "51 mg/L（降幅约26倍），反映了液相有机碳的快速消耗",
+      "claim_text": "TOC→IC回归的不显著性表明，液相有机碳的矿化并非控制IC浓度的主要因素，碳酸盐缓冲体系的稳定性（pH变异系数仅11",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "固相有机碳（SOC）与CH₄的显著正相关（r=0",
+      "claim_text": "0%）对IC的调控作用可能更为重要",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "010）反映了碳酸盐系统的温度敏感性：升温促进HCO₃⁻分解为CO₂逸出，降低了液相无机碳浓度，同时增加了气相CO₂通量",
+      "claim_text": "上述回归分析结果共同表明，液相有机碳浓度并非气相碳排放的直接控制变量",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "81 g/kg），是管网长期碳排放的\"源\"，定期清淤可有效降低碳排放潜力；（2）春季是碳排放的高峰期，应在升温前采取预处理措施（如提前清淤、增加曝气）以抑制产甲烷爆发；（3）热点管段（如R17、R13）贡献了不成比例的碳排放量，应优先纳入精准管控清单；（4）有机物在冬季管网中的大量积累提示，控制餐饮区等高有机负荷源的排放强度，可从源头减少碳排放的\"蓄积-释放\"循环",
+      "claim_text": "这一发现为后续讨论章节中引入DO梯度和沉积物碳库等非线性控制因子的分析提供了统计学依据",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "CH4平均值与总磷（mg/L)相关(r=0",
+      "claim_text": "87 mg/L，TOC均值44",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0
     },
     {
-      "claim_text": "522)；CH4平均值与铵态氮（mg/L)相关(r=-0",
+      "claim_text": "2%，表明管网污水中碳的赋存以无机态为主导",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "86 mg/kg）向液相释放溶解性有机碳，是液相TOC的补充来源之一",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "6%）表明沉积物中约四分之一的有机碳以溶解态形式存在，具有向液相释放的潜力",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "007）反映了温度升高促进CO₂从液相逸出的过程",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "CH₄与液相TOC几乎无关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "38 mg/L），沉积物DOC释放速率较低，气相CH₄排放微弱（2",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "05℃），微生物活性增强，冬季积累的液相有机碳被快速水解酸化，一部分经好氧矿化途径转化为CO₂（液相IC减少，气相CO₂增加），另一部分经厌氧发酵途径转化为CH₄（CH₄浓度爆发式增长74倍，由2",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "51 mg/L），碳储量净减少，碳向气相排放转移",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "这一碳节律与杨温娜等（2021）报道的城市管网碳排放季节模式一致，但本研究校园管网的CH₄季节波动幅度（74倍）显著大于城市管网报道值（约2~5倍），可能与校园管网管径较小、水力停留时间较长、有机负荷季节差异更大等因素有关",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "1 DO梯度下的碳转化路径分异\n\nDO是控制管网碳转化方向的关键变量",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "在DO<2 mg/L的低氧区段，有机碳主要经厌氧发酵途径转化为CH₄和有机酸，CH₄浓度显著升高（与DO呈负相关趋势，r=−0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "在DO>5 mg/L的好氧区段，有机碳主要经好氧呼吸矿化为CO₂/HCO₃⁻，液相IC占比增大，CH₄产生受到抑制",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "在DO>5 mg/L的好氧区段，有机碳主要经好氧呼吸矿化为CO₂/HCO₃⁻，液相IC占比增大，CH₄产生受到抑制",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "55 mg/L），对应CH₄浓度的爆发式增长（74倍）和IC占比的相对下降",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "38 ppm，表明有机碳在低DO条件下虽大量存在，但低温对产甲烷菌活性的抑制作用更为显著；春季升温后，DO略降而CH₄骤升，说明温度对产甲烷过程的激活效应远大于DO降低的促进效应",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "TN与NH₄⁺-N的极强正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "CO₂与NO₂的强正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "3 盐度对碳氮转化的调控效应\n\nNaCl与电导率的极强正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "盐度通过两条路径影响碳氮转化：\n\n一是NaCl与液相TC（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "高盐度环境下，耐盐微生物种群占优势，其代谢特征可能偏向于有机碳的不完全降解，导致液相TC和IC积累",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "二是N₂O与NaCl的显著正相关（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "030）揭示了盐度对脱氮过程的抑制效应——高盐度环境下亚硝酸盐氧化菌（NOB）比氨氧化菌（AOB）更易受渗透压胁迫而活性降低（Chandran et al",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": ", 2016），导致NO₂⁻积累，进而通过硝化细菌的硝化反硝化（nitrifier denitrification）途径产生更多N₂O",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "433）提示温度升高可能促进了NH₄⁺向气相NH₃的挥发损失或增强了硝化消耗",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "DO浓度作为氧化还原条件的综合指标，控制着碳转化路径的分支方向，是理解管网碳排放机制的核心变量",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "盐度则通过抑制NOB活性影响N₂O排放（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "盐度则通过抑制NOB活性影响N₂O排放（r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "3节明确提出\"碳平衡分析薄弱\"为研究不足之一，3",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "CO2与NO2（ppm）相关(r=0",
+      "claim_section": "",
+      "supporting_citations": [],
+      "confidence": 0.0
+    },
+    {
+      "claim_text": "842)；CO2本底值与气温（℃）相关(r=-0",
       "claim_section": "",
       "supporting_citations": [],
       "confidence": 0.0

@@ -1457,12 +1457,12 @@ if __name__ == "__main__":
         print(pipe.suggest_next_steps('step5_review'))
 
     elif args[0] == "motivation":
-        # 如果有分析结果文件
+        # 如果有分析结果文件（安全改进：使用JSON替代pickle）
         results = {}
         if len(args) > 1 and os.path.exists(args[1]):
-            import pickle
-            with open(args[1], 'rb') as f:
-                results = pickle.load(f)
+            import json
+            with open(args[1], 'r', encoding='utf-8') as f:
+                results = json.load(f)
         options = pipe.step3_5_motivation(analysis_results=results)
         print(pipe.suggest_next_steps('step3_5_motivation'))
 

@@ -1652,16 +1652,17 @@ class VisualizationAgent:
         )])
         fig.update_layout(title_text=title, font_size=12, width=800, height=500)
 
-        # 保存HTML
-        html_path = os.path.join(self.output_dir, 'sankey.html')
-        fig.write_html(html_path)
-
-        # 保存PNG (需要kaleido)
+        # 只保存PNG (不生成HTML)
+        png_path = os.path.join(self.output_dir, 'sankey.png')
         if _HAS_KALEIDO:
-            png_path = os.path.join(self.output_dir, 'sankey.png')
             fig.write_image(png_path, width=800, height=500, scale=3)
+        else:
+            # 如果没有kaleido，使用matplotlib回退
+            plt_fig, _ = self._plot_sankey_mpl(sources, targets, values, labels, title)
+            plt_fig.savefig(png_path, dpi=300, bbox_inches='tight')
+            plt.close(plt_fig)
 
-        meta = {'labels': labels, 'n_links': len(sources), 'html_path': html_path}
+        meta = {'labels': labels, 'n_links': len(sources), 'png_path': png_path}
         return fig, meta
 
     def _plot_sankey_mpl(self, sources, targets, values, labels, title):

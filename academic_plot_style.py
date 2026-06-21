@@ -522,8 +522,22 @@ class FigureComponents:
 
     @staticmethod
     def add_significance_bar(ax, x1: float, x2: float, y: float, p_value: float,
-                             h: float = None, color: str = '#333333'):
-        """添加显著性横线"""
+                             h: float = None, color: str = '#333333',
+                             effect_size: float = None, show_detail: bool = False):
+        """
+        添加显著性横线
+
+        Parameters
+        ----------
+        ax : matplotlib axes
+        x1, x2 : float, 横线起止位置
+        y : float, 横线高度
+        p_value : float, p值
+        h : float, 横线高度增量
+        color : str, 颜色
+        effect_size : float, 效应量（可选）
+        show_detail : bool, 是否显示详细信息（p值和效应量）
+        """
         if h is None:
             ylim = ax.get_ylim()
             h = (ylim[1] - ylim[0]) * 0.03
@@ -531,9 +545,35 @@ class FigureComponents:
         ax.plot([x1, x1, x2, x2], [y, y + h, y + h, y],
                 color=color, linewidth=1.0, clip_on=False)
 
+        # 构建标注文本
         stars = significance_stars(p_value)
-        ax.text((x1 + x2) / 2, y + h, stars,
-                ha='center', va='bottom', fontsize=8, fontweight='bold', color=color)
+
+        if show_detail:
+            # 显示详细信息：星号 + p值 + 效应量
+            if p_value < 0.001:
+                p_text = 'p<0.001'
+            elif p_value < 0.01:
+                p_text = f'p={p_value:.3f}'
+            else:
+                p_text = f'p={p_value:.2f}'
+
+            if effect_size is not None:
+                # Cohen's d 或 r 的效应量
+                if abs(effect_size) < 1:
+                    label = f'{stars}\n{p_text}\nr={effect_size:.2f}'
+                else:
+                    label = f'{stars}\n{p_text}\nd={effect_size:.2f}'
+            else:
+                label = f'{stars}\n{p_text}'
+            fontsize = 7
+        else:
+            # 只显示星号
+            label = stars
+            fontsize = 8
+
+        ax.text((x1 + x2) / 2, y + h, label,
+                ha='center', va='bottom', fontsize=fontsize,
+                fontweight='bold', color=color)
 
     @staticmethod
     def add_error_bars(ax, x, y, yerr, capsize: int = 3, **kwargs):
@@ -653,11 +693,11 @@ class FigureSaver:
     @staticmethod
     def save(fig, filename: str, output_dir: str, journal: str = None,
              formats: List[str] = None, fig_type: str = 'line_art'):
-        """按期刊规范保存图表"""
+        """按期刊规范保存图表（只生成PNG和PDF，不生成网页版）"""
         cfg = JOURNAL_CONFIGS.get(journal or DEFAULT_JOURNAL, JOURNAL_CONFIGS['nature'])
         dpi = FigureFactory.get_save_dpi(journal, fig_type)
         if formats is None:
-            formats = ['png', 'pdf', 'svg']
+            formats = ['png', 'pdf']  # 只生成PNG和PDF，不生成SVG
 
         os.makedirs(output_dir, exist_ok=True)
         saved = []

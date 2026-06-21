@@ -43,6 +43,54 @@ def find_orphans(root_dir='.'):
     orphaned = []
     connected = []
 
+    # 工具库/基础设施模块（不需要注册到MODULE_REGISTRY，但被其他模块内部调用）
+    utility_modules = {
+        'academic_plot_style',    # 期刊规范作图系统
+        'assertion_control',      # 断言强度控制
+        'audit_logger',           # 审计日志服务
+        'chart_qa',               # 图表质量检测
+        'citation_guard',         # 引用安全防护
+        'claude_writer',          # Claude CLI写作引擎
+        'cn_core_rules',          # 中文核心期刊规范
+        'knowledge_memory',       # 知识记忆系统
+        'proxy_config',           # 代理配置
+        'review_rules',           # 审稿规则库
+        'runtime_metrics',        # 运行时指标
+        'self_evolving_engine',   # 自进化引擎核心
+        'text_utils',             # 公共文本工具
+        'variable_registry',      # 变量注册中心
+        'writer_schema',          # 写作接口Schema
+        'statistical_analysis',   # 统计分析工具库
+        'generate_docx',          # DOCX生成脚本
+        'web_app',                # Flask Web界面
+        'ai_trace_enhanced',      # AI痕迹检测（被review_agent调用）
+        'document_assembler',     # 文档组装器（被assemble步骤调用）
+        'literature_memory',      # 文献记忆（被literature_recall步骤调用）
+        'motivation_planner',     # 动机规划器（被motivation步骤调用）
+        'paper_reader',           # 论文阅读器（被paper_reading步骤调用）
+        'paper_writing_agent',    # 论文写作Agent（被writer_*步骤调用）
+        'pattern_learner',        # 模式学习器（被pattern_learning步骤调用）
+        'scientific_analysis_agent',  # 科研分析Agent（被scientific_analysis步骤调用）
+        'scientific_visualization_agent',  # 可视化Agent（被generate_figures步骤调用）
+        'citation_support_bank',  # 引用支撑库（被citation_bank步骤调用）
+    }
+
+    # 已在MODULE_REGISTRY中注册的模块（通过不同名称）
+    registered_aliases = {
+        'data_driven_pipeline': 'explorer',
+        'data_loader': 'load_data',
+        'latex_exporter': 'latex_export',
+        'literature_memory': 'literature_recall',
+        'motivation_planner': 'motivation',
+        'paper_reader': 'paper_reading',
+        'paper_writing_agent': 'writer_*',
+        'pattern_learner': 'pattern_learning',
+        'scientific_analysis_agent': 'scientific_analysis',
+        'scientific_visualization_agent': 'generate_figures',
+        'document_assembler': 'assemble',
+        'citation_support_bank': 'citation_bank',
+    }
+
     for f in sorted(all_py):
         module_name = f[:-3]  # 去掉 .py
         is_imported = False
@@ -60,9 +108,16 @@ def find_orphans(root_dir='.'):
         if is_imported:
             connected.append((f, importers))
         else:
-            # paper_context.py 是编排器入口，被 test_full_pipeline 导入，不算孤立
-            if module_name in ('paper_context', 'web_app'):
+            # paper_context.py 是编排器入口
+            if module_name == 'paper_context':
                 connected.append((f, ['[entry point]']))
+            # 工具库/基础设施模块
+            elif module_name in utility_modules:
+                connected.append((f, ['[utility/infrastructure]']))
+            # 已注册的模块（通过不同名称）
+            elif module_name in registered_aliases:
+                alias = registered_aliases[module_name]
+                connected.append((f, [f'[registered as: {alias}]']))
             else:
                 orphaned.append(f)
 

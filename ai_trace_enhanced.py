@@ -79,11 +79,11 @@ class SentenceLengthAnalyzer:
     4. 缺少短句穿插
     """
 
-    # 阈值配置
-    LONG_SENTENCE_THRESHOLD = 40      # 长句阈值（字）
-    VERY_LONG_SENTENCE_THRESHOLD = 60 # 超长句阈值（字）
-    CONSECUTIVE_LONG_THRESHOLD = 3    # 连续长句阈值（句）
-    SHORT_SENTENCE_RATIO_MIN = 0.2    # 短句比例下限
+    # 阈值配置（针对中文学术论文优化）
+    LONG_SENTENCE_THRESHOLD = 50      # 长句阈值（字）- 中文学术论文句子通常较长
+    VERY_LONG_SENTENCE_THRESHOLD = 80 # 超长句阈值（字）- 中文允许更长的句子
+    CONSECUTIVE_LONG_THRESHOLD = 4    # 连续长句阈值（句）
+    SHORT_SENTENCE_RATIO_MIN = 0.15   # 短句比例下限 - 中文学术论文短句比例通常较低
 
     @staticmethod
     def split_sentences(text: str) -> List[str]:
@@ -333,12 +333,31 @@ class ParenOptimizer:
         english_parens = re.findall(r'\([^)]+\)', text)
         all_parens = chinese_parens + english_parens
 
-        paren_count = len(all_parens)
+        # 过滤文献引用格式的括号（如 (Author et al., Year) 或 (Year)）
+        citation_patterns = [
+            r'\([A-Z][a-z]+(?:\s+(?:et\s+al|and|[A-Z][a-z]+))*(?:\s+等)?,?\s*\d{4}\)',
+            r'\(\d{4}\)',
+            r'\([A-Z][a-z]+(?:\s+(?:et\s+al|and|[A-Z][a-z]+))*(?:\s+等)?,?\s*\d{4}(?:\s*;\s*[A-Z][a-z]+(?:\s+(?:et\s+al|and|[A-Z][a-z]+))*(?:\s+等)?,?\s*\d{4})*\)',
+            r'（[^）]*\d{4}[^）]*）',  # 中文括号内的年份引用
+        ]
+
+        non_citation_parens = []
+        for paren in all_parens:
+            is_citation = False
+            for pattern in citation_patterns:
+                if re.match(pattern, paren):
+                    is_citation = True
+                    break
+            if not is_citation:
+                non_citation_parens.append(paren)
+
+        paren_count = len(non_citation_parens)
         text_length = len(text)
         paren_density = paren_count / (text_length / 1000) if text_length > 0 else 0
 
-        # 检测1: 括号过多
-        if paren_density > 8:  # 每1000字超过8个括号
+        # 检测1: 括号过多（针对中文学术论文优化）
+        # 中文学术论文中括号常用于标注英文术语、统计值、参考文献等
+        if paren_density > 15:  # 每1000字超过15个括号（中文学术论文阈值更宽松）
             issues.append(TraceIssue(
                 feature='括号',
                 level=IssueLevel.MAJOR,

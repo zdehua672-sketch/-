@@ -18,6 +18,43 @@ from typing import Dict, List, Optional
 
 
 @dataclass
+class WritingQualityConfig:
+    """写作质量控制配置"""
+    # 文本长度限制
+    min_text_length: int = 100          # 最小有效文本长度
+    max_conclusion_length: int = 1000   # 结论最大长度
+
+    # 质量评分阈值
+    min_quality_score: int = 30         # 最低质量分数（0-100）
+    min_academic_features: int = 3      # 最少学术特征词数量
+    min_references: int = 1             # 最少引用数量
+
+    # 重试配置
+    max_retries: int = 3                # 最大重试次数
+    retry_delay: float = 1.0            # 重试延迟（秒）
+
+    # 候选生成配置
+    num_candidates: int = 1             # 候选草稿数量（1 = 不生成候选）
+
+
+@dataclass
+class MemoryConfig:
+    """记忆系统配置"""
+    # 检索配置
+    max_recall_results: int = 10        # 最大召回数量
+    similarity_threshold: float = 0.1   # 相似度阈值
+    jaccard_threshold: float = 0.05     # Jaccard 相似度阈值
+
+    # 置信度配置
+    initial_confidence: float = 0.5     # 初始置信度
+    confidence_decay: float = 0.95      # 置信度衰减因子
+    min_confidence: float = 0.1         # 最低置信度
+
+    # 去重配置
+    dedup_similarity: float = 0.8       # 去重相似度阈值
+
+
+@dataclass
 class DomainConfig:
     """研究领域配置"""
     # 基本信息
@@ -43,6 +80,10 @@ class DomainConfig:
 
     # 限制条件
     typical_limitations: List[str] = field(default_factory=list)
+
+    # 子配置
+    writing_quality: WritingQualityConfig = field(default_factory=WritingQualityConfig)
+    memory: MemoryConfig = field(default_factory=MemoryConfig)
 
 
 # ============================================================
