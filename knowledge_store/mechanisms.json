@@ -1,8 +1,8 @@
 {
   "meta": {
     "count": 36,
-    "updated": "2026-06-21T16:20:02.531101+00:00",
-    "version": 43
+    "updated": "2026-06-21T16:40:52.909496+00:00",
+    "version": 49
   },
   "entries": {
     "c_n_coupling_pattern": {
@@ -755,12 +755,12 @@
         "var2": "attention",
         "relation_type": "positive_effect",
         "source": "01-sci-rules",
-        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+        "learned_at": "2026-06-21T16:40:52.890969+00:00"
       },
       "confidence": 0.8,
       "source": "manual",
-      "updated": "2026-06-21T16:20:02.515092+00:00",
-      "version": 1
+      "updated": "2026-06-21T16:40:52.890969+00:00",
+      "version": 2
     },
     "learned_has_received_negative_effect_attention_1": {
       "value": {
@@ -770,12 +770,12 @@
         "var2": "attention",
         "relation_type": "negative_effect",
         "source": "01-sci-rules",
-        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+        "learned_at": "2026-06-21T16:40:52.890969+00:00"
       },
       "confidence": 0.8,
       "source": "manual",
-      "updated": "2026-06-21T16:20:02.519098+00:00",
-      "version": 1
+      "updated": "2026-06-21T16:40:52.894983+00:00",
+      "version": 2
     },
     "learned_several_negative_effect_of_this_study_s_2": {
       "value": {
@@ -785,12 +785,12 @@
         "var2": "of this study should be acknowledged",
         "relation_type": "negative_effect",
         "source": "04-discussion-library",
-        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+        "learned_at": "2026-06-21T16:40:52.890969+00:00"
       },
       "confidence": 0.8,
       "source": "manual",
-      "updated": "2026-06-21T16:20:02.521142+00:00",
-      "version": 1
+      "updated": "2026-06-21T16:40:52.898510+00:00",
+      "version": 2
     },
     "learned_指标a_positive_correlation_指标b_3": {
       "value": {
@@ -800,12 +800,12 @@
         "var2": "指标B",
         "relation_type": "positive_correlation",
         "source": "04-discussion-library",
-        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+        "learned_at": "2026-06-21T16:40:52.890969+00:00"
       },
       "confidence": 0.8,
       "source": "manual",
-      "updated": "2026-06-21T16:20:02.524143+00:00",
-      "version": 1
+      "updated": "2026-06-21T16:40:52.902497+00:00",
+      "version": 2
     },
     "learned_可能与冬季厌氧条件_positive_effect_有关_4": {
       "value": {
@@ -815,12 +815,12 @@
         "var2": "有关",
         "relation_type": "positive_effect",
         "source": "06-data-analysis-logic",
-        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+        "learned_at": "2026-06-21T16:40:52.890969+00:00"
       },
       "confidence": 0.8,
       "source": "manual",
-      "updated": "2026-06-21T16:20:02.527143+00:00",
-      "version": 1
+      "updated": "2026-06-21T16:40:52.906498+00:00",
+      "version": 2
     },
     "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5": {
       "value": {
@@ -830,12 +830,12 @@
         "var2": "以及春季降雨稀释效应有关",
         "relation_type": "negative_effect",
         "source": "06-data-analysis-logic",
-        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+        "learned_at": "2026-06-21T16:40:52.890969+00:00"
       },
       "confidence": 0.8,
       "source": "manual",
-      "updated": "2026-06-21T16:20:02.530143+00:00",
-      "version": 1
+      "updated": "2026-06-21T16:40:52.909496+00:00",
+      "version": 2
     }
   },
   "changelog": [
@@ -1430,6 +1430,102 @@
       "new": "{'pattern': '微生物分解速率 negative_effect 以及春季降雨稀释效应有关', 'mechanism': '微生物分解速率降低以及春季降雨稀释效应有关', 'var1': '微生物分解速率', 'var2': '以及春季降雨稀释效应有关', 'relation_type': 'negative_effect', 'source': '06-data-analysis-log",
       "source": "manual",
       "timestamp": "2026-06-21T16:20:02.531101+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0",
+      "old": {
+        "pattern": "has attracted positive_effect attention",
+        "mechanism": "has attracted increasing attention.",
+        "var1": "has attracted",
+        "var2": "attention",
+        "relation_type": "positive_effect",
+        "source": "01-sci-rules",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "new": "{'pattern': 'has attracted positive_effect attention', 'mechanism': 'has attracted increasing attention.', 'var1': 'has attracted', 'var2': 'attention', 'relation_type': 'positive_effect', 'source': '",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:40:52.890969+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1",
+      "old": {
+        "pattern": "has received negative_effect attention",
+        "mechanism": "has received limited attention.",
+        "var1": "has received",
+        "var2": "attention",
+        "relation_type": "negative_effect",
+        "source": "01-sci-rules",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "new": "{'pattern': 'has received negative_effect attention', 'mechanism': 'has received limited attention.', 'var1': 'has received', 'var2': 'attention', 'relation_type': 'negative_effect', 'source': '01-sci",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:40:52.894983+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2",
+      "old": {
+        "pattern": "Several negative_effect of this study should be acknowledged",
+        "mechanism": "Several limitations of this study should be acknowledged.",
+        "var1": "Several",
+        "var2": "of this study should be acknowledged",
+        "relation_type": "negative_effect",
+        "source": "04-discussion-library",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "new": "{'pattern': 'Several negative_effect of this study should be acknowledged', 'mechanism': 'Several limitations of this study should be acknowledged.', 'var1': 'Several', 'var2': 'of this study should b",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:40:52.898510+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3",
+      "old": {
+        "pattern": "指标A positive_correlation 指标B",
+        "mechanism": "指标A与指标B呈正相关",
+        "var1": "指标A",
+        "var2": "指标B",
+        "relation_type": "positive_correlation",
+        "source": "04-discussion-library",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "new": "{'pattern': '指标A positive_correlation 指标B', 'mechanism': '指标A与指标B呈正相关', 'var1': '指标A', 'var2': '指标B', 'relation_type': 'positive_correlation', 'source': '04-discussion-library', 'learned_at': '2026-06",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:40:52.902497+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4",
+      "old": {
+        "pattern": "可能与冬季厌氧条件 positive_effect 有关",
+        "mechanism": "可能与冬季厌氧条件增强有关",
+        "var1": "可能与冬季厌氧条件",
+        "var2": "有关",
+        "relation_type": "positive_effect",
+        "source": "06-data-analysis-logic",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "new": "{'pattern': '可能与冬季厌氧条件 positive_effect 有关', 'mechanism': '可能与冬季厌氧条件增强有关', 'var1': '可能与冬季厌氧条件', 'var2': '有关', 'relation_type': 'positive_effect', 'source': '06-data-analysis-logic', 'learned_at': '2026",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:40:52.906498+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5",
+      "old": {
+        "pattern": "微生物分解速率 negative_effect 以及春季降雨稀释效应有关",
+        "mechanism": "微生物分解速率降低以及春季降雨稀释效应有关",
+        "var1": "微生物分解速率",
+        "var2": "以及春季降雨稀释效应有关",
+        "relation_type": "negative_effect",
+        "source": "06-data-analysis-logic",
+        "learned_at": "2026-06-21T16:20:02.515092+00:00"
+      },
+      "new": "{'pattern': '微生物分解速率 negative_effect 以及春季降雨稀释效应有关', 'mechanism': '微生物分解速率降低以及春季降雨稀释效应有关', 'var1': '微生物分解速率', 'var2': '以及春季降雨稀释效应有关', 'relation_type': 'negative_effect', 'source': '06-data-analysis-log",
+      "source": "manual",
+      "timestamp": "2026-06-21T16:40:52.909496+00:00"
     }
   ]
 }

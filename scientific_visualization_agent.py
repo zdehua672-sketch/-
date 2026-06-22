@@ -1287,7 +1287,7 @@ class VisualizationAgent:
 
     # ==================== 需求4: 多变量统计图 ====================
 
-    def plot_multivariate(self, variables=None, group_col=None, kind='raincloud'):
+    def plot_multivariate(self, variables=None, group_col=None, kind='raincloud', separate_seasons=False):
         """
         多变量统计图: violin / box / strip / raincloud
 
@@ -1296,6 +1296,7 @@ class VisualizationAgent:
         variables : list of str, 数值列名
         group_col : str, 分组列名
         kind : str, 'violin'|'box'|'strip'|'raincloud'
+        separate_seasons : bool, 是否按季节分开绘制（更清晰的对比）
 
         Returns
         -------
@@ -1315,6 +1316,87 @@ class VisualizationAgent:
             return None, {}
 
         n_vars = len(variables)
+
+        # 按季节分开绘制模式
+        if separate_seasons and '季节' in df.columns:
+            seasons = df['季节'].unique()
+            n_seasons = len(seasons)
+            fig_w = StylePresets.figure_size('double' if n_vars > 3 else 'single', self.style)[0]
+            fig_h = StylePresets.figure_size('single', self.style)[1]
+            fig, axes = plt.subplots(1, n_vars, figsize=(fig_w, fig_h * 0.8),
+                                      sharey=False, squeeze=False)
+            axes = axes[0]
+
+            # 季节颜色方案
+            season_colors = {'冬季': '#3B82F6', '春季': '#10B981'}
+            metadata = {'variables': variables, 'kind': kind, 'separate_seasons': True}
+
+            for i, var in enumerate(variables):
+                ax = axes[i]
+
+                for j, season in enumerate(seasons):
+                    season_data = df[df['季节'] == season][var].dropna()
+                    if len(season_data) == 0:
+                        continue
+
+                    color = season_colors.get(season, '#6B7280')
+                    position = j
+
+                    # 绘制箱线图
+                    bp = ax.boxplot([season_data], positions=[position], widths=0.6,
+                                   patch_artist=True, showmeans=True,
+                                   meanprops={'marker': 'D', 'markersize': 5, 'color': 'red',
+                                             'markerfacecolor': 'red', 'markeredgecolor': 'red'})
+                    bp['boxes'][0].set_facecolor(color)
+                    bp['boxes'][0].set_alpha(0.7)
+                    bp['boxes'][0].set_linewidth(1.0)
+
+                    # 设置线条颜色
+                    for element in ['whiskers', 'caps', 'medians']:
+                        for line in bp[element]:
+                            line.set_color('#374151')
+                            line.set_linewidth(1.0)
+
+                    # 添加散点（抖动）
+                    jitter = np.random.normal(0, 0.08, len(season_data))
+                    ax.scatter([position + j for j in jitter], season_data,
+                              color=color, s=25, alpha=0.7, zorder=5,
+                              edgecolors='white', linewidth=0.5)
+
+                    # 添加均值标注
+                    mean_val = season_data.mean()
+                    ax.text(position, mean_val, f'{mean_val:.1f}',
+                           ha='center', va='bottom', fontsize=8, color='red', fontweight='bold')
+
+                ax.set_xticks(range(n_seasons))
+                ax.set_xticklabels(seasons, fontsize=10)
+                ax.set_ylabel(get_label(var), fontsize=10)
+                ax.set_title(get_label(var) if n_vars <= 4 else '', fontsize=11, fontweight='bold')
+
+                # 添加显著性标注
+                if n_seasons == 2:
+                    g1 = df[df['季节'] == seasons[0]][var].dropna()
+                    g2 = df[df['季节'] == seasons[1]][var].dropna()
+                    if len(g1) > 2 and len(g2) > 2:
+                        _, p_val = scipy_stats.mannwhitneyu(g1, g2, alternative='two-sided')
+                        y_max = df[var].max()
+                        y_min = df[var].min()
+                        y_range = y_max - y_min
+                        bar_height = y_max + y_range * 0.1
+                        add_significance_bars(ax, 0, 1, bar_height, p_value=p_val)
+                        metadata.setdefault('tests', {})[var] = {'p_value': p_val, 'method': 'Mann-Whitney U'}
+
+                # 添加网格线
+                ax.grid(True, axis='y', alpha=0.3, linestyle='--')
+                ax.set_axisbelow(True)
+
+            plt.tight_layout()
+            filename = 'multivariate_separate_seasons'
+            save_figure(fig, filename, self.output_dir)
+            caption = self._caption_gen.generate('multivariate', metadata, language=self.language)
+            return fig, metadata
+
+        # 原有的分组模式
         fig_w = StylePresets.figure_size('double' if n_vars > 3 else 'single', self.style)[0]
         fig_h = StylePresets.figure_size('single', self.style)[1]
         fig, axes = plt.subplots(1, n_vars, figsize=(fig_w, fig_h * 0.8),

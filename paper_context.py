@@ -1065,7 +1065,7 @@ def _run_writer_conclusion(ctx: PaperContext):
 
 
 def _run_polish(ctx: PaperContext):
-    """用文献学到的模式润色各章节文本"""
+    """用文献学到的模式润色各章节文本，并补充引言等章节"""
     if not ctx.has('sections') or not ctx.learned_patterns:
         return None
 
@@ -1074,11 +1074,16 @@ def _run_polish(ctx: PaperContext):
         return None
 
     polished_count = 0
-    for section_name in ['results', 'discussion', 'introduction']:
+    enhanced_count = 0
+
+    # 润色所有主要章节
+    sections_to_polish = ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion']
+    for section_name in sections_to_polish:
         text = ctx.sections.get(section_name, '')
-        if not text or len(text) < 200:
+        if not text or len(text) < 100:
             continue
         try:
+            # 润色文本
             polished = writer.polish_text(
                 text[:3000],  # 限制长度避免超时
                 learned_patterns=ctx.learned_patterns,
@@ -1090,9 +1095,46 @@ def _run_polish(ctx: PaperContext):
         except Exception as e:
             logger.debug(f"润色 {section_name} 跳过: {e}")
 
-    if polished_count:
-        logger.info(f"润色完成: {polished_count} 个章节")
-    return polished_count
+    # 增强引言（如果太短或缺少关键内容）
+    intro_text = ctx.sections.get('introduction', '')
+    if intro_text and len(intro_text) < 800:
+        try:
+            # 使用Claude增强引言
+            enhanced_intro = writer.enhance_introduction(
+                intro_text,
+                findings=ctx.findings,
+                domain_config=ctx.domain_config if ctx.has('domain_config') else {},
+                language=ctx.language,
+            )
+            if enhanced_intro and len(enhanced_intro) > len(intro_text) * 1.2:
+                ctx.sections['introduction'] = enhanced_intro
+                enhanced_count += 1
+                logger.info(f"增强引言: {len(intro_text)} -> {len(enhanced_intro)} 字")
+        except Exception as e:
+            logger.debug(f"增强引言跳过: {e}")
+
+    # 增强讨论（如果缺少机制解释）
+    discussion_text = ctx.sections.get('discussion', '')
+    if discussion_text and len(discussion_text) < 1000:
+        try:
+            # 使用Claude增强讨论
+            enhanced_discussion = writer.enhance_discussion(
+                discussion_text,
+                findings=ctx.findings,
+                mechanisms=ctx.learned_mechanisms if ctx.has('learned_mechanisms') else [],
+                recalled_refs=ctx.recalled_references if ctx.has('recalled_references') else [],
+                language=ctx.language,
+            )
+            if enhanced_discussion and len(enhanced_discussion) > len(discussion_text) * 1.2:
+                ctx.sections['discussion'] = enhanced_discussion
+                enhanced_count += 1
+                logger.info(f"增强讨论: {len(discussion_text)} -> {len(enhanced_discussion)} 字")
+        except Exception as e:
+            logger.debug(f"增强讨论跳过: {e}")
+
+    if polished_count or enhanced_count:
+        logger.info(f"润色完成: {polished_count} 个章节润色, {enhanced_count} 个章节增强")
+    return polished_count + enhanced_count
 
 
 def _run_review(ctx: PaperContext):
