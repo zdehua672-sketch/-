@@ -1809,21 +1809,40 @@ def _run_assemble(ctx: PaperContext):
     ctx.docx_path = assembler.assemble(output_docx)
     logger.info(f"DOCX: {ctx.docx_path}")
 
-    # 复制到桌面
+    # 复制到桌面/论文输出/
     try:
         import shutil
         desktop = os.path.join(os.path.expanduser('~'), 'Desktop')
         if os.path.isdir(desktop):
-            desktop_docx = os.path.join(desktop, '冬春数据论文.docx')
-            shutil.copy2(ctx.docx_path, desktop_docx)
-            logger.info(f"已复制到桌面: {desktop_docx}")
+            output_dir = os.path.join(desktop, '论文输出')
+            os.makedirs(output_dir, exist_ok=True)
 
-            # 同时复制 Markdown 版本
+            # 复制 DOCX
+            shutil.copy2(ctx.docx_path, os.path.join(output_dir, 'paper.docx'))
+            logger.info(f"已复制到: {output_dir}/paper.docx")
+
+            # 复制 Markdown
             paper_md = os.path.join(ctx.output_dir, 'paper.md')
             if os.path.exists(paper_md):
-                desktop_md = os.path.join(desktop, '冬春数据论文.md')
-                shutil.copy2(paper_md, desktop_md)
-                logger.info(f"已复制到桌面: {desktop_md}")
+                shutil.copy2(paper_md, os.path.join(output_dir, 'paper.md'))
+
+            # 复制图表
+            figures_src = os.path.join(ctx.output_dir, 'figures')
+            if os.path.isdir(figures_src):
+                figures_dst = os.path.join(output_dir, 'figures')
+                os.makedirs(figures_dst, exist_ok=True)
+                for f in os.listdir(figures_src):
+                    if f.endswith(('.png', '.pdf', '.svg')):
+                        shutil.copy2(os.path.join(figures_src, f),
+                                     os.path.join(figures_dst, f))
+
+            # 复制三线表
+            for table_file in ['table1_descriptive_stats.md', 'table2_correlation_matrix.md', 'table3_seasonal_comparison.md']:
+                table_path = os.path.join(ctx.output_dir, table_file)
+                if os.path.exists(table_path):
+                    shutil.copy2(table_path, os.path.join(output_dir, table_file))
+
+            logger.info(f"所有输出已复制到: {output_dir}")
     except Exception as e:
         logger.warning(f"复制到桌面失败: {e}")
 
