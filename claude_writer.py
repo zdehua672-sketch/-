@@ -754,6 +754,114 @@ Write the Methods directly."""
         result = self._call_claude(prompt)
         return result if result else text
 
+    def enhance_introduction(self, intro_text: str, findings: list = None,
+                             domain_config=None, language: str = 'zh') -> str:
+        """
+        增强引言：补充研究背景、研究空白、创新点，使引言更丰满有逻辑。
+
+        Parameters
+        ----------
+        intro_text : str, 现有引言文本
+        findings : list, 数据分析发现
+        domain_config, 领域配置
+        language : str, 语言
+
+        Returns
+        -------
+        str, 增强后的引言
+        """
+        findings_hint = ""
+        if findings:
+            key_findings = self._summarize_findings(findings[:5])
+            findings_hint = f"\n\n关键发现（用于引出研究意义）:\n{key_findings}"
+
+        domain_hint = self._get_domain_context()
+
+        prompt = f"""你是一位资深环境科学学术作者。请对以下引言进行扩写增强。
+
+要求：
+1. 保持原有核心内容和逻辑框架
+2. 补充研究背景的广度（从全球→区域→具体问题）
+3. 明确指出现有研究的空白/不足
+4. 突出本研究的创新点和科学意义
+5. 逻辑递进：大背景 → 具体问题 → 研究空白 → 本文目的
+6. 学术语气，避免口语化
+7. 字数扩写到原来的1.5-2倍
+{domain_hint}
+{findings_hint}
+
+现有引言:
+{intro_text}
+
+请直接输出增强后的引言文本，不要加说明。"""
+
+        result = self._call_claude(prompt)
+        return result if result else intro_text
+
+    def enhance_discussion(self, discussion_text: str, findings: list = None,
+                           mechanisms: list = None, recalled_refs: list = None,
+                           language: str = 'zh') -> str:
+        """
+        增强讨论：补充机制解释、文献对比、研究意义。
+
+        Parameters
+        ----------
+        discussion_text : str, 现有讨论文本
+        findings : list, 数据分析发现
+        mechanisms : list, 学到的机制知识
+        recalled_refs : list, 回忆的相关文献
+        language : str, 语言
+
+        Returns
+        -------
+        str, 增强后的讨论
+        """
+        findings_hint = ""
+        if findings:
+            key_findings = self._summarize_findings(findings[:5])
+            findings_hint = f"\n\n关键发现:\n{key_findings}"
+
+        mechanisms_hint = ""
+        if mechanisms:
+            mech_lines = []
+            for m in mechanisms[:3]:
+                if isinstance(m, dict):
+                    mech_lines.append(f"- {m.get('description', str(m)[:150])}")
+            if mech_lines:
+                mechanisms_hint = "\n\n已知机制:\n" + '\n'.join(mech_lines)
+
+        refs_hint = ""
+        if recalled_refs:
+            ref_lines = []
+            for r in recalled_refs[:3]:
+                if isinstance(r, dict):
+                    ref_lines.append(f"- {r.get('title', str(r)[:100])}")
+            if ref_lines:
+                refs_hint = "\n\n可引用文献:\n" + '\n'.join(ref_lines)
+
+        prompt = f"""你是一位资深环境科学学术作者。请对以下讨论部分进行扩写增强。
+
+要求：
+1. 保持原有核心分析和逻辑框架
+2. 深入解释观测到的现象背后的机制
+3. 与已有文献进行对比讨论（一致/不一致及原因）
+4. 讨论研究的实践意义和政策启示
+5. 客观承认研究局限性
+6. 提出未来研究方向
+7. 学术语气，逻辑严密
+8. 字数扩写到原来的1.5-2倍
+{findings_hint}
+{mechanisms_hint}
+{refs_hint}
+
+现有讨论:
+{discussion_text}
+
+请直接输出增强后的讨论文本，不要加说明。"""
+
+        result = self._call_claude(prompt)
+        return result if result else discussion_text
+
     # ================================================================
     # 辅助格式化方法
     # ================================================================

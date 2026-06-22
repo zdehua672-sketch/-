@@ -2966,14 +2966,14 @@ class VisualizationAgent:
         # 4. 气体箱线图
         gas_vars = [c for c in ['CH4平均值', 'N2O平均值', 'CO2', 'VOCs(ppb)'] if c in self.df.columns]
         if gas_vars:
-            fig, meta = self.plot_multivariate(variables=gas_vars, kind='box')
+            fig, meta = self.plot_multivariate(variables=gas_vars, kind='box', separate_seasons=True)
             if fig:
                 results.append((fig, meta))
 
         # 5. 液相箱线图
         liquid_vars = [c for c in ['TOC（mg/L)', 'IC(mg/L)', 'DO(mg/L)', 'pH'] if c in self.df.columns]
         if liquid_vars:
-            fig, meta = self.plot_multivariate(variables=liquid_vars, kind='box')
+            fig, meta = self.plot_multivariate(variables=liquid_vars, kind='box', separate_seasons=True)
             if fig:
                 results.append((fig, meta))
 

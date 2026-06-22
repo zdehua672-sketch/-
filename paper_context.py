@@ -1808,6 +1808,25 @@ def _run_assemble(ctx: PaperContext):
     output_docx = os.path.join(ctx.output_dir, 'paper.docx')
     ctx.docx_path = assembler.assemble(output_docx)
     logger.info(f"DOCX: {ctx.docx_path}")
+
+    # 复制到桌面
+    try:
+        import shutil
+        desktop = os.path.join(os.path.expanduser('~'), 'Desktop')
+        if os.path.isdir(desktop):
+            desktop_docx = os.path.join(desktop, '冬春数据论文.docx')
+            shutil.copy2(ctx.docx_path, desktop_docx)
+            logger.info(f"已复制到桌面: {desktop_docx}")
+
+            # 同时复制 Markdown 版本
+            paper_md = os.path.join(ctx.output_dir, 'paper.md')
+            if os.path.exists(paper_md):
+                desktop_md = os.path.join(desktop, '冬春数据论文.md')
+                shutil.copy2(paper_md, desktop_md)
+                logger.info(f"已复制到桌面: {desktop_md}")
+    except Exception as e:
+        logger.warning(f"复制到桌面失败: {e}")
+
     return ctx.docx_path
 
 
