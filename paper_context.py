@@ -2518,7 +2518,7 @@ def _run_generate_figures(ctx: PaperContext):
             logger.info(f"图{fig_id} {name}: 已保存 -> {section}")
 
         # ============================================================
-        # 图1: 季节对比箱线图（带散点叠加和显著性标注）
+        # 图1: 冬季箱线图（各变量分布）
         # ============================================================
         try:
             key_vars = ['甲烷(ppm)', 'CO2', 'COD（mg/L)', 'DO(mg/L)', 'TOC（mg/L)', 'pH',
@@ -2526,6 +2526,85 @@ def _run_generate_figures(ctx: PaperContext):
             available = [v for v in key_vars if v in df.columns]
 
             if available and '季节' in df.columns:
+                season_list = sorted(df['季节'].unique())
+
+                for season_idx, season in enumerate(season_list):
+                    season_df = df[df['季节'] == season]
+                    season_color = SEASON_COLORS.get(season, NATURE_COLORS[season_idx])
+                    n_vars = min(len(available), 8)
+                    cols = min(n_vars, 4)
+                    rows = (n_vars + cols - 1) // cols
+
+                    fig, axes = plt.subplots(rows, cols,
+                                            figsize=get_figure_size('nature', columns=2, height_ratio=0.4 * rows))
+                    if rows == 1 and cols == 1:
+                        axes = np.array([[axes]])
+                    elif rows == 1:
+                        axes = axes.reshape(1, -1)
+                    elif cols == 1:
+                        axes = axes.reshape(-1, 1)
+
+                    for idx, var in enumerate(available[:n_vars]):
+                        ax = axes[idx // cols][idx % cols]
+                        data = season_df[var].dropna().values
+
+                        if len(data) > 2:
+                            # 箱线图
+                            bp = ax.boxplot([data], patch_artist=True,
+                                           widths=0.5, showmeans=True,
+                                           meanprops={'marker': 'D', 'markersize': 5,
+                                                     'markerfacecolor': '#E74C3C', 'markeredgecolor': '#E74C3C'})
+
+                            bp['boxes'][0].set_facecolor(season_color)
+                            bp['boxes'][0].set_alpha(0.75)
+                            bp['boxes'][0].set_linewidth(1.0)
+                            for element in ['whiskers', 'caps', 'medians']:
+                                for line in bp[element]:
+                                    line.set_color('#374151')
+                                    line.set_linewidth(0.8)
+                            bp['medians'][0].set_color('#E74C3C')
+                            bp['medians'][0].set_linewidth(1.5)
+
+                            # 叠加散点（抖动）
+                            jitter = np.random.normal(0, 0.06, len(data))
+                            ax.scatter([1 + j for j in jitter], data,
+                                      color=season_color, s=20, alpha=0.7, zorder=5,
+                                      edgecolors='white', linewidth=0.3)
+
+                            # 标注均值和标准差
+                            mean_val = np.mean(data)
+                            std_val = np.std(data)
+                            ax.text(1.3, mean_val, f'{mean_val:.1f}±{std_val:.1f}',
+                                    ha='left', va='center', fontsize=6, color='#E74C3C')
+
+                            # 样本量
+                            ax.text(1, ax.get_ylim()[0], f'n={len(data)}',
+                                    ha='center', va='top', fontsize=6, style='italic')
+
+                        ax.set_xticks([])
+                        ax.set_ylabel(get_label(var), fontsize=7)
+                        ax.set_title(get_label(var), fontsize=8, pad=5)
+                        ax.tick_params(axis='y', labelsize=6)
+                        ax.grid(True, axis='y', alpha=0.2, linestyle='--')
+                        ax.set_axisbelow(True)
+
+                    # 隐藏多余子图
+                    for idx in range(n_vars, rows * cols):
+                        axes[idx // cols][idx % cols].set_visible(False)
+
+                    # 添加面板标签
+                    for idx in range(n_vars):
+                        add_panel_label(axes[idx // cols][idx % cols], idx)
+
+                    plt.tight_layout(pad=1.0, w_pad=0.5, h_pad=0.5)
+
+                    fig_name = f'fig{season_idx + 1}a_{season}_boxplot'
+                    _save_figure(fig, fig_name,
+                               [f'{season}关键变量箱线图',
+                                '箱线图展示中位数、四分位距和异常值，红色菱形为均值'],
+                               section='results')
+
+                # 冬春对比箱线图（合并图）
                 n_vars = min(len(available), 8)
                 cols = min(n_vars, 4)
                 rows = (n_vars + cols - 1) // cols
@@ -2539,7 +2618,6 @@ def _run_generate_figures(ctx: PaperContext):
                 elif cols == 1:
                     axes = axes.reshape(-1, 1)
 
-                season_list = sorted(df['季节'].unique())
                 season_colors = [SEASON_COLORS.get(s, NATURE_COLORS[i]) for i, s in enumerate(season_list)]
 
                 for idx, var in enumerate(available[:n_vars]):
@@ -2547,17 +2625,12 @@ def _run_generate_figures(ctx: PaperContext):
                     data = df[['季节', var]].dropna()
 
                     if len(data) > 3:
-                        # 准备数据
                         values = [data[data['季节'] == s][var].values for s in season_list]
 
-                        # 箱线图
                         bp = ax.boxplot(values, patch_artist=True,
                                        widths=0.6, showmeans=True, meanprops={'marker': 'D', 'markersize': 4})
-
-                        # 设置x轴标签
                         ax.set_xticklabels(season_list)
 
-                        # 设置颜色
                         for si, box in enumerate(bp['boxes']):
                             box.set_facecolor(season_colors[si])
                             box.set_alpha(0.7)
@@ -2570,24 +2643,20 @@ def _run_generate_figures(ctx: PaperContext):
                             median.set_linewidth(1.0)
                             median.set_color('#333333')
 
-                        # 叠加散点
                         for si, (s, v) in enumerate(zip(season_list, values)):
                             jitter = np.random.normal(0, 0.05, len(v))
                             ax.scatter([si + 1 + j for j in jitter], v,
                                       color=season_colors[si], s=15, alpha=0.6, zorder=5,
                                       edgecolors='white', linewidth=0.3)
 
-                        # 设置标签
                         ax.set_ylabel(get_label(var), fontsize=7)
                         ax.set_title(get_label(var), fontsize=8, pad=5)
 
-                        # 添加样本量
                         for si, s in enumerate(season_list):
                             n = len(values[si])
                             ax.text(si + 1, ax.get_ylim()[0], f'n={n}',
                                     ha='center', va='top', fontsize=6, style='italic')
 
-                        # 添加显著性标注（如果有）
                         p = next((f['data']['p'] for f in ctx.findings
                                  if f.get('type') == 'group_difference'
                                  and f.get('variable') == var
@@ -2597,21 +2666,18 @@ def _run_generate_figures(ctx: PaperContext):
                             y_range = ax.get_ylim()[1] - ax.get_ylim()[0]
                             add_significance_bar(ax, 1, 2, y_max + y_range * 0.05, p)
 
-                        # 简化刻度
                         ax.tick_params(axis='x', labelsize=7)
                         ax.tick_params(axis='y', labelsize=6)
 
-                # 隐藏多余子图
                 for idx in range(n_vars, rows * cols):
                     axes[idx // cols][idx % cols].set_visible(False)
 
-                # 添加面板标签
                 for idx in range(n_vars):
                     add_panel_label(axes[idx // cols][idx % cols], idx)
 
                 plt.tight_layout(pad=1.0, w_pad=0.5, h_pad=0.5)
 
-                _save_figure(fig, 'fig1_seasonal_boxplot',
+                _save_figure(fig, 'fig1c_seasonal_comparison_boxplot',
                            ['冬春季关键变量箱线图比较',
                             '箱线图展示中位数、四分位距和异常值',
                             '* p<0.05, ** p<0.01, *** p<0.001'],

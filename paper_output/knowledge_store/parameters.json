@@ -4,7 +4,7 @@
     "description": "系统参数（阈值/权重）",
     "version": 15,
     "created": "2026-06-12T16:34:15.899890+00:00",
-    "updated": "2026-06-21T16:40:54.028063+00:00",
+    "updated": "2026-06-22T01:54:24.994457+00:00",
     "source": "initial"
   },
   "entries": {
@@ -15,8 +15,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.012065+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.978452+00:00",
+      "version": 12
     },
     "score_weight_中文格式": {
       "value": {
@@ -25,8 +25,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.013110+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.979456+00:00",
+      "version": 12
     },
     "score_weight_错别字": {
       "value": {
@@ -35,8 +35,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.014065+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.980457+00:00",
+      "version": 12
     },
     "score_weight_学术语法": {
       "value": {
@@ -45,8 +45,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.016064+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.982457+00:00",
+      "version": 12
     },
     "score_weight_引文规范": {
       "value": {
@@ -55,8 +55,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.017061+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.983456+00:00",
+      "version": 12
     },
     "score_weight_图表规范": {
       "value": {
@@ -65,8 +65,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.018062+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.984457+00:00",
+      "version": 12
     },
     "score_weight_数据逻辑": {
       "value": {
@@ -75,8 +75,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.019063+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.985497+00:00",
+      "version": 12
     },
     "score_weight_Discussion逻辑": {
       "value": {
@@ -85,8 +85,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.020061+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.986457+00:00",
+      "version": 12
     },
     "score_weight_AI痕迹": {
       "value": {
@@ -95,8 +95,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.022063+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.987457+00:00",
+      "version": 12
     },
     "score_weight_学术重复": {
       "value": {
@@ -105,8 +105,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.023062+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.989453+00:00",
+      "version": 12
     },
     "score_weight_推理链完整性": {
       "value": {
@@ -115,8 +115,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.024062+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.990454+00:00",
+      "version": 12
     },
     "score_weight_逻辑跳跃": {
       "value": {
@@ -125,8 +125,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.025103+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.991457+00:00",
+      "version": 12
     },
     "score_weight_引用质量": {
       "value": {
@@ -135,8 +135,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.027065+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.993458+00:00",
+      "version": 12
     },
     "score_weight_Nature结构诊断": {
       "value": {
@@ -145,8 +145,8 @@
       },
       "confidence": 0.8,
       "source": "Scorer",
-      "updated": "2026-06-21T16:40:54.028063+00:00",
-      "version": 10
+      "updated": "2026-06-22T01:54:24.994457+00:00",
+      "version": 12
     }
   },
   "changelog": [
