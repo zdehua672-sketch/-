@@ -1198,5 +1198,35 @@
     "reviewed_at": "",
     "original_text": "IC(mg/L)在季节间差异(t检验, p=0.0838(接近显著), Cohen's d=0.91",
     "modified_text": ""
+  },
+  {
+    "id": "2ce9c252",
+    "section_type": "conclusion",
+    "text": "p=0.019",
+    "location": "p=0.019",
+    "reason": "数值不一致: 文中 p=0.019 在 findings 中未找到匹配",
+    "confidence": 0.3,
+    "severity": "MAJOR",
+    "created_at": "2026-06-23T01:09:15.180327",
+    "status": "pending",
+    "reviewer_notes": "",
+    "reviewed_at": "",
+    "original_text": "p=0.019",
+    "modified_text": ""
+  },
+  {
+    "id": "a6fcb1cf",
+    "section_type": "conclusion",
+    "text": "p=0.019",
+    "location": "p=0.019",
+    "reason": "数值不一致: 文中 p=0.019 在 findings 中未找到匹配",
+    "confidence": 0.3,
+    "severity": "MAJOR",
+    "created_at": "2026-06-23T01:09:15.180327",
+    "status": "pending",
+    "reviewer_notes": "",
+    "reviewed_at": "",
+    "original_text": "p=0.019",
+    "modified_text": ""
   }
 ]

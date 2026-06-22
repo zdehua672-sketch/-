@@ -1705,6 +1705,14 @@ def _run_assemble(ctx: PaperContext):
     5. 结论
     6. 参考文献
     """
+    # 清洗写作残留 + 验证完整性
+    from paper_cleaner import clean_and_validate_paper
+    ctx.sections, problems = clean_and_validate_paper(ctx.sections, ctx.figures)
+    if problems:
+        logger.warning(f"论文清洗发现 {len(problems)} 个问题:")
+        for p in problems:
+            logger.warning(f"  {p}")
+
     # 在排版前注入引用支撑
     _inject_citations_to_sections(ctx)
 
