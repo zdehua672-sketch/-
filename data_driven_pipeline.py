@@ -238,7 +238,7 @@ class DataExplorer:
                     elif p < 0.10:
                         print(f"  [!] {c1} vs {c2}: {method} r={r:.3f}, p={p:.4f}{sig} (接近显著)")
                     if nonlinear_flag:
-                        print(f"       ⚠️ 非线性可能: Pearson={r_pearson:.3f}, Spearman={r_spearman:.3f}")
+                        print(f"       [!] 非线性可能: Pearson={r_pearson:.3f}, Spearman={r_spearman:.3f}")
 
     def _explore_group_differences(self):
         """探索组间差异（如果有分组变量）"""
