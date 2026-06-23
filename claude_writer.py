@@ -205,30 +205,24 @@ class ClaudeWriter:
             if os.path.exists(npm_global):
                 claude_cmd = npm_global
 
-        cmd = [claude_cmd, "-p", prompt, "--output-format", "text"]
+        # 使用 stdin 传递 prompt（避免 Windows 命令行长度限制）
+        cmd = [claude_cmd, "--output-format", "text"]
         if self.model:
             cmd.extend(["--model", self.model])
+
         try:
-            # 安全改进：使用完整的可执行路径，避免 shell=True
-            # 对于 Windows，使用完整路径可以避免命令注入风险
             env = os.environ.copy()
 
-            # 安全改进：不再全局禁用 SSL 验证
-            # 如果确实需要，可以通过配置文件设置
-            # env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
-
-            # 安全改进：避免 shell=True，使用完整可执行路径
-            # 对于 .cmd 文件，需要通过 cmd.exe 调用
             is_windows = os.name == 'nt'
             if is_windows and claude_cmd.endswith('.cmd'):
-                # Windows .cmd 文件需要通过 cmd.exe 调用
                 cmd = ['cmd', '/c'] + cmd
 
+            # 通过 stdin 传递 prompt，避免命令行参数长度限制
             result = subprocess.run(
-                cmd, capture_output=True, text=True,
+                cmd, input=prompt, capture_output=True, text=True,
                 timeout=self.timeout, encoding='utf-8', errors='replace',
                 env=env,
-                shell=False,  # 安全改进：不使用 shell=True
+                shell=False,
             )
             if result.returncode != 0:
                 logger.error(f"Claude CLI error: {result.stderr[:300]}")
