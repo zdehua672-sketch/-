@@ -2439,6 +2439,32 @@ def _run_citation_bank(ctx: PaperContext):
 # 5. 画图模块 + 文本清理
 # ============================================================
 
+def _run_smart_figure_planner(ctx: PaperContext):
+    """
+    智能作图规划 — 基于数据质量和findings规划图表
+
+    输出: ctx.figure_plans (FigurePlanSet)
+    """
+    if not ctx.has('df') or not ctx.has('findings'):
+        return None
+
+    try:
+        from smart_figure_planner import plan_figures
+
+        plan_set = plan_figures(ctx.df, ctx.findings, ctx.language)
+        ctx.figure_plans = plan_set
+
+        # 输出规划结果
+        logger.info(f"智能作图规划完成: {len(plan_set.plans)}个图表")
+        for i, plan in enumerate(plan_set.plans):
+            logger.info(f"  {i+1}. {plan.title} ({plan.chart_type}, 优先级{plan.priority})")
+
+        return plan_set
+    except Exception as e:
+        logger.warning(f"智能作图规划失败: {e}")
+        return None
+
+
 def _run_generate_figures(ctx: PaperContext):
     """
     数据驱动的图表生成 — 使用 academic_plot_style 规范系统
@@ -4151,6 +4177,12 @@ MODULE_REGISTRY = {
         'provides': ['figures'],
         'run': _run_generate_figures,
         'description': '生成论文图表',
+    },
+    'smart_figure_planner': {
+        'needs': ['df', 'findings'],
+        'provides': ['figure_plans'],
+        'run': _run_smart_figure_planner,
+        'description': '智能作图规划（数据驱动）',
     },
     'scientific_analysis': {
         'needs': ['df'],
