@@ -77,6 +77,112 @@ class ClaudeWriter:
             logger.warning(f"Prompt 过长，已截断到 {max_length} 字符")
         return sanitized
 
+    def _clean_output(self, text: str) -> str:
+        """清理 Claude 输出中的元评论和残留"""
+        if not text:
+            return text
+        import re
+
+        lines = text.split('\n')
+        clean = []
+
+        for line in lines:
+            s = line.strip()
+
+            # 跳过元评论行（只跳过该行，不影响后续）
+            is_meta = False
+
+            # 检查元评论模式
+            meta_starts = [
+                '以下是为您', '以上为', '我已仔细', '请授权', '文件写入需要',
+                'I have all', 'Since file writing', 'Please authorize',
+                '后续部分规划', '全文约', '数据均取自实际',
+                '包含以下逻辑', '补充了具体', '各claim均有', '解决了原版',
+                '引言结构说明', '建议的改进优先', '需要重点改进',
+                '论文现状评估', '已完成的工作', '论文框架基本', '数据基础扎实',
+                '我们可以讨论', '您可以复制',
+            ]
+            if any(s.startswith(p) for p in meta_starts):
+                is_meta = True
+
+            # 检查 "第X部分" 模式
+            if re.match(r'^第\d部分[：:]', s):
+                is_meta = True
+
+            # 检查英文元评论
+            if re.match(r'^(I have all|Since file|Please authorize|Here is the|The following is)', s):
+                is_meta = True
+
+            # 检查交互式文字（短行）
+            if len(s) < 30 and re.match(r'^(如需调整|请告知|如有需要|若有需要|如有疑问)', s):
+                is_meta = True
+
+            # 检查 "如上所述" 等（但不包括 "如图X所示" 等正常学术用语）
+            if re.match(r'^(如上所述|如前所述|以上分析)', s) and len(s) < 30:
+                is_meta = True
+
+            if not is_meta:
+                clean.append(line)
+
+        result = '\n'.join(clean)
+        # 移除连续空行
+        result = re.sub(r'\n{4,}', '\n\n\n', result)
+        return result.strip()
+
+    def _replace_figure_refs(self, text: str, figures: dict) -> str:
+        """将图X占位符替换为实际图号"""
+        if not text or not figures:
+            return text
+        import re
+
+        # 建立 caption -> fig_num 映射
+        fig_map = {}
+        for name, info in figures.items():
+            fig_num = info.get('fig_num', '')
+            caption = info.get('caption', '')
+            if fig_num:
+                fig_map[name] = str(fig_num)
+                # 也按关键词映射
+                if 'boxplot' in name or '箱线' in caption:
+                    fig_map['箱线图'] = str(fig_num)
+                if 'heatmap' in name or '热图' in caption or '相关' in caption:
+                    fig_map['热图'] = str(fig_num)
+                if 'spatial' in name or '空间' in caption:
+                    fig_map['空间分布'] = str(fig_num)
+                if 'comparison' in name or '对比' in caption:
+                    fig_map['对比'] = str(fig_num)
+                if 'phase' in name or '耦合' in caption:
+                    fig_map['耦合'] = str(fig_num)
+                if 'anomaly' in name or '异常' in caption:
+                    fig_map['异常'] = str(fig_num)
+                if 'cluster' in name or '聚类' in caption:
+                    fig_map['聚类'] = str(fig_num)
+
+        # 替换 "图X" 为实际图号（按出现顺序）
+        fig_nums = sorted(set(info.get('fig_num', '') for info in figures.values() if info.get('fig_num')))
+        fig_idx = 0
+
+        def replace_fig_x(match):
+            nonlocal fig_idx
+            if fig_idx < len(fig_nums):
+                num = fig_nums[fig_idx]
+                fig_idx += 1
+                return f'图{num}'
+            return match.group(0)
+
+        result = re.sub(r'图X', replace_fig_x, text)
+
+        # 替换 "表X" 为表号（从1开始）
+        table_idx = [1]
+        def replace_table_x(match):
+            num = table_idx[0]
+            table_idx[0] += 1
+            return f'表{num}'
+
+        result = re.sub(r'表X', replace_table_x, result)
+
+        return result
+
     def _call_claude(self, prompt: str) -> str:
         """调用 Claude CLI 生成文本"""
         # 清理 prompt
@@ -197,6 +303,7 @@ Write the Results directly, use ## for subsections."""
         if not result:
             logger.warning("Claude 生成 Results 失败")
             return ""
+        result = self._clean_output(result)
         logger.info(f"Results: Claude 生成 {len(result)} 字")
         return result
 
@@ -253,17 +360,24 @@ Write the Results directly, use ## for subsections."""
 
         # 第1部分：气相碳污染物分布特征（结果+讨论）
         if language == "zh":
-            prompt1 = f"""写{domain}论文的"结果与分析"章节第1部分。
+            prompt1 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
+
+写{domain}论文的"结果与分析"章节第1部分。
 
 ## 3.1 气相碳污染物分布特征
 
-要求：
-1. 先描述气相碳污染物的分布特征（结果数据）
-2. 引用相关图片（如"如图1所示"）
+写作规则：
+1. 先描述气相碳污染物的分布特征（结果数据，包含均值、标准差、p值）
+2. 引用相关图片（用"如图1所示"格式）
 3. 然后立即讨论这些特征的机制原因
-4. 引用文献支撑讨论
+4. 引用文献支撑讨论（用[1]格式）
 
-重要：直接输出正文，不要添加任何元评论、说明或交互式文字。不要添加"如需调整"、"请告知"等文字。
+禁止输出：
+- 不要写"以下是"、"以上为"等元评论
+- 不要写"如需调整"、"请告知"等交互文字
+- 不要写"I have"、"Since"等英文元评论
+- 不要写"第X部分"、"后续规划"等说明
+- 只输出论文正文
 
 气相相关发现:
 {seasonal_text[:500]}
@@ -291,15 +405,19 @@ Write directly."""
 
         # 第2部分：季节差异分析（结果+讨论）
         if language == "zh":
-            prompt2 = f"""写{domain}论文的"结果与分析"章节第2部分。
+            prompt2 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
+
+写{domain}论文的"结果与分析"章节第2部分。
 
 ## 3.2 季节差异分析
 
-要求：
-1. 先描述冬春季节的差异数据（结果）
+写作规则：
+1. 先描述冬春季节的差异数据（结果，包含均值、p值、效应量d）
 2. 引用相关图片
 3. 然后立即讨论季节差异的机制（温度、水文等）
 4. 引用文献支撑
+
+禁止输出：不要写元评论、交互文字、英文说明。只输出论文正文。
 
 季节差异发现:
 {seasonal_text}
@@ -327,15 +445,19 @@ Write directly."""
 
         # 第3部分：相关性分析（结果+讨论）
         if language == "zh":
-            prompt3 = f"""写{domain}论文的"结果与分析"章节第3部分。
+            prompt3 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
+
+写{domain}论文的"结果与分析"章节第3部分。
 
 ## 3.3 多变量相关性分析
 
-要求：
-1. 先描述关键相关性结果（r值、p值）
+写作规则：
+1. 先描述关键相关性结果（r值、p值、样本量n）
 2. 引用相关性热图
 3. 然后立即讨论相关性的机制意义
 4. 引用文献支撑
+
+禁止输出：不要写元评论、交互文字、英文说明。只输出论文正文。
 
 相关性发现:
 {corr_text}
@@ -363,15 +485,19 @@ Write directly."""
 
         # 第4部分：固相碳赋存特征（结果+讨论）
         if language == "zh":
-            prompt4 = f"""写{domain}论文的"结果与分析"章节第4部分。
+            prompt4 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
+
+写{domain}论文的"结果与分析"章节第4部分。
 
 ## 3.4 固相碳赋存特征与多相态碳分布
 
-要求：
+写作规则：
 1. 先描述固相碳的赋存特征（结果数据）
 2. 描述三相碳的分布格局
 3. 然后讨论碳在不同相态间的迁移机制
 4. 引用文献支撑
+
+禁止输出：不要写元评论、交互文字、英文说明。只输出论文正文。
 
 分布发现:
 {distribution_text}
@@ -400,8 +526,23 @@ Write directly."""
             logger.warning("Claude 生成 Results-Discussion 全部失败")
             return ""
 
-        result = '\n\n'.join(parts)
-        logger.info(f"Results-Discussion 总计: {len(result)} 字 ({len(parts)} 段)")
+        # 清洗每段输出
+        cleaned_parts = []
+        for part in parts:
+            cleaned = self._clean_output(part)
+            if cleaned and len(cleaned) > 50:
+                cleaned_parts.append(cleaned)
+
+        if not cleaned_parts:
+            logger.warning("清洗后 Results-Discussion 无有效内容")
+            return ""
+
+        result = '\n\n'.join(cleaned_parts)
+
+        # 替换图表引用占位符
+        result = self._replace_figure_refs(result, figures)
+
+        logger.info(f"Results-Discussion 总计: {len(result)} 字 ({len(cleaned_parts)} 段)")
         return result
 
     def write_discussion(self, findings: list, mechanisms: dict = None,
@@ -526,8 +667,15 @@ Write directly."""
             logger.warning("Claude 生成 Discussion 全部失败")
             return ""
 
-        result = '\n\n'.join(parts)
-        logger.info(f"Discussion 总计: {len(result)} 字 ({len(parts)} 段)")
+        # 清洗每段输出
+        cleaned_parts = []
+        for part in parts:
+            cleaned = self._clean_output(part)
+            if cleaned and len(cleaned) > 50:
+                cleaned_parts.append(cleaned)
+
+        result = '\n\n'.join(cleaned_parts) if cleaned_parts else ''
+        logger.info(f"Discussion 总计: {len(result)} 字 ({len(cleaned_parts)} 段)")
         return result
 
     def write_introduction(self, findings: list, domain: str = "污水管网碳排放",
@@ -580,6 +728,7 @@ Write the Introduction directly, use ## for subsections."""
         if not result:
             logger.warning("Claude 生成 Introduction 失败")
             return ""
+        result = self._clean_output(result)
         logger.info(f"Introduction: Claude 生成 {len(result)} 字")
         return result
 
@@ -619,6 +768,7 @@ Write directly."""
         if not result:
             logger.warning("Claude 生成 Abstract 失败")
             return ""
+        result = self._clean_output(result)
         logger.info(f"Abstract: Claude 生成 {len(result)} 字")
         return result
 
@@ -674,6 +824,7 @@ Write the Conclusion directly."""
         if not result:
             logger.warning("Claude 生成 Conclusion 失败")
             return ""
+        result = self._clean_output(result)
         logger.info(f"Conclusion: Claude 生成 {len(result)} 字")
         return result
 
@@ -713,6 +864,7 @@ Write the Methods directly."""
         if not result:
             logger.warning("Claude 生成 Methods 失败")
             return ""
+        result = self._clean_output(result)
         logger.info(f"Methods: Claude 生成 {len(result)} 字")
         return result
 
@@ -752,6 +904,8 @@ Write the Methods directly."""
 请直接输出润色后的文本，不要加说明。"""
 
         result = self._call_claude(prompt)
+        if result:
+            result = self._clean_output(result)
         return result if result else text
 
     def enhance_introduction(self, intro_text: str, findings: list = None,
@@ -796,6 +950,8 @@ Write the Methods directly."""
 请直接输出增强后的引言文本，不要加说明。"""
 
         result = self._call_claude(prompt)
+        if result:
+            result = self._clean_output(result)
         return result if result else intro_text
 
     def enhance_discussion(self, discussion_text: str, findings: list = None,
@@ -860,6 +1016,8 @@ Write the Methods directly."""
 请直接输出增强后的讨论文本，不要加说明。"""
 
         result = self._call_claude(prompt)
+        if result:
+            result = self._clean_output(result)
         return result if result else discussion_text
 
     # ================================================================
