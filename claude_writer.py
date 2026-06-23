@@ -21,7 +21,7 @@ from typing import Optional, Dict, List
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TIMEOUT = 300
+DEFAULT_TIMEOUT = 600
 
 
 class ClaudeWriter:
@@ -314,35 +314,27 @@ Write the Results directly, use ## for subsections."""
                                   injection_context: str = None,
                                   figures: dict = None) -> str:
         """
-        生成结果与讨论交织的章节（符合中文核心期刊规范）
-
-        结构：每个主题先展示结果，然后立即讨论
-        3.1 气相碳污染物分布特征
-          - 结果数据
-          - 相关图片
-          - 讨论分析
-        3.2 季节差异分析
-          - 结果数据
-          - 相关图片
-          - 讨论分析
+        生成结果与讨论交织的章节（单次生成，避免多段式空小节问题）
         """
         findings_text = self._summarize_findings(findings)
         mech_text = self._format_mechanisms(mechanisms)
         refs_text = self._format_references(recalled_refs)
 
         # 分离不同类型的发现
-        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:4]
-        corr = [f for f in findings if f.get('type') == 'correlation'][:4]
+        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:6]
+        corr = [f for f in findings if f.get('type') == 'correlation'][:6]
         distribution = [f for f in findings if f.get('type') == 'distribution'][:4]
+        anomaly = [f for f in findings if f.get('type') == 'anomaly_story'][:3]
 
         seasonal_text = self._summarize_findings(seasonal)
         corr_text = self._summarize_findings(corr)
         distribution_text = self._summarize_findings(distribution)
+        anomaly_text = self._summarize_findings(anomaly)
 
         # 构建注入上下文
         injection_hint = ""
         if injection_context:
-            injection_hint = f"\n\n【补充分析结果】\n{injection_context}\n\n请在讨论中引用上述分析结果。"
+            injection_hint = f"\n\n【补充分析结果】\n{injection_context}"
 
         # 构建图片提示
         figures_hint = ""
@@ -354,195 +346,94 @@ Write the Results directly, use ## for subsections."""
                 if caption:
                     fig_list.append(f"图{fig_num}: {caption}")
             if fig_list:
-                figures_hint = "\n\n【可用图片】\n" + "\n".join(fig_list[:8])
+                figures_hint = "\n\n【可用图片】\n" + "\n".join(fig_list[:9])
 
-        parts = []
-
-        # 第1部分：气相碳污染物分布特征（结果+讨论）
+        # 单次生成完整结果与讨论章节
         if language == "zh":
-            prompt1 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
+            prompt = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
 
-写{domain}论文的"结果与分析"章节第1部分。
+写{domain}论文的"结果与分析"章节，必须包含以下所有子章节，每个子章节必须有实质内容（不能只有标题）：
 
 ## 3.1 气相碳污染物分布特征
+- 描述CH4、CO2、VOCs等气相碳污染物的分布特征（均值、标准差、CV%）
+- 引用图片（如"如图1所示"）
+- 讨论分布特征的机制原因
+- 引用文献支撑
+
+## 3.2 季节差异分析
+- 描述冬春季节的差异数据（均值、p值、效应量d）
+- 讨论季节差异的机制（温度、水文等）
+- 引用文献支撑
+
+## 3.3 多变量相关性分析
+- 描述关键相关性结果（r值、p值、样本量n）
+- 引用相关性热图
+- 讨论相关性的机制意义
+
+## 3.4 固相碳赋存特征与多相态碳分布
+- 描述固相碳的赋存特征
+- 描述三相碳的分布格局
+- 讨论碳在不同相态间的迁移机制
+
+## 3.5 回归分析
+- 描述TOC、DO、COD、pH等与CH4的回归关系
+- 讨论回归结果的环境意义
+
+## 3.6 碳平衡分析
+- 描述三相碳含量分布特征
+- 分析碳在三相中的分配比例
+- 讨论季节对碳分配的影响
 
 写作规则：
-1. 先描述气相碳污染物的分布特征（结果数据，包含均值、标准差、p值）
-2. 引用相关图片（用"如图1所示"格式）
-3. 然后立即讨论这些特征的机制原因
-4. 引用文献支撑讨论（用[1]格式）
+1. 每个 ## 标题下必须有至少3段正文内容
+2. 所有数据必须包含具体数值（均值、标准差、p值、r值等）
+3. 引用图片用"如图X所示"格式
+4. 引用文献用[1]格式
+5. 每个发现都要有机制解释
 
 禁止输出：
 - 不要写"以下是"、"以上为"等元评论
 - 不要写"如需调整"、"请告知"等交互文字
 - 不要写"I have"、"Since"等英文元评论
 - 不要写"第X部分"、"后续规划"等说明
+- 不要写"小节)"、"5个小节"等规划文字
 - 只输出论文正文
 
-气相相关发现:
-{seasonal_text[:500]}
-
-{refs_text}
-{figures_hint}
-
-直接输出正文，用 ## 标记子章节。"""
-        else:
-            prompt1 = f"""Write Results & Discussion section 1 for {domain}.
-
-## 3.1 Gas-phase carbon pollutant distribution characteristics
-
-Gas findings:
-{seasonal_text[:500]}
-
-{refs_text}
-
-Write directly."""
-
-        part1 = self._call_claude(prompt1)
-        if part1:
-            parts.append(part1)
-            logger.info(f"Results-Discussion Part1: {len(part1)} 字")
-
-        # 第2部分：季节差异分析（结果+讨论）
-        if language == "zh":
-            prompt2 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
-
-写{domain}论文的"结果与分析"章节第2部分。
-
-## 3.2 季节差异分析
-
-写作规则：
-1. 先描述冬春季节的差异数据（结果，包含均值、p值、效应量d）
-2. 引用相关图片
-3. 然后立即讨论季节差异的机制（温度、水文等）
-4. 引用文献支撑
-
-禁止输出：不要写元评论、交互文字、英文说明。只输出论文正文。
-
-季节差异发现:
+【数据发现】
 {seasonal_text}
 
-{refs_text}
+{corr_text}
+
+{distribution_text}
+
+{anomaly_text}
+
 {injection_hint}
 
-直接输出正文，用 ## 标记子章节。"""
-        else:
-            prompt2 = f"""Write Results & Discussion section 2 for {domain}.
-
-## 3.2 Seasonal difference analysis
-
-Seasonal findings:
-{seasonal_text}
-
 {refs_text}
-
-Write directly."""
-
-        part2 = self._call_claude(prompt2)
-        if part2:
-            parts.append(part2)
-            logger.info(f"Results-Discussion Part2: {len(part2)} 字")
-
-        # 第3部分：相关性分析（结果+讨论）
-        if language == "zh":
-            prompt3 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
-
-写{domain}论文的"结果与分析"章节第3部分。
-
-## 3.3 多变量相关性分析
-
-写作规则：
-1. 先描述关键相关性结果（r值、p值、样本量n）
-2. 引用相关性热图
-3. 然后立即讨论相关性的机制意义
-4. 引用文献支撑
-
-禁止输出：不要写元评论、交互文字、英文说明。只输出论文正文。
-
-相关性发现:
-{corr_text}
-
 {mech_text}
 {figures_hint}
 
-直接输出正文，用 ## 标记子章节。"""
+直接输出完整正文，用 ## 标记子章节。"""
         else:
-            prompt3 = f"""Write Results & Discussion section 3 for {domain}.
+            prompt = f"""Write the complete Results & Discussion section for {domain}.
 
-## 3.3 Multivariate correlation analysis
-
-Correlation findings:
-{corr_text}
-
-{mech_text}
+Include all subsections with substantial content under each heading.
 
 Write directly."""
 
-        part3 = self._call_claude(prompt3)
-        if part3:
-            parts.append(part3)
-            logger.info(f"Results-Discussion Part3: {len(part3)} 字")
-
-        # 第4部分：固相碳赋存特征（结果+讨论）
-        if language == "zh":
-            prompt4 = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
-
-写{domain}论文的"结果与分析"章节第4部分。
-
-## 3.4 固相碳赋存特征与多相态碳分布
-
-写作规则：
-1. 先描述固相碳的赋存特征（结果数据）
-2. 描述三相碳的分布格局
-3. 然后讨论碳在不同相态间的迁移机制
-4. 引用文献支撑
-
-禁止输出：不要写元评论、交互文字、英文说明。只输出论文正文。
-
-分布发现:
-{distribution_text}
-
-{refs_text}
-
-直接输出正文，用 ## 标记子章节。"""
-        else:
-            prompt4 = f"""Write Results & Discussion section 4 for {domain}.
-
-## 3.4 Solid-phase carbon distribution
-
-Distribution findings:
-{distribution_text}
-
-{refs_text}
-
-Write directly."""
-
-        part4 = self._call_claude(prompt4)
-        if part4:
-            parts.append(part4)
-            logger.info(f"Results-Discussion Part4: {len(part4)} 字")
-
-        if not parts:
-            logger.warning("Claude 生成 Results-Discussion 全部失败")
+        result = self._call_claude(prompt)
+        if not result:
+            logger.warning("Claude 生成 Results-Discussion 失败")
             return ""
 
-        # 清洗每段输出
-        cleaned_parts = []
-        for part in parts:
-            cleaned = self._clean_output(part)
-            if cleaned and len(cleaned) > 50:
-                cleaned_parts.append(cleaned)
-
-        if not cleaned_parts:
-            logger.warning("清洗后 Results-Discussion 无有效内容")
-            return ""
-
-        result = '\n\n'.join(cleaned_parts)
+        # 清洗输出
+        result = self._clean_output(result)
 
         # 替换图表引用占位符
         result = self._replace_figure_refs(result, figures)
 
-        logger.info(f"Results-Discussion 总计: {len(result)} 字 ({len(cleaned_parts)} 段)")
+        logger.info(f"Results-Discussion 总计: {len(result)} 字")
         return result
 
     def write_discussion(self, findings: list, mechanisms: dict = None,
@@ -551,97 +442,37 @@ Write directly."""
                          learned_patterns: dict = None,
                          injection_context: str = None) -> str:
         """
-        生成 Discussion 章节（分段生成避免超时）。
-        拆成3个小prompt：概述+季节讨论、相关性+机制、局限性+意义。
+        生成 Discussion 章节（单次生成，避免空小节问题）
         """
         findings_text = self._summarize_findings(findings)
         mech_text = self._format_mechanisms(mechanisms)
         refs_text = self._format_references(recalled_refs)
 
         # 分离不同类型的发现
-        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:4]
-        corr = [f for f in findings if f.get('type') == 'correlation'][:4]
+        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:6]
+        corr = [f for f in findings if f.get('type') == 'correlation'][:6]
         seasonal_text = self._summarize_findings(seasonal)
         corr_text = self._summarize_findings(corr)
 
         # 构建注入上下文
         injection_hint = ""
         if injection_context:
-            injection_hint = f"\n\n【补充分析结果】\n{injection_context}\n\n请在讨论中引用上述分析结果。"
+            injection_hint = f"\n\n【补充分析结果】\n{injection_context}"
 
-        parts = []
-
-        # 第1段：概述 + 季节差异讨论
+        # 单次生成完整讨论章节
         if language == "zh":
-            prompt1 = f"""写{domain}论文讨论的前半部分。
+            prompt = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
+
+写{domain}论文的"讨论"章节，必须包含以下所有子章节，每个子章节必须有实质内容：
 
 ## 4.1 主要发现概述
 用1-2段话总结研究的核心发现。
 
 ## 4.2 季节差异分析
-对每个季节差异给出机制解释，引用文献支撑（如 [1] [2] 格式）。
-
-季节差异发现:
-{seasonal_text}
-
-{refs_text}
-{injection_hint}
-
-要求：
-1. 每个机制解释必须引用1-2篇文献
-2. 使用 [数字] 格式引用文献
-3. 直接输出正文，用 ## 标记子章节。"""
-        else:
-            prompt1 = f"""Write Discussion part 1 (600-1000 words) for {domain}.
-
-## 4.1 Overview of main findings
-## 4.2 Seasonal difference analysis
-
-Seasonal findings:
-{seasonal_text}
-
-{refs_text}
-
-Write directly."""
-
-        part1 = self._call_claude(prompt1)
-        if part1:
-            parts.append(part1)
-            logger.info(f"Discussion Part1: {len(part1)} 字")
-
-        # 第2段：相关性 + 机制讨论
-        if language == "zh":
-            prompt2 = f"""写{domain}论文讨论的后半部分。
+对每个季节差异给出机制解释，引用文献支撑。
 
 ## 4.3 相关性与机制分析
 对重要相关关系给出机制解释。
-
-相关性发现:
-{corr_text}
-
-{mech_text}
-
-直接输出正文，用 ## 标记。"""
-        else:
-            prompt2 = f"""Write Discussion part 2 (500-800 words) for {domain}.
-
-## 4.3 Correlation and mechanism analysis
-
-Correlation findings:
-{corr_text}
-
-{mech_text}
-
-Write directly."""
-
-        part2 = self._call_claude(prompt2)
-        if part2:
-            parts.append(part2)
-            logger.info(f"Discussion Part2: {len(part2)} 字")
-
-        # 第3段：局限性 + 意义
-        if language == "zh":
-            prompt3 = f"""写{domain}论文讨论的结尾部分。
 
 ## 4.4 研究意义
 本研究的科学价值和实际应用价值。
@@ -649,33 +480,50 @@ Write directly."""
 ## 4.5 研究局限性
 列出2-3条具体的局限性。
 
-直接输出正文，用 ## 标记。"""
-        else:
-            prompt3 = f"""Write Discussion ending (200-400 words) for {domain}.
+写作规则：
+1. 每个 ## 标题下必须有至少2段正文内容
+2. 每个机制解释必须引用1-2篇文献（用[1]格式）
+3. 使用 [数字] 格式引用文献
+4. 直接输出正文，用 ## 标记子章节
 
-## 4.4 Significance
-## 4.5 Limitations
+禁止输出：不要写元评论、交互文字、英文说明。只输出论文正文。
+
+季节差异发现:
+{seasonal_text}
+
+相关性发现:
+{corr_text}
+
+{injection_hint}
+
+{refs_text}
+{mech_text}
+
+直接输出完整正文，用 ## 标记子章节。"""
+        else:
+            prompt = f"""Write the complete Discussion section for {domain}.
+
+Include all subsections with substantial content.
+
+Findings:
+{seasonal_text}
+
+{corr_text}
+
+{refs_text}
+{mech_text}
 
 Write directly."""
 
-        part3 = self._call_claude(prompt3)
-        if part3:
-            parts.append(part3)
-            logger.info(f"Discussion Part3: {len(part3)} 字")
-
-        if not parts:
-            logger.warning("Claude 生成 Discussion 全部失败")
+        result = self._call_claude(prompt)
+        if not result:
+            logger.warning("Claude 生成 Discussion 失败")
             return ""
 
-        # 清洗每段输出
-        cleaned_parts = []
-        for part in parts:
-            cleaned = self._clean_output(part)
-            if cleaned and len(cleaned) > 50:
-                cleaned_parts.append(cleaned)
+        # 清洗输出
+        result = self._clean_output(result)
 
-        result = '\n\n'.join(cleaned_parts) if cleaned_parts else ''
-        logger.info(f"Discussion 总计: {len(result)} 字 ({len(cleaned_parts)} 段)")
+        logger.info(f"Discussion 总计: {len(result)} 字")
         return result
 
     def write_introduction(self, findings: list, domain: str = "污水管网碳排放",
@@ -693,13 +541,29 @@ Write directly."""
             motivation_hint = f"\n\n【研究动机】\n{motivation_context}\n\n请在引言中体现这些研究动机。"
 
         if language == "zh":
-            prompt = f"""你是环境科学学者，撰写{domain}论文的"引言"。
+            prompt = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
 
-要求：
-1. 倒三角：领域重要性 → 现有研究 → 不足 → 本文目标
+撰写{domain}论文的"引言"章节，必须包含以下所有子章节，每个子章节必须有实质内容：
+
+## 1.1 研究背景与意义
+从全球→区域→具体问题递进，引用文献支撑。
+
+## 1.2 国内外研究现状
+综述已有研究，引用3-5篇文献。
+
+## 1.3 现有研究不足
+明确指出2-3个研究空白。
+
+## 1.4 研究内容与目标
+列出2-3个具体研究目标。
+
+写作规则：
+1. 每个 ## 标题下必须有至少2段正文内容
 2. 引用3-5篇文献，使用 [数字] 格式
 3. 用"本研究"不用"本文"
-4. 列出2-3个研究目标
+4. 倒三角结构：领域重要性 → 现有研究 → 不足 → 本文目标
+
+禁止输出：不要写元评论、交互文字、英文说明、"以下是"、"以上为"、"第X部分"。只输出论文正文。
 
 发现摘要:
 {findings_text}
@@ -747,12 +611,14 @@ Write the Introduction directly, use ## for subsections."""
 关键数据:
 {results_summary}
 
-要求：
+写作规则：
 1. 严格控制在300-400字，不要超过400字
 2. 必须包含具体数据（如 r=0.647, p=0.004）
 3. 直接输出：
 【摘要】(正文)
-【关键词】(列表)"""
+【关键词】(列表)
+
+禁止输出：不要写元评论、交互文字、英文说明、"以下是"、"以上为"。只输出摘要正文。"""
         else:
             prompt = f"""Write abstract (200-250 words) for {domain} paper.
 
@@ -808,6 +674,8 @@ Write directly."""
 数据分析发现:
 {findings_text}
 
+禁止输出：不要写元评论、交互文字、英文说明、"以下是"、"以上为"。只输出结论正文。
+
 请直接输出结论正文，用 (1) (2) (3) 编号。"""
         else:
             prompt = f"""Write a Conclusion (300-500 words) for a paper about {domain}.
@@ -842,15 +710,29 @@ Write the Conclusion directly."""
 """
 
         if language == "zh":
-            prompt = f"""你是一位环境科学领域的资深学者，正在撰写一篇关于{domain}的中文学术论文。
+            prompt = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
 
-请撰写"材料与方法"章节（约1000-1500字）。
+撰写{domain}论文的"材料与方法"章节（约1000-1500字），必须包含以下所有子章节：
 
-要求：
-1. 结构：研究区域概况 → 采样方法 → 分析方法 → 数据处理方法
-2. 分析方法要引用国家标准（如 TOC用HJ 501-2009，COD用GB 11914-89）
-3. 统计方法要具体（Pearson相关、t检验/Mann-Whitney U、PCA、HCA等）
+## 2.1 研究区域概况
+描述研究区域的基本情况。
+
+## 2.2 采样方案
+描述采样点设置、采样时间、采样方法。
+
+## 2.3 分析方法
+描述气相、液相、固相的分析方法，引用国家标准。
+
+## 2.4 数据处理与统计分析
+描述统计方法（Pearson相关、Mann-Whitney U、PCA、HCA等）。
+
+写作规则：
+1. 每个 ## 标题下必须有实质内容
+2. 分析方法引用国家标准（如 TOC用HJ 501-2009，COD用GB 11914-89）
+3. 统计方法要具体
 4. 语言要让同行能复现实验
+
+禁止输出：不要写元评论、交互文字、英文说明、"以下是"、"以上为"。只输出方法正文。
 {info_text}
 请直接输出方法正文，用 ## 标记子章节。"""
         else:
