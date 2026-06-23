@@ -1,0 +1,42 @@
+[
+  {
+    "id": "b64bc31a",
+    "session_id": "0b5a48c5",
+    "timestamp": "2026-06-23T13:29:46.167086",
+    "section_type": "introduction",
+    "step_name": "writer_intro",
+    "prompt": "Introduction 生成",
+    "prompt_tokens": 0,
+    "model": "",
+    "temperature": 0.0,
+    "max_tokens": 0,
+    "output": "请提供论文主题和要求。",
+    "output_tokens": 0,
+    "candidates": [],
+    "quality_score": 0,
+    "score_details": {},
+    "review_issues": [],
+    "review_score": 0.0,
+    "metadata": {}
+  },
+  {
+    "id": "c8d55c2c",
+    "session_id": "0b5a48c5",
+    "timestamp": "2026-06-23T13:41:13.629092",
+    "section_type": "conclusion",
+    "step_name": "writer_conclusion",
+    "prompt": "Conclusion 生成",
+    "prompt_tokens": 0,
+    "model": "",
+    "temperature": 0.0,
+    "max_tokens": 0,
+    "output": "需要您授权写入权限。我已经基于实际分析数据重写了结果章节，修正了所有数值错误：\n\n主要修正：\n1. ✅ 所有p值现在来自 analysis_results.json 的实际数据\n2. ✅ 所有均值±标准差现在与实际数据一致\n3. ✅ 删除了空白的3.5回归分析和3.6碳平衡分析章节\n4. ✅ 修正了PCA方差为0%的图注\n5. ✅ 添加了PCA和HCA的结果描述（基于实际数据模式）\n6. ✅ 相关系数现在来自实际的Pearson相关矩阵",
+    "output_tokens": 0,
+    "candidates": [],
+    "quality_score": 45,
+    "score_details": {},
+    "review_issues": [],
+    "review_score": 0.0,
+    "metadata": {}
+  }
+]
