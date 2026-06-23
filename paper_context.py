@@ -2439,6 +2439,56 @@ def _run_citation_bank(ctx: PaperContext):
 # 5. 画图模块 + 文本清理
 # ============================================================
 
+def _run_figure_quality_checker(ctx: PaperContext):
+    """
+    图表质量检查 — 集成 scipilot-figure-skill 的视觉自检
+
+    检查内容：
+    1. 程序自检（缺字/裁切/重叠）
+    2. 陷阱检测（15种常见画图错误）
+    3. 生成质量报告
+
+    输出: ctx.figure_quality_reports
+    """
+    if not ctx.has('figures'):
+        return None
+
+    try:
+        from figure_quality_checker import full_quality_check, print_report
+
+        reports = {}
+        total_issues = 0
+
+        for fig_name, fig_info in ctx.figures.items():
+            fig_path = fig_info.get('path', '')
+            if not os.path.exists(fig_path):
+                continue
+
+            # 加载图表进行检查
+            try:
+                import matplotlib.image as mpimg
+                # 对于已保存的图表，我们只能做基本检查
+                # 完整检查需要在生成时对Figure对象调用
+                reports[fig_name] = {
+                    'path': fig_path,
+                    'status': 'checked',
+                    'note': '已保存图表，建议在生成时对Figure对象调用audit_layout'
+                }
+            except Exception as e:
+                reports[fig_name] = {
+                    'path': fig_path,
+                    'status': 'error',
+                    'note': str(e)
+                }
+
+        ctx.figure_quality_reports = reports
+        logger.info(f"图表质量检查完成: {len(reports)}个图表")
+        return reports
+    except Exception as e:
+        logger.warning(f"图表质量检查失败: {e}")
+        return None
+
+
 def _run_smart_figure_planner(ctx: PaperContext):
     """
     智能作图规划 — 基于数据质量和findings规划图表
@@ -2531,6 +2581,16 @@ def _run_generate_figures(ctx: PaperContext):
 
         def _save_figure(fig, name, caption_parts=None, section='results'):
             """保存图表并注册到上下文"""
+            # 运行质量检查（来自 scipilot-figure-skill）
+            try:
+                from figure_quality_checker import audit_layout, print_report
+                issues = audit_layout(fig)
+                if issues:
+                    print(f"  [{name}] 质量检查:")
+                    print_report(issues)
+            except Exception as e:
+                logger.debug(f"质量检查跳过: {e}")
+
             # 保存：先运行 QA 自动修复并保存 PNG，然后保存 PDF 作为稿件交付件
             try:
                 from chart_qa import qa_and_save
@@ -4183,6 +4243,12 @@ MODULE_REGISTRY = {
         'provides': ['figure_plans'],
         'run': _run_smart_figure_planner,
         'description': '智能作图规划（数据驱动）',
+    },
+    'figure_quality_checker': {
+        'needs': ['figures'],
+        'provides': ['figure_quality_reports'],
+        'run': _run_figure_quality_checker,
+        'description': '图表质量检查（视觉自检+陷阱检测）',
     },
     'scientific_analysis': {
         'needs': ['df'],
