@@ -378,17 +378,21 @@ def _post_process_writing(text: str, section_type: str, ctx,
     needs_review = False
     review_reasons = []
 
-    # 1. 事实一致性检查
+    # 1. 事实一致性检查（自动修正数值不一致）
     fact_check_passed = True
     fact_check_issues = []
     if _fact_checker and ctx.has('findings'):
-        fact_result = _fact_checker.check(text, ctx.findings)
+        # 使用check_and_fix自动修正数值不一致
+        text, fact_result = _fact_checker.check_and_fix(text, ctx.findings)
         fact_check_passed = fact_result.passed
         fact_check_issues = fact_result.issues
         if not fact_check_passed:
             needs_review = True
             review_reasons.append(f"事实检查未通过: {len(fact_check_issues)} 个问题")
             logger.warning(f"事实检查未通过: {len(fact_check_issues)} 个问题")
+        elif fact_result.mismatch_count > 0:
+            # 如果有修正，记录修正数量
+            logger.info(f"事实检查: 自动修正 {fact_result.mismatch_count} 处数值不一致")
 
     # 2. 可控断言处理
     if _assertion_controller:
@@ -840,12 +844,18 @@ def _run_writer_methods(ctx: PaperContext):
         result = writer.write_methods(data_info=data_info, language=ctx.language)
         if result:
             ctx.sections['methods'] = _clean_claude_output(result)
+            # 填充占位符
+            if ctx.metadata:
+                ctx.sections['methods'] = _fill_placeholders(ctx.sections['methods'], ctx.metadata)
             return ctx.sections['methods']
 
     # 回退：使用模板
     from paper_writing_agent import MethodsGenerator
     gen = MethodsGenerator()
     ctx.sections['methods'] = gen.generate(language=ctx.language)
+    # 填充占位符
+    if ctx.metadata:
+        ctx.sections['methods'] = _fill_placeholders(ctx.sections['methods'], ctx.metadata)
     return ctx.sections['methods']
 
 
@@ -862,12 +872,23 @@ def _run_writer_abstract(ctx: PaperContext):
             return ctx.sections['abstract']
 
     # 回退：使用模板
+    # 支持交织写作模式（results_discussion）和传统模式（results + discussion）
+    results_text = ctx.sections.get('results', '')
+    discussion_text = ctx.sections.get('discussion', '')
+    results_discussion_text = ctx.sections.get('results_discussion', '')
+
+    # 如果有 results_discussion，使用它作为 results 和 discussion 的组合
+    if results_discussion_text and not results_text:
+        results_text = results_discussion_text
+    if results_discussion_text and not discussion_text:
+        discussion_text = results_discussion_text
+
     from paper_writing_agent import AbstractGenerator
     gen = AbstractGenerator(
         ctx.sections.get('introduction', ''),
         ctx.sections.get('methods', ''),
-        ctx.sections.get('results', ''),
-        ctx.sections.get('discussion', ''),
+        results_text,
+        discussion_text,
     )
     ctx.sections['abstract'] = gen.generate(language=ctx.language)
     return ctx.sections['abstract']
@@ -930,7 +951,66 @@ def _run_writer_results_discussion(ctx: PaperContext):
             figures=ctx.figures if ctx.figures else None,
         )
         if result:
-            ctx.sections['results_discussion'] = _clean_claude_output(result)
+            cleaned = _clean_claude_output(result)
+            quality_score = _calculate_text_quality_score(cleaned)
+
+            # 全管线后处理（事实检查 + 断言控制 + 人工在环）
+            processed, needs_review, review_reasons = _post_process_writing(
+                cleaned, 'results_discussion', ctx, quality_score
+            )
+
+            # 循环修正机制：如果事实检查未通过，尝试修正
+            max_revision_attempts = 2
+            revision_attempt = 0
+            while needs_review and revision_attempt < max_revision_attempts:
+                revision_attempt += 1
+                logger.info(f"Results_Discussion 第{revision_attempt}次修正尝试")
+
+                # 收集事实检查问题
+                fact_check_issues = []
+                if ctx.has('fact_check_result'):
+                    fact_check_issues = ctx.fact_check_result.get('issues', [])
+
+                # 如果没有存储的问题，从 review_reasons 中提取
+                if not fact_check_issues:
+                    fact_check_issues = [{'category': '数值不一致', 'problem': r} for r in review_reasons if '数值不一致' in r or '显著性错误' in r]
+
+                if fact_check_issues:
+                    # 调用修正函数
+                    revised = writer.revise_with_fact_check(
+                        text=processed,
+                        fact_check_issues=fact_check_issues,
+                        findings=ctx.findings,
+                        section_type='results_discussion'
+                    )
+                    if revised and revised != processed:
+                        processed = revised
+                        # 重新检查
+                        processed, needs_review, review_reasons = _post_process_writing(
+                            processed, 'results_discussion', ctx, quality_score
+                        )
+                        logger.info(f"修正后: needs_review={needs_review}, issues={len(review_reasons)}")
+                    else:
+                        break
+                else:
+                    break
+
+            # 添加章节标题
+            if not processed.startswith('# 3'):
+                processed = '# 3 结果与讨论\n\n' + processed
+            ctx.sections['results_discussion'] = processed
+
+            # 记录审计日志
+            _log_writing_audit(
+                section_type='results_discussion',
+                step_name='writer_results_discussion',
+                prompt='Results & Discussion 交织写作',
+                output=processed,
+                quality_score=quality_score,
+            )
+
+            if needs_review:
+                logger.warning(f"Results_Discussion 需要人工复核: {review_reasons}")
             return ctx.sections['results_discussion']
 
     # 回退：使用模板
@@ -997,6 +1077,9 @@ def _run_writer_conclusion(ctx: PaperContext):
             processed, needs_review, review_reasons = _post_process_writing(
                 cleaned, 'conclusion', ctx, quality_score
             )
+            # 添加章节标题
+            if not processed.startswith('# 4'):
+                processed = '# 4 结论\n\n' + processed
             ctx.sections['conclusion'] = processed
 
             # 记录审计日志
@@ -1017,7 +1100,7 @@ def _run_writer_conclusion(ctx: PaperContext):
     group_findings = [f for f in critical if f['type'] == 'group_difference']
     corr_findings = [f for f in critical if f['type'] == 'correlation']
 
-    lines = ['# 5 结论\n']
+    lines = ['# 4 结论\n']
     lines.append('本研究以校园污水管网为对象，系统分析了冬春两季固-液-气三相碳污染物的赋存特征与驱动机制。主要结论如下：\n')
 
     idx = 1
@@ -1940,7 +2023,7 @@ def _build_citation_injection(ctx: PaperContext) -> str:
     if not ctx.citation_bank or not hasattr(ctx.citation_bank, 'bindings'):
         return ''
     lines = ['### 引用支撑索引\n']
-    for binding in ctx.citation_bank.bindings[:10]:
+    for binding in ctx.citation_bank.bindings[:20]:  # 增加到20个
         # ClaimBinding 是 dataclass，直接访问属性
         claim = binding.claim_text if hasattr(binding, 'claim_text') else ''
         refs = binding.supporting_citations if hasattr(binding, 'supporting_citations') else []
@@ -3974,11 +4057,14 @@ def _run_methodology_learning(ctx: PaperContext):
 # ============================================================
 
 def _run_gas_distribution_figures(ctx: PaperContext):
-    """生成气体污染物空间分布图（按功能区分组）"""
+    """生成气体污染物空间分布图（按功能区分组）+ 对数坐标冬春对比图"""
     if not ctx.has('df'):
         return None
     try:
-        from gas_distribution_figures import load_gas_data, create_gas_distribution_figures
+        from gas_distribution_figures import (
+            load_gas_data, create_gas_distribution_figures,
+            create_gas_concentration_log_figure
+        )
 
         # 优先使用桌面数据
         data = load_gas_data()
@@ -3989,11 +4075,22 @@ def _run_gas_distribution_figures(ctx: PaperContext):
             analysis_dir = os.path.join(ctx.output_dir, 'figures')
             os.makedirs(analysis_dir, exist_ok=True)
 
+            all_figures = []
+
+            # 生成功能区分组图
             figures = create_gas_distribution_figures(data, analysis_dir)
             if figures:
-                ctx.gas_figures = figures
-                logger.info(f"气体分布图: 生成 {len(figures)} 张")
-                return figures
+                all_figures.extend(figures)
+
+            # 生成对数坐标冬春对比图（修复N2O数据 + 解决遮挡）
+            log_figures = create_gas_concentration_log_figure(data, analysis_dir)
+            if log_figures:
+                all_figures.extend(log_figures)
+
+            if all_figures:
+                ctx.gas_figures = all_figures
+                logger.info(f"气体分布图: 生成 {len(all_figures)} 张")
+                return all_figures
 
         return None
     except Exception as e:
@@ -4305,7 +4402,7 @@ MODULE_REGISTRY = {
         'description': '写 Methods',
     },
     'writer_abstract': {
-        'needs': ['sections.introduction', 'sections.methods', 'sections.results', 'sections.discussion'],
+        'needs': ['sections.introduction', 'sections.methods'],
         'provides': ['sections.abstract'],
         'run': _run_writer_abstract,
         'description': '写 Abstract',
@@ -4483,23 +4580,33 @@ def _fill_placeholders(text: str, metadata: dict) -> str:
     if not metadata:
         return text
 
-    # 占位符映射表
+    # 获取元数据值
+    campus_area = metadata.get('campus_area', 'X')
+    population = metadata.get('population', 'X')
+    daily_sewage = metadata.get('daily_sewage', 'X')
+    n_sampling_points = metadata.get('n_sampling_points', 'X')
+    winter_months = metadata.get('winter_months', 'X')
+    spring_months = metadata.get('spring_months', 'X')
+
+    # 占位符映射表（支持多种格式）
     placeholder_map = {
-        'X公顷': metadata.get('campus_area', 'X公顷'),
-        'X万人': metadata.get('population', 'X万人'),
-        'X m³/d': metadata.get('daily_sewage', 'X m³/d'),
-        'X个采样点': f"{metadata.get('n_sampling_points', 'X')}个采样点",
-        '2024年X月': f"2024年{metadata.get('winter_months', 'X')}月",
-        '2025年X月': f"2025年{metadata.get('spring_months', 'X')}月",
+        '约X公顷': f"约{campus_area}公顷",
+        'X公顷': f"{campus_area}公顷",
+        '约X万人': f"约{population}万人",
+        'X万人': f"{population}万人",
+        '约X m³/d': f"约{daily_sewage} m³/d",
+        'X m³/d': f"{daily_sewage} m³/d",
+        'X个采样点': f"{n_sampling_points}个采样点",
+        '2024年X月': f"2024年{winter_months}月",
+        '2025年X月': f"2025年{spring_months}月",
     }
 
-    # 如果metadata中有采样点信息，直接使用
-    if 'n_sampling_points' in metadata:
-        placeholder_map['X个采样点'] = f"{metadata['n_sampling_points']}个采样点"
-
-    # 替换占位符
+    # 替换占位符（先替换长的，再替换短的，避免部分匹配）
     result = text
-    for placeholder, value in placeholder_map.items():
+    # 按长度排序，先替换长的占位符
+    sorted_placeholders = sorted(placeholder_map.keys(), key=len, reverse=True)
+    for placeholder in sorted_placeholders:
+        value = placeholder_map[placeholder]
         if placeholder in result:
             result = result.replace(placeholder, str(value))
             logger.info(f"填充占位符: {placeholder} -> {value}")
@@ -4815,8 +4922,16 @@ class PaperOrchestrator:
             content = f.read()
 
         # 1. 章节完整性检查
-        required_sections = ['引言', '材料与方法', '结果', '讨论', '结论']
+        required_sections = ['引言', '绪论', '材料与方法', '结果', '讨论', '结论']
+        found_sections = []
         for section in required_sections:
+            if section in content:
+                found_sections.append(section)
+        # 检查是否找到了引言或绪论
+        if '引言' not in found_sections and '绪论' not in found_sections:
+            issues.append('缺少章节: 引言/绪论')
+        # 检查其他必要章节
+        for section in ['材料与方法', '结果', '讨论', '结论']:
             if section not in content and section.replace('与分析', '') not in content:
                 issues.append(f'缺少章节: {section}')
 

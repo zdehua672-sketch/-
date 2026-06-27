@@ -189,21 +189,31 @@ class ClaudeWriter:
         prompt = self._sanitize_prompt(prompt)
 
         # 自动查找 claude CLI 路径
-        claude_cmd = "claude"
-        # Windows: 优先使用批处理包装器
-        wrapper_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'claude_wrapper.bat')
-        if os.name == 'nt' and os.path.exists(wrapper_path):
-            claude_cmd = wrapper_path
-        else:
+        claude_cmd = None
+
+        # Windows: 优先使用 npm 全局安装路径
+        if os.name == 'nt':
+            npm_global = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'npm', 'claude.cmd')
+            if os.path.exists(npm_global):
+                claude_cmd = npm_global
+
+        # 如果没找到，尝试使用批处理包装器
+        if claude_cmd is None:
+            wrapper_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'claude_wrapper.bat')
+            if os.path.exists(wrapper_path):
+                claude_cmd = wrapper_path
+
+        # 如果还没找到，尝试在 PATH 中查找
+        if claude_cmd is None:
             for path_dir in os.environ.get('PATH', '').split(os.pathsep):
                 candidate = os.path.join(path_dir, 'claude')
                 if os.path.exists(candidate) or os.path.exists(candidate + '.cmd'):
                     claude_cmd = candidate
                     break
-            # Windows npm 全局安装路径
-            npm_global = os.path.join(os.path.expanduser('~'), 'AppData', 'Roaming', 'npm', 'claude.cmd')
-            if os.path.exists(npm_global):
-                claude_cmd = npm_global
+
+        # 如果还是没找到，使用默认值
+        if claude_cmd is None:
+            claude_cmd = "claude"
 
         # 使用 stdin 传递 prompt（避免 Windows 命令行长度限制）
         cmd = [claude_cmd, "--output-format", "text"]
@@ -212,27 +222,42 @@ class ClaudeWriter:
 
         try:
             env = os.environ.copy()
+            # 设置编码环境变量
+            env['PYTHONIOENCODING'] = 'utf-8'
+            env['NODE_OPTIONS'] = '--max-old-space-size=4096'
+            # 设置 Claude CLI 的输出编码为 UTF-8
+            env['CLAUDE_CLI_ENCODING'] = 'utf-8'
+            # 设置 Windows 控制台编码为 UTF-8
+            if os.name == 'nt':
+                env['PYTHONLEGACYWINDOWSSTDIO'] = 'utf-8'
 
             is_windows = os.name == 'nt'
             if is_windows and claude_cmd.endswith('.cmd'):
                 cmd = ['cmd', '/c'] + cmd
 
             # 通过 stdin 传递 prompt，避免命令行参数长度限制
+            # 使用 bytes 模式避免编码问题
             result = subprocess.run(
-                cmd, input=prompt, capture_output=True, text=True,
-                timeout=self.timeout, encoding='utf-8', errors='replace',
-                env=env,
-                shell=False,
+                cmd, input=prompt.encode('utf-8'), capture_output=True,
+                timeout=self.timeout, env=env, shell=False,
             )
             if result.returncode != 0:
-                logger.error(f"Claude CLI error: {result.stderr[:300]}")
+                stderr_text = result.stderr.decode('utf-8', errors='replace')[:300]
+                logger.error(f"Claude CLI error (code {result.returncode}): {stderr_text}")
                 return ""
-            return result.stdout.strip()
+            # 解码输出，使用 UTF-8 编码
+            stdout_text = result.stdout.decode('utf-8', errors='replace')
+            # 清理输出中的 emoji 和特殊字符
+            import re
+            # 移除 emoji 字符
+            stdout_text = re.sub(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F1E0-\U0001F1FF]', '', stdout_text)
+            return stdout_text.strip()
         except subprocess.TimeoutExpired:
             logger.error(f"Claude CLI timeout after {self.timeout}s")
             return ""
         except FileNotFoundError:
-            logger.error("Claude CLI not found. Install: npm install -g @anthropic-ai/claude-code")
+            logger.error(f"Claude CLI not found at: {claude_cmd}")
+            logger.error("Install: npm install -g @anthropic-ai/claude-code")
             return ""
         except Exception as e:
             logger.error(f"Claude CLI call failed: {e}")
@@ -310,20 +335,23 @@ Write the Results directly, use ## for subsections."""
         """
         生成结果与讨论交织的章节（单次生成，避免多段式空小节问题）
         """
-        findings_text = self._summarize_findings(findings)
+        # 使用包含完整统计数据的格式化函数
+        findings_text = self._format_findings_with_stats(findings)
         mech_text = self._format_mechanisms(mechanisms)
         refs_text = self._format_references(recalled_refs)
 
-        # 分离不同类型的发现
-        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:6]
-        corr = [f for f in findings if f.get('type') == 'correlation'][:6]
+        # 分离不同类型的发现，并保留完整数据
+        seasonal = [f for f in findings if f.get('type') == 'group_difference'][:8]
+        corr = [f for f in findings if f.get('type') == 'correlation'][:8]
         distribution = [f for f in findings if f.get('type') == 'distribution'][:4]
         anomaly = [f for f in findings if f.get('type') == 'anomaly_story'][:3]
+        data_quality = [f for f in findings if f.get('type') == 'data_quality'][:3]
 
-        seasonal_text = self._summarize_findings(seasonal)
-        corr_text = self._summarize_findings(corr)
-        distribution_text = self._summarize_findings(distribution)
-        anomaly_text = self._summarize_findings(anomaly)
+        seasonal_text = self._format_findings_with_stats(seasonal)
+        corr_text = self._format_findings_with_stats(corr)
+        distribution_text = self._format_findings_with_stats(distribution)
+        anomaly_text = self._format_findings_with_stats(anomaly)
+        quality_text = self._format_findings_with_stats(data_quality)
 
         # 构建注入上下文
         injection_hint = ""
@@ -346,61 +374,105 @@ Write the Results directly, use ## for subsections."""
         if language == "zh":
             prompt = f"""你是学术论文写作引擎。直接输出论文正文，禁止任何元评论。
 
-写{domain}论文的"结果与分析"章节，必须包含以下所有子章节，每个子章节必须有实质内容（不能只有标题）：
+【重要规则 - 必须严格遵守，违反任何一条都是严重错误！】
+
+1. **所有统计数据必须使用下方【原始数据】中的精确数值，禁止编造任何数字**
+
+2. **p值格式要求：必须使用普通小数格式，禁止使用科学计数法！**
+   - 正确格式: p=0.0001, p=0.0005, p=0.00003, p=0.0193
+   - 错误格式: p=1.03e-04, p=3.06e-04, p=1.03×10⁻⁴
+   - 所有p值必须写成0.xxxx格式，不能有e、×、10等字符
+
+3. **显著性描述必须与p值严格对应（这是最重要的规则！）：**
+   - p < 0.001 → 写"极显著"
+   - p < 0.01 → 写"非常显著"
+   - p < 0.05 → 写"显著"
+   - 0.05 ≤ p < 0.10 → **必须写"接近显著"或"边际显著"，绝对不能写"显著"！这是最常见的错误！**
+   - p ≥ 0.10 → 写"不显著"或"无显著差异"
+
+4. **【接近显著变量清单 - 这些变量绝对不能写"显著"！】**
+   以下变量p值在0.05-0.10之间，只能描述为"接近显著"：
+   - 氧化亚氮 vs NaCl: p=0.0713 → "接近显著"
+   - CO2本底值 vs 液温: p=0.0849 → "接近显著"
+   - VOCs vs DO: p=0.0603 → "接近显著"
+   - VOCs本底值 vs 液温: p=0.0931 → "接近显著"
+   - 电导率 vs TOC: p=0.0557 → "接近显著"
+   - 液温 vs 总氮: p=0.0735 → "接近显著"
+   - 液温 vs 铵态氮: p=0.0827 → "接近显著"
+   - pH vs TC: p=0.0686 → "接近显著"
+   - TC vs 总磷: p=0.0895 → "接近显著"
+   - IC季节差异: p=0.0838 → "接近显著"
+
+5. **如果不确定是否显著，宁可写"接近显著"也不要写"显著"**
+
+6. **【引用规则 - 必须严格遵守！】**
+   - **必须引用15-20篇文献**，这是硬性要求！
+   - **必须使用 [数字] 格式**，如 [1]、[2]、[3]
+   - **禁止使用 (Author et al., Year) 格式**，必须改为 (Author et al., Year) [数字]
+   - 每个子章节至少引用3篇文献
+   - 引用格式示例：
+     * 正确："研究表明管网碳排放...（Zhang et al., 2021）[1]"
+     * 正确："...具有重要意义[2,3]"
+     * 错误："研究表明管网碳排放...（Zhang et al., 2021）"（缺少[1]）
+     * 错误："...具有重要意义"（缺少引用）
+   - **在每个论点后必须添加引用标记**
+
+7. **避免AI痕迹 - 这些表达禁止使用：**
+   - 禁止："具有重要意义"、"具有重要价值"、"具有重要参考价值"
+   - 禁止："本研究首次"、"本研究创新性地"
+   - 禁止："综上所述"、"总而言之"、"总之"
+   - 禁止："研究表明"、"研究发现"（改为具体引用）
+   - 禁止："显著提高"、"显著降低"（改为具体数据）
+   - **必须用具体数据替代空洞表述**：如"降低了30%"而不是"显著降低"
+
+8. **句子长度限制：**
+   - 每句话不超过60字
+   - 避免连续使用括号
+   - 避免超长句（超过80字必须拆分）
+
+写{domain}论文的"结果与分析"章节，必须包含以下所有子章节：
 
 ## 3.1 气相碳污染物分布特征
-- 描述CH4、CO2、VOCs等气相碳污染物的分布特征（均值、标准差、CV%）
+- 使用【原始数据-分布】中的均值、标准差、CV%等数据
 - 引用图片（如"如图1所示"）
 - 讨论分布特征的机制原因
-- 引用文献支撑
 
 ## 3.2 季节差异分析
-- 描述冬春季节的差异数据（均值、p值、效应量d）
+- 使用【原始数据-季节差异】中的均值、p值、效应量d
+- **注意：标注"接近显著"的变量只能描述为"接近显著"，不能描述为"显著"**
 - 讨论季节差异的机制（温度、水文等）
-- 引用文献支撑
 
 ## 3.3 多变量相关性分析
-- 描述关键相关性结果（r值、p值、样本量n）
+- 使用【原始数据-相关性】中的r值、p值、样本量n
+- **注意：标注"接近显著"的相关性只能描述为"接近显著"**
 - 引用相关性热图
 - 讨论相关性的机制意义
 
 ## 3.4 固相碳赋存特征与多相态碳分布
 - 描述固相碳的赋存特征
 - 描述三相碳的分布格局
-- 讨论碳在不同相态间的迁移机制
 
 ## 3.5 回归分析
-- 描述TOC、DO、COD、pH等与CH4的回归关系
-- 讨论回归结果的环境意义
+- 描述回归关系，使用原始数据中的回归统计量
 
 ## 3.6 碳平衡分析
 - 描述三相碳含量分布特征
 - 分析碳在三相中的分配比例
-- 讨论季节对碳分配的影响
 
-写作规则：
-1. 每个 ## 标题下必须有至少3段正文内容
-2. 所有数据必须包含具体数值（均值、标准差、p值、r值等）
-3. 引用图片用"如图X所示"格式
-4. 引用文献用[1]格式
-5. 每个发现都要有机制解释
-
-禁止输出：
-- 不要写"以下是"、"以上为"等元评论
-- 不要写"如需调整"、"请告知"等交互文字
-- 不要写"I have"、"Since"等英文元评论
-- 不要写"第X部分"、"后续规划"等说明
-- 不要写"小节)"、"5个小节"等规划文字
-- 只输出论文正文
-
-【数据发现】
+【原始数据-季节差异】
 {seasonal_text}
 
+【原始数据-相关性】
 {corr_text}
 
+【原始数据-分布】
 {distribution_text}
 
+【原始数据-异常值】
 {anomaly_text}
+
+【原始数据-数据质量】
+{quality_text}
 
 {injection_hint}
 
@@ -408,7 +480,13 @@ Write the Results directly, use ## for subsections."""
 {mech_text}
 {figures_hint}
 
-直接输出完整正文，用 ## 标记子章节。"""
+写作规则：
+1. **必须引用15-20篇文献**，使用 [数字] 格式
+2. 每个子章节至少引用2-3篇文献
+3. 引用格式：...（作者 et al., 年份）[数字]
+4. 讨论部分必须与已有文献进行对比（一致/不一致及原因）
+
+直接输出完整正文，用 ## 标记子章节。禁止编造任何数据！"""
         else:
             prompt = f"""Write the complete Results & Discussion section for {domain}.
 
@@ -558,11 +636,19 @@ Write directly."""
 列出2-3个具体研究目标。
 
 写作规则：
-1. 每个 ## 标题下必须有至少2段正文内容
-2. 引用3-5篇文献，使用 [数字] 格式
+1. 每个 ## 标题下必须有**至少4段正文内容**
+2. **必须引用15-20篇文献**，使用 [数字] 格式，每个子章节至少引用3篇
 3. 用"本研究"不用"本文"
 4. 倒三角结构：领域重要性 → 现有研究 → 不足 → 本文目标
-5. 总字数1500-2000字
+5. **总字数必须达到2000-2500字**，不能少于2000字
+6. 引用格式示例：研究表明...（Zhang et al., 2021）[1]，...（Wang et al., 2022）[2]
+7. **避免AI痕迹**：
+   - 禁止使用"具有重要意义"、"具有重要价值"等空洞表达
+   - 禁止使用"本研究首次"、"本研究创新性地"
+   - 必须用具体数据支撑论述
+   - 每句话不超过60字
+
+**特别强调：引言必须充实完整，不能有空的小节！**
 
 禁止输出：不要写元评论、交互文字、英文说明、"以下是"、"以上为"、"第X部分"、"请提供"。只输出论文正文。
 
@@ -917,6 +1003,82 @@ Write the Methods directly."""
             result = self._clean_output(result)
         return result if result else discussion_text
 
+    def revise_with_fact_check(self, text: str, fact_check_issues: list,
+                               findings: list, section_type: str = 'results_discussion') -> str:
+        """
+        根据事实检查结果修正文本
+
+        Parameters
+        ----------
+        text : str, 原始文本
+        fact_check_issues : list, 事实检查发现的问题
+        findings : list, 数据发现
+        section_type : str, 章节类型
+
+        Returns
+        -------
+        str : 修正后的文本
+        """
+        if not fact_check_issues:
+            return text
+
+        # 构建问题摘要
+        issues_summary = []
+        for issue in fact_check_issues[:20]:  # 最多取20个问题
+            if isinstance(issue, dict):
+                issues_summary.append(f"- {issue.get('category', '')}: {issue.get('problem', '')}")
+            elif isinstance(issue, str):
+                issues_summary.append(f"- {issue}")
+
+        issues_text = '\n'.join(issues_summary)
+
+        # 构建正确的统计数据
+        correct_stats = []
+        for f in findings[:30]:  # 最多取30个发现
+            if isinstance(f, dict):
+                data = f.get('data', {})
+                detail = f.get('detail', '')
+                if data and detail:
+                    p = data.get('p')
+                    r = data.get('r')
+                    mean = data.get('mean')
+                    stats_parts = []
+                    if p is not None:
+                        stats_parts.append(f"p={p:.6f}")
+                    if r is not None:
+                        stats_parts.append(f"r={r:.3f}")
+                    if mean is not None:
+                        stats_parts.append(f"mean={mean:.2f}")
+                    if stats_parts:
+                        correct_stats.append(f"- {detail[:80]}: {', '.join(stats_parts)}")
+
+        stats_text = '\n'.join(correct_stats[:15])
+
+        prompt = f"""你是一位严谨的学术作者。请修正以下文本中的数值错误。
+
+发现的问题:
+{issues_text}
+
+正确的统计数据（来自原始数据）:
+{stats_text}
+
+修正要求:
+1. 将文中错误的 p 值、r 值、mean 值替换为正确的值
+2. 如果某个数值在正确数据中找不到对应，保持原样
+3. 确保显著性描述与实际 p 值一致（p<0.05 为显著，0.05<p<0.10 为接近显著，p>0.10 为不显著）
+4. 不要添加新的内容，只修正数值错误
+5. 保持原文的结构和风格
+
+原文:
+{text}
+
+请直接输出修正后的文本，不要加说明。"""
+
+        result = self._call_claude(prompt)
+        if result:
+            result = self._clean_output(result)
+        return result if result else text
+
     # ================================================================
     # 辅助格式化方法
     # ================================================================
@@ -944,6 +1106,98 @@ Write the Methods directly."""
         lines.append(f'总计: {sig_count}个显著, {near_count}个接近显著, {len(findings)}个发现')
 
         return '\n'.join(lines)
+
+    def _format_findings_with_stats(self, findings: list, max_items: int = 15) -> str:
+        """
+        将 findings 格式化为包含完整统计数据的文本
+
+        Parameters
+        ----------
+        findings : list, 数据发现列表
+        max_items : int, 最大条目数
+
+        Returns
+        -------
+        str : 格式化后的文本
+        """
+        if not findings:
+            return "暂无统计数据。"
+
+        lines = []
+        for i, f in enumerate(findings[:max_items]):
+            if not isinstance(f, dict):
+                continue
+
+            ftype = f.get('type', '')
+            detail = f.get('detail', '')
+            data = f.get('data', {})
+            importance = f.get('importance', '')
+
+            if not detail:
+                continue
+
+            # 构建统计信息
+            stats_parts = []
+
+            # 提取 p 值
+            p = data.get('p')
+            if p is not None:
+                # 确定显著性水平（使用普通小数格式）
+                if p < 0.001:
+                    sig_label = '极显著(***)'
+                    stats_parts.append(f"p={p:.6f} {sig_label}")
+                elif p < 0.01:
+                    sig_label = '显著(**)'
+                    stats_parts.append(f"p={p:.6f} {sig_label}")
+                elif p < 0.05:
+                    sig_label = '显著(*)'
+                    stats_parts.append(f"p={p:.6f} {sig_label}")
+                elif p < 0.10:
+                    # 接近显著 - 特别强调不能写"显著"
+                    sig_label = '接近显著(不能写显著!)'
+                    stats_parts.append(f"p={p:.6f} {sig_label}")
+                else:
+                    sig_label = '不显著'
+                    stats_parts.append(f"p={p:.6f} {sig_label}")
+
+            # 提取 r 值
+            r = data.get('r')
+            if r is not None:
+                stats_parts.append(f"r={r:.3f}")
+
+            # 提取均值和标准差
+            mean = data.get('mean')
+            std = data.get('std')
+            if mean is not None:
+                if std is not None:
+                    stats_parts.append(f"均值={mean:.2f}±{std:.2f}")
+                else:
+                    stats_parts.append(f"均值={mean:.2f}")
+
+            # 提取效应量
+            d = data.get('d')
+            if d is not None:
+                stats_parts.append(f"Cohen's d={d:.2f}")
+
+            # 提取样本量
+            n = data.get('n')
+            if n is not None:
+                stats_parts.append(f"n={n}")
+
+            # 提取组别信息
+            groups = data.get('groups', [])
+            means = data.get('means', [])
+            if groups and means and len(groups) == len(means):
+                group_info = ', '.join([f"{g}={m:.2f}" for g, m in zip(groups, means)])
+                stats_parts.append(f"组别: {group_info}")
+
+            # 构建完整行
+            stats_str = ', '.join(stats_parts) if stats_parts else ''
+            if stats_str:
+                lines.append(f"[{ftype}] {detail[:80]} | {stats_str}")
+            else:
+                lines.append(f"[{ftype}] {detail[:80]}")
+
         return '\n'.join(lines)
 
     def _format_figures(self, figures: dict) -> str:
@@ -968,17 +1222,18 @@ Write the Methods directly."""
         return '\n'.join(lines)
 
     def _format_references(self, refs: list) -> str:
-        """格式化参考文献（精简版）"""
+        """格式化参考文献（使用 [数字] 格式）"""
         if not refs:
             return ""
-        lines = ["参考文献:"]
-        for ref in refs[:5]:
+        lines = ["【可引用文献列表 - 请在正文中使用 [数字] 格式引用】"]
+        for i, ref in enumerate(refs[:20], 1):  # 最多20篇
             title = ref.get('title', '')
             year = ref.get('year', '')
             authors = ref.get('authors', '')
             if isinstance(authors, list):
                 authors = ', '.join(authors[:3])
-            lines.append(f"- {authors} ({year}). {title}")
+            lines.append(f"[{i}] {authors} ({year}). {title}")
+        lines.append("\n引用格式示例：研究表明...（Zhang et al., 2021）[1]，管网碳排放...（Wang et al., 2022）[2]")
         return '\n'.join(lines)
 
     def _format_patterns_hint(self, learned_patterns: dict, section_type: str) -> str:

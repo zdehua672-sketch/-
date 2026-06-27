@@ -3,8 +3,8 @@
     "category": "review_rules",
     "description": "审稿规则（AI检测/禁用词/时态）",
     "version": 78,
-    "created": "2026-06-12T16:34:15.895894+00:00",
-    "updated": "2026-06-22T01:54:24.132861+00:00",
+    "created": "2026-06-25T06:58:29.902321+00:00",
+    "updated": "2026-06-27T05:59:41.014232+00:00",
     "source": "initial"
   },
   "entries": {
@@ -12,183 +12,183 @@
       "value": "It is (?:important|crucial|essential|worth noting) to (?:note|mention|emphasize)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.935902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.819757+00:00",
+      "version": 20
     },
     "ai_pattern_en_1": {
       "value": "(?:delve|dive) into",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.938868+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.821757+00:00",
+      "version": 20
     },
     "ai_pattern_en_2": {
       "value": "in the realm of",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.941861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.824754+00:00",
+      "version": 20
     },
     "ai_pattern_en_3": {
       "value": "it'?s worth noting that",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.943903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.827754+00:00",
+      "version": 20
     },
     "ai_pattern_en_4": {
       "value": "the (?:multifaceted|nuanced|intricate) (?:nature|interplay|landscape)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.946861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.829754+00:00",
+      "version": 20
     },
     "ai_pattern_en_5": {
       "value": "(?:further|more) research (?:is (?:needed|required|warranted))",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.949857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.832754+00:00",
+      "version": 20
     },
     "ai_pattern_en_6": {
       "value": "plays a (?:crucial|pivotal|vital|key) role",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.951901+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.835775+00:00",
+      "version": 20
     },
     "ai_pattern_en_7": {
       "value": "(?:shed light|cast light) on",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.954875+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.837779+00:00",
+      "version": 20
     },
     "ai_pattern_en_8": {
       "value": "at the (?:forefront|intersection) of",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.957861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.840780+00:00",
+      "version": 20
     },
     "ai_pattern_en_9": {
       "value": "(?:holistic|comprehensive|robust) (?:approach|framework|understanding)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.959868+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.842780+00:00",
+      "version": 20
     },
     "ai_pattern_en_10": {
       "value": "in conclusion,? (?:this study|our (?:findings|results|study))",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.962888+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.845780+00:00",
+      "version": 20
     },
     "ai_pattern_en_11": {
       "value": "(?:tapestry|myriad|plethora|cornucopia)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.964907+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.848781+00:00",
+      "version": 20
     },
     "ai_pattern_en_12": {
       "value": "(?:leveraging|harnessing|utilizing) (?:the|a) (?:power|potential)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.967857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.850783+00:00",
+      "version": 20
     },
     "ai_pattern_en_13": {
       "value": "(?:not only).+?(?:but also)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.969856+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.853780+00:00",
+      "version": 20
     },
     "ai_pattern_en_14": {
       "value": "to (?:the best of|our knowledge)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.973857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.855955+00:00",
+      "version": 20
     },
     "ai_pattern_zh_0": {
       "value": "值得[注关]意的是",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.975902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.858967+00:00",
+      "version": 20
     },
     "ai_pattern_zh_1": {
       "value": "(?:深入|进[一壹]步)探讨",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.978857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.861012+00:00",
+      "version": 20
     },
     "ai_pattern_zh_2": {
       "value": "(?:扮演|起着)(?:关键|重要|核心)(?:角色|作用)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.980856+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.863967+00:00",
+      "version": 20
     },
     "ai_pattern_zh_3": {
       "value": "(?:揭示|阐明|展现了?).+(?:深刻|重要)(?:认识|理解|洞察)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.983875+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.865972+00:00",
+      "version": 20
     },
     "ai_pattern_zh_4": {
       "value": "(?:这[一壹]|该)(?:发现|结果)(?:具有|具有着?)(?:重要|深远)(?:意义|价值)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.985874+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.869155+00:00",
+      "version": 20
     },
     "ai_pattern_zh_5": {
       "value": "(?:填补|弥补)(?:了?)(?:研究)?空白",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.988857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.871160+00:00",
+      "version": 20
     },
     "ai_pattern_zh_6": {
       "value": "(?:首次|开创性|创新性地)(?:发现|提出|证明)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.991865+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.874162+00:00",
+      "version": 20
     },
     "ai_pattern_zh_7": {
       "value": "(?:尽管|虽然).+(?:但是|然而).+(?:局限|不足)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.993906+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.877154+00:00",
+      "version": 20
     },
     "ai_pattern_zh_8": {
       "value": "综上所述.{0,10}(?:本文|本研究)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.996869+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.879154+00:00",
+      "version": 20
     },
     "ai_pattern_zh_9": {
       "value": "(?:为).+(?:提供.{0,5}(?:理论|科学|数据)(?:支撑|依据|参考))",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:23.998905+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.882161+00:00",
+      "version": 20
     },
     "ai_pattern_zh_10": {
       "value": "(?:具有|有着)(?:重大|深远|重要)(?:理论|实践)(?:意义|价值)",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.001869+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.884159+00:00",
+      "version": 20
     },
     "forbidden_en_prove": {
       "value": {
@@ -197,8 +197,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.003902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.887155+00:00",
+      "version": 20
     },
     "forbidden_en_very": {
       "value": {
@@ -207,8 +207,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.006857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.889159+00:00",
+      "version": 20
     },
     "forbidden_en_a lot of": {
       "value": {
@@ -217,8 +217,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.008857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.892157+00:00",
+      "version": 20
     },
     "forbidden_en_get": {
       "value": {
@@ -227,8 +227,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.011857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.894160+00:00",
+      "version": 20
     },
     "forbidden_en_big": {
       "value": {
@@ -237,8 +237,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.013857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.897161+00:00",
+      "version": 20
     },
     "forbidden_en_good": {
       "value": {
@@ -247,8 +247,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.015902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.899164+00:00",
+      "version": 20
     },
     "forbidden_en_bad": {
       "value": {
@@ -257,8 +257,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.018863+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.902176+00:00",
+      "version": 20
     },
     "forbidden_en_nice": {
       "value": {
@@ -267,8 +267,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.020857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.904233+00:00",
+      "version": 20
     },
     "forbidden_en_thing": {
       "value": {
@@ -277,8 +277,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.023857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.907237+00:00",
+      "version": 20
     },
     "forbidden_en_stuff": {
       "value": {
@@ -287,8 +287,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.025857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.910182+00:00",
+      "version": 20
     },
     "forbidden_en_lots of": {
       "value": {
@@ -297,8 +297,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.027902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.914193+00:00",
+      "version": 20
     },
     "forbidden_en_pretty": {
       "value": {
@@ -307,8 +307,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.030863+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.916234+00:00",
+      "version": 20
     },
     "forbidden_zh_很多": {
       "value": {
@@ -317,8 +317,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.032862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.919189+00:00",
+      "version": 20
     },
     "forbidden_zh_差不多": {
       "value": {
@@ -327,8 +327,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.035857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.921182+00:00",
+      "version": 20
     },
     "forbidden_zh_好": {
       "value": {
@@ -337,8 +337,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.037902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.924187+00:00",
+      "version": 20
     },
     "forbidden_zh_坏": {
       "value": {
@@ -347,8 +347,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.039862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.926233+00:00",
+      "version": 20
     },
     "forbidden_zh_搞清楚": {
       "value": {
@@ -357,8 +357,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.042862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.929183+00:00",
+      "version": 20
     },
     "forbidden_zh_用了": {
       "value": {
@@ -367,8 +367,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.044861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.931238+00:00",
+      "version": 20
     },
     "forbidden_zh_一般来说": {
       "value": {
@@ -377,8 +377,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.047857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.934226+00:00",
+      "version": 20
     },
     "forbidden_zh_跟": {
       "value": {
@@ -387,8 +387,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.049861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.936232+00:00",
+      "version": 20
     },
     "forbidden_zh_比较大的": {
       "value": {
@@ -397,8 +397,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.052894+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.939188+00:00",
+      "version": 20
     },
     "forbidden_zh_比较小的": {
       "value": {
@@ -407,8 +407,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.055859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.941182+00:00",
+      "version": 20
     },
     "forbidden_zh_还行": {
       "value": {
@@ -417,8 +417,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.057904+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.944183+00:00",
+      "version": 20
     },
     "forbidden_zh_感觉": {
       "value": {
@@ -427,8 +427,8 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.060858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.946232+00:00",
+      "version": 20
     },
     "forbidden_zh_看起来": {
       "value": {
@@ -437,190 +437,190 @@
       },
       "confidence": 0.95,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.062905+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.948234+00:00",
+      "version": 20
     },
     "overclaim_en_prove": {
       "value": "prove",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.065858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.951182+00:00",
+      "version": 20
     },
     "overclaim_en_confirm": {
       "value": "confirm",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.068858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.954184+00:00",
+      "version": 20
     },
     "overclaim_en_definitive": {
       "value": "definitive",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.070904+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.956188+00:00",
+      "version": 20
     },
     "overclaim_en_unprecedented": {
       "value": "unprecedented",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.073862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.959183+00:00",
+      "version": 20
     },
     "overclaim_en_groundbreaking": {
       "value": "groundbreaking",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.075857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.961183+00:00",
+      "version": 20
     },
     "overclaim_en_revolutionary": {
       "value": "revolutionary",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.078860+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.964267+00:00",
+      "version": 20
     },
     "overclaim_en_first ever": {
       "value": "first ever",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.080858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.966233+00:00",
+      "version": 20
     },
     "overclaim_en_novel discovery": {
       "value": "novel discovery",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.083858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.969234+00:00",
+      "version": 20
     },
     "overclaim_en_breakthrough": {
       "value": "breakthrough",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.085902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.972183+00:00",
+      "version": 20
     },
     "overclaim_zh_首次发现": {
       "value": "首次发现",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.088863+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.974185+00:00",
+      "version": 20
     },
     "overclaim_zh_证实": {
       "value": "证实",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.090857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.976232+00:00",
+      "version": 20
     },
     "overclaim_zh_确证": {
       "value": "确证",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.093861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.979233+00:00",
+      "version": 20
     },
     "overclaim_zh_重大突破": {
       "value": "重大突破",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.095859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.981233+00:00",
+      "version": 20
     },
     "overclaim_zh_开创性": {
       "value": "开创性",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.098858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.984232+00:00",
+      "version": 20
     },
     "overclaim_zh_革命性": {
       "value": "革命性",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.100904+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.986233+00:00",
+      "version": 20
     },
     "overclaim_zh_前所未有": {
       "value": "前所未有",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.103862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.989208+00:00",
+      "version": 20
     },
     "overclaim_zh_根本性": {
       "value": "根本性",
       "confidence": 0.9,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.107858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.992187+00:00",
+      "version": 20
     },
     "hollow_en_0": {
       "value": "(?:provides|offers|serves as) (?:a |an )?(?:valuable|useful|important) (?:reference|insight|foundation)",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.109857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.994269+00:00",
+      "version": 20
     },
     "hollow_en_1": {
       "value": "(?:further|additional|more) (?:research|study|investigation) (?:is |was )?(?:needed|required|warranted|necessary)",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.113859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.997183+00:00",
+      "version": 20
     },
     "hollow_en_2": {
       "value": "(?:shed[s]? light|cast[s]? light) on",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.117896+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:40.999233+00:00",
+      "version": 20
     },
     "hollow_en_3": {
       "value": "(?:play[s]?|played) a (?:crucial|pivotal|vital|key|significant) role",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.120858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.002189+00:00",
+      "version": 20
     },
     "hollow_zh_0": {
       "value": "(?:为?).+(?:提供.{0,5}(?:参考|借鉴|依据))",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.122857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.004235+00:00",
+      "version": 20
     },
     "hollow_zh_1": {
       "value": "(?:对?).+(?:具有.{0,5}(?:指导|参考)(?:意义|价值))",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.125858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.007188+00:00",
+      "version": 20
     },
     "hollow_zh_2": {
       "value": "(?:研究|分析)(?:了?).+(?:的?.{0,5}(?:规律|特征|特点))",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.127859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.009233+00:00",
+      "version": 20
     },
     "hollow_zh_3": {
       "value": "(?:丰富|完善)(?:了?)(?:相关|该领域的?)(?:理论|研究)",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.130860+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.012183+00:00",
+      "version": 20
     },
     "hollow_zh_4": {
       "value": "有待(?:进[一壹]步|深入)(?:研究|探讨|分析)",
       "confidence": 0.85,
       "source": "ReviewKB",
-      "updated": "2026-06-22T01:54:24.132861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.014232+00:00",
+      "version": 20
     }
   },
   "changelog": [
@@ -630,7 +630,7 @@
       "old": null,
       "new": "It is (?:important|crucial|essential|worth noting) to (?:note|mention|emphasize)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.912890+00:00"
+      "timestamp": "2026-06-25T06:58:29.957364+00:00"
     },
     {
       "action": "create",
@@ -638,7 +638,7 @@
       "old": null,
       "new": "(?:delve|dive) into",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.912890+00:00"
+      "timestamp": "2026-06-25T06:58:29.958324+00:00"
     },
     {
       "action": "create",
@@ -646,7 +646,7 @@
       "old": null,
       "new": "in the realm of",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.913890+00:00"
+      "timestamp": "2026-06-25T06:58:29.959315+00:00"
     },
     {
       "action": "create",
@@ -654,7 +654,7 @@
       "old": null,
       "new": "it'?s worth noting that",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.913890+00:00"
+      "timestamp": "2026-06-25T06:58:29.960321+00:00"
     },
     {
       "action": "create",
@@ -662,7 +662,7 @@
       "old": null,
       "new": "the (?:multifaceted|nuanced|intricate) (?:nature|interplay|landscape)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.915890+00:00"
+      "timestamp": "2026-06-25T06:58:29.961315+00:00"
     },
     {
       "action": "create",
@@ -670,7 +670,7 @@
       "old": null,
       "new": "(?:further|more) research (?:is (?:needed|required|warranted))",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.915890+00:00"
+      "timestamp": "2026-06-25T06:58:29.963315+00:00"
     },
     {
       "action": "create",
@@ -678,7 +678,7 @@
       "old": null,
       "new": "plays a (?:crucial|pivotal|vital|key) role",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.916895+00:00"
+      "timestamp": "2026-06-25T06:58:29.964315+00:00"
     },
     {
       "action": "create",
@@ -686,7 +686,7 @@
       "old": null,
       "new": "(?:shed light|cast light) on",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.916895+00:00"
+      "timestamp": "2026-06-25T06:58:29.966316+00:00"
     },
     {
       "action": "create",
@@ -694,7 +694,7 @@
       "old": null,
       "new": "at the (?:forefront|intersection) of",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.917905+00:00"
+      "timestamp": "2026-06-25T06:58:29.967315+00:00"
     },
     {
       "action": "create",
@@ -702,7 +702,7 @@
       "old": null,
       "new": "(?:holistic|comprehensive|robust) (?:approach|framework|understanding)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.917905+00:00"
+      "timestamp": "2026-06-25T06:58:29.968316+00:00"
     },
     {
       "action": "create",
@@ -710,7 +710,7 @@
       "old": null,
       "new": "in conclusion,? (?:this study|our (?:findings|results|study))",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.918893+00:00"
+      "timestamp": "2026-06-25T06:58:29.969320+00:00"
     },
     {
       "action": "create",
@@ -718,7 +718,7 @@
       "old": null,
       "new": "(?:tapestry|myriad|plethora|cornucopia)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.919890+00:00"
+      "timestamp": "2026-06-25T06:58:29.971316+00:00"
     },
     {
       "action": "create",
@@ -726,7 +726,7 @@
       "old": null,
       "new": "(?:leveraging|harnessing|utilizing) (?:the|a) (?:power|potential)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.919890+00:00"
+      "timestamp": "2026-06-25T06:58:29.972315+00:00"
     },
     {
       "action": "create",
@@ -734,7 +734,7 @@
       "old": null,
       "new": "(?:not only).+?(?:but also)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.920893+00:00"
+      "timestamp": "2026-06-25T06:58:29.973320+00:00"
     },
     {
       "action": "create",
@@ -742,7 +742,7 @@
       "old": null,
       "new": "to (?:the best of|our knowledge)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.920893+00:00"
+      "timestamp": "2026-06-25T06:58:29.974320+00:00"
     },
     {
       "action": "create",
@@ -750,7 +750,7 @@
       "old": null,
       "new": "值得[注关]意的是",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.921894+00:00"
+      "timestamp": "2026-06-25T06:58:29.975325+00:00"
     },
     {
       "action": "create",
@@ -758,7 +758,7 @@
       "old": null,
       "new": "(?:深入|进[一壹]步)探讨",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.922895+00:00"
+      "timestamp": "2026-06-25T06:58:29.977315+00:00"
     },
     {
       "action": "create",
@@ -766,7 +766,7 @@
       "old": null,
       "new": "(?:扮演|起着)(?:关键|重要|核心)(?:角色|作用)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.923906+00:00"
+      "timestamp": "2026-06-25T06:58:29.978323+00:00"
     },
     {
       "action": "create",
@@ -774,7 +774,7 @@
       "old": null,
       "new": "(?:揭示|阐明|展现了?).+(?:深刻|重要)(?:认识|理解|洞察)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.923906+00:00"
+      "timestamp": "2026-06-25T06:58:29.980322+00:00"
     },
     {
       "action": "create",
@@ -782,7 +782,7 @@
       "old": null,
       "new": "(?:这[一壹]|该)(?:发现|结果)(?:具有|具有着?)(?:重要|深远)(?:意义|价值)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.924894+00:00"
+      "timestamp": "2026-06-25T06:58:29.981322+00:00"
     },
     {
       "action": "create",
@@ -790,7 +790,7 @@
       "old": null,
       "new": "(?:填补|弥补)(?:了?)(?:研究)?空白",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.925890+00:00"
+      "timestamp": "2026-06-25T06:58:29.982360+00:00"
     },
     {
       "action": "create",
@@ -798,7 +798,7 @@
       "old": null,
       "new": "(?:首次|开创性|创新性地)(?:发现|提出|证明)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.926891+00:00"
+      "timestamp": "2026-06-25T06:58:29.984320+00:00"
     },
     {
       "action": "create",
@@ -806,7 +806,7 @@
       "old": null,
       "new": "(?:尽管|虽然).+(?:但是|然而).+(?:局限|不足)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.927891+00:00"
+      "timestamp": "2026-06-25T06:58:29.985314+00:00"
     },
     {
       "action": "create",
@@ -814,7 +814,7 @@
       "old": null,
       "new": "综上所述.{0,10}(?:本文|本研究)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.928889+00:00"
+      "timestamp": "2026-06-25T06:58:29.986325+00:00"
     },
     {
       "action": "create",
@@ -822,7 +822,7 @@
       "old": null,
       "new": "(?:为).+(?:提供.{0,5}(?:理论|科学|数据)(?:支撑|依据|参考))",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.928889+00:00"
+      "timestamp": "2026-06-25T06:58:29.988321+00:00"
     },
     {
       "action": "create",
@@ -830,7 +830,7 @@
       "old": null,
       "new": "(?:具有|有着)(?:重大|深远|重要)(?:理论|实践)(?:意义|价值)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.930891+00:00"
+      "timestamp": "2026-06-25T06:58:29.989316+00:00"
     },
     {
       "action": "create",
@@ -838,7 +838,7 @@
       "old": null,
       "new": "{'word': 'prove', 'suggestion': 'demonstrate / suggest / indicate'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.931894+00:00"
+      "timestamp": "2026-06-25T06:58:29.990315+00:00"
     },
     {
       "action": "create",
@@ -846,7 +846,7 @@
       "old": null,
       "new": "{'word': 'very', 'suggestion': '删除，用具体数据替代'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.932935+00:00"
+      "timestamp": "2026-06-25T06:58:29.992321+00:00"
     },
     {
       "action": "create",
@@ -854,7 +854,7 @@
       "old": null,
       "new": "{'word': 'a lot of', 'suggestion': 'substantial / considerable'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.933893+00:00"
+      "timestamp": "2026-06-25T06:58:29.993314+00:00"
     },
     {
       "action": "create",
@@ -862,7 +862,7 @@
       "old": null,
       "new": "{'word': 'get', 'suggestion': 'obtain / acquire / derive'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.934888+00:00"
+      "timestamp": "2026-06-25T06:58:29.995315+00:00"
     },
     {
       "action": "create",
@@ -870,7 +870,7 @@
       "old": null,
       "new": "{'word': 'big', 'suggestion': 'significant / substantial / considerable'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.935891+00:00"
+      "timestamp": "2026-06-25T06:58:29.997325+00:00"
     },
     {
       "action": "create",
@@ -878,7 +878,7 @@
       "old": null,
       "new": "{'word': 'good', 'suggestion': 'favorable / effective / satisfactory'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.936891+00:00"
+      "timestamp": "2026-06-25T06:58:29.998367+00:00"
     },
     {
       "action": "create",
@@ -886,7 +886,7 @@
       "old": null,
       "new": "{'word': 'bad', 'suggestion': 'poor / unfavorable / inadequate'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.937893+00:00"
+      "timestamp": "2026-06-25T06:58:30.000326+00:00"
     },
     {
       "action": "create",
@@ -894,7 +894,7 @@
       "old": null,
       "new": "{'word': 'nice', 'suggestion': 'favorable / acceptable'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.938891+00:00"
+      "timestamp": "2026-06-25T06:58:30.002322+00:00"
     },
     {
       "action": "create",
@@ -902,7 +902,7 @@
       "old": null,
       "new": "{'word': 'thing', 'suggestion': 'factor / aspect / element'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.939926+00:00"
+      "timestamp": "2026-06-25T06:58:30.004365+00:00"
     },
     {
       "action": "create",
@@ -910,7 +910,7 @@
       "old": null,
       "new": "{'word': 'stuff', 'suggestion': 'material / substance'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.940924+00:00"
+      "timestamp": "2026-06-25T06:58:30.006314+00:00"
     },
     {
       "action": "create",
@@ -918,7 +918,7 @@
       "old": null,
       "new": "{'word': 'lots of', 'suggestion': 'numerous / considerable'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.941890+00:00"
+      "timestamp": "2026-06-25T06:58:30.008316+00:00"
     },
     {
       "action": "create",
@@ -926,7 +926,7 @@
       "old": null,
       "new": "{'word': 'pretty', 'suggestion': '相当 → moderately / relatively'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.942892+00:00"
+      "timestamp": "2026-06-25T06:58:30.010326+00:00"
     },
     {
       "action": "create",
@@ -934,7 +934,7 @@
       "old": null,
       "new": "{'word': '很多', 'suggestion': '显著 / 大量 / 较高'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.943894+00:00"
+      "timestamp": "2026-06-25T06:58:30.012314+00:00"
     },
     {
       "action": "create",
@@ -942,7 +942,7 @@
       "old": null,
       "new": "{'word': '差不多', 'suggestion': '近似 / 约 / 大约'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.945929+00:00"
+      "timestamp": "2026-06-25T06:58:30.013314+00:00"
     },
     {
       "action": "create",
@@ -950,7 +950,7 @@
       "old": null,
       "new": "{'word': '好', 'suggestion': '良好 / 优良 / 较好'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.946891+00:00"
+      "timestamp": "2026-06-25T06:58:30.015315+00:00"
     },
     {
       "action": "create",
@@ -958,7 +958,7 @@
       "old": null,
       "new": "{'word': '坏', 'suggestion': '较差 / 偏低 / 不足'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.947926+00:00"
+      "timestamp": "2026-06-25T06:58:30.017364+00:00"
     },
     {
       "action": "create",
@@ -966,7 +966,7 @@
       "old": null,
       "new": "{'word': '搞清楚', 'suggestion': '阐明 / 揭示 / 探究'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.948891+00:00"
+      "timestamp": "2026-06-25T06:58:30.019328+00:00"
     },
     {
       "action": "create",
@@ -974,7 +974,7 @@
       "old": null,
       "new": "{'word': '用了', 'suggestion': '采用 / 运用 / 利用'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.950925+00:00"
+      "timestamp": "2026-06-25T06:58:30.021364+00:00"
     },
     {
       "action": "create",
@@ -982,7 +982,7 @@
       "old": null,
       "new": "{'word': '一般来说', 'suggestion': '通常 / 一般而言 / 总体而言'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.951890+00:00"
+      "timestamp": "2026-06-25T06:58:30.023369+00:00"
     },
     {
       "action": "create",
@@ -990,7 +990,7 @@
       "old": null,
       "new": "{'word': '跟', 'suggestion': '与...呈显著相关'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.952930+00:00"
+      "timestamp": "2026-06-25T06:58:30.026315+00:00"
     },
     {
       "action": "create",
@@ -998,7 +998,7 @@
       "old": null,
       "new": "{'word': '比较大的', 'suggestion': '显著的 / 较大的'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.953896+00:00"
+      "timestamp": "2026-06-25T06:58:30.028316+00:00"
     },
     {
       "action": "create",
@@ -1006,7 +1006,7 @@
       "old": null,
       "new": "{'word': '比较小的', 'suggestion': '较小的 / 微弱的'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.955926+00:00"
+      "timestamp": "2026-06-25T06:58:30.030315+00:00"
     },
     {
       "action": "create",
@@ -1014,7 +1014,7 @@
       "old": null,
       "new": "{'word': '还行', 'suggestion': '尚可 / 较为理想'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.956892+00:00"
+      "timestamp": "2026-06-25T06:58:30.033314+00:00"
     },
     {
       "action": "create",
@@ -1022,7 +1022,7 @@
       "old": null,
       "new": "{'word': '感觉', 'suggestion': '认为 / 推测'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.958926+00:00"
+      "timestamp": "2026-06-25T06:58:30.035314+00:00"
     },
     {
       "action": "create",
@@ -1030,7 +1030,7 @@
       "old": null,
       "new": "{'word': '看起来', 'suggestion': '表明 / 显示'}",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.959926+00:00"
+      "timestamp": "2026-06-25T06:58:30.037315+00:00"
     },
     {
       "action": "create",
@@ -1038,7 +1038,7 @@
       "old": null,
       "new": "prove",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.960926+00:00"
+      "timestamp": "2026-06-25T06:58:30.039319+00:00"
     },
     {
       "action": "create",
@@ -1046,7 +1046,7 @@
       "old": null,
       "new": "confirm",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.962926+00:00"
+      "timestamp": "2026-06-25T06:58:30.041323+00:00"
     },
     {
       "action": "create",
@@ -1054,7 +1054,7 @@
       "old": null,
       "new": "definitive",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.963891+00:00"
+      "timestamp": "2026-06-25T06:58:30.043325+00:00"
     },
     {
       "action": "create",
@@ -1062,7 +1062,7 @@
       "old": null,
       "new": "unprecedented",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.965926+00:00"
+      "timestamp": "2026-06-25T06:58:30.045365+00:00"
     },
     {
       "action": "create",
@@ -1070,7 +1070,7 @@
       "old": null,
       "new": "groundbreaking",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.966891+00:00"
+      "timestamp": "2026-06-25T06:58:30.048315+00:00"
     },
     {
       "action": "create",
@@ -1078,7 +1078,7 @@
       "old": null,
       "new": "revolutionary",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.968925+00:00"
+      "timestamp": "2026-06-25T06:58:30.050314+00:00"
     },
     {
       "action": "create",
@@ -1086,7 +1086,7 @@
       "old": null,
       "new": "first ever",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.969890+00:00"
+      "timestamp": "2026-06-25T06:58:30.052315+00:00"
     },
     {
       "action": "create",
@@ -1094,7 +1094,7 @@
       "old": null,
       "new": "novel discovery",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.971925+00:00"
+      "timestamp": "2026-06-25T06:58:30.054364+00:00"
     },
     {
       "action": "create",
@@ -1102,7 +1102,7 @@
       "old": null,
       "new": "breakthrough",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.972891+00:00"
+      "timestamp": "2026-06-25T06:58:30.057314+00:00"
     },
     {
       "action": "create",
@@ -1110,7 +1110,7 @@
       "old": null,
       "new": "首次发现",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.974890+00:00"
+      "timestamp": "2026-06-25T06:58:30.059364+00:00"
     },
     {
       "action": "create",
@@ -1118,7 +1118,7 @@
       "old": null,
       "new": "证实",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.976890+00:00"
+      "timestamp": "2026-06-25T06:58:30.061314+00:00"
     },
     {
       "action": "create",
@@ -1126,7 +1126,7 @@
       "old": null,
       "new": "确证",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.977890+00:00"
+      "timestamp": "2026-06-25T06:58:30.064314+00:00"
     },
     {
       "action": "create",
@@ -1134,7 +1134,7 @@
       "old": null,
       "new": "重大突破",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.979890+00:00"
+      "timestamp": "2026-06-25T06:58:30.066320+00:00"
     },
     {
       "action": "create",
@@ -1142,7 +1142,7 @@
       "old": null,
       "new": "开创性",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.981890+00:00"
+      "timestamp": "2026-06-25T06:58:30.068364+00:00"
     },
     {
       "action": "create",
@@ -1150,7 +1150,7 @@
       "old": null,
       "new": "革命性",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.983890+00:00"
+      "timestamp": "2026-06-25T06:58:30.070364+00:00"
     },
     {
       "action": "create",
@@ -1158,7 +1158,7 @@
       "old": null,
       "new": "前所未有",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.985938+00:00"
+      "timestamp": "2026-06-25T06:58:30.074324+00:00"
     },
     {
       "action": "create",
@@ -1166,7 +1166,7 @@
       "old": null,
       "new": "根本性",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.987942+00:00"
+      "timestamp": "2026-06-25T06:58:30.076325+00:00"
     },
     {
       "action": "create",
@@ -1174,7 +1174,7 @@
       "old": null,
       "new": "(?:provides|offers|serves as) (?:a |an )?(?:valuable|useful|important) (?:reference|insight|foundation)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.988892+00:00"
+      "timestamp": "2026-06-25T06:58:30.078323+00:00"
     },
     {
       "action": "create",
@@ -1182,7 +1182,7 @@
       "old": null,
       "new": "(?:further|additional|more) (?:research|study|investigation) (?:is |was )?(?:needed|required|warranted|necessary)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.990935+00:00"
+      "timestamp": "2026-06-25T06:58:30.081324+00:00"
     },
     {
       "action": "create",
@@ -1190,7 +1190,7 @@
       "old": null,
       "new": "(?:shed[s]? light|cast[s]? light) on",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.992963+00:00"
+      "timestamp": "2026-06-25T06:58:30.083364+00:00"
     },
     {
       "action": "create",
@@ -1198,7 +1198,7 @@
       "old": null,
       "new": "(?:play[s]?|played) a (?:crucial|pivotal|vital|key|significant) role",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.994936+00:00"
+      "timestamp": "2026-06-25T06:58:30.086321+00:00"
     },
     {
       "action": "create",
@@ -1206,7 +1206,7 @@
       "old": null,
       "new": "(?:为?).+(?:提供.{0,5}(?:参考|借鉴|依据))",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.996889+00:00"
+      "timestamp": "2026-06-25T06:58:30.088358+00:00"
     },
     {
       "action": "create",
@@ -1214,7 +1214,7 @@
       "old": null,
       "new": "(?:对?).+(?:具有.{0,5}(?:指导|参考)(?:意义|价值))",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.997935+00:00"
+      "timestamp": "2026-06-25T06:58:30.090364+00:00"
     },
     {
       "action": "create",
@@ -1222,7 +1222,7 @@
       "old": null,
       "new": "(?:研究|分析)(?:了?).+(?:的?.{0,5}(?:规律|特征|特点))",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:15.999935+00:00"
+      "timestamp": "2026-06-25T06:58:30.093315+00:00"
     },
     {
       "action": "create",
@@ -1230,7 +1230,7 @@
       "old": null,
       "new": "(?:丰富|完善)(?:了?)(?:相关|该领域的?)(?:理论|研究)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:16.001934+00:00"
+      "timestamp": "2026-06-25T06:58:30.095364+00:00"
     },
     {
       "action": "create",
@@ -1238,7 +1238,7 @@
       "old": null,
       "new": "有待(?:进[一壹]步|深入)(?:研究|探讨|分析)",
       "source": "ReviewKB",
-      "timestamp": "2026-06-12T16:34:16.003938+00:00"
+      "timestamp": "2026-06-25T06:58:30.098315+00:00"
     }
   ]
 }

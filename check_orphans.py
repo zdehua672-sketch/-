@@ -108,8 +108,8 @@ def find_orphans(root_dir='.'):
         if is_imported:
             connected.append((f, importers))
         else:
-            # paper_context.py 是编排器入口
-            if module_name == 'paper_context':
+            # 入口脚本（不需要注册到MODULE_REGISTRY）
+            if module_name in ('paper_context', 'run_pipeline'):
                 connected.append((f, ['[entry point]']))
             # 工具库/基础设施模块
             elif module_name in utility_modules:

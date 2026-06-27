@@ -128,23 +128,55 @@ class FactChecker:
         return result
 
     def _extract_values(self, text: str) -> List[Dict]:
-        """从文本中提取数值"""
+        """从文本中提取数值（支持科学计数法）"""
         values = []
+        seen_contexts = set()  # 避免重复匹配
 
-        # 匹配 p 值
+        # Unicode 上标数字映射
+        superscript_map = {
+            '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4',
+            '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9',
+            '⁻': '-', '+': '+'
+        }
+
+        # 匹配 p 值（支持科学计数法如 p=3.0×10⁻⁶, p=1.03e-4, p=1.03×10⁻⁴）
+        # 按优先级排序：科学计数法优先，普通小数在后
         p_patterns = [
-            r'p\s*[<>=]\s*(\d+\.?\d*)',
-            r'p\s*=\s*(\d+\.?\d*)',
+            # 科学计数法: p=3.0×10⁻⁶ 或 p=3.0×10^-6 (Unicode 上标)
+            r'p\s*[<>=]\s*(\d+\.?\d*)\s*×\s*10\s*([⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+)',
+            # 科学计数法: p=3.0×10⁻⁶ 或 p=3.0×10^-6 (普通字符)
+            r'p\s*[<>=]\s*(\d+\.?\d*)\s*×\s*10\s*[\-]?\s*(\d+)',
+            # 科学计数法: p=1.03e-4 或 p=1.03E-4
+            r'p\s*[<>=]\s*(\d+\.?\d*)\s*[eE]\s*([+-]?\d+)',
+            # 普通小数: p=0.0001 或 p<0.05 (必须排除已经被科学计数法匹配的)
+            r'(?<![eE×])p\s*[<>=]\s*(\d+\.?\d*)(?![eE×])',
             r'[（(]\s*p\s*[<>=]\s*(\d+\.?\d*)\s*[）)]',
         ]
         for pattern in p_patterns:
             for match in re.finditer(pattern, text):
                 try:
-                    val = float(match.group(1))
+                    context = match.group(0)
+                    # 避免重复匹配
+                    if context in seen_contexts:
+                        continue
+                    seen_contexts.add(context)
+
+                    if '×' in context or 'e' in context.lower():
+                        # 科学计数法
+                        mantissa = float(match.group(1))
+                        exponent_str = match.group(2)
+                        # 处理 Unicode 上标字符
+                        if any(c in superscript_map for c in exponent_str):
+                            exponent = int(''.join(superscript_map.get(c, c) for c in exponent_str))
+                        else:
+                            exponent = int(exponent_str)
+                        val = mantissa * (10 ** exponent)
+                    else:
+                        val = float(match.group(1))
                     values.append({
                         'type': 'p',
                         'value': val,
-                        'context': match.group(0),
+                        'context': context,
                     })
                 except:
                     pass
@@ -298,12 +330,13 @@ class FactChecker:
         return issues
 
     def _check_significance_consistency(self, text: str, findings: List[Dict]) -> List[FactCheckIssue]:
-        """检查显著性一致性"""
+        """检查显著性一致性（支持接近显著）"""
         issues = []
 
-        # 提取文本中的显著性描述
-        sig_patterns = ['显著', 'p<0.05', 'p<0.01', 'p<0.001']
-        not_sig_patterns = ['不显著', '无显著差异', 'p>0.05']
+        # 显著性关键词（用于检查 detail 字段）
+        # 注意：需要排除"接近显著"中的"显著"
+        strong_sig_keywords = ['极显著', '非常显著', '显著差异', '显著正相关', '显著负相关', '显著相关']
+        near_sig_keywords = ['接近显著', '边际显著', '临界显著']
 
         for f in findings:
             data = f.get('data', {})
@@ -318,35 +351,178 @@ class FactChecker:
 
             detail = f.get('detail', '')
 
-            # 检查显著性是否一致
-            if p < 0.05:
-                # 显著
-                for pattern in not_sig_patterns:
-                    if pattern in detail and pattern in text:
-                        issues.append(FactCheckIssue(
-                            severity='MAJOR',
-                            category='显著性错误',
-                            location=detail[:50],
-                            problem=f"findings 显示 p={p}（显著），但文中描述为不显著",
-                            expected='显著',
-                            actual='不显著',
-                            suggestion='请修正显著性描述',
-                        ))
-            else:
-                # 不显著
-                for pattern in sig_patterns:
-                    if pattern in detail and pattern in text:
-                        issues.append(FactCheckIssue(
-                            severity='MAJOR',
-                            category='显著性错误',
-                            location=detail[:50],
-                            problem=f"findings 显示 p={p}（不显著），但文中描述为显著",
-                            expected='不显著',
-                            actual='显著',
-                            suggestion='请修正显著性描述',
-                        ))
+            # 确定实际显著性水平
+            is_sig = p < 0.05
+
+            # 检查 detail 中是否包含显著性描述
+            detail_has_strong_sig = False
+            detail_has_near_sig = False
+
+            for keyword in strong_sig_keywords:
+                if keyword in detail:
+                    detail_has_strong_sig = True
+                    break
+
+            for keyword in near_sig_keywords:
+                if keyword in detail:
+                    detail_has_near_sig = True
+                    break
+
+            # 如果 detail 中有"强显著"描述，但实际 p >= 0.05，则报告问题
+            if detail_has_strong_sig and not detail_has_near_sig and not is_sig:
+                # 区分接近显著和不显著
+                if p < 0.10:
+                    issues.append(FactCheckIssue(
+                        severity='MINOR',
+                        category='显著性描述不准确',
+                        location=detail[:50],
+                        problem=f"findings 显示 p={p:.4f}（接近显著），但描述为显著",
+                        expected='接近显著/临界显著',
+                        actual='显著',
+                        suggestion='建议改为"接近显著"或"临界显著"',
+                    ))
+                else:
+                    issues.append(FactCheckIssue(
+                        severity='MAJOR',
+                        category='显著性错误',
+                        location=detail[:50],
+                        problem=f"findings 显示 p={p:.4f}（不显著），但描述为显著",
+                        expected='不显著',
+                        actual='显著',
+                        suggestion='请修正显著性描述，或删除显著性声明',
+                    ))
 
         return issues
+
+    def check_and_fix(self, text: str, findings: List[Dict]) -> Tuple[str, FactCheckResult]:
+        """
+        检查并自动修正数值不一致问题
+
+        Parameters
+        ----------
+        text : str, 待检查文本
+        findings : list of dict, 数据发现列表
+
+        Returns
+        -------
+        tuple : (修正后文本, 检查结果)
+        """
+        result = self.check(text, findings)
+
+        if not result.issues:
+            return text, result
+
+        # 自动修正数值不一致
+        fixed_text = text
+        for issue in result.issues:
+            if issue.category == '数值不一致':
+                # 尝试从findings中找到正确的值
+                correct_value = self._find_correct_value(issue, findings)
+                if correct_value is not None:
+                    # 替换文本中的错误值
+                    fixed_text = self._replace_value(fixed_text, issue.location, correct_value)
+
+        return fixed_text, result
+
+    def _find_correct_value(self, issue: FactCheckIssue, findings: List[Dict]) -> Optional[float]:
+        """从findings中找到正确的值"""
+        # 从issue.location中提取数值类型和值
+        import re
+
+        # 提取p值
+        p_match = re.search(r'p\s*[<>=]\s*(\d+\.?\d*)', issue.location)
+        if p_match:
+            old_p = float(p_match.group(1))
+            # 在findings中查找最接近的p值
+            best_p = None
+            best_diff = float('inf')
+            for f in findings:
+                data = f.get('data', {})
+                if 'p' in data:
+                    try:
+                        p_val = float(data['p'])
+                        diff = abs(p_val - old_p)
+                        if diff < best_diff:
+                            best_diff = diff
+                            best_p = p_val
+                    except:
+                        pass
+            # 如果找到了接近的值（差异小于50%），返回它
+            if best_p is not None and best_diff < 0.5 * old_p:
+                return best_p
+
+        # 提取r值
+        r_match = re.search(r'r\s*=\s*([-\d.]+)', issue.location)
+        if r_match:
+            old_r = float(r_match.group(1))
+            # 在findings中查找最接近的r值
+            best_r = None
+            best_diff = float('inf')
+            for f in findings:
+                data = f.get('data', {})
+                if 'r' in data:
+                    try:
+                        r_val = float(data['r'])
+                        diff = abs(r_val - old_r)
+                        if diff < best_diff:
+                            best_diff = diff
+                            best_r = r_val
+                    except:
+                        pass
+            # 如果找到了接近的值（差异小于20%），返回它
+            if best_r is not None and best_diff < 0.2 * abs(old_r):
+                return best_r
+
+        # 提取mean值
+        mean_match = re.search(r'mean\s*=\s*(\d+\.?\d*)', issue.location)
+        if mean_match:
+            old_mean = float(mean_match.group(1))
+            # 在findings中查找最接近的mean值
+            best_mean = None
+            best_diff = float('inf')
+            for f in findings:
+                data = f.get('data', {})
+                if 'mean' in data:
+                    try:
+                        mean_val = float(data['mean'])
+                        diff = abs(mean_val - old_mean)
+                        if diff < best_diff:
+                            best_diff = diff
+                            best_mean = mean_val
+                    except:
+                        pass
+            # 如果找到了接近的值（差异小于30%），返回它
+            if best_mean is not None and best_diff < 0.3 * old_mean:
+                return best_mean
+
+        return None
+
+    def _replace_value(self, text: str, location: str, correct_value: float) -> str:
+        """替换文本中的错误值"""
+        import re
+
+        # 替换p值
+        p_match = re.search(r'p\s*[<>=]\s*(\d+\.?\d*)', location)
+        if p_match:
+            old_value = p_match.group(1)
+            # 格式化新值
+            if correct_value < 0.001:
+                new_value = f"{correct_value:.2e}"
+            elif correct_value < 0.01:
+                new_value = f"{correct_value:.4f}"
+            else:
+                new_value = f"{correct_value:.4f}"
+            # 替换文本中的值
+            text = re.sub(rf'p\s*[<>=]\s*{re.escape(old_value)}', f'p={new_value}', text)
+
+        # 替换r值
+        r_match = re.search(r'r\s*=\s*([-\d.]+)', location)
+        if r_match:
+            old_value = r_match.group(1)
+            new_value = f"{correct_value:.3f}"
+            text = re.sub(rf'r\s*=\s*{re.escape(old_value)}', f'r={new_value}', text)
+
+        return text
 
 
 # 全局单例

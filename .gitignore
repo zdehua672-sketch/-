@@ -42,3 +42,10 @@ Desktop.ini
 *.pdf
 *.eps
 *.svg
+
+# Logs and temp files
+*.log
+pipeline_output*.log
+test_output*.log
+audit_logs/
+skills-lock.json

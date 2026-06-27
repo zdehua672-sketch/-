@@ -2,9 +2,9 @@
   "meta": {
     "category": "mechanisms",
     "description": "碳污染物生成/转化机制",
-    "version": 195,
-    "created": "2026-06-12T16:34:15.894935+00:00",
-    "updated": "2026-06-22T01:54:24.973497+00:00",
+    "version": 297,
+    "created": "2026-06-25T06:58:29.901315+00:00",
+    "updated": "2026-06-27T05:59:42.096647+00:00",
     "source": "initial"
   },
   "entries": {
@@ -12,15 +12,15 @@
       "value": "碳在固液气三相的分配",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.134904+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.017193+00:00",
+      "version": 20
     },
     "carbon_phase_distribution_mechanism": {
       "value": "污水管网中碳污染物以三相存在：液相(TOC/DOC/POC)占总碳60-80%，是微生物代谢直接底物；固相(沉积物有机碳/生物膜EPS)占15-30%，是碳汇也是内源碳释放源；气相(CH4/CO2/VOCs)占5-15%，是碳损失和温室效应直接贡献者。三相碳通过溶解-沉淀、吸附-解吸、生物转化等过程动态平衡。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.139902+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.023183+00:00",
+      "version": 20
     },
     "carbon_phase_distribution_references": {
       "value": [
@@ -29,29 +29,29 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.144861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.028234+00:00",
+      "version": 20
     },
     "carbon_phase_distribution_source": {
       "value": "domain_knowledge",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.148904+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.034187+00:00",
+      "version": 20
     },
     "ch4_seasonal_mechanism_pattern": {
       "value": "CH4春高冬低",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.153862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.040188+00:00",
+      "version": 20
     },
     "ch4_seasonal_mechanism_mechanism": {
       "value": "CH4春季显著高于冬季的原因：(1)温度是控制产甲烷菌活性的关键因素，最适温度35-40°C，冬季低温(6.6°C)严重抑制产甲烷活性，春季温度回升(16°C)后活性恢复；(2)春季管道内厌氧区扩大，DO降低，有利于产甲烷过程；(3)冬季积累的有机底物在春季被产甲烷菌利用，导致CH4集中释放。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.157906+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.046188+00:00",
+      "version": 20
     },
     "ch4_seasonal_mechanism_references": {
       "value": [
@@ -60,22 +60,22 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.162861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.051236+00:00",
+      "version": 20
     },
     "co2_no2_mechanism_pattern": {
       "value": "CO2与NO2正相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.166861+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.057190+00:00",
+      "version": 20
     },
     "co2_no2_mechanism_mechanism": {
       "value": "CO2与NO2的正相关可能反映了共同的环境驱动因素。温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)。此外，管道内微生物活性增强时，有氧呼吸产CO2和硝化产NO2同步增加。NO2作为硝化中间产物，其积累也与DO水平和有机物浓度有关。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.171862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.062240+00:00",
+      "version": 20
     },
     "co2_no2_mechanism_references": {
       "value": [
@@ -83,22 +83,22 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.175903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.068188+00:00",
+      "version": 20
     },
     "cod_seasonal_mechanism_pattern": {
       "value": "COD冬高春低",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.179903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.073233+00:00",
+      "version": 20
     },
     "cod_seasonal_mechanism_mechanism": {
       "value": "COD冬季显著高于春季的原因可能有：(1)冬季低温抑制微生物分解，有机物在管道内积累；(2)春季温度回升后，微生物活性增强，有机物被快速降解，导致管道出水COD降低；(3)冬季用水量减少，污水在管道内停留时间延长，沉积物再悬浮和有机物释放增加。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.184862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.079182+00:00",
+      "version": 20
     },
     "cod_seasonal_mechanism_references": {
       "value": [
@@ -107,50 +107,50 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.188903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.085706+00:00",
+      "version": 20
     },
     "c_n_coupling_pattern": {
       "value": "TOC与TN/铵态氮相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.193862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.091715+00:00",
+      "version": 20
     },
     "c_n_coupling_mechanism": {
       "value": "碳氮耦合是污水管道生物转化的核心过程。有机碳降解释放含氮有机物中的氮（氨化作用），使NH4+浓度升高。同时，反硝化过程需要有机碳作为电子供体，C/N比直接影响脱氮效率(C/N>5时脱氮效率高)。碳氮的协同转化反映了管道中微生物群落的整体代谢活性。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.197857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.096757+00:00",
+      "version": 20
     },
     "c_n_coupling_mechanism_en": {
       "value": "Carbon-nitrogen coupling is a core biogeochemical process in sewage networks. Organic carbon degradation releases nitrogen from nitrogenous organic compounds (ammonification), elevating NH4+ concentrations. Meanwhile, denitrification requires organic carbon as an electron donor, and the C/N ratio directly affects nitrogen removal efficiency (optimal when C/N > 5). The synergistic transformation of carbon and nitrogen reflects the overall metabolic activity of the microbial community in the pipeline.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.202860+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.102713+00:00",
+      "version": 20
     },
     "c_n_coupling_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.207860+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.108708+00:00",
+      "version": 20
     },
     "dissolved_oxygen_control_pattern": {
       "value": "DO控制碳转化路径",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.211857+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.114717+00:00",
+      "version": 20
     },
     "dissolved_oxygen_control_mechanism": {
       "value": "溶解氧(DO)是控制管道碳转化路径的核心开关：DO>2mg/L时好氧呼吸为主，有机碳转化为CO2，CH4被抑制；DO 0.5-2mg/L时微好氧区，好氧厌氧共存；DO<0.5mg/L时严格厌氧，产甲烷活跃；DO<0.2mg/L时硫酸盐还原菌与产甲烷古菌竞争。管口到管末端的DO梯度决定碳转化空间分异。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.216862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.120367+00:00",
+      "version": 20
     },
     "dissolved_oxygen_control_references": {
       "value": [
@@ -159,36 +159,36 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.221859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.126367+00:00",
+      "version": 20
     },
     "dissolved_oxygen_control_source": {
       "value": "domain_knowledge",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.225859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.132367+00:00",
+      "version": 20
     },
     "do_ch4_pattern": {
       "value": "DO与CH4负相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.230859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.137417+00:00",
+      "version": 20
     },
     "do_ch4_mechanism": {
       "value": "溶解氧(DO)浓度是控制管道中产甲烷过程的关键因素。当DO<0.5 mg/L时，管道进入严格厌氧状态，产甲烷古菌活性达到最高，通过乙酸发酵和CO2/H2还原两条途径将有机碳转化为CH4。相反，当DO>2 mg/L时，好氧微生物通过有氧呼吸将有机碳氧化为CO2，产甲烷过程被完全抑制。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.234903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.144368+00:00",
+      "version": 20
     },
     "do_ch4_mechanism_en": {
       "value": "Dissolved oxygen (DO) is the primary factor controlling methanogenesis in sewage networks. Under strictly anaerobic conditions (DO < 0.5 mg/L), methanogenic archaea exhibit maximum activity, converting organic carbon to CH4 via acetoclastic fermentation and hydrogenotrophic CO2 reduction. Conversely, when DO exceeds 2 mg/L, aerobic microorganisms oxidize organic carbon to CO2 through aerobic respiration, completely suppressing methanogenesis.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.239865+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.150374+00:00",
+      "version": 20
     },
     "do_ch4_references": {
       "value": [
@@ -197,50 +197,50 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.244862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.156368+00:00",
+      "version": 20
     },
     "do_co2_pattern": {
       "value": "DO与CO2可能正相关或呈复杂关系",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.249859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.162377+00:00",
+      "version": 20
     },
     "do_co2_mechanism": {
       "value": "CO2的来源包括好氧呼吸和厌氧发酵两部分。好氧条件下，异养菌通过三羧酸循环将有机物完全氧化为CO2和H2O。厌氧条件下，产甲烷过程中CO2也作为电子受体被还原为CH4。因此，DO对CO2的影响取决于好氧呼吸产CO2和厌氧产甲烷消耗CO2的平衡。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.254858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.168374+00:00",
+      "version": 20
     },
     "do_co2_mechanism_en": {
       "value": "CO2 in sewage networks originates from both aerobic respiration and anaerobic fermentation. Under aerobic conditions, heterotrophic bacteria oxidize organic matter to CO2 and H2O via the tricarboxylic acid cycle. Under anaerobic conditions, CO2 also serves as an electron acceptor and is reduced to CH4 during methanogenesis. Therefore, the net effect of DO on CO2 depends on the balance between aerobic CO2 production and anaerobic CO2 consumption in CH4 formation.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.258903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.174378+00:00",
+      "version": 20
     },
     "do_co2_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.263863+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.180426+00:00",
+      "version": 20
     },
     "do_no3_mechanism_pattern": {
       "value": "DO与NO3-正相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.267859+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.186409+00:00",
+      "version": 20
     },
     "do_no3_mechanism_mechanism": {
       "value": "DO与硝态氮(NO3-)的正相关反映了硝化作用对溶解氧的依赖。硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全。DO<0.5 mg/L时硝化作用几乎停止，NO3-浓度极低。因此DO高的采样点NO3-浓度也高。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.272858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.192367+00:00",
+      "version": 20
     },
     "do_no3_mechanism_references": {
       "value": [
@@ -248,64 +248,358 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.276903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.198374+00:00",
+      "version": 20
     },
     "functional_zone_carbon_input_pattern": {
       "value": "功能区碳输入差异",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.280903+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.204377+00:00",
+      "version": 20
     },
     "functional_zone_carbon_input_mechanism": {
       "value": "不同功能区排放的污水碳组成差异显著：教学区低有机碳低油脂；生活区中等有机碳含洗涤剂；餐饮区高有机碳(TOC 200-500mg/L)高油脂高NH4+；运动区间歇排放含有机碎屑。功能区差异导致管网有机碳负荷的空间异质性，影响不同位置的碳转化路径和气相碳排放。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.285906+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.209366+00:00",
+      "version": 20
     },
     "functional_zone_carbon_input_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.290858+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.216241+00:00",
+      "version": 20
     },
     "functional_zone_carbon_input_source": {
       "value": "domain_knowledge",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.294862+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.223238+00:00",
+      "version": 20
+    },
+    "learned_has_attracted_positive_effect_attention_0_pattern": {
+      "value": "has attracted positive_effect attention",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.229243+00:00",
+      "version": 20
+    },
+    "learned_has_attracted_positive_effect_attention_0_mechanism": {
+      "value": "has attracted increasing attention.",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.235233+00:00",
+      "version": 20
+    },
+    "learned_has_attracted_positive_effect_attention_0_var1": {
+      "value": "has attracted",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.240683+00:00",
+      "version": 20
+    },
+    "learned_has_attracted_positive_effect_attention_0_var2": {
+      "value": "attention",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.247178+00:00",
+      "version": 20
+    },
+    "learned_has_attracted_positive_effect_attention_0_relation_type": {
+      "value": "positive_effect",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.254179+00:00",
+      "version": 20
+    },
+    "learned_has_attracted_positive_effect_attention_0_source": {
+      "value": "01-sci-rules",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.259178+00:00",
+      "version": 20
+    },
+    "learned_has_attracted_positive_effect_attention_0_learned_at": {
+      "value": "2026-06-27T05:43:44.288791+00:00",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.266120+00:00",
+      "version": 20
+    },
+    "learned_has_received_negative_effect_attention_1_pattern": {
+      "value": "has received negative_effect attention",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.272124+00:00",
+      "version": 20
+    },
+    "learned_has_received_negative_effect_attention_1_mechanism": {
+      "value": "has received limited attention.",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.277121+00:00",
+      "version": 20
+    },
+    "learned_has_received_negative_effect_attention_1_var1": {
+      "value": "has received",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.283115+00:00",
+      "version": 20
+    },
+    "learned_has_received_negative_effect_attention_1_var2": {
+      "value": "attention",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.290116+00:00",
+      "version": 20
+    },
+    "learned_has_received_negative_effect_attention_1_relation_type": {
+      "value": "negative_effect",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.296116+00:00",
+      "version": 20
+    },
+    "learned_has_received_negative_effect_attention_1_source": {
+      "value": "01-sci-rules",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.302115+00:00",
+      "version": 20
+    },
+    "learned_has_received_negative_effect_attention_1_learned_at": {
+      "value": "2026-06-27T05:43:44.288791+00:00",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.308125+00:00",
+      "version": 20
+    },
+    "learned_several_negative_effect_of_this_study_s_2_pattern": {
+      "value": "Several negative_effect of this study should be acknowledged",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.314127+00:00",
+      "version": 20
+    },
+    "learned_several_negative_effect_of_this_study_s_2_mechanism": {
+      "value": "Several limitations of this study should be acknowledged.",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.320116+00:00",
+      "version": 20
+    },
+    "learned_several_negative_effect_of_this_study_s_2_var1": {
+      "value": "Several",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.326125+00:00",
+      "version": 20
+    },
+    "learned_several_negative_effect_of_this_study_s_2_var2": {
+      "value": "of this study should be acknowledged",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.332116+00:00",
+      "version": 20
+    },
+    "learned_several_negative_effect_of_this_study_s_2_relation_type": {
+      "value": "negative_effect",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.338120+00:00",
+      "version": 20
+    },
+    "learned_several_negative_effect_of_this_study_s_2_source": {
+      "value": "04-discussion-library",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.345126+00:00",
+      "version": 20
+    },
+    "learned_several_negative_effect_of_this_study_s_2_learned_at": {
+      "value": "2026-06-27T05:43:44.288791+00:00",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.351125+00:00",
+      "version": 20
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4_pattern": {
+      "value": "可能与冬季厌氧条件 positive_effect 有关",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.357126+00:00",
+      "version": 20
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4_mechanism": {
+      "value": "可能与冬季厌氧条件增强有关",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.363126+00:00",
+      "version": 20
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4_var1": {
+      "value": "可能与冬季厌氧条件",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.369136+00:00",
+      "version": 20
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4_var2": {
+      "value": "有关",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.374135+00:00",
+      "version": 20
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4_relation_type": {
+      "value": "positive_effect",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.381126+00:00",
+      "version": 20
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4_source": {
+      "value": "06-data-analysis-logic",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.387012+00:00",
+      "version": 20
+    },
+    "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at": {
+      "value": "2026-06-27T05:43:44.289790+00:00",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.393012+00:00",
+      "version": 20
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_pattern": {
+      "value": "微生物分解速率 negative_effect 以及春季降雨稀释效应有关",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.399013+00:00",
+      "version": 20
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_mechanism": {
+      "value": "微生物分解速率降低以及春季降雨稀释效应有关",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.405045+00:00",
+      "version": 20
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_var1": {
+      "value": "微生物分解速率",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.410995+00:00",
+      "version": 20
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_var2": {
+      "value": "以及春季降雨稀释效应有关",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.416995+00:00",
+      "version": 20
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_relation_type": {
+      "value": "negative_effect",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.422886+00:00",
+      "version": 20
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_source": {
+      "value": "06-data-analysis-logic",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.428884+00:00",
+      "version": 20
+    },
+    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at": {
+      "value": "2026-06-27T05:43:44.289790+00:00",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.434897+00:00",
+      "version": 20
+    },
+    "learned_指标a_positive_correlation_指标b_3_pattern": {
+      "value": "指标A positive_correlation 指标B",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.439939+00:00",
+      "version": 20
+    },
+    "learned_指标a_positive_correlation_指标b_3_mechanism": {
+      "value": "指标A与指标B呈正相关",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.445952+00:00",
+      "version": 20
+    },
+    "learned_指标a_positive_correlation_指标b_3_var1": {
+      "value": "指标A",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.451897+00:00",
+      "version": 20
+    },
+    "learned_指标a_positive_correlation_指标b_3_var2": {
+      "value": "指标B",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.457902+00:00",
+      "version": 20
+    },
+    "learned_指标a_positive_correlation_指标b_3_relation_type": {
+      "value": "positive_correlation",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.463950+00:00",
+      "version": 20
+    },
+    "learned_指标a_positive_correlation_指标b_3_source": {
+      "value": "04-discussion-library",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.469927+00:00",
+      "version": 20
+    },
+    "learned_指标a_positive_correlation_指标b_3_learned_at": {
+      "value": "2026-06-27T05:43:44.289790+00:00",
+      "confidence": 0.95,
+      "source": "MechanismKB",
+      "updated": "2026-06-27T05:59:41.475946+00:00",
+      "version": 20
     },
     "mem_20260612_000452_1796_key": {
       "value": "spatial_distribution",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.494498+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.481906+00:00",
+      "version": 20
     },
     "mem_20260612_000452_1796_pattern": {
       "value": "Distance -> CH4/CO2/H2S",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.499454+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.487896+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1796_mechanism": {
       "value": "沿管网距离增加，碳排放呈空间梯度变化。管口(DO高)以CO2为主；中段(DO降低)开始产生CH4；末端(完全厌氧)CH4和H2S排放最大。沉积物积累、水力停留时间、管径大小都是影响空间分布的因素。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.504450+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.493339+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1796_mechanism_en": {
       "value": "Along sewer networks, carbon emissions show spatial gradients. Inlet (high DO): mainly CO2. Middle (decreasing DO): CH4 begins. Outlet (fully anaerobic): maximum CH4 and H2S.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.510454+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.499344+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1796_references": {
       "value": [
@@ -314,57 +608,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.514497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.505345+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1796_var1": {
       "value": "Distance",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.518496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.511345+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1796_var2": {
       "value": "CH4/CO2/H2S",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.523455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.517355+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1796_relation": {
       "value": "gradient",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.527495+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.523345+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_key": {
       "value": "nh4_ch4_mechanism",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.532455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.529345+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_pattern": {
       "value": "NH4+ -> CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.536495+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.535184+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_mechanism": {
       "value": "铵态氮(NH4+)与甲烷产生的关联机制包括：(1)氨化作用产生NH4+的同时释放有机碳底物；(2)高浓度NH4+可抑制产甲烷菌(IC50约3000mg/L)；(3)NH4+与CH4在氮碳耦合中存在协同效应。在低碳氮比条件下，NH4+对CH4的促进作用更明显。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.541455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.540228+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_mechanism_en": {
       "value": "Ammonium (NH4+) relates to CH4 production through: ammonification releasing organic carbon substrates; high NH4+ inhibiting methanogens (IC50 ~3000 mg/L); synergistic effects in C-N coupling.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.546450+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.546242+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_references": {
       "value": [
@@ -373,57 +667,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.551451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.553229+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_var1": {
       "value": "NH4+",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.555496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.559185+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_var2": {
       "value": "CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.560451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.565177+00:00",
+      "version": 19
     },
     "mem_20260612_000452_1867_relation": {
       "value": "complex",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.565455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.572187+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_key": {
       "value": "cod_ch4_mechanism",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.569455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.579184+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_pattern": {
       "value": "COD -> CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.574455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.586177+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_mechanism": {
       "value": "化学需氧量(COD)反映水体中可被氧化的有机物总量。COD越高，可被产甲烷菌利用的有机底物越丰富。在管网厌氧环境中，COD的降解与甲烷产生呈正相关。COD/TOC比值可反映有机物的可生物降解性。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.579451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.591227+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_mechanism_en": {
       "value": "Chemical Oxygen Demand (COD) reflects the total oxidizable organic matter. Higher COD provides more substrate for methanogenic archaea in anaerobic sewer environments.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.583496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.597177+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_references": {
       "value": [
@@ -432,57 +726,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.589450+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.603177+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_var1": {
       "value": "COD",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.594451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.608657+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_var2": {
       "value": "CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.598499+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.614658+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3595_relation": {
       "value": "positive",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.603455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.620658+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_key": {
       "value": "toc_ch4_mechanism",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.607497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.627251+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_pattern": {
       "value": "TOC -> CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.612496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.634250+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_mechanism": {
       "value": "有机碳(TOC)是产甲烷菌的主要底物。在厌氧条件下，产甲烷菌通过乙酸发酵或CO2还原途径将有机碳转化为甲烷。TOC浓度越高，底物越充足，甲烷产生量越大。污水管网中沉积物的有机碳含量是决定甲烷排放的关键因素。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.617455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.640251+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_mechanism_en": {
       "value": "Organic carbon (TOC) serves as the primary substrate for methanogenic archaea. Under anaerobic conditions, methanogens convert organic carbon to methane through acetoclastic or hydrogenotrophic pathways.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.621497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.646250+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_references": {
       "value": [
@@ -491,57 +785,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.626451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.652260+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_var1": {
       "value": "TOC",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.630500+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.658258+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_var2": {
       "value": "CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.635455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.664586+00:00",
+      "version": 19
     },
     "mem_20260612_000452_3875_relation": {
       "value": "positive",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.640455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.669584+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_key": {
       "value": "sediment_effect",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.644496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.675587+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_pattern": {
       "value": "Sediment -> CH4/CO2",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.649456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.681592+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_mechanism": {
       "value": "管网沉积物是碳排放的重要来源。沉积物中有机物浓度高、DO极低，是产甲烷的热区。沉积物厚度增加→厌氧体积增大→甲烷产量增加。泥水界面是生物地球化学反应的活跃区域，碳氮硫的转化在此集中发生。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.653496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.687594+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_mechanism_en": {
       "value": "Sewer sediments are major sources of carbon emissions. High organic matter and near-zero DO in sediments create hotspots for methanogenesis. Sediment depth correlates with anaerobic volume and CH4 production.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.658451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.693585+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_references": {
       "value": [
@@ -550,57 +844,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.663456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.698584+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_var1": {
       "value": "Sediment",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.667449+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.704584+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_var2": {
       "value": "CH4/CO2",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.672450+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.710584+00:00",
+      "version": 19
     },
     "mem_20260612_000452_5483_relation": {
       "value": "positive",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.676449+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.716593+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_key": {
       "value": "toc_co2_mechanism",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.681455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.722584+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_pattern": {
       "value": "TOC -> CO2",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.685497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.728593+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_mechanism": {
       "value": "有机碳的好氧分解和厌氧发酵都会产生CO2。好氧条件下，异养菌通过有氧呼吸将有机碳氧化为CO2和H2O。厌氧条件下，发酵菌将有机碳分解为挥发性脂肪酸(VFA)和CO2。管网中CO2的产生是碳循环的重要环节。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.690453+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.733819+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_mechanism_en": {
       "value": "CO2 is produced through both aerobic decomposition and anaerobic fermentation of organic carbon. Heterotrophic bacteria oxidize organic carbon to CO2 under aerobic conditions.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.697451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.739813+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_references": {
       "value": [
@@ -609,57 +903,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.702451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.745809+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_var1": {
       "value": "TOC",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.706452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.751820+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_var2": {
       "value": "CO2",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.711456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.757819+00:00",
+      "version": 19
     },
     "mem_20260612_000452_6324_relation": {
       "value": "positive",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.716455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.764819+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_key": {
       "value": "do_ch4_mechanism",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.720497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.770820+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_pattern": {
       "value": "DO -| CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.725496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.777137+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_mechanism": {
       "value": "溶解氧(DO)对甲烷产生有显著抑制作用。甲烷菌是严格厌氧菌，DO>0.2mg/L即可抑制其活性。好氧条件下，甲烷氧化菌(MOB)可在有氧层氧化甲烷为CO2，减少甲烷排放。管网中DO的空间分布决定了甲烷产生的热区。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.730457+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.783149+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_mechanism_en": {
       "value": "Dissolved oxygen (DO) significantly inhibits methanogenesis. Methanogens are strict anaerobes; DO > 0.2 mg/L suppresses their activity. Methanotrophic bacteria (MOB) oxidize CH4 to CO2 in aerobic zones.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.734503+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.788141+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_references": {
       "value": [
@@ -668,57 +962,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.739454+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.794474+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_var1": {
       "value": "DO",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.744451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.800487+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_var2": {
       "value": "CH4",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.748450+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.805525+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7102_relation": {
       "value": "negative",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.753456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.811480+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_key": {
       "value": "temperature_seasonal",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.757453+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.817550+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_pattern": {
       "value": "Temperature -> CH4/CO2",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.762451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.823521+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_mechanism": {
       "value": "温度是驱动碳排放季节差异的核心因素。Q10效应：温度每升高10°C，微生物代谢速率增加2-3倍。冬季(5-10°C)微生物活性低，碳排放量小；夏季(20-30°C)微生物活跃，碳排放量大。产甲烷菌的最适温度为35-40°C(中温)或50-60°C(高温)。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.766498+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.829705+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_mechanism_en": {
       "value": "Temperature is the core driver of seasonal carbon emission differences. Q10 effect: metabolic rate increases 2-3x per 10°C rise. Optimal temperature for methanogens: 35-40°C (mesophilic) or 50-60°C (thermophilic).",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.771455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.835906+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_references": {
       "value": [
@@ -727,57 +1021,57 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.775497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.840894+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_var1": {
       "value": "Temperature",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.780456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.849895+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_var2": {
       "value": "CH4/CO2",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.785452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.855904+00:00",
+      "version": 19
     },
     "mem_20260612_000452_7346_relation": {
       "value": "positive",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.790452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.860945+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_key": {
       "value": "tn_tp_mechanism",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.794497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.867904+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_pattern": {
       "value": "TN ~ TP",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.799455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.873895+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_mechanism": {
       "value": "总氮(TN)与总磷(TP)的共变关系反映了污水中营养盐的同源性。生活污水中N和P主要来自人类排泄物和洗涤剂，因此通常呈正相关。TN/TP比值可指示污水的营养盐特征和生物可利用性。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.804456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.879904+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_mechanism_en": {
       "value": "The co-variation of TN and TP reflects their common sources in sewage (human excreta and detergents). The N/P ratio indicates nutrient characteristics and bioavailability.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.808496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.885904+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_references": {
       "value": [
@@ -786,43 +1080,43 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.813456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.891896+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_var1": {
       "value": "TN",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.818451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.896948+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_var2": {
       "value": "TP",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.822451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.902895+00:00",
+      "version": 19
     },
     "mem_20260612_000452_8575_relation": {
       "value": "positive",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.826496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.908903+00:00",
+      "version": 19
     },
     "methane_production_sewer_pattern": {
       "value": "管道厌氧环境产甲烷",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.831452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.913945+00:00",
+      "version": 19
     },
     "methane_production_sewer_mechanism": {
       "value": "污水管道底部沉积物和管壁生物膜在厌氧条件下形成产甲烷热点。产甲烷古菌通过乙酸发酵(CH3COOH->CH4+CO2)和氢营养型还原(CO2+4H2->CH4+2H2O)两条途径产生CH4。管道中CH4产生量可占城市污水处理系统总CH4排放的10-50%。水力停留时间(HRT)越长、有机负荷越高，CH4排放越严重。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.836456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.919946+00:00",
+      "version": 19
     },
     "methane_production_sewer_references": {
       "value": [
@@ -832,29 +1126,29 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.840450+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.925896+00:00",
+      "version": 19
     },
     "methane_production_sewer_source": {
       "value": "domain_knowledge",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.845454+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.930945+00:00",
+      "version": 19
     },
     "n2o_nacl_mechanism_pattern": {
       "value": "N2O与NaCl正相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.850455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.937549+00:00",
+      "version": 19
     },
     "n2o_nacl_mechanism_mechanism": {
       "value": "N2O排放与NaCl浓度的正相关关系可能反映了盐度对硝化过程的影响。高盐度环境下，亚硝酸盐氧化菌(NOB)比氨氧化菌(AOB)更易受抑制，导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O。此外，NaCl浓度升高会增加污水渗透压，影响微生物群落结构，促进N2O的产生。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.854454+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.943550+00:00",
+      "version": 19
     },
     "n2o_nacl_mechanism_references": {
       "value": [
@@ -863,78 +1157,78 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.859457+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.948870+00:00",
+      "version": 19
     },
     "seasonal_pattern": {
       "value": "冬春差异",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.863497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.954881+00:00",
+      "version": 19
     },
     "seasonal_mechanism": {
       "value": "温度是影响微生物代谢活性的主要因素。春季温度升高，水解酸化菌和产甲烷菌的酶活性增强，有机碳转化速率加快，气相碳(CH4+CO2)浓度可能升高。同时，春季降雨增加了管道流量，可能产生稀释效应和冲刷效应——冲刷管壁生物膜和底部沉积物中的有机碳，导致液相TOC升高。两种效应的相对大小决定了净变化方向。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.868456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.960880+00:00",
+      "version": 19
     },
     "seasonal_mechanism_en": {
       "value": "Temperature is the dominant factor influencing microbial metabolic activity. As temperature rises in spring, enzymatic activities of hydrolytic-acidogenic and methanogenic microorganisms increase, accelerating organic carbon transformation and potentially elevating gaseous carbon (CH4+CO2) concentrations. Concurrently, increased rainfall in spring enhances pipeline flow, creating both dilution and scouring effects that may wash biofilms and sediment-bound organic carbon into the liquid phase, increasing TOC. The net outcome depends on the relative magnitude of these competing effects.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.872497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.965947+00:00",
+      "version": 19
     },
     "seasonal_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.876497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.971921+00:00",
+      "version": 19
     },
     "spatial_pattern": {
       "value": "沿程空间变化",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.881497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.977951+00:00",
+      "version": 19
     },
     "spatial_mechanism": {
       "value": "管道中碳污染物的空间分异受功能区排放特征和管道内生化过程共同控制。管口区域氧气充足(O2较高)，好氧呼吸为主，CO2为主要碳气。随着向管道中段和末端推进，O2被微生物消耗逐渐降低，厌氧程度增加，CH4生成比例上升。同时，不同功能区(教学区/生活区/餐饮区)的有机负荷和组成不同，导致碳污染物的初始输入存在空间差异。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.886457+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.984003+00:00",
+      "version": 19
     },
     "spatial_mechanism_en": {
       "value": "Spatial differentiation of carbon pollutants in pipelines is jointly controlled by functional zone discharge characteristics and in-pipe biogeochemical processes. At the inlet, oxygen is relatively abundant, favoring aerobic respiration with CO2 as the dominant carbon gas. Progressing toward the mid-section and outlet, O2 is progressively consumed by microorganisms, increasing anaerobiosis and shifting the balance toward CH4 production. Meanwhile, different functional zones (teaching, residential, dining) exhibit distinct organic loading and composition, creating spatial variation in initial carbon input.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.890496+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.989952+00:00",
+      "version": 19
     },
     "spatial_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.895456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:41.995289+00:00",
+      "version": 19
     },
     "temperature_seasonal_effect_pattern": {
       "value": "温度驱动季节差异",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.899490+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.002340+00:00",
+      "version": 19
     },
     "temperature_seasonal_effect_mechanism": {
       "value": "温度通过微生物酶活性控制碳转化速率：Q10效应(每升10C速率增2-3倍)。冬季(5-15C)微生物活性低，有机碳降解慢；春季(15-25C)水解酸化菌和产甲烷菌活性增强，CH4排放增加；夏季(>25C)产甲烷速率达峰值。降雨事件冲刷管壁生物膜和沉积物，导致脉冲式碳释放。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.904452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.008299+00:00",
+      "version": 19
     },
     "temperature_seasonal_effect_references": {
       "value": [
@@ -942,29 +1236,29 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.908467+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.014290+00:00",
+      "version": 19
     },
     "temperature_seasonal_effect_source": {
       "value": "domain_knowledge",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.913456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.020290+00:00",
+      "version": 19
     },
     "tn_nh4_mechanism_pattern": {
       "value": "TN与NH4+正相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.918456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.026359+00:00",
+      "version": 19
     },
     "tn_nh4_mechanism_mechanism": {
       "value": "总氮(TN)与铵态氮(NH4+)的强正相关(r=0.985)表明，污水管网中氮的主要存在形式为铵态氮，占TN的大部分。这是因为管道内厌氧条件下，有机氮通过氨化作用转化为NH4+，而硝化作用因DO不足而受限，导致NH4+积累。TN-NH4+的差值主要为有机氮和少量硝态氮。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.922450+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.032340+00:00",
+      "version": 19
     },
     "tn_nh4_mechanism_references": {
       "value": [
@@ -973,372 +1267,78 @@
       ],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.927452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.038299+00:00",
+      "version": 19
     },
     "toc_ch4_pattern": {
       "value": "TOC与CH4正相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.932452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.043648+00:00",
+      "version": 19
     },
     "toc_ch4_mechanism": {
       "value": "TOC代表污水中有机碳的总量，是产甲烷过程的底物来源。TOC浓度越高，可供水解酸化菌利用的有机底物越充足，进而为产甲烷古菌提供更多的乙酸和H2/CO2底物，促进CH4的生成。但在高TOC条件下，有机酸积累导致pH下降，可能抑制产甲烷活性。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.936451+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.050658+00:00",
+      "version": 19
     },
     "toc_ch4_mechanism_en": {
       "value": "Total organic carbon (TOC) represents the aggregate organic carbon pool in wastewater and serves as the primary substrate for methanogenesis. Higher TOC concentrations provide more abundant organic substrates for hydrolytic and acidogenic bacteria, which in turn supply more acetate and H2/CO2 to methanogenic archaea, enhancing CH4 production. However, under high TOC conditions, volatile fatty acid accumulation may lower pH and inhibit methanogenic activity.",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.941452+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.056648+00:00",
+      "version": 19
     },
     "toc_ch4_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.946455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.062656+00:00",
+      "version": 19
     },
     "toc_tc_mechanism_pattern": {
       "value": "TOC与TC正相关",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.951457+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.067658+00:00",
+      "version": 19
     },
     "toc_tc_mechanism_mechanism": {
       "value": "TOC与TC的强正相关(r=0.789)表明有机碳是总碳的主要组成部分。TC=TOC+IC，当TOC占TC比例稳定时，两者自然呈正相关。TOC/TC比值反映了有机碳在总碳中的份额，比值越高说明有机污染越重。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.955455+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.073655+00:00",
+      "version": 19
     },
     "toc_tc_mechanism_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.960456+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.079649+00:00",
+      "version": 19
     },
     "vocs_seasonal_mechanism_pattern": {
       "value": "VOCs冬高春低",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.964497+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.084705+00:00",
+      "version": 19
     },
     "vocs_seasonal_mechanism_mechanism": {
       "value": "VOCs冬季高于春季可能原因：(1)冬季大气扩散条件差，管道内VOCs不易逸散；(2)冬季低温下VOCs挥发性降低，在液相中浓度升高；(3)春季微生物活性增强，部分VOCs被生物降解。",
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.969457+00:00",
-      "version": 12
+      "updated": "2026-06-27T05:59:42.090699+00:00",
+      "version": 19
     },
     "vocs_seasonal_mechanism_references": {
       "value": [],
       "confidence": 0.95,
       "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.973497+00:00",
-      "version": 12
-    },
-    "learned_has_attracted_positive_effect_attention_0_pattern": {
-      "value": "has attracted positive_effect attention",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.298862+00:00",
-      "version": 3
-    },
-    "learned_has_attracted_positive_effect_attention_0_mechanism": {
-      "value": "has attracted increasing attention.",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.303858+00:00",
-      "version": 3
-    },
-    "learned_has_attracted_positive_effect_attention_0_var1": {
-      "value": "has attracted",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.307903+00:00",
-      "version": 3
-    },
-    "learned_has_attracted_positive_effect_attention_0_var2": {
-      "value": "attention",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.312904+00:00",
-      "version": 3
-    },
-    "learned_has_attracted_positive_effect_attention_0_relation_type": {
-      "value": "positive_effect",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.317862+00:00",
-      "version": 3
-    },
-    "learned_has_attracted_positive_effect_attention_0_source": {
-      "value": "01-sci-rules",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.321903+00:00",
-      "version": 3
-    },
-    "learned_has_attracted_positive_effect_attention_0_learned_at": {
-      "value": "2026-06-22T01:35:21.759235+00:00",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.325903+00:00",
-      "version": 3
-    },
-    "learned_has_received_negative_effect_attention_1_pattern": {
-      "value": "has received negative_effect attention",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.330862+00:00",
-      "version": 3
-    },
-    "learned_has_received_negative_effect_attention_1_mechanism": {
-      "value": "has received limited attention.",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.334905+00:00",
-      "version": 3
-    },
-    "learned_has_received_negative_effect_attention_1_var1": {
-      "value": "has received",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.339863+00:00",
-      "version": 3
-    },
-    "learned_has_received_negative_effect_attention_1_var2": {
-      "value": "attention",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.343903+00:00",
-      "version": 3
-    },
-    "learned_has_received_negative_effect_attention_1_relation_type": {
-      "value": "negative_effect",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.348903+00:00",
-      "version": 3
-    },
-    "learned_has_received_negative_effect_attention_1_source": {
-      "value": "01-sci-rules",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.353863+00:00",
-      "version": 3
-    },
-    "learned_has_received_negative_effect_attention_1_learned_at": {
-      "value": "2026-06-22T01:35:21.759235+00:00",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.357905+00:00",
-      "version": 3
-    },
-    "learned_several_negative_effect_of_this_study_s_2_pattern": {
-      "value": "Several negative_effect of this study should be acknowledged",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.362863+00:00",
-      "version": 3
-    },
-    "learned_several_negative_effect_of_this_study_s_2_mechanism": {
-      "value": "Several limitations of this study should be acknowledged.",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.366905+00:00",
-      "version": 3
-    },
-    "learned_several_negative_effect_of_this_study_s_2_var1": {
-      "value": "Several",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.371862+00:00",
-      "version": 3
-    },
-    "learned_several_negative_effect_of_this_study_s_2_var2": {
-      "value": "of this study should be acknowledged",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.375908+00:00",
-      "version": 3
-    },
-    "learned_several_negative_effect_of_this_study_s_2_relation_type": {
-      "value": "negative_effect",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.380860+00:00",
-      "version": 3
-    },
-    "learned_several_negative_effect_of_this_study_s_2_source": {
-      "value": "04-discussion-library",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.384903+00:00",
-      "version": 3
-    },
-    "learned_several_negative_effect_of_this_study_s_2_learned_at": {
-      "value": "2026-06-22T01:35:21.759235+00:00",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.389863+00:00",
-      "version": 3
-    },
-    "learned_可能与冬季厌氧条件_positive_effect_有关_4_pattern": {
-      "value": "可能与冬季厌氧条件 positive_effect 有关",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.393858+00:00",
-      "version": 3
-    },
-    "learned_可能与冬季厌氧条件_positive_effect_有关_4_mechanism": {
-      "value": "可能与冬季厌氧条件增强有关",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.398861+00:00",
-      "version": 3
-    },
-    "learned_可能与冬季厌氧条件_positive_effect_有关_4_var1": {
-      "value": "可能与冬季厌氧条件",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.403889+00:00",
-      "version": 3
-    },
-    "learned_可能与冬季厌氧条件_positive_effect_有关_4_var2": {
-      "value": "有关",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.407905+00:00",
-      "version": 3
-    },
-    "learned_可能与冬季厌氧条件_positive_effect_有关_4_relation_type": {
-      "value": "positive_effect",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.412863+00:00",
-      "version": 3
-    },
-    "learned_可能与冬季厌氧条件_positive_effect_有关_4_source": {
-      "value": "06-data-analysis-logic",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.416905+00:00",
-      "version": 3
-    },
-    "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at": {
-      "value": "2026-06-22T01:35:21.759235+00:00",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.422450+00:00",
-      "version": 3
-    },
-    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_pattern": {
-      "value": "微生物分解速率 negative_effect 以及春季降雨稀释效应有关",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.427495+00:00",
-      "version": 3
-    },
-    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_mechanism": {
-      "value": "微生物分解速率降低以及春季降雨稀释效应有关",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.432495+00:00",
-      "version": 3
-    },
-    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_var1": {
-      "value": "微生物分解速率",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.437454+00:00",
-      "version": 3
-    },
-    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_var2": {
-      "value": "以及春季降雨稀释效应有关",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.442455+00:00",
-      "version": 3
-    },
-    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_relation_type": {
-      "value": "negative_effect",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.447453+00:00",
-      "version": 3
-    },
-    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_source": {
-      "value": "06-data-analysis-logic",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.451452+00:00",
-      "version": 3
-    },
-    "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at": {
-      "value": "2026-06-22T01:35:21.759235+00:00",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.456454+00:00",
-      "version": 3
-    },
-    "learned_指标a_positive_correlation_指标b_3_pattern": {
-      "value": "指标A positive_correlation 指标B",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.461450+00:00",
-      "version": 3
-    },
-    "learned_指标a_positive_correlation_指标b_3_mechanism": {
-      "value": "指标A与指标B呈正相关",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.466450+00:00",
-      "version": 3
-    },
-    "learned_指标a_positive_correlation_指标b_3_var1": {
-      "value": "指标A",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.471452+00:00",
-      "version": 3
-    },
-    "learned_指标a_positive_correlation_指标b_3_var2": {
-      "value": "指标B",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.476454+00:00",
-      "version": 3
-    },
-    "learned_指标a_positive_correlation_指标b_3_relation_type": {
-      "value": "positive_correlation",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.480496+00:00",
-      "version": 3
-    },
-    "learned_指标a_positive_correlation_指标b_3_source": {
-      "value": "04-discussion-library",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.485454+00:00",
-      "version": 3
-    },
-    "learned_指标a_positive_correlation_指标b_3_learned_at": {
-      "value": "2026-06-22T01:35:21.759235+00:00",
-      "confidence": 0.95,
-      "source": "MechanismKB",
-      "updated": "2026-06-22T01:54:24.490450+00:00",
-      "version": 3
+      "updated": "2026-06-27T05:59:42.096647+00:00",
+      "version": 19
     }
   },
   "changelog": [
@@ -1348,7 +1348,7 @@
       "old": null,
       "new": "碳在固液气三相的分配",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.005935+00:00"
+      "timestamp": "2026-06-25T06:58:30.100364+00:00"
     },
     {
       "action": "create",
@@ -1356,7 +1356,7 @@
       "old": null,
       "new": "污水管网中碳污染物以三相存在：液相(TOC/DOC/POC)占总碳60-80%，是微生物代谢直接底物；固相(沉积物有机碳/生物膜EPS)占15-30%，是碳汇也是内源碳释放源；气相(CH4/CO2/VOCs)占5-15%，是碳损失和温室效应直接贡献者。三相碳通过溶解-沉淀、吸附-解吸、生物转化等过程动态平衡。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.005935+00:00"
+      "timestamp": "2026-06-25T06:58:30.101315+00:00"
     },
     {
       "action": "create",
@@ -1364,7 +1364,7 @@
       "old": null,
       "new": "['Sharma et al. (2008)', 'Ni et al. (2015)']",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.006890+00:00"
+      "timestamp": "2026-06-25T06:58:30.102319+00:00"
     },
     {
       "action": "create",
@@ -1372,7 +1372,7 @@
       "old": null,
       "new": "domain_knowledge",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.006890+00:00"
+      "timestamp": "2026-06-25T06:58:30.103314+00:00"
     },
     {
       "action": "create",
@@ -1380,7 +1380,7 @@
       "old": null,
       "new": "CH4春高冬低",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.007893+00:00"
+      "timestamp": "2026-06-25T06:58:30.104320+00:00"
     },
     {
       "action": "create",
@@ -1388,7 +1388,7 @@
       "old": null,
       "new": "CH4春季显著高于冬季的原因：(1)温度是控制产甲烷菌活性的关键因素，最适温度35-40°C，冬季低温(6.6°C)严重抑制产甲烷活性，春季温度回升(16°C)后活性恢复；(2)春季管道内厌氧区扩大，DO降低，有利于产甲烷过程；(3)冬季积累的有机底物在春季被产甲烷菌利用，导致CH4集中释放。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.007893+00:00"
+      "timestamp": "2026-06-25T06:58:30.105319+00:00"
     },
     {
       "action": "create",
@@ -1396,7 +1396,7 @@
       "old": null,
       "new": "['Guisasola et al. (2008)报道温度每升高10°C，产甲烷速率增加2-3倍', 'Jiang et al. (2011)指出管道CH4排放具有显著季节性']",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.008890+00:00"
+      "timestamp": "2026-06-25T06:58:30.106314+00:00"
     },
     {
       "action": "create",
@@ -1404,7 +1404,7 @@
       "old": null,
       "new": "CO2与NO2正相关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.008890+00:00"
+      "timestamp": "2026-06-25T06:58:30.107318+00:00"
     },
     {
       "action": "create",
@@ -1412,7 +1412,7 @@
       "old": null,
       "new": "CO2与NO2的正相关可能反映了共同的环境驱动因素。温度升高会同时促进有机物分解(产生CO2)和硝化/反硝化过程(产生NO2)。此外，管道内微生物活性增强时，有氧呼吸产CO2和硝化产NO2同步增加。NO2作为硝化中间产物，其积累也与DO水平和有机物浓度有关。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.009890+00:00"
+      "timestamp": "2026-06-25T06:58:30.108319+00:00"
     },
     {
       "action": "create",
@@ -1420,7 +1420,7 @@
       "old": null,
       "new": "['Foley et al. (2009)报道管道温室气体排放与微生物活性正相关']",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.010892+00:00"
+      "timestamp": "2026-06-25T06:58:30.109319+00:00"
     },
     {
       "action": "create",
@@ -1428,7 +1428,7 @@
       "old": null,
       "new": "COD冬高春低",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.010892+00:00"
+      "timestamp": "2026-06-25T06:58:30.110313+00:00"
     },
     {
       "action": "create",
@@ -1436,7 +1436,7 @@
       "old": null,
       "new": "COD冬季显著高于春季的原因可能有：(1)冬季低温抑制微生物分解，有机物在管道内积累；(2)春季温度回升后，微生物活性增强，有机物被快速降解，导致管道出水COD降低；(3)冬季用水量减少，污水在管道内停留时间延长，沉积物再悬浮和有机物释放增加。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.011892+00:00"
+      "timestamp": "2026-06-25T06:58:30.111314+00:00"
     },
     {
       "action": "create",
@@ -1444,7 +1444,7 @@
       "old": null,
       "new": "['Guisasola et al. (2008)报道管道内有机物降解受温度显著影响', 'Sharma et al. (2008)发现冬季管道COD浓度比夏季高30-50%']",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.011892+00:00"
+      "timestamp": "2026-06-25T06:58:30.113314+00:00"
     },
     {
       "action": "create",
@@ -1452,7 +1452,7 @@
       "old": null,
       "new": "TOC与TN/铵态氮相关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.012891+00:00"
+      "timestamp": "2026-06-25T06:58:30.114315+00:00"
     },
     {
       "action": "create",
@@ -1460,7 +1460,7 @@
       "old": null,
       "new": "碳氮耦合是污水管道生物转化的核心过程。有机碳降解释放含氮有机物中的氮（氨化作用），使NH4+浓度升高。同时，反硝化过程需要有机碳作为电子供体，C/N比直接影响脱氮效率(C/N>5时脱氮效率高)。碳氮的协同转化反映了管道中微生物群落的整体代谢活性。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.013891+00:00"
+      "timestamp": "2026-06-25T06:58:30.115320+00:00"
     },
     {
       "action": "create",
@@ -1468,7 +1468,7 @@
       "old": null,
       "new": "Carbon-nitrogen coupling is a core biogeochemical process in sewage networks. Organic carbon degradation releases nitrogen from nitrogenous organic compounds (ammonification), elevating NH4+ concentrations. Meanwhile, denitrification requires organic carbon as an electron donor, and the C/N ratio directly affects nitrogen removal efficiency (optimal when C/N > 5). The synergistic transformation of carbon and nitrogen reflects the overall metabolic activity of the microbial community in the pipeline.",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.013891+00:00"
+      "timestamp": "2026-06-25T06:58:30.116319+00:00"
     },
     {
       "action": "create",
@@ -1476,7 +1476,7 @@
       "old": null,
       "new": "[]",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.014891+00:00"
+      "timestamp": "2026-06-25T06:58:30.118314+00:00"
     },
     {
       "action": "create",
@@ -1484,7 +1484,7 @@
       "old": null,
       "new": "DO控制碳转化路径",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.015890+00:00"
+      "timestamp": "2026-06-25T06:58:30.119315+00:00"
     },
     {
       "action": "create",
@@ -1492,7 +1492,7 @@
       "old": null,
       "new": "溶解氧(DO)是控制管道碳转化路径的核心开关：DO>2mg/L时好氧呼吸为主，有机碳转化为CO2，CH4被抑制；DO 0.5-2mg/L时微好氧区，好氧厌氧共存；DO<0.5mg/L时严格厌氧，产甲烷活跃；DO<0.2mg/L时硫酸盐还原菌与产甲烷古菌竞争。管口到管末端的DO梯度决定碳转化空间分异。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.016890+00:00"
+      "timestamp": "2026-06-25T06:58:30.121321+00:00"
     },
     {
       "action": "create",
@@ -1500,7 +1500,7 @@
       "old": null,
       "new": "['Guisasola et al. (2008)', 'Jiang et al. (2011)']",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.017891+00:00"
+      "timestamp": "2026-06-25T06:58:30.122365+00:00"
     },
     {
       "action": "create",
@@ -1508,7 +1508,7 @@
       "old": null,
       "new": "domain_knowledge",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.017891+00:00"
+      "timestamp": "2026-06-25T06:58:30.123319+00:00"
     },
     {
       "action": "create",
@@ -1516,7 +1516,7 @@
       "old": null,
       "new": "DO与CH4负相关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.018890+00:00"
+      "timestamp": "2026-06-25T06:58:30.125314+00:00"
     },
     {
       "action": "create",
@@ -1524,7 +1524,7 @@
       "old": null,
       "new": "溶解氧(DO)浓度是控制管道中产甲烷过程的关键因素。当DO<0.5 mg/L时，管道进入严格厌氧状态，产甲烷古菌活性达到最高，通过乙酸发酵和CO2/H2还原两条途径将有机碳转化为CH4。相反，当DO>2 mg/L时，好氧微生物通过有氧呼吸将有机碳氧化为CO2，产甲烷过程被完全抑制。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.019890+00:00"
+      "timestamp": "2026-06-25T06:58:30.126315+00:00"
     },
     {
       "action": "create",
@@ -1532,7 +1532,7 @@
       "old": null,
       "new": "Dissolved oxygen (DO) is the primary factor controlling methanogenesis in sewage networks. Under strictly anaerobic conditions (DO < 0.5 mg/L), methanogenic archaea exhibit maximum activity, converting organic carbon to CH4 via acetoclastic fermentation and hydrogenotrophic CO2 reduction. Conversely, when DO exceeds 2 mg/L, aerobic microorganisms oxidize organic carbon to CO2 through aerobic respiration, completely suppressing methanogenesis.",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.020890+00:00"
+      "timestamp": "2026-06-25T06:58:30.128321+00:00"
     },
     {
       "action": "create",
@@ -1540,7 +1540,7 @@
       "old": null,
       "new": "['Guisasola et al. (2008)报道城市污水管道中厌氧段的产甲烷活动可降解50%以上的有机碳', 'Jiang et al. (2011)指出管道系统是城市温室气体排放的重要来源']",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.021890+00:00"
+      "timestamp": "2026-06-25T06:58:30.129365+00:00"
     },
     {
       "action": "create",
@@ -1548,7 +1548,7 @@
       "old": null,
       "new": "DO与CO2可能正相关或呈复杂关系",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.022890+00:00"
+      "timestamp": "2026-06-25T06:58:30.131320+00:00"
     },
     {
       "action": "create",
@@ -1556,7 +1556,7 @@
       "old": null,
       "new": "CO2的来源包括好氧呼吸和厌氧发酵两部分。好氧条件下，异养菌通过三羧酸循环将有机物完全氧化为CO2和H2O。厌氧条件下，产甲烷过程中CO2也作为电子受体被还原为CH4。因此，DO对CO2的影响取决于好氧呼吸产CO2和厌氧产甲烷消耗CO2的平衡。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.023890+00:00"
+      "timestamp": "2026-06-25T06:58:30.132355+00:00"
     },
     {
       "action": "create",
@@ -1564,7 +1564,7 @@
       "old": null,
       "new": "CO2 in sewage networks originates from both aerobic respiration and anaerobic fermentation. Under aerobic conditions, heterotrophic bacteria oxidize organic matter to CO2 and H2O via the tricarboxylic acid cycle. Under anaerobic conditions, CO2 also serves as an electron acceptor and is reduced to CH4 during methanogenesis. Therefore, the net effect of DO on CO2 depends on the balance between aerobic CO2 production and anaerobic CO2 consumption in CH4 formation.",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.024891+00:00"
+      "timestamp": "2026-06-25T06:58:30.134359+00:00"
     },
     {
       "action": "create",
@@ -1572,7 +1572,7 @@
       "old": null,
       "new": "[]",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.025890+00:00"
+      "timestamp": "2026-06-25T06:58:30.135359+00:00"
     },
     {
       "action": "create",
@@ -1580,7 +1580,7 @@
       "old": null,
       "new": "DO与NO3-正相关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.026890+00:00"
+      "timestamp": "2026-06-25T06:58:30.137354+00:00"
     },
     {
       "action": "create",
@@ -1588,7 +1588,7 @@
       "old": null,
       "new": "DO与硝态氮(NO3-)的正相关反映了硝化作用对溶解氧的依赖。硝化细菌(Nitrosomonas和Nitrobacter)是严格好氧菌，DO>2 mg/L时硝化作用活跃，NH4+→NO2-→NO3-转化完全。DO<0.5 mg/L时硝化作用几乎停止，NO3-浓度极低。因此DO高的采样点NO3-浓度也高。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.027890+00:00"
+      "timestamp": "2026-06-25T06:58:30.139321+00:00"
     },
     {
       "action": "create",
@@ -1596,7 +1596,7 @@
       "old": null,
       "new": "['Metcalf & Eddy (2014)指出DO是硝化作用的限速因子']",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.028890+00:00"
+      "timestamp": "2026-06-25T06:58:30.140356+00:00"
     },
     {
       "action": "create",
@@ -1604,7 +1604,7 @@
       "old": null,
       "new": "功能区碳输入差异",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.029890+00:00"
+      "timestamp": "2026-06-25T06:58:30.142356+00:00"
     },
     {
       "action": "create",
@@ -1612,7 +1612,7 @@
       "old": null,
       "new": "不同功能区排放的污水碳组成差异显著：教学区低有机碳低油脂；生活区中等有机碳含洗涤剂；餐饮区高有机碳(TOC 200-500mg/L)高油脂高NH4+；运动区间歇排放含有机碎屑。功能区差异导致管网有机碳负荷的空间异质性，影响不同位置的碳转化路径和气相碳排放。",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.030890+00:00"
+      "timestamp": "2026-06-25T06:58:30.144314+00:00"
     },
     {
       "action": "create",
@@ -1620,7 +1620,7 @@
       "old": null,
       "new": "[]",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.031890+00:00"
+      "timestamp": "2026-06-25T06:58:30.146316+00:00"
     },
     {
       "action": "create",
@@ -1628,839 +1628,7 @@
       "old": null,
       "new": "domain_knowledge",
       "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.032890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_key",
-      "old": null,
-      "new": "spatial_distribution",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.033890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_pattern",
-      "old": null,
-      "new": "Distance -> CH4/CO2/H2S",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.034894+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_mechanism",
-      "old": null,
-      "new": "沿管网距离增加，碳排放呈空间梯度变化。管口(DO高)以CO2为主；中段(DO降低)开始产生CH4；末端(完全厌氧)CH4和H2S排放最大。沉积物积累、水力停留时间、管径大小都是影响空间分布的因素。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.035891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_mechanism_en",
-      "old": null,
-      "new": "Along sewer networks, carbon emissions show spatial gradients. Inlet (high DO): mainly CO2. Middle (decreasing DO): CH4 begins. Outlet (fully anaerobic): maximum CH4 and H2S.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.037935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_references",
-      "old": null,
-      "new": "['Sharma et al., 2021', 'Foley et al., 2009']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.038935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_var1",
-      "old": null,
-      "new": "Distance",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.039892+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_var2",
-      "old": null,
-      "new": "CH4/CO2/H2S",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.040893+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1796_relation",
-      "old": null,
-      "new": "gradient",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.042891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_key",
-      "old": null,
-      "new": "nh4_ch4_mechanism",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.043890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_pattern",
-      "old": null,
-      "new": "NH4+ -> CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.044891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_mechanism",
-      "old": null,
-      "new": "铵态氮(NH4+)与甲烷产生的关联机制包括：(1)氨化作用产生NH4+的同时释放有机碳底物；(2)高浓度NH4+可抑制产甲烷菌(IC50约3000mg/L)；(3)NH4+与CH4在氮碳耦合中存在协同效应。在低碳氮比条件下，NH4+对CH4的促进作用更明显。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.046926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_mechanism_en",
-      "old": null,
-      "new": "Ammonium (NH4+) relates to CH4 production through: ammonification releasing organic carbon substrates; high NH4+ inhibiting methanogens (IC50 ~3000 mg/L); synergistic effects in C-N coupling.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.047925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_references",
-      "old": null,
-      "new": "['Rajagopal et al., 2013', 'Yenigün & Demirel, 2013']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.048932+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_var1",
-      "old": null,
-      "new": "NH4+",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.050925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_var2",
-      "old": null,
-      "new": "CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.051891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_1867_relation",
-      "old": null,
-      "new": "complex",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.053925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_key",
-      "old": null,
-      "new": "cod_ch4_mechanism",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.054931+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_pattern",
-      "old": null,
-      "new": "COD -> CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.056892+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_mechanism",
-      "old": null,
-      "new": "化学需氧量(COD)反映水体中可被氧化的有机物总量。COD越高，可被产甲烷菌利用的有机底物越丰富。在管网厌氧环境中，COD的降解与甲烷产生呈正相关。COD/TOC比值可反映有机物的可生物降解性。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.057890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_mechanism_en",
-      "old": null,
-      "new": "Chemical Oxygen Demand (COD) reflects the total oxidizable organic matter. Higher COD provides more substrate for methanogenic archaea in anaerobic sewer environments.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.060926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_references",
-      "old": null,
-      "new": "['Cakir & Stoeckel, 2000', 'Ahn et al., 2011']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.062925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_var1",
-      "old": null,
-      "new": "COD",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.063890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_var2",
-      "old": null,
-      "new": "CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.065890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3595_relation",
-      "old": null,
-      "new": "positive",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.066890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_key",
-      "old": null,
-      "new": "toc_ch4_mechanism",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.068927+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_pattern",
-      "old": null,
-      "new": "TOC -> CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.070925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_mechanism",
-      "old": null,
-      "new": "有机碳(TOC)是产甲烷菌的主要底物。在厌氧条件下，产甲烷菌通过乙酸发酵或CO2还原途径将有机碳转化为甲烷。TOC浓度越高，底物越充足，甲烷产生量越大。污水管网中沉积物的有机碳含量是决定甲烷排放的关键因素。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.072891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_mechanism_en",
-      "old": null,
-      "new": "Organic carbon (TOC) serves as the primary substrate for methanogenic archaea. Under anaerobic conditions, methanogens convert organic carbon to methane through acetoclastic or hydrogenotrophic pathways.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.073892+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_references",
-      "old": null,
-      "new": "['Guisasola et al., 2008, Water Research', 'Liu et al., 2015, Environmental Science & Technology']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.075925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_var1",
-      "old": null,
-      "new": "TOC",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.076891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_var2",
-      "old": null,
-      "new": "CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.078931+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_3875_relation",
-      "old": null,
-      "new": "positive",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.080926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_key",
-      "old": null,
-      "new": "sediment_effect",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.081891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_pattern",
-      "old": null,
-      "new": "Sediment -> CH4/CO2",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.083890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_mechanism",
-      "old": null,
-      "new": "管网沉积物是碳排放的重要来源。沉积物中有机物浓度高、DO极低，是产甲烷的热区。沉积物厚度增加→厌氧体积增大→甲烷产量增加。泥水界面是生物地球化学反应的活跃区域，碳氮硫的转化在此集中发生。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.085926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_mechanism_en",
-      "old": null,
-      "new": "Sewer sediments are major sources of carbon emissions. High organic matter and near-zero DO in sediments create hotspots for methanogenesis. Sediment depth correlates with anaerobic volume and CH4 production.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.087925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_references",
-      "old": null,
-      "new": "['Sharma et al., 2021', 'Hvitved-Jacobsen et al., 2013']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.089892+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_var1",
-      "old": null,
-      "new": "Sediment",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.090929+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_var2",
-      "old": null,
-      "new": "CH4/CO2",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.092926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_5483_relation",
-      "old": null,
-      "new": "positive",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.094926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_key",
-      "old": null,
-      "new": "toc_co2_mechanism",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.096926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_pattern",
-      "old": null,
-      "new": "TOC -> CO2",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.098925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_mechanism",
-      "old": null,
-      "new": "有机碳的好氧分解和厌氧发酵都会产生CO2。好氧条件下，异养菌通过有氧呼吸将有机碳氧化为CO2和H2O。厌氧条件下，发酵菌将有机碳分解为挥发性脂肪酸(VFA)和CO2。管网中CO2的产生是碳循环的重要环节。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.100925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_mechanism_en",
-      "old": null,
-      "new": "CO2 is produced through both aerobic decomposition and anaerobic fermentation of organic carbon. Heterotrophic bacteria oxidize organic carbon to CO2 under aerobic conditions.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.102929+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_references",
-      "old": null,
-      "new": "['Jiang et al., 2011', 'Sharma et al., 2021']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.104926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_var1",
-      "old": null,
-      "new": "TOC",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.106926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_var2",
-      "old": null,
-      "new": "CO2",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.108928+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_6324_relation",
-      "old": null,
-      "new": "positive",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.110925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_key",
-      "old": null,
-      "new": "do_ch4_mechanism",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.112925+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_pattern",
-      "old": null,
-      "new": "DO -| CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.114926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_mechanism",
-      "old": null,
-      "new": "溶解氧(DO)对甲烷产生有显著抑制作用。甲烷菌是严格厌氧菌，DO>0.2mg/L即可抑制其活性。好氧条件下，甲烷氧化菌(MOB)可在有氧层氧化甲烷为CO2，减少甲烷排放。管网中DO的空间分布决定了甲烷产生的热区。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.116926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_mechanism_en",
-      "old": null,
-      "new": "Dissolved oxygen (DO) significantly inhibits methanogenesis. Methanogens are strict anaerobes; DO > 0.2 mg/L suppresses their activity. Methanotrophic bacteria (MOB) oxidize CH4 to CO2 in aerobic zones.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.118926+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_references",
-      "old": null,
-      "new": "['Guisasola et al., 2008', 'Czepiel et al., 1993']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.121889+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_var1",
-      "old": null,
-      "new": "DO",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.123890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_var2",
-      "old": null,
-      "new": "CH4",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.125890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7102_relation",
-      "old": null,
-      "new": "negative",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.127890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_key",
-      "old": null,
-      "new": "temperature_seasonal",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.129889+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_pattern",
-      "old": null,
-      "new": "Temperature -> CH4/CO2",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.132889+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_mechanism",
-      "old": null,
-      "new": "温度是驱动碳排放季节差异的核心因素。Q10效应：温度每升高10°C，微生物代谢速率增加2-3倍。冬季(5-10°C)微生物活性低，碳排放量小；夏季(20-30°C)微生物活跃，碳排放量大。产甲烷菌的最适温度为35-40°C(中温)或50-60°C(高温)。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.134890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_mechanism_en",
-      "old": null,
-      "new": "Temperature is the core driver of seasonal carbon emission differences. Q10 effect: metabolic rate increases 2-3x per 10°C rise. Optimal temperature for methanogens: 35-40°C (mesophilic) or 50-60°C (thermophilic).",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.136935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_references",
-      "old": null,
-      "new": "['Liu et al., 2015', 'Nielsen et al., 2019']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.138935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_var1",
-      "old": null,
-      "new": "Temperature",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.141936+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_var2",
-      "old": null,
-      "new": "CH4/CO2",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.143890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_7346_relation",
-      "old": null,
-      "new": "positive",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.146936+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_key",
-      "old": null,
-      "new": "tn_tp_mechanism",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.148934+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_pattern",
-      "old": null,
-      "new": "TN ~ TP",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.150935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_mechanism",
-      "old": null,
-      "new": "总氮(TN)与总磷(TP)的共变关系反映了污水中营养盐的同源性。生活污水中N和P主要来自人类排泄物和洗涤剂，因此通常呈正相关。TN/TP比值可指示污水的营养盐特征和生物可利用性。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.153935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_mechanism_en",
-      "old": null,
-      "new": "The co-variation of TN and TP reflects their common sources in sewage (human excreta and detergents). The N/P ratio indicates nutrient characteristics and bioavailability.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.155937+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_references",
-      "old": null,
-      "new": "['Metcalf & Eddy, 2003', 'Henze et al., 2008']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.157935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_var1",
-      "old": null,
-      "new": "TN",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.160935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_var2",
-      "old": null,
-      "new": "TP",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.162932+00:00"
-    },
-    {
-      "action": "create",
-      "key": "mem_20260612_000452_8575_relation",
-      "old": null,
-      "new": "positive",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.164931+00:00"
-    },
-    {
-      "action": "create",
-      "key": "methane_production_sewer_pattern",
-      "old": null,
-      "new": "管道厌氧环境产甲烷",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.167890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "methane_production_sewer_mechanism",
-      "old": null,
-      "new": "污水管道底部沉积物和管壁生物膜在厌氧条件下形成产甲烷热点。产甲烷古菌通过乙酸发酵(CH3COOH->CH4+CO2)和氢营养型还原(CO2+4H2->CH4+2H2O)两条途径产生CH4。管道中CH4产生量可占城市污水处理系统总CH4排放的10-50%。水力停留时间(HRT)越长、有机负荷越高，CH4排放越严重。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.170936+00:00"
-    },
-    {
-      "action": "create",
-      "key": "methane_production_sewer_references",
-      "old": null,
-      "new": "['Guisasola et al. (2008) Water Research', 'Jiang et al. (2011) ES&T', 'Cheng et al. (2022) Water Research']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.172936+00:00"
-    },
-    {
-      "action": "create",
-      "key": "methane_production_sewer_source",
-      "old": null,
-      "new": "domain_knowledge",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.175935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "n2o_nacl_mechanism_pattern",
-      "old": null,
-      "new": "N2O与NaCl正相关",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.177935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "n2o_nacl_mechanism_mechanism",
-      "old": null,
-      "new": "N2O排放与NaCl浓度的正相关关系可能反映了盐度对硝化过程的影响。高盐度环境下，亚硝酸盐氧化菌(NOB)比氨氧化菌(AOB)更易受抑制，导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O。此外，NaCl浓度升高会增加污水渗透压，影响微生物群落结构，促进N2O的产生。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.180940+00:00"
-    },
-    {
-      "action": "create",
-      "key": "n2o_nacl_mechanism_references",
-      "old": null,
-      "new": "['Chandran et al. (2016)报道盐度升高会显著增加污水处理中N2O排放', 'Lu et al. (2020)发现NaCl浓度>5g/L时N2O排放因子增加2-3倍']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.183934+00:00"
-    },
-    {
-      "action": "create",
-      "key": "seasonal_pattern",
-      "old": null,
-      "new": "冬春差异",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.185937+00:00"
-    },
-    {
-      "action": "create",
-      "key": "seasonal_mechanism",
-      "old": null,
-      "new": "温度是影响微生物代谢活性的主要因素。春季温度升高，水解酸化菌和产甲烷菌的酶活性增强，有机碳转化速率加快，气相碳(CH4+CO2)浓度可能升高。同时，春季降雨增加了管道流量，可能产生稀释效应和冲刷效应——冲刷管壁生物膜和底部沉积物中的有机碳，导致液相TOC升高。两种效应的相对大小决定了净变化方向。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.188889+00:00"
-    },
-    {
-      "action": "create",
-      "key": "seasonal_mechanism_en",
-      "old": null,
-      "new": "Temperature is the dominant factor influencing microbial metabolic activity. As temperature rises in spring, enzymatic activities of hydrolytic-acidogenic and methanogenic microorganisms increase, accelerating organic carbon transformation and potentially elevating gaseous carbon (CH4+CO2) concentrations. Concurrently, increased rainfall in spring enhances pipeline flow, creating both dilution and scouring effects that may wash biofilms and sediment-bound organic carbon into the liquid phase, increasing TOC. The net outcome depends on the relative magnitude of these competing effects.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.191935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "seasonal_references",
-      "old": null,
-      "new": "[]",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.193935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "spatial_pattern",
-      "old": null,
-      "new": "沿程空间变化",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.196935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "spatial_mechanism",
-      "old": null,
-      "new": "管道中碳污染物的空间分异受功能区排放特征和管道内生化过程共同控制。管口区域氧气充足(O2较高)，好氧呼吸为主，CO2为主要碳气。随着向管道中段和末端推进，O2被微生物消耗逐渐降低，厌氧程度增加，CH4生成比例上升。同时，不同功能区(教学区/生活区/餐饮区)的有机负荷和组成不同，导致碳污染物的初始输入存在空间差异。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.199935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "spatial_mechanism_en",
-      "old": null,
-      "new": "Spatial differentiation of carbon pollutants in pipelines is jointly controlled by functional zone discharge characteristics and in-pipe biogeochemical processes. At the inlet, oxygen is relatively abundant, favoring aerobic respiration with CO2 as the dominant carbon gas. Progressing toward the mid-section and outlet, O2 is progressively consumed by microorganisms, increasing anaerobiosis and shifting the balance toward CH4 production. Meanwhile, different functional zones (teaching, residential, dining) exhibit distinct organic loading and composition, creating spatial variation in initial carbon input.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.202936+00:00"
-    },
-    {
-      "action": "create",
-      "key": "spatial_references",
-      "old": null,
-      "new": "[]",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.204943+00:00"
-    },
-    {
-      "action": "create",
-      "key": "temperature_seasonal_effect_pattern",
-      "old": null,
-      "new": "温度驱动季节差异",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.207935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "temperature_seasonal_effect_mechanism",
-      "old": null,
-      "new": "温度通过微生物酶活性控制碳转化速率：Q10效应(每升10C速率增2-3倍)。冬季(5-15C)微生物活性低，有机碳降解慢；春季(15-25C)水解酸化菌和产甲烷菌活性增强，CH4排放增加；夏季(>25C)产甲烷速率达峰值。降雨事件冲刷管壁生物膜和沉积物，导致脉冲式碳释放。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.210890+00:00"
-    },
-    {
-      "action": "create",
-      "key": "temperature_seasonal_effect_references",
-      "old": null,
-      "new": "['Sun et al. (2022)']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.213934+00:00"
-    },
-    {
-      "action": "create",
-      "key": "temperature_seasonal_effect_source",
-      "old": null,
-      "new": "domain_knowledge",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.215935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "tn_nh4_mechanism_pattern",
-      "old": null,
-      "new": "TN与NH4+正相关",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.218935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "tn_nh4_mechanism_mechanism",
-      "old": null,
-      "new": "总氮(TN)与铵态氮(NH4+)的强正相关(r=0.985)表明，污水管网中氮的主要存在形式为铵态氮，占TN的大部分。这是因为管道内厌氧条件下，有机氮通过氨化作用转化为NH4+，而硝化作用因DO不足而受限，导致NH4+积累。TN-NH4+的差值主要为有机氮和少量硝态氮。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.221947+00:00"
-    },
-    {
-      "action": "create",
-      "key": "tn_nh4_mechanism_references",
-      "old": null,
-      "new": "['Guisasola et al. (2008)指出管道厌氧段有机氮氨化是NH4+的主要来源', 'Jiang et al. (2011)报道管道污水中NH4+-N占TN的60-80%']",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.224935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "toc_ch4_pattern",
-      "old": null,
-      "new": "TOC与CH4正相关",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.227891+00:00"
-    },
-    {
-      "action": "create",
-      "key": "toc_ch4_mechanism",
-      "old": null,
-      "new": "TOC代表污水中有机碳的总量，是产甲烷过程的底物来源。TOC浓度越高，可供水解酸化菌利用的有机底物越充足，进而为产甲烷古菌提供更多的乙酸和H2/CO2底物，促进CH4的生成。但在高TOC条件下，有机酸积累导致pH下降，可能抑制产甲烷活性。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.230935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "toc_ch4_mechanism_en",
-      "old": null,
-      "new": "Total organic carbon (TOC) represents the aggregate organic carbon pool in wastewater and serves as the primary substrate for methanogenesis. Higher TOC concentrations provide more abundant organic substrates for hydrolytic and acidogenic bacteria, which in turn supply more acetate and H2/CO2 to methanogenic archaea, enhancing CH4 production. However, under high TOC conditions, volatile fatty acid accumulation may lower pH and inhibit methanogenic activity.",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.233937+00:00"
-    },
-    {
-      "action": "create",
-      "key": "toc_ch4_references",
-      "old": null,
-      "new": "[]",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.236936+00:00"
-    },
-    {
-      "action": "create",
-      "key": "toc_tc_mechanism_pattern",
-      "old": null,
-      "new": "TOC与TC正相关",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.239935+00:00"
-    },
-    {
-      "action": "create",
-      "key": "toc_tc_mechanism_mechanism",
-      "old": null,
-      "new": "TOC与TC的强正相关(r=0.789)表明有机碳是总碳的主要组成部分。TC=TOC+IC，当TOC占TC比例稳定时，两者自然呈正相关。TOC/TC比值反映了有机碳在总碳中的份额，比值越高说明有机污染越重。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.242939+00:00"
-    },
-    {
-      "action": "create",
-      "key": "toc_tc_mechanism_references",
-      "old": null,
-      "new": "[]",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.246894+00:00"
-    },
-    {
-      "action": "create",
-      "key": "vocs_seasonal_mechanism_pattern",
-      "old": null,
-      "new": "VOCs冬高春低",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.249894+00:00"
-    },
-    {
-      "action": "create",
-      "key": "vocs_seasonal_mechanism_mechanism",
-      "old": null,
-      "new": "VOCs冬季高于春季可能原因：(1)冬季大气扩散条件差，管道内VOCs不易逸散；(2)冬季低温下VOCs挥发性降低，在液相中浓度升高；(3)春季微生物活性增强，部分VOCs被生物降解。",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.252893+00:00"
-    },
-    {
-      "action": "create",
-      "key": "vocs_seasonal_mechanism_references",
-      "old": null,
-      "new": "[]",
-      "source": "MechanismKB",
-      "timestamp": "2026-06-12T16:34:16.255894+00:00"
+      "timestamp": "2026-06-25T06:58:30.148314+00:00"
     },
     {
       "action": "create",
@@ -2468,7 +1636,7 @@
       "old": null,
       "new": "has attracted positive_effect attention",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.292862+00:00"
+      "timestamp": "2026-06-25T06:58:30.149355+00:00"
     },
     {
       "action": "create",
@@ -2476,7 +1644,7 @@
       "old": null,
       "new": "has attracted increasing attention.",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.299859+00:00"
+      "timestamp": "2026-06-25T06:58:30.151314+00:00"
     },
     {
       "action": "create",
@@ -2484,7 +1652,7 @@
       "old": null,
       "new": "has attracted",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.305857+00:00"
+      "timestamp": "2026-06-25T06:58:30.153314+00:00"
     },
     {
       "action": "create",
@@ -2492,7 +1660,7 @@
       "old": null,
       "new": "attention",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.310857+00:00"
+      "timestamp": "2026-06-25T06:58:30.155319+00:00"
     },
     {
       "action": "create",
@@ -2500,7 +1668,7 @@
       "old": null,
       "new": "positive_effect",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.314858+00:00"
+      "timestamp": "2026-06-25T06:58:30.157314+00:00"
     },
     {
       "action": "create",
@@ -2508,15 +1676,15 @@
       "old": null,
       "new": "01-sci-rules",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.317862+00:00"
+      "timestamp": "2026-06-25T06:58:30.158366+00:00"
     },
     {
       "action": "create",
       "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
       "old": null,
-      "new": "2026-06-21T16:20:02.515092+00:00",
+      "new": "2026-06-22T01:54:23.908857+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.321904+00:00"
+      "timestamp": "2026-06-25T06:58:30.160356+00:00"
     },
     {
       "action": "create",
@@ -2524,7 +1692,7 @@
       "old": null,
       "new": "has received negative_effect attention",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.326858+00:00"
+      "timestamp": "2026-06-25T06:58:30.162355+00:00"
     },
     {
       "action": "create",
@@ -2532,7 +1700,7 @@
       "old": null,
       "new": "has received limited attention.",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.330857+00:00"
+      "timestamp": "2026-06-25T06:58:30.164319+00:00"
     },
     {
       "action": "create",
@@ -2540,7 +1708,7 @@
       "old": null,
       "new": "has received",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.334862+00:00"
+      "timestamp": "2026-06-25T06:58:30.166325+00:00"
     },
     {
       "action": "create",
@@ -2548,7 +1716,7 @@
       "old": null,
       "new": "attention",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.338538+00:00"
+      "timestamp": "2026-06-25T06:58:30.168315+00:00"
     },
     {
       "action": "create",
@@ -2556,7 +1724,7 @@
       "old": null,
       "new": "negative_effect",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.343541+00:00"
+      "timestamp": "2026-06-25T06:58:30.171315+00:00"
     },
     {
       "action": "create",
@@ -2564,15 +1732,15 @@
       "old": null,
       "new": "01-sci-rules",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.347537+00:00"
+      "timestamp": "2026-06-25T06:58:30.173315+00:00"
     },
     {
       "action": "create",
       "key": "learned_has_received_negative_effect_attention_1_learned_at",
       "old": null,
-      "new": "2026-06-21T16:20:02.515092+00:00",
+      "new": "2026-06-22T01:54:23.908857+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.351537+00:00"
+      "timestamp": "2026-06-25T06:58:30.175315+00:00"
     },
     {
       "action": "create",
@@ -2580,7 +1748,7 @@
       "old": null,
       "new": "Several negative_effect of this study should be acknowledged",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.355541+00:00"
+      "timestamp": "2026-06-25T06:58:30.177313+00:00"
     },
     {
       "action": "create",
@@ -2588,7 +1756,7 @@
       "old": null,
       "new": "Several limitations of this study should be acknowledged.",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.359536+00:00"
+      "timestamp": "2026-06-25T06:58:30.179323+00:00"
     },
     {
       "action": "create",
@@ -2596,7 +1764,7 @@
       "old": null,
       "new": "Several",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.364538+00:00"
+      "timestamp": "2026-06-25T06:58:30.181324+00:00"
     },
     {
       "action": "create",
@@ -2604,7 +1772,7 @@
       "old": null,
       "new": "of this study should be acknowledged",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.368541+00:00"
+      "timestamp": "2026-06-25T06:58:30.183314+00:00"
     },
     {
       "action": "create",
@@ -2612,7 +1780,7 @@
       "old": null,
       "new": "negative_effect",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.372541+00:00"
+      "timestamp": "2026-06-25T06:58:30.185325+00:00"
     },
     {
       "action": "create",
@@ -2620,15 +1788,15 @@
       "old": null,
       "new": "04-discussion-library",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.376539+00:00"
+      "timestamp": "2026-06-25T06:58:30.187320+00:00"
     },
     {
       "action": "create",
       "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
       "old": null,
-      "new": "2026-06-21T16:20:02.515092+00:00",
+      "new": "2026-06-22T01:54:23.908857+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.380541+00:00"
+      "timestamp": "2026-06-25T06:58:30.189314+00:00"
     },
     {
       "action": "create",
@@ -2636,7 +1804,7 @@
       "old": null,
       "new": "可能与冬季厌氧条件 positive_effect 有关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.384441+00:00"
+      "timestamp": "2026-06-25T06:58:30.191314+00:00"
     },
     {
       "action": "create",
@@ -2644,7 +1812,7 @@
       "old": null,
       "new": "可能与冬季厌氧条件增强有关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.390441+00:00"
+      "timestamp": "2026-06-25T06:58:30.193314+00:00"
     },
     {
       "action": "create",
@@ -2652,7 +1820,7 @@
       "old": null,
       "new": "可能与冬季厌氧条件",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.395440+00:00"
+      "timestamp": "2026-06-25T06:58:30.195363+00:00"
     },
     {
       "action": "create",
@@ -2660,7 +1828,7 @@
       "old": null,
       "new": "有关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.399442+00:00"
+      "timestamp": "2026-06-25T06:58:30.197365+00:00"
     },
     {
       "action": "create",
@@ -2668,7 +1836,7 @@
       "old": null,
       "new": "positive_effect",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.404441+00:00"
+      "timestamp": "2026-06-25T06:58:30.200315+00:00"
     },
     {
       "action": "create",
@@ -2676,15 +1844,15 @@
       "old": null,
       "new": "06-data-analysis-logic",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.408442+00:00"
+      "timestamp": "2026-06-25T06:58:30.202315+00:00"
     },
     {
       "action": "create",
       "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
       "old": null,
-      "new": "2026-06-21T16:20:02.515092+00:00",
+      "new": "2026-06-22T01:54:23.908857+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.413133+00:00"
+      "timestamp": "2026-06-25T06:58:30.204378+00:00"
     },
     {
       "action": "create",
@@ -2692,7 +1860,7 @@
       "old": null,
       "new": "微生物分解速率 negative_effect 以及春季降雨稀释效应有关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.418138+00:00"
+      "timestamp": "2026-06-25T06:58:30.206313+00:00"
     },
     {
       "action": "create",
@@ -2700,7 +1868,7 @@
       "old": null,
       "new": "微生物分解速率降低以及春季降雨稀释效应有关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.424137+00:00"
+      "timestamp": "2026-06-25T06:58:30.208366+00:00"
     },
     {
       "action": "create",
@@ -2708,7 +1876,7 @@
       "old": null,
       "new": "微生物分解速率",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.429138+00:00"
+      "timestamp": "2026-06-25T06:58:30.211384+00:00"
     },
     {
       "action": "create",
@@ -2716,7 +1884,7 @@
       "old": null,
       "new": "以及春季降雨稀释效应有关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.434139+00:00"
+      "timestamp": "2026-06-25T06:58:30.213314+00:00"
     },
     {
       "action": "create",
@@ -2724,7 +1892,7 @@
       "old": null,
       "new": "negative_effect",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.438138+00:00"
+      "timestamp": "2026-06-25T06:58:30.216324+00:00"
     },
     {
       "action": "create",
@@ -2732,15 +1900,15 @@
       "old": null,
       "new": "06-data-analysis-logic",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.443142+00:00"
+      "timestamp": "2026-06-25T06:58:30.218322+00:00"
     },
     {
       "action": "create",
       "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
       "old": null,
-      "new": "2026-06-21T16:20:02.515092+00:00",
+      "new": "2026-06-22T01:54:23.908857+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.447140+00:00"
+      "timestamp": "2026-06-25T06:58:30.221319+00:00"
     },
     {
       "action": "create",
@@ -2748,7 +1916,7 @@
       "old": null,
       "new": "指标A positive_correlation 指标B",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.453141+00:00"
+      "timestamp": "2026-06-25T06:58:30.223364+00:00"
     },
     {
       "action": "create",
@@ -2756,7 +1924,7 @@
       "old": null,
       "new": "指标A与指标B呈正相关",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.458139+00:00"
+      "timestamp": "2026-06-25T06:58:30.226324+00:00"
     },
     {
       "action": "create",
@@ -2764,7 +1932,7 @@
       "old": null,
       "new": "指标A",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.462138+00:00"
+      "timestamp": "2026-06-25T06:58:30.228339+00:00"
     },
     {
       "action": "create",
@@ -2772,7 +1940,7 @@
       "old": null,
       "new": "指标B",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.467143+00:00"
+      "timestamp": "2026-06-25T06:58:30.231314+00:00"
     },
     {
       "action": "create",
@@ -2780,7 +1948,7 @@
       "old": null,
       "new": "positive_correlation",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.472138+00:00"
+      "timestamp": "2026-06-25T06:58:30.233364+00:00"
     },
     {
       "action": "create",
@@ -2788,111 +1956,1759 @@
       "old": null,
       "new": "04-discussion-library",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.476964+00:00"
+      "timestamp": "2026-06-25T06:58:30.236315+00:00"
     },
     {
       "action": "create",
       "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
       "old": null,
-      "new": "2026-06-21T16:20:02.515092+00:00",
+      "new": "2026-06-22T01:54:23.908857+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-21T16:40:53.481969+00:00"
+      "timestamp": "2026-06-25T06:58:30.238365+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_key",
+      "old": null,
+      "new": "spatial_distribution",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.241373+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_pattern",
+      "old": null,
+      "new": "Distance -> CH4/CO2/H2S",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.244314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_mechanism",
+      "old": null,
+      "new": "沿管网距离增加，碳排放呈空间梯度变化。管口(DO高)以CO2为主；中段(DO降低)开始产生CH4；末端(完全厌氧)CH4和H2S排放最大。沉积物积累、水力停留时间、管径大小都是影响空间分布的因素。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.246315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_mechanism_en",
+      "old": null,
+      "new": "Along sewer networks, carbon emissions show spatial gradients. Inlet (high DO): mainly CO2. Middle (decreasing DO): CH4 begins. Outlet (fully anaerobic): maximum CH4 and H2S.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.249314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_references",
+      "old": null,
+      "new": "['Sharma et al., 2021', 'Foley et al., 2009']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.251314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_var1",
+      "old": null,
+      "new": "Distance",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.254314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_var2",
+      "old": null,
+      "new": "CH4/CO2/H2S",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.257315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1796_relation",
+      "old": null,
+      "new": "gradient",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.259364+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_key",
+      "old": null,
+      "new": "nh4_ch4_mechanism",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.262365+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_pattern",
+      "old": null,
+      "new": "NH4+ -> CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.265315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_mechanism",
+      "old": null,
+      "new": "铵态氮(NH4+)与甲烷产生的关联机制包括：(1)氨化作用产生NH4+的同时释放有机碳底物；(2)高浓度NH4+可抑制产甲烷菌(IC50约3000mg/L)；(3)NH4+与CH4在氮碳耦合中存在协同效应。在低碳氮比条件下，NH4+对CH4的促进作用更明显。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.268323+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_mechanism_en",
+      "old": null,
+      "new": "Ammonium (NH4+) relates to CH4 production through: ammonification releasing organic carbon substrates; high NH4+ inhibiting methanogens (IC50 ~3000 mg/L); synergistic effects in C-N coupling.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.272315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_references",
+      "old": null,
+      "new": "['Rajagopal et al., 2013', 'Yenigün & Demirel, 2013']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.275319+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_var1",
+      "old": null,
+      "new": "NH4+",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.277364+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_var2",
+      "old": null,
+      "new": "CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.280364+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_1867_relation",
+      "old": null,
+      "new": "complex",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.283399+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_key",
+      "old": null,
+      "new": "cod_ch4_mechanism",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.286314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_pattern",
+      "old": null,
+      "new": "COD -> CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.289314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_mechanism",
+      "old": null,
+      "new": "化学需氧量(COD)反映水体中可被氧化的有机物总量。COD越高，可被产甲烷菌利用的有机底物越丰富。在管网厌氧环境中，COD的降解与甲烷产生呈正相关。COD/TOC比值可反映有机物的可生物降解性。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.292314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_mechanism_en",
+      "old": null,
+      "new": "Chemical Oxygen Demand (COD) reflects the total oxidizable organic matter. Higher COD provides more substrate for methanogenic archaea in anaerobic sewer environments.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.295324+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_references",
+      "old": null,
+      "new": "['Cakir & Stoeckel, 2000', 'Ahn et al., 2011']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.297324+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_var1",
+      "old": null,
+      "new": "COD",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.301314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_var2",
+      "old": null,
+      "new": "CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.304315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3595_relation",
+      "old": null,
+      "new": "positive",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.306314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_key",
+      "old": null,
+      "new": "toc_ch4_mechanism",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.309315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_pattern",
+      "old": null,
+      "new": "TOC -> CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.312314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_mechanism",
+      "old": null,
+      "new": "有机碳(TOC)是产甲烷菌的主要底物。在厌氧条件下，产甲烷菌通过乙酸发酵或CO2还原途径将有机碳转化为甲烷。TOC浓度越高，底物越充足，甲烷产生量越大。污水管网中沉积物的有机碳含量是决定甲烷排放的关键因素。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.315314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_mechanism_en",
+      "old": null,
+      "new": "Organic carbon (TOC) serves as the primary substrate for methanogenic archaea. Under anaerobic conditions, methanogens convert organic carbon to methane through acetoclastic or hydrogenotrophic pathways.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.318365+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_references",
+      "old": null,
+      "new": "['Guisasola et al., 2008, Water Research', 'Liu et al., 2015, Environmental Science & Technology']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.321364+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_var1",
+      "old": null,
+      "new": "TOC",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.325315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_var2",
+      "old": null,
+      "new": "CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.328367+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_3875_relation",
+      "old": null,
+      "new": "positive",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.331314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_key",
+      "old": null,
+      "new": "sediment_effect",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.335322+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_pattern",
+      "old": null,
+      "new": "Sediment -> CH4/CO2",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.338314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_mechanism",
+      "old": null,
+      "new": "管网沉积物是碳排放的重要来源。沉积物中有机物浓度高、DO极低，是产甲烷的热区。沉积物厚度增加→厌氧体积增大→甲烷产量增加。泥水界面是生物地球化学反应的活跃区域，碳氮硫的转化在此集中发生。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.341324+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_mechanism_en",
+      "old": null,
+      "new": "Sewer sediments are major sources of carbon emissions. High organic matter and near-zero DO in sediments create hotspots for methanogenesis. Sediment depth correlates with anaerobic volume and CH4 production.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.345323+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_references",
+      "old": null,
+      "new": "['Sharma et al., 2021', 'Hvitved-Jacobsen et al., 2013']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.348324+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_var1",
+      "old": null,
+      "new": "Sediment",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.351390+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_var2",
+      "old": null,
+      "new": "CH4/CO2",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.354324+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_5483_relation",
+      "old": null,
+      "new": "positive",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.358322+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_key",
+      "old": null,
+      "new": "toc_co2_mechanism",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.361332+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_pattern",
+      "old": null,
+      "new": "TOC -> CO2",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.364369+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_mechanism",
+      "old": null,
+      "new": "有机碳的好氧分解和厌氧发酵都会产生CO2。好氧条件下，异养菌通过有氧呼吸将有机碳氧化为CO2和H2O。厌氧条件下，发酵菌将有机碳分解为挥发性脂肪酸(VFA)和CO2。管网中CO2的产生是碳循环的重要环节。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.367313+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_mechanism_en",
+      "old": null,
+      "new": "CO2 is produced through both aerobic decomposition and anaerobic fermentation of organic carbon. Heterotrophic bacteria oxidize organic carbon to CO2 under aerobic conditions.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.371314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_references",
+      "old": null,
+      "new": "['Jiang et al., 2011', 'Sharma et al., 2021']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.377314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_var1",
+      "old": null,
+      "new": "TOC",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.380364+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_var2",
+      "old": null,
+      "new": "CO2",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.384382+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_6324_relation",
+      "old": null,
+      "new": "positive",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.388363+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_key",
+      "old": null,
+      "new": "do_ch4_mechanism",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.392319+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_pattern",
+      "old": null,
+      "new": "DO -| CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.395363+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_mechanism",
+      "old": null,
+      "new": "溶解氧(DO)对甲烷产生有显著抑制作用。甲烷菌是严格厌氧菌，DO>0.2mg/L即可抑制其活性。好氧条件下，甲烷氧化菌(MOB)可在有氧层氧化甲烷为CO2，减少甲烷排放。管网中DO的空间分布决定了甲烷产生的热区。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.399314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_mechanism_en",
+      "old": null,
+      "new": "Dissolved oxygen (DO) significantly inhibits methanogenesis. Methanogens are strict anaerobes; DO > 0.2 mg/L suppresses their activity. Methanotrophic bacteria (MOB) oxidize CH4 to CO2 in aerobic zones.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.403323+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_references",
+      "old": null,
+      "new": "['Guisasola et al., 2008', 'Czepiel et al., 1993']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.406314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_var1",
+      "old": null,
+      "new": "DO",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.410327+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_var2",
+      "old": null,
+      "new": "CH4",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.414314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7102_relation",
+      "old": null,
+      "new": "negative",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.418314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_key",
+      "old": null,
+      "new": "temperature_seasonal",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.422314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_pattern",
+      "old": null,
+      "new": "Temperature -> CH4/CO2",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.427314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_mechanism",
+      "old": null,
+      "new": "温度是驱动碳排放季节差异的核心因素。Q10效应：温度每升高10°C，微生物代谢速率增加2-3倍。冬季(5-10°C)微生物活性低，碳排放量小；夏季(20-30°C)微生物活跃，碳排放量大。产甲烷菌的最适温度为35-40°C(中温)或50-60°C(高温)。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.431315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_mechanism_en",
+      "old": null,
+      "new": "Temperature is the core driver of seasonal carbon emission differences. Q10 effect: metabolic rate increases 2-3x per 10°C rise. Optimal temperature for methanogens: 35-40°C (mesophilic) or 50-60°C (thermophilic).",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.435314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_references",
+      "old": null,
+      "new": "['Liu et al., 2015', 'Nielsen et al., 2019']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.439315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_var1",
+      "old": null,
+      "new": "Temperature",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.443315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_var2",
+      "old": null,
+      "new": "CH4/CO2",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.447365+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_7346_relation",
+      "old": null,
+      "new": "positive",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.453314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_key",
+      "old": null,
+      "new": "tn_tp_mechanism",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.457313+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_pattern",
+      "old": null,
+      "new": "TN ~ TP",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.461319+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_mechanism",
+      "old": null,
+      "new": "总氮(TN)与总磷(TP)的共变关系反映了污水中营养盐的同源性。生活污水中N和P主要来自人类排泄物和洗涤剂，因此通常呈正相关。TN/TP比值可指示污水的营养盐特征和生物可利用性。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.467314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_mechanism_en",
+      "old": null,
+      "new": "The co-variation of TN and TP reflects their common sources in sewage (human excreta and detergents). The N/P ratio indicates nutrient characteristics and bioavailability.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.471314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_references",
+      "old": null,
+      "new": "['Metcalf & Eddy, 2003', 'Henze et al., 2008']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.476315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_var1",
+      "old": null,
+      "new": "TN",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.482316+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_var2",
+      "old": null,
+      "new": "TP",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.487316+00:00"
+    },
+    {
+      "action": "create",
+      "key": "mem_20260612_000452_8575_relation",
+      "old": null,
+      "new": "positive",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.492326+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_pattern",
+      "old": null,
+      "new": "管道厌氧环境产甲烷",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.497320+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_mechanism",
+      "old": null,
+      "new": "污水管道底部沉积物和管壁生物膜在厌氧条件下形成产甲烷热点。产甲烷古菌通过乙酸发酵(CH3COOH->CH4+CO2)和氢营养型还原(CO2+4H2->CH4+2H2O)两条途径产生CH4。管道中CH4产生量可占城市污水处理系统总CH4排放的10-50%。水力停留时间(HRT)越长、有机负荷越高，CH4排放越严重。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.502325+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_references",
+      "old": null,
+      "new": "['Guisasola et al. (2008) Water Research', 'Jiang et al. (2011) ES&T', 'Cheng et al. (2022) Water Research']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.506314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "methane_production_sewer_source",
+      "old": null,
+      "new": "domain_knowledge",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.511317+00:00"
+    },
+    {
+      "action": "create",
+      "key": "n2o_nacl_mechanism_pattern",
+      "old": null,
+      "new": "N2O与NaCl正相关",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.516314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "n2o_nacl_mechanism_mechanism",
+      "old": null,
+      "new": "N2O排放与NaCl浓度的正相关关系可能反映了盐度对硝化过程的影响。高盐度环境下，亚硝酸盐氧化菌(NOB)比氨氧化菌(AOB)更易受抑制，导致亚硝酸盐积累，进而通过硝化反硝化途径产生更多N2O。此外，NaCl浓度升高会增加污水渗透压，影响微生物群落结构，促进N2O的产生。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.520314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "n2o_nacl_mechanism_references",
+      "old": null,
+      "new": "['Chandran et al. (2016)报道盐度升高会显著增加污水处理中N2O排放', 'Lu et al. (2020)发现NaCl浓度>5g/L时N2O排放因子增加2-3倍']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.525333+00:00"
+    },
+    {
+      "action": "create",
+      "key": "seasonal_pattern",
+      "old": null,
+      "new": "冬春差异",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.530324+00:00"
+    },
+    {
+      "action": "create",
+      "key": "seasonal_mechanism",
+      "old": null,
+      "new": "温度是影响微生物代谢活性的主要因素。春季温度升高，水解酸化菌和产甲烷菌的酶活性增强，有机碳转化速率加快，气相碳(CH4+CO2)浓度可能升高。同时，春季降雨增加了管道流量，可能产生稀释效应和冲刷效应——冲刷管壁生物膜和底部沉积物中的有机碳，导致液相TOC升高。两种效应的相对大小决定了净变化方向。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.535328+00:00"
+    },
+    {
+      "action": "create",
+      "key": "seasonal_mechanism_en",
+      "old": null,
+      "new": "Temperature is the dominant factor influencing microbial metabolic activity. As temperature rises in spring, enzymatic activities of hydrolytic-acidogenic and methanogenic microorganisms increase, accelerating organic carbon transformation and potentially elevating gaseous carbon (CH4+CO2) concentrations. Concurrently, increased rainfall in spring enhances pipeline flow, creating both dilution and scouring effects that may wash biofilms and sediment-bound organic carbon into the liquid phase, increasing TOC. The net outcome depends on the relative magnitude of these competing effects.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.539321+00:00"
+    },
+    {
+      "action": "create",
+      "key": "seasonal_references",
+      "old": null,
+      "new": "[]",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.544319+00:00"
+    },
+    {
+      "action": "create",
+      "key": "spatial_pattern",
+      "old": null,
+      "new": "沿程空间变化",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.548315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "spatial_mechanism",
+      "old": null,
+      "new": "管道中碳污染物的空间分异受功能区排放特征和管道内生化过程共同控制。管口区域氧气充足(O2较高)，好氧呼吸为主，CO2为主要碳气。随着向管道中段和末端推进，O2被微生物消耗逐渐降低，厌氧程度增加，CH4生成比例上升。同时，不同功能区(教学区/生活区/餐饮区)的有机负荷和组成不同，导致碳污染物的初始输入存在空间差异。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.553314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "spatial_mechanism_en",
+      "old": null,
+      "new": "Spatial differentiation of carbon pollutants in pipelines is jointly controlled by functional zone discharge characteristics and in-pipe biogeochemical processes. At the inlet, oxygen is relatively abundant, favoring aerobic respiration with CO2 as the dominant carbon gas. Progressing toward the mid-section and outlet, O2 is progressively consumed by microorganisms, increasing anaerobiosis and shifting the balance toward CH4 production. Meanwhile, different functional zones (teaching, residential, dining) exhibit distinct organic loading and composition, creating spatial variation in initial carbon input.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.557319+00:00"
+    },
+    {
+      "action": "create",
+      "key": "spatial_references",
+      "old": null,
+      "new": "[]",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.561313+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_pattern",
+      "old": null,
+      "new": "温度驱动季节差异",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.566314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_mechanism",
+      "old": null,
+      "new": "温度通过微生物酶活性控制碳转化速率：Q10效应(每升10C速率增2-3倍)。冬季(5-15C)微生物活性低，有机碳降解慢；春季(15-25C)水解酸化菌和产甲烷菌活性增强，CH4排放增加；夏季(>25C)产甲烷速率达峰值。降雨事件冲刷管壁生物膜和沉积物，导致脉冲式碳释放。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.570314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_references",
+      "old": null,
+      "new": "['Sun et al. (2022)']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.576325+00:00"
+    },
+    {
+      "action": "create",
+      "key": "temperature_seasonal_effect_source",
+      "old": null,
+      "new": "domain_knowledge",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.580324+00:00"
+    },
+    {
+      "action": "create",
+      "key": "tn_nh4_mechanism_pattern",
+      "old": null,
+      "new": "TN与NH4+正相关",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.585323+00:00"
+    },
+    {
+      "action": "create",
+      "key": "tn_nh4_mechanism_mechanism",
+      "old": null,
+      "new": "总氮(TN)与铵态氮(NH4+)的强正相关(r=0.985)表明，污水管网中氮的主要存在形式为铵态氮，占TN的大部分。这是因为管道内厌氧条件下，有机氮通过氨化作用转化为NH4+，而硝化作用因DO不足而受限，导致NH4+积累。TN-NH4+的差值主要为有机氮和少量硝态氮。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.589315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "tn_nh4_mechanism_references",
+      "old": null,
+      "new": "['Guisasola et al. (2008)指出管道厌氧段有机氮氨化是NH4+的主要来源', 'Jiang et al. (2011)报道管道污水中NH4+-N占TN的60-80%']",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.594322+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_ch4_pattern",
+      "old": null,
+      "new": "TOC与CH4正相关",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.598317+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_ch4_mechanism",
+      "old": null,
+      "new": "TOC代表污水中有机碳的总量，是产甲烷过程的底物来源。TOC浓度越高，可供水解酸化菌利用的有机底物越充足，进而为产甲烷古菌提供更多的乙酸和H2/CO2底物，促进CH4的生成。但在高TOC条件下，有机酸积累导致pH下降，可能抑制产甲烷活性。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.603315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_ch4_mechanism_en",
+      "old": null,
+      "new": "Total organic carbon (TOC) represents the aggregate organic carbon pool in wastewater and serves as the primary substrate for methanogenesis. Higher TOC concentrations provide more abundant organic substrates for hydrolytic and acidogenic bacteria, which in turn supply more acetate and H2/CO2 to methanogenic archaea, enhancing CH4 production. However, under high TOC conditions, volatile fatty acid accumulation may lower pH and inhibit methanogenic activity.",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.607318+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_ch4_references",
+      "old": null,
+      "new": "[]",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.612313+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_tc_mechanism_pattern",
+      "old": null,
+      "new": "TOC与TC正相关",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.616312+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_tc_mechanism_mechanism",
+      "old": null,
+      "new": "TOC与TC的强正相关(r=0.789)表明有机碳是总碳的主要组成部分。TC=TOC+IC，当TOC占TC比例稳定时，两者自然呈正相关。TOC/TC比值反映了有机碳在总碳中的份额，比值越高说明有机污染越重。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.621314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "toc_tc_mechanism_references",
+      "old": null,
+      "new": "[]",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.626313+00:00"
+    },
+    {
+      "action": "create",
+      "key": "vocs_seasonal_mechanism_pattern",
+      "old": null,
+      "new": "VOCs冬高春低",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.630314+00:00"
+    },
+    {
+      "action": "create",
+      "key": "vocs_seasonal_mechanism_mechanism",
+      "old": null,
+      "new": "VOCs冬季高于春季可能原因：(1)冬季大气扩散条件差，管道内VOCs不易逸散；(2)冬季低温下VOCs挥发性降低，在液相中浓度升高；(3)春季微生物活性增强，部分VOCs被生物降解。",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.635315+00:00"
+    },
+    {
+      "action": "create",
+      "key": "vocs_seasonal_mechanism_references",
+      "old": null,
+      "new": "[]",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T06:58:30.640314+00:00"
     },
     {
       "action": "update",
       "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
-      "old": "2026-06-21T16:20:02.515092+00:00",
-      "new": "2026-06-21T16:40:52.890969+00:00",
+      "old": "2026-06-22T01:54:23.908857+00:00",
+      "new": "2026-06-25T06:58:29.877324+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:35:22.420118+00:00"
+      "timestamp": "2026-06-25T07:21:52.651505+00:00"
     },
     {
       "action": "update",
       "key": "learned_has_received_negative_effect_attention_1_learned_at",
-      "old": "2026-06-21T16:20:02.515092+00:00",
-      "new": "2026-06-21T16:40:52.890969+00:00",
+      "old": "2026-06-22T01:54:23.908857+00:00",
+      "new": "2026-06-25T06:58:29.877324+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:35:22.468138+00:00"
+      "timestamp": "2026-06-25T07:21:52.684456+00:00"
     },
     {
       "action": "update",
       "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
-      "old": "2026-06-21T16:20:02.515092+00:00",
-      "new": "2026-06-21T16:40:52.890969+00:00",
+      "old": "2026-06-22T01:54:23.908857+00:00",
+      "new": "2026-06-25T06:58:29.877324+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:35:22.518120+00:00"
+      "timestamp": "2026-06-25T07:21:52.720455+00:00"
     },
     {
       "action": "update",
       "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
-      "old": "2026-06-21T16:20:02.515092+00:00",
-      "new": "2026-06-21T16:40:52.890969+00:00",
+      "old": "2026-06-22T01:54:23.908857+00:00",
+      "new": "2026-06-25T06:58:29.877324+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:35:22.567968+00:00"
+      "timestamp": "2026-06-25T07:21:52.756462+00:00"
     },
     {
       "action": "update",
       "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
-      "old": "2026-06-21T16:20:02.515092+00:00",
-      "new": "2026-06-21T16:40:52.890969+00:00",
+      "old": "2026-06-22T01:54:23.908857+00:00",
+      "new": "2026-06-25T06:58:29.877324+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:35:22.621931+00:00"
+      "timestamp": "2026-06-25T07:21:52.790456+00:00"
     },
     {
       "action": "update",
       "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
-      "old": "2026-06-21T16:20:02.515092+00:00",
-      "new": "2026-06-21T16:40:52.890969+00:00",
+      "old": "2026-06-22T01:54:23.908857+00:00",
+      "new": "2026-06-25T06:58:29.877324+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:35:22.672407+00:00"
+      "timestamp": "2026-06-25T07:21:52.826461+00:00"
     },
     {
       "action": "update",
       "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
-      "old": "2026-06-21T16:40:52.890969+00:00",
-      "new": "2026-06-22T01:35:21.759235+00:00",
+      "old": "2026-06-25T06:58:29.877324+00:00",
+      "new": "2026-06-25T07:21:52.147776+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:54:24.325903+00:00"
+      "timestamp": "2026-06-25T07:37:05.329191+00:00"
     },
     {
       "action": "update",
       "key": "learned_has_received_negative_effect_attention_1_learned_at",
-      "old": "2026-06-21T16:40:52.890969+00:00",
-      "new": "2026-06-22T01:35:21.759235+00:00",
+      "old": "2026-06-25T06:58:29.877324+00:00",
+      "new": "2026-06-25T07:21:52.147776+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:54:24.357905+00:00"
+      "timestamp": "2026-06-25T07:37:05.363803+00:00"
     },
     {
       "action": "update",
       "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
-      "old": "2026-06-21T16:40:52.890969+00:00",
-      "new": "2026-06-22T01:35:21.759235+00:00",
+      "old": "2026-06-25T06:58:29.877324+00:00",
+      "new": "2026-06-25T07:21:52.147776+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:54:24.389863+00:00"
+      "timestamp": "2026-06-25T07:37:05.399755+00:00"
     },
     {
       "action": "update",
       "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
-      "old": "2026-06-21T16:40:52.890969+00:00",
-      "new": "2026-06-22T01:35:21.759235+00:00",
+      "old": "2026-06-25T06:58:29.877324+00:00",
+      "new": "2026-06-25T07:21:52.147776+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:54:24.422450+00:00"
+      "timestamp": "2026-06-25T07:37:05.433201+00:00"
     },
     {
       "action": "update",
       "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
-      "old": "2026-06-21T16:40:52.890969+00:00",
-      "new": "2026-06-22T01:35:21.759235+00:00",
+      "old": "2026-06-25T06:58:29.877324+00:00",
+      "new": "2026-06-25T07:21:52.147776+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:54:24.456454+00:00"
+      "timestamp": "2026-06-25T07:37:05.466651+00:00"
     },
     {
       "action": "update",
       "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
-      "old": "2026-06-21T16:40:52.890969+00:00",
-      "new": "2026-06-22T01:35:21.759235+00:00",
+      "old": "2026-06-25T06:58:29.877324+00:00",
+      "new": "2026-06-25T07:21:52.147776+00:00",
       "source": "MechanismKB",
-      "timestamp": "2026-06-22T01:54:24.490450+00:00"
+      "timestamp": "2026-06-25T07:37:05.502649+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T07:21:52.147776+00:00",
+      "new": "2026-06-25T07:37:04.820015+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T07:46:11.248367+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T07:21:52.147776+00:00",
+      "new": "2026-06-25T07:37:04.820015+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T07:46:11.283967+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T07:21:52.147776+00:00",
+      "new": "2026-06-25T07:37:04.820015+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T07:46:11.318438+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T07:21:52.147776+00:00",
+      "new": "2026-06-25T07:37:04.820015+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T07:46:11.352381+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T07:21:52.147776+00:00",
+      "new": "2026-06-25T07:37:04.820015+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T07:46:11.386382+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T07:21:52.147776+00:00",
+      "new": "2026-06-25T07:37:04.820015+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T07:46:11.422344+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T07:37:04.820015+00:00",
+      "new": "2026-06-25T07:46:10.722090+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:26:22.142581+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T07:37:04.820015+00:00",
+      "new": "2026-06-25T07:46:10.722090+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:26:22.176625+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T07:37:04.820015+00:00",
+      "new": "2026-06-25T07:46:10.722090+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:26:22.211442+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T07:37:04.820015+00:00",
+      "new": "2026-06-25T07:46:10.722090+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:26:22.245440+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T07:37:04.820015+00:00",
+      "new": "2026-06-25T07:46:10.722090+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:26:22.278699+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T07:37:04.820015+00:00",
+      "new": "2026-06-25T07:46:10.722090+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:26:22.310699+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T07:46:10.722090+00:00",
+      "new": "2026-06-25T16:26:21.661584+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:32:17.732531+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T07:46:10.722090+00:00",
+      "new": "2026-06-25T16:26:21.661584+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:32:17.766532+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T07:46:10.722090+00:00",
+      "new": "2026-06-25T16:26:21.661584+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:32:17.801871+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T07:46:10.722090+00:00",
+      "new": "2026-06-25T16:26:21.661584+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:32:17.836798+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T07:46:10.722090+00:00",
+      "new": "2026-06-25T16:26:21.661584+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:32:17.870766+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T07:46:10.722090+00:00",
+      "new": "2026-06-25T16:26:21.661584+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:32:17.905766+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T16:26:21.661584+00:00",
+      "new": "2026-06-25T16:32:17.189052+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:38:07.280738+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T16:26:21.661584+00:00",
+      "new": "2026-06-25T16:32:17.189052+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:38:07.315695+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T16:26:21.661584+00:00",
+      "new": "2026-06-25T16:32:17.189052+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:38:07.350656+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T16:26:21.661584+00:00",
+      "new": "2026-06-25T16:32:17.189052+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:38:07.383697+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T16:26:21.661584+00:00",
+      "new": "2026-06-25T16:32:17.189052+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:38:07.418626+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T16:26:21.661584+00:00",
+      "new": "2026-06-25T16:32:17.189052+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:38:07.451667+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T16:32:17.189052+00:00",
+      "new": "2026-06-25T16:38:06.799195+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:44:11.736483+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T16:32:17.189052+00:00",
+      "new": "2026-06-25T16:38:06.799195+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:44:11.771483+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T16:32:17.189052+00:00",
+      "new": "2026-06-25T16:38:06.799195+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:44:11.806488+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T16:32:17.189052+00:00",
+      "new": "2026-06-25T16:38:06.799195+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:44:11.842490+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T16:32:17.189052+00:00",
+      "new": "2026-06-25T16:38:06.799195+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:44:11.878510+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T16:32:17.189052+00:00",
+      "new": "2026-06-25T16:38:06.799195+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:44:11.912513+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T16:38:06.799195+00:00",
+      "new": "2026-06-25T16:44:11.257522+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:50:24.892141+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T16:38:06.799195+00:00",
+      "new": "2026-06-25T16:44:11.258521+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:50:24.928001+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T16:38:06.799195+00:00",
+      "new": "2026-06-25T16:44:11.258521+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:50:24.963006+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T16:38:06.799195+00:00",
+      "new": "2026-06-25T16:44:11.258521+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:50:24.998674+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T16:38:06.799195+00:00",
+      "new": "2026-06-25T16:44:11.258521+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:50:25.033612+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T16:38:06.799195+00:00",
+      "new": "2026-06-25T16:44:11.258521+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:50:25.068431+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T16:44:11.257522+00:00",
+      "new": "2026-06-25T16:50:24.413255+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:56:05.337531+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T16:44:11.258521+00:00",
+      "new": "2026-06-25T16:50:24.413255+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:56:05.372693+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T16:44:11.258521+00:00",
+      "new": "2026-06-25T16:50:24.413255+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:56:05.409067+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T16:44:11.258521+00:00",
+      "new": "2026-06-25T16:50:24.413255+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:56:05.443951+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T16:44:11.258521+00:00",
+      "new": "2026-06-25T16:50:24.413255+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:56:05.479015+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T16:44:11.258521+00:00",
+      "new": "2026-06-25T16:50:24.413255+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-25T16:56:05.514356+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T16:50:24.413255+00:00",
+      "new": "2026-06-25T16:56:04.776290+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:39:18.100940+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T16:50:24.413255+00:00",
+      "new": "2026-06-25T16:56:04.776290+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:39:18.136364+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T16:50:24.413255+00:00",
+      "new": "2026-06-25T16:56:04.776290+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:39:18.175267+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T16:50:24.413255+00:00",
+      "new": "2026-06-25T16:56:04.776290+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:39:18.210262+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T16:50:24.413255+00:00",
+      "new": "2026-06-25T16:56:04.776290+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:39:18.247423+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T16:50:24.413255+00:00",
+      "new": "2026-06-25T16:56:04.776290+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:39:18.282423+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-25T16:56:04.776290+00:00",
+      "new": "2026-06-26T15:39:17.639627+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:53:27.440230+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-25T16:56:04.776290+00:00",
+      "new": "2026-06-26T15:39:17.639627+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:53:27.478692+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-25T16:56:04.776290+00:00",
+      "new": "2026-06-26T15:39:17.639627+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:53:27.514055+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-25T16:56:04.776290+00:00",
+      "new": "2026-06-26T15:39:17.639627+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:53:27.550666+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-25T16:56:04.776290+00:00",
+      "new": "2026-06-26T15:39:17.639627+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:53:27.590854+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-25T16:56:04.776290+00:00",
+      "new": "2026-06-26T15:39:17.639627+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T15:53:27.627782+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-26T15:39:17.639627+00:00",
+      "new": "2026-06-26T15:53:26.969650+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:15:41.965205+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-26T15:39:17.639627+00:00",
+      "new": "2026-06-26T15:53:26.969650+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:15:42.003050+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-26T15:39:17.639627+00:00",
+      "new": "2026-06-26T15:53:26.969650+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:15:42.040695+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-26T15:39:17.639627+00:00",
+      "new": "2026-06-26T15:53:26.969650+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:15:42.078532+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-26T15:39:17.639627+00:00",
+      "new": "2026-06-26T15:53:26.969650+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:15:42.117860+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-26T15:39:17.639627+00:00",
+      "new": "2026-06-26T15:53:26.969650+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:15:42.158857+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-26T15:53:26.969650+00:00",
+      "new": "2026-06-26T16:15:41.489510+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:33:51.372880+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-26T15:53:26.969650+00:00",
+      "new": "2026-06-26T16:15:41.489510+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:33:51.407925+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-26T15:53:26.969650+00:00",
+      "new": "2026-06-26T16:15:41.489510+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:33:51.448877+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-26T15:53:26.969650+00:00",
+      "new": "2026-06-26T16:15:41.489510+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:33:51.484624+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-26T15:53:26.969650+00:00",
+      "new": "2026-06-26T16:15:41.489510+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:33:51.523577+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-26T15:53:26.969650+00:00",
+      "new": "2026-06-26T16:15:41.489510+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:33:51.562581+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-26T16:15:41.489510+00:00",
+      "new": "2026-06-26T16:33:50.892243+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:48:27.667097+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-26T16:15:41.489510+00:00",
+      "new": "2026-06-26T16:33:50.892243+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:48:27.704694+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-26T16:15:41.489510+00:00",
+      "new": "2026-06-26T16:33:50.892243+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:48:27.740605+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-26T16:15:41.489510+00:00",
+      "new": "2026-06-26T16:33:50.892243+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:48:27.776576+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-26T16:15:41.489510+00:00",
+      "new": "2026-06-26T16:33:50.892243+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:48:27.813218+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-26T16:15:41.489510+00:00",
+      "new": "2026-06-26T16:33:50.892243+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-26T16:48:27.849929+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-26T16:33:50.892243+00:00",
+      "new": "2026-06-26T16:48:27.201346+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:25:39.584465+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-26T16:33:50.892243+00:00",
+      "new": "2026-06-26T16:48:27.201346+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:25:39.622666+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-26T16:33:50.892243+00:00",
+      "new": "2026-06-26T16:48:27.201346+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:25:39.662027+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-26T16:33:50.892243+00:00",
+      "new": "2026-06-26T16:48:27.201346+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:25:39.701138+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-26T16:33:50.892243+00:00",
+      "new": "2026-06-26T16:48:27.201346+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:25:39.740686+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-26T16:33:50.892243+00:00",
+      "new": "2026-06-26T16:48:27.201346+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:25:39.778474+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-26T16:48:27.201346+00:00",
+      "new": "2026-06-27T01:25:39.091675+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:41:02.179736+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-26T16:48:27.201346+00:00",
+      "new": "2026-06-27T01:25:39.091675+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:41:02.218642+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-26T16:48:27.201346+00:00",
+      "new": "2026-06-27T01:25:39.091675+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:41:02.257183+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-26T16:48:27.201346+00:00",
+      "new": "2026-06-27T01:25:39.091675+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:41:02.295959+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-26T16:48:27.201346+00:00",
+      "new": "2026-06-27T01:25:39.091675+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:41:02.333776+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-26T16:48:27.201346+00:00",
+      "new": "2026-06-27T01:25:39.091675+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:41:02.373281+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-27T01:25:39.091675+00:00",
+      "new": "2026-06-27T01:41:01.679302+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:47:31.037721+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-27T01:25:39.091675+00:00",
+      "new": "2026-06-27T01:41:01.679302+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:47:31.075694+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-27T01:25:39.091675+00:00",
+      "new": "2026-06-27T01:41:01.679302+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:47:31.114901+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-27T01:25:39.091675+00:00",
+      "new": "2026-06-27T01:41:01.679302+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:47:31.155575+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-27T01:25:39.091675+00:00",
+      "new": "2026-06-27T01:41:01.679302+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:47:31.193843+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-27T01:25:39.091675+00:00",
+      "new": "2026-06-27T01:41:01.679302+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T01:47:31.234146+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-27T01:41:01.679302+00:00",
+      "new": "2026-06-27T01:47:30.519426+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:43:44.811945+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-27T01:41:01.679302+00:00",
+      "new": "2026-06-27T01:47:30.519426+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:43:44.851770+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-27T01:41:01.679302+00:00",
+      "new": "2026-06-27T01:47:30.519426+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:43:44.893072+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-27T01:41:01.679302+00:00",
+      "new": "2026-06-27T01:47:30.519426+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:43:44.934803+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-27T01:41:01.679302+00:00",
+      "new": "2026-06-27T01:47:30.519426+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:43:44.975855+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-27T01:41:01.679302+00:00",
+      "new": "2026-06-27T01:47:30.519426+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:43:45.017105+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_attracted_positive_effect_attention_0_learned_at",
+      "old": "2026-06-27T01:47:30.519426+00:00",
+      "new": "2026-06-27T05:43:44.288791+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:59:41.266120+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_has_received_negative_effect_attention_1_learned_at",
+      "old": "2026-06-27T01:47:30.519426+00:00",
+      "new": "2026-06-27T05:43:44.288791+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:59:41.308125+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_several_negative_effect_of_this_study_s_2_learned_at",
+      "old": "2026-06-27T01:47:30.519426+00:00",
+      "new": "2026-06-27T05:43:44.288791+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:59:41.351125+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_可能与冬季厌氧条件_positive_effect_有关_4_learned_at",
+      "old": "2026-06-27T01:47:30.519426+00:00",
+      "new": "2026-06-27T05:43:44.289790+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:59:41.393012+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_微生物分解速率_negative_effect_以及春季降雨稀释效应有关_5_learned_at",
+      "old": "2026-06-27T01:47:30.519426+00:00",
+      "new": "2026-06-27T05:43:44.289790+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:59:41.434897+00:00"
+    },
+    {
+      "action": "update",
+      "key": "learned_指标a_positive_correlation_指标b_3_learned_at",
+      "old": "2026-06-27T01:47:30.519426+00:00",
+      "new": "2026-06-27T05:43:44.289790+00:00",
+      "source": "MechanismKB",
+      "timestamp": "2026-06-27T05:59:41.475946+00:00"
     }
   ]
 }
